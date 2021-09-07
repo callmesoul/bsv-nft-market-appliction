@@ -77,13 +77,9 @@ export const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   // app
   const isApp = store.state.isApp
-  alert('appMetaIdJsV2' + window.appMetaIdJsV2, )
-  alert('appMetaIdJs' + window.appMetaIdJs, )
-  alert('isApp' + isApp, )
   if (isApp) {
     //  没有用户信息， 也没有正在加载用户信息, 则去获取用户信息
     if (!store.state.userInfo && !store.state.userInfoLoading) {
-      alert('into userInfo')
       store.dispatch(Action.getUserInfo)
     }
   } else {
@@ -101,19 +97,12 @@ router.beforeEach(async (to, from, next) => {
       }
 
       if (to.name === 'create' && store.state.userInfo) {
-        const mc = await store.state.sdk?.getMc(store.state.userInfo!.address)
-        const neeeMc = parseInt(import.meta.env.VITE_CreateNeedMc)
-        if (mc && mc < neeeMc) {
-          // 需要权限的提示先登陆且不给予跳转
-          ElMessage.error(i18n.global.t('needHold') + neeeMc + ' MetaCoins' + i18n.global.t('canCreateNft'))
-          return
-        }
-        /* const result = await store.state.sdk?.checkUserCanIssueNft({
+        const result = await store.state.sdk?.checkUserCanIssueNft({
           metaId: store.state.userInfo!.metaId,
           address: store.state.userInfo!.address,
           language: i18n.global.locale.value === 'en' ? Langs.EN : Langs.CN
         })
-        if (!result) return */
+        if (!result) return
       }
     }  else {
       // 没有token

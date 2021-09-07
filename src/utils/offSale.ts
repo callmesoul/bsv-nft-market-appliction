@@ -39,9 +39,11 @@ export default function NftOffSale(nft: NftItemDetail, loading?: any) {
             })
             if (res?.code === 200) {
               // ElMessage.success(i18n.global.t('offsale') + i18n.global.t('success'))
+              nft.putAway = false
+              ElMessage.success(i18n.global.t('offsale') + i18n.global.t('success'))
 
               // 上报服务器 移除时间
-              const res = await RemoveDeadlineTime({
+              /* const res = await RemoveDeadlineTime({
                 genesis: nft.genesis,
                 codeHash: nft.codeHash,
                 tokenIndex: nft.tokenIndex,
@@ -52,7 +54,7 @@ export default function NftOffSale(nft: NftItemDetail, loading?: any) {
                 ElMessage.success(i18n.global.t('offsale') + i18n.global.t('success'))
               } else {
                 ElMessage.error(i18n.global.t('offsale') + i18n.global.t('fail'))
-              }
+              } */
               resolve()
 
               // 上链 cancel sell 协议 成功后 上报给服务器

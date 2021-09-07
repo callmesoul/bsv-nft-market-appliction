@@ -37,6 +37,7 @@ import { store } from '@/store'
 import { Decimal } from 'decimal.js-light'
 import { Langs } from '@/api'
 import { fail } from 'assert'
+import axios from 'axios'
 
 const metaIdTag = import.meta.env.VITE_MetaIdTag
 
@@ -81,32 +82,29 @@ export default class Sdk {
 
   getUserInfo() {
     return new Promise<MetaIdJsRes>((resolve) => {
-      alert('sdk userInfo')
       const params = {
         accessToken: store.state.token ? store.state.token?.access_token : '',
         callback: (res: MetaIdJsRes) => {
-          alert('callback userInfo'+ res)
           this.callback(res, resolve)
         },
       }
       if (this.isApp) {
         const functionName: string = `getUserInfoCallBack`
-        
         const that = this
         // @ts-ignore
         window[functionName] = function (res) {
-          alert('call getUserInfo')
           that.callback(res, resolve)
         }
-        alert('appMetaidjs?.getUserInfo userInfo'+ this.appMetaidjs?.getUserInfo)
-        alert('appMetaidjs userInfo')
-        this.appMetaidjs?.getUserInfo(this.appId, this.appScrect, functionName)
+        if (window.appMetaIdJsV2) {
+          window.appMetaIdJsV2?.getUserInfo(this.appId, this.appScrect, functionName)
+        } else {
+          window.appMetaIdJs?.getUserInfo(this.appId, this.appScrect, functionName)
+        }
       } else {
         this.metaidjs?.getUserInfo(params)
       }
     })
   }
-
   sendMetaDataTx(params: {
     data: string
     nodeName: string
@@ -130,7 +128,11 @@ export default class Sdk {
         const functionName: string = `sendMetaDataTxCallBack`
         // @ts-ignore
         window[functionName] = params.callback
-        this.appMetaidjs?.sendMetaDataTx(accessToken, JSON.stringify(params), functionName)
+        if (window.appMetaIdJsV2) {
+          window.appMetaIdJsV2?.sendMetaDataTx(accessToken, JSON.stringify(params), functionName)
+        } else {
+          window.appMetaIdJs?.sendMetaDataTx(accessToken, JSON.stringify(params), functionName)
+        }
       } else {
         const _params = {
           callback: (res: MetaIdJsRes) => {
@@ -167,7 +169,11 @@ export default class Sdk {
       const functionName: string = `eciesDecryptDataCallBack`
       // @ts-ignore
       window[functionName] = params.callback
-      this.appMetaidjs?.decryptData(params.accessToken, params.data, functionName)
+      if (window.appMetaIdJsV2) {
+        window.appMetaIdJsV2?.decryptData(params.accessToken, params.data, functionName)
+      } else {
+        window.appMetaIdJs?.decryptData(params.accessToken, params.data, functionName)
+      }
     } else {
       this.metaidjs?.eciesDecryptData(params)
     }
@@ -207,36 +213,36 @@ export default class Sdk {
     parentResolve?: (value: void | PromiseLike<void>) => void,
     parentReject?: any
   ) {
-    return new Promise<void>((resolve, reject) => {
-      fetch(`https://api.sensiblequery.com/tx/${txId}`)
-        .then(function (response) {
-          return response.json()
-        })
-        .then((response) => {
-          if (response.code === 0) {
-            if (parentResolve) parentResolve()
-            else resolve()
+    return new Promise<void>(async (resolve, reject) => {
+      axios.get(`https://api.sensiblequery.com/tx/${txId}`).then((res) => {
+        if (res.data.code === 0) {
+          if (parentResolve) parentResolve()
+          else resolve()
+        } else {
+          if (timer && timer > 30) {
+            if (parentReject) parentReject()
+            else reject()
           } else {
-            // 超过30次还不成功就 回调失败
-            if (timer && timer > 30) {
-              if (parentReject) parentReject()
-              else reject()
-            } else {
-              setTimeout(() => {
-                this.checkNftTxIdStatus(
-                  txId,
-                  timer ? timer + 1 : 1,
-                  parentResolve ? parentResolve : resolve,
-                  parentReject ? parentReject : reject
-                )
-              }, 1000)
-            }
+            setTimeout(() => {
+              this.checkNftTxIdStatus(
+                txId,
+                timer ? timer + 1 : 1,
+                parentResolve ? parentResolve : resolve,
+                parentReject ? parentReject : reject
+              )
+            }, 1000)
           }
-        })
-        .catch(() => {
-          if (parentReject) parentReject()
-          else reject()
-        })
+        }
+      }).catch((err) => {
+        setTimeout(() => {
+          this.checkNftTxIdStatus(
+            txId,
+            timer ? timer + 1 : 1,
+            parentResolve ? parentResolve : resolve,
+            parentReject ? parentReject : reject
+          )
+        }, 1000)
+      })
     })
   }
 
@@ -253,7 +259,6 @@ export default class Sdk {
           return response.json()
         })
         .then((response) => {
-          debugger
           if (response) {
             if (response.code === 200) {
               if (parentResolve) parentResolve()
@@ -314,15 +319,6 @@ export default class Sdk {
         if (!params.checkOnly) {
           await this.checkNftTxIdStatus(genesisTxId!).catch(() => reject('createNFT error'))
         }
-        // const issueParams = await this.setIssuePrams({
-        //   genesisId: genesis!,
-        //   genesisTxid: genesisTxId!,
-        //   codehash: codeHash!,
-        //   sensibleId: sensibleId,
-        //   ..._params,
-        // })
-
-        // 3.issueNFT
         const issueRes = await this.issueNFT({
           genesisId: genesis!,
           genesisTxid: genesisTxId!,
@@ -369,15 +365,16 @@ export default class Sdk {
             sensibleId = res.data.sensibleId
           }
           debugger
-          issueOperate()
+          await issueOperate()
         } else {
           reject('createNFT error')
         }
       } else {
-        issueOperate()
+        await issueOperate()
       }
     })
   }
+
 
   // setIssuePrams (params: NFTIssueParams) {
   //   return new Promise((resolve) => {
@@ -429,7 +426,6 @@ export default class Sdk {
           seriesName: params.seriesName
         },
         callback: (res: SdkGenesisNFTRes) => {
-          debugger
           this.callback(res, resolve)
         },
       }
@@ -437,7 +433,11 @@ export default class Sdk {
         const functionName: string = `genesisNFTCallBack`
         // @ts-ignore
         window[functionName] = _params.callback
-        this.appMetaidjs?.genesisNFT(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+        if (window.appMetaIdJsV2) {
+          window.appMetaIdJsV2?.genesisNFT(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+        } else {
+          window.appMetaIdJs?.genesisNFT(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+        }
       } else {
         debugger
         // @ts-ignore
@@ -500,7 +500,12 @@ export default class Sdk {
         const functionName: string = `issueNFTCallBack`
         // @ts-ignore
         window[functionName] = _params.callback
-        this.appMetaidjs?.issueNFT(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+        _params.data.content.classifyList = JSON.parse(_params.data.content.classifyList)
+        if (window.appMetaIdJsV2) {
+          window.appMetaIdJsV2?.issueNFT(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+        } else {
+          window.appMetaIdJs?.issueNFT(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+        }
       } else {
         // @ts-ignore
         debugger
@@ -528,7 +533,11 @@ export default class Sdk {
         // @ts-ignore
         window[functionName] = _params.callback
         // @ts-ignore
-        this.appMetaidjs?.nftBuy(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+        if (window.appMetaIdJsV2) {
+          window.appMetaIdJsV2?.nftBuy(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+        } else {
+          window.appMetaIdJs?.nftBuy(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+        }
       } else {
         // @ts-ignore
         this.metaidjs?.nftBuy(_params)
@@ -540,14 +549,12 @@ export default class Sdk {
   // nft 上架/销售
   nftSell(params: NftSellParams) {
     return new Promise<NftSellResData>((resolve, reject) => {
-      alert('sell 1')
       const _params = {
         data: {
           ...params,
           payTo: [{ address: import.meta.env.VITE_AppAddress, amount: 10000 }]
         },
         callback: (res: MetaIdJsRes) => {
-          alert('appMetaidjs callback nftSell' + res)
           this.callback(res, resolve)
         },
       }
@@ -555,11 +562,12 @@ export default class Sdk {
         const functionName: string = `nftSellCallBack`
         // @ts-ignore
         window[functionName] = _params.callback
-        alert('sell 1')
         // @ts-ignore
-        alert('appMetaidjs' + this.appMetaidjs?.nftSell)
-        // @ts-ignore
-        this.appMetaidjs?.nftSell(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+        if (window.appMetaIdJsV2) {
+          window.appMetaIdJsV2?.nftSell(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+        } else {
+          window.appMetaIdJs?.nftSell(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+        }
       } else {
         // @ts-ignore
         this.metaidjs?.nftSell(_params)
@@ -588,7 +596,11 @@ export default class Sdk {
         // @ts-ignore
         window[functionName] = _params.callback
         // @ts-ignore
-        this.appMetaidjs?.nftCancel(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+        if (window.appMetaIdJsV2) {
+          window.appMetaIdJsV2?.nftCancel(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+        } else {
+          window.appMetaIdJs?.nftCancel(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+        }
       } else {
         debugger
         // @ts-ignore
@@ -608,6 +620,7 @@ export default class Sdk {
         address
       }
       if (this.isApp) {
+        alert('没兼容APP')
         const functionName: string = `nftList`
         // @ts-ignore
         window[functionName] = params.callback
@@ -653,29 +666,30 @@ export default class Sdk {
 
   // 获取用户余额
   ftList(address: string) {
-    return new Promise<GetBalanceRes>((resolve, reject) => {
-      fetch(`https://api.sensiblequery.com/ft/summary/${address}` )
-        .then(function (response) {
-          return response.json()
-        })
-        .then((response) => {
-          debugger
-          if (response.code === 0) {
-            resolve(response)
-          } else {
-            reject('ftList error')
-          }
-        })
-        .catch(() => {
-          reject('ftList error')
-        })
-    })
+    return axios.get(`https://api.sensiblequery.com/ft/summary/${address}`)
   }
 
   // 获取用户余额
   getBalance() {
     return new Promise<GetBalanceRes>((resolve) => {
       if (this.isApp) {
+        //@ts-ignore
+        window['getBalanceCallBack'] = (res) => {
+          res = JSON.parse(res)
+          const bsv = res.data
+          this.callback({
+            code: res.code,
+            data: {
+              bsv: bsv,
+              satoshis: new Decimal(bsv).mul(Math.pow(10, 8))
+            }
+          }, resolve)
+        }
+        if (window.appMetaIdJsV2) {
+          window.appMetaIdJsV2?.getBalance(store.state.token!.access_token, 'getBalanceCallBack')
+        } else {
+          window.appMetaIdJs?.getBalance(store.state.token!.access_token, 'getBalanceCallBack')
+        }
       } else {
         //@ts-ignore
         this.metaidjs.getBalance({
@@ -702,12 +716,10 @@ export default class Sdk {
             message: res
           },
           status: 'fail',
-          accessToken: '',
           handlerId: ''
         }
       }
     }
-    alert('res' + JSON.stringify(res))
     if (res.code !== 200 && res.code !== 205) {
       if (res.data.message !== 'The NFT is not for sale because  the corresponding SellUtxo cannot be found.') {
         ElMessage.error(res.data.message)
