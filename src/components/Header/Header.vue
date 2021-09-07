@@ -11,6 +11,7 @@
       <nav class="flex flex-align-center flex-pack-center">
         <router-link to="/">{{ $t('marketplace') }}</router-link>
         <router-link to="/create">{{ $t('createnft') }}</router-link>
+        <router-link to="/metaBot" class="flex flex-align-center"> MetaBot <img src="@/assets/images/nav_icon_hot.svg" alt="MetaBot" /></router-link>
       </nav>
       <div class="operate flex flex-align-center">
         <!-- 登录按钮 -->
@@ -52,9 +53,10 @@
   modal-class="menu-drawer"
   v-model="isShowDrawer"
   direction="ttb">
-  <nav class="mobile-nav-modal flex flex-align-center flex-pack-center">
+  <nav class="mobile-nav-modal">
         <router-link  to="/" @click.stop="isShowDrawer = false">{{ $t('marketplace') }}</router-link>
         <router-link  to="/create" @click.stop="isShowDrawer = false">{{ $t('createnft') }}</router-link>
+        <router-link to="/metaBot" @click.stop="isShowDrawer = false"> MetaBot <img src="@/assets/images/nav_icon_hot.svg" alt="MetaBot" /></router-link>
   </nav>
 </el-drawer>
 </template>
