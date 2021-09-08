@@ -20,7 +20,7 @@
 
   <!-- banner -->
   <div class="banner container">
-    <a><img src="@/assets/images/banner.png" alt="" /></a>
+    <a @click="toMetabot"><img src="@/assets/images/banner.png" alt="" /></a>
   </div>
 
   <div class="metabot-tags container">
@@ -106,7 +106,7 @@
                   !metabot.nftIsReady ||
                   (store.state.userInfo && store.state.userInfo.metaId === metabot.nftOwnerMetaId),
               }"
-              @click.stop="buy(metabot)"
+              @click.stop="toDetail(metabot)"
             >
               {{ new Decimal(metabot.nftPrice).div(Math.pow(10, 8)).toString() }} BSV
             </div>
@@ -166,6 +166,10 @@ function search() {
     sectionIndex.value = -1
     getSearchDatas(true)
   }
+}
+
+function toMetabot() {
+  window.open('https://www.metabot.world')
 }
 
 function toDetail(metabot: GetMetaBotListResItem) {
