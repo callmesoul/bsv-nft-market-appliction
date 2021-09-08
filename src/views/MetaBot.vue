@@ -98,7 +98,7 @@
                 <span class="type">({{ $t('owner') }})</span>
               </div>
             </div>
-            <div
+            <!-- <div
               class="btn btn-block"
               :class="{
                 'btn-gray':
@@ -109,7 +109,7 @@
               @click.stop="buy(metabot)"
             >
               {{ new Decimal(metabot.nftPrice).div(Math.pow(10, 8)).toString() }} BSV
-            </div>
+            </div> -->
           </div>
         </a>
       </div>
