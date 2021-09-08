@@ -60,7 +60,10 @@ export default class Sdk {
   isApp: boolean = false
   appId: string = ''
   appScrect: string = ''
-  isProduction = import.meta.env.MODE === 'gray' || import.meta.env.MODE === 'prod' || import.meta.env.MODE === 'production'
+  isProduction =
+    import.meta.env.MODE === 'gray' ||
+    import.meta.env.MODE === 'prod' ||
+    import.meta.env.MODE === 'production'
   constructor(options?: ConstructorOptionsTypes) {
     this.appId = import.meta.env.VITE_AppId
     this.appScrect = import.meta.env.VITE_AppSecret
@@ -214,35 +217,38 @@ export default class Sdk {
     parentReject?: any
   ) {
     return new Promise<void>(async (resolve, reject) => {
-      axios.get(`https://api.sensiblequery.com/tx/${txId}`).then((res) => {
-        if (res.data.code === 0) {
-          if (parentResolve) parentResolve()
-          else resolve()
-        } else {
-          if (timer && timer > 30) {
-            if (parentReject) parentReject()
-            else reject()
+      axios
+        .get(`https://api.sensiblequery.com/tx/${txId}`)
+        .then((res) => {
+          if (res.data.code === 0) {
+            if (parentResolve) parentResolve()
+            else resolve()
           } else {
-            setTimeout(() => {
-              this.checkNftTxIdStatus(
-                txId,
-                timer ? timer + 1 : 1,
-                parentResolve ? parentResolve : resolve,
-                parentReject ? parentReject : reject
-              )
-            }, 1000)
+            if (timer && timer > 30) {
+              if (parentReject) parentReject()
+              else reject()
+            } else {
+              setTimeout(() => {
+                this.checkNftTxIdStatus(
+                  txId,
+                  timer ? timer + 1 : 1,
+                  parentResolve ? parentResolve : resolve,
+                  parentReject ? parentReject : reject
+                )
+              }, 1000)
+            }
           }
-        }
-      }).catch((err) => {
-        setTimeout(() => {
-          this.checkNftTxIdStatus(
-            txId,
-            timer ? timer + 1 : 1,
-            parentResolve ? parentResolve : resolve,
-            parentReject ? parentReject : reject
-          )
-        }, 1000)
-      })
+        })
+        .catch((err) => {
+          setTimeout(() => {
+            this.checkNftTxIdStatus(
+              txId,
+              timer ? timer + 1 : 1,
+              parentResolve ? parentResolve : resolve,
+              parentReject ? parentReject : reject
+            )
+          }, 1000)
+        })
     })
   }
 
@@ -375,14 +381,13 @@ export default class Sdk {
     })
   }
 
-
   // setIssuePrams (params: NFTIssueParams) {
   //   return new Promise((resolve) => {
   //     let nfticon
   //     if (params.content.nfticon) {
   //       nfticon =  params.content.nfticon
   //       params.content.nfticon = `![metafile](0)`
-  //     } 
+  //     }
   //     if (params.content.originalFileTxid) {
   //       nfticon =  params.content.originalFileTxid
   //       params.content.originalFileTxid = `![metafile](1)`
@@ -423,7 +428,7 @@ export default class Sdk {
             },
           ],
           checkOnly: params.checkOnly,
-          seriesName: params.seriesName
+          seriesName: params.seriesName,
         },
         callback: (res: SdkGenesisNFTRes) => {
           this.callback(res, resolve)
@@ -434,9 +439,17 @@ export default class Sdk {
         // @ts-ignore
         window[functionName] = _params.callback
         if (window.appMetaIdJsV2) {
-          window.appMetaIdJsV2?.genesisNFT(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+          window.appMetaIdJsV2?.genesisNFT(
+            store.state.token!.access_token,
+            JSON.stringify(_params.data),
+            functionName
+          )
         } else {
-          window.appMetaIdJs?.genesisNFT(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+          window.appMetaIdJs?.genesisNFT(
+            store.state.token!.access_token,
+            JSON.stringify(_params.data),
+            functionName
+          )
         }
       } else {
         debugger
@@ -446,13 +459,13 @@ export default class Sdk {
     })
   }
 
-  checkUserCanIssueNft (params: {
-    metaId: string
-    address: string
-    language: Langs
-  }) {
+  checkUserCanIssueNft(params: { metaId: string; address: string; language: Langs }) {
     return new Promise<boolean>((resolve, reject) => {
-      fetch(`${import.meta.env.VITE_WalletApi}/aggregation/v2/app/nftOnShow/getMyNftIssueEligibility/${params.metaId}/${params.address}/0/${params.language}`)
+      fetch(
+        `${import.meta.env.VITE_WalletApi}/aggregation/v2/app/nftOnShow/getMyNftIssueEligibility/${
+          params.metaId
+        }/${params.address}/0/${params.language}`
+      )
         .then(function (response) {
           return response.json()
         })
@@ -480,7 +493,7 @@ export default class Sdk {
         data: {
           iconType: 'pic',
           payTo: [{ address: import.meta.env.VITE_AppAddress, amount: 10000 }],
-          ...params
+          ...params,
         },
         callback: (res: MetaIdJsRes) => {
           debugger
@@ -502,9 +515,17 @@ export default class Sdk {
         window[functionName] = _params.callback
         _params.data.content.classifyList = JSON.parse(_params.data.content.classifyList)
         if (window.appMetaIdJsV2) {
-          window.appMetaIdJsV2?.issueNFT(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+          window.appMetaIdJsV2?.issueNFT(
+            store.state.token!.access_token,
+            JSON.stringify(_params.data),
+            functionName
+          )
         } else {
-          window.appMetaIdJs?.issueNFT(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+          window.appMetaIdJs?.issueNFT(
+            store.state.token!.access_token,
+            JSON.stringify(_params.data),
+            functionName
+          )
         }
       } else {
         // @ts-ignore
@@ -513,7 +534,6 @@ export default class Sdk {
       }
     })
   }
-  
 
   // metaidjs nft 购买
   nftBuy(params: NftBuyParams) {
@@ -522,11 +542,16 @@ export default class Sdk {
       const _params = {
         data: {
           ...data,
-          payTo: this.isProduction ? [{ address: import.meta.env.VITE_AppAddress, amount: Math.ceil(new Decimal(amount * 0.05).toNumber())}] : [],
+          payTo: [
+            {
+              address: import.meta.env.VITE_AppAddress,
+              amount: Math.ceil(new Decimal(amount * 0.05).toNumber()),
+            },
+          ],
         },
         callback: (res: MetaIdJsRes) => {
           this.callback(res, resolve)
-        }
+        },
       }
       if (this.isApp) {
         const functionName: string = `nftBuyCallBack`
@@ -534,9 +559,17 @@ export default class Sdk {
         window[functionName] = _params.callback
         // @ts-ignore
         if (window.appMetaIdJsV2) {
-          window.appMetaIdJsV2?.nftBuy(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+          window.appMetaIdJsV2?.nftBuy(
+            store.state.token!.access_token,
+            JSON.stringify(_params.data),
+            functionName
+          )
         } else {
-          window.appMetaIdJs?.nftBuy(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+          window.appMetaIdJs?.nftBuy(
+            store.state.token!.access_token,
+            JSON.stringify(_params.data),
+            functionName
+          )
         }
       } else {
         // @ts-ignore
@@ -545,14 +578,13 @@ export default class Sdk {
     })
   }
 
-
   // nft 上架/销售
   nftSell(params: NftSellParams) {
     return new Promise<NftSellResData>((resolve, reject) => {
       const _params = {
         data: {
           ...params,
-          payTo: [{ address: import.meta.env.VITE_AppAddress, amount: 10000 }]
+          payTo: [{ address: import.meta.env.VITE_AppAddress, amount: 10000 }],
         },
         callback: (res: MetaIdJsRes) => {
           this.callback(res, resolve)
@@ -564,9 +596,17 @@ export default class Sdk {
         window[functionName] = _params.callback
         // @ts-ignore
         if (window.appMetaIdJsV2) {
-          window.appMetaIdJsV2?.nftSell(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+          window.appMetaIdJsV2?.nftSell(
+            store.state.token!.access_token,
+            JSON.stringify(_params.data),
+            functionName
+          )
         } else {
-          window.appMetaIdJs?.nftSell(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+          window.appMetaIdJs?.nftSell(
+            store.state.token!.access_token,
+            JSON.stringify(_params.data),
+            functionName
+          )
         }
       } else {
         // @ts-ignore
@@ -580,8 +620,8 @@ export default class Sdk {
     return new Promise<NFTCancelResData>((resolve, reject) => {
       const _params = {
         data: {
-           outputIndex: 0,
-           payTo: [{ address: import.meta.env.VITE_AppAddress, amount: 10000 }],
+          outputIndex: 0,
+          payTo: [{ address: import.meta.env.VITE_AppAddress, amount: 10000 }],
           ...params,
         },
         callback: (res: MetaIdJsRes) => {
@@ -597,9 +637,17 @@ export default class Sdk {
         window[functionName] = _params.callback
         // @ts-ignore
         if (window.appMetaIdJsV2) {
-          window.appMetaIdJsV2?.nftCancel(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+          window.appMetaIdJsV2?.nftCancel(
+            store.state.token!.access_token,
+            JSON.stringify(_params.data),
+            functionName
+          )
         } else {
-          window.appMetaIdJs?.nftCancel(store.state.token!.access_token, JSON.stringify(_params.data), functionName)
+          window.appMetaIdJs?.nftCancel(
+            store.state.token!.access_token,
+            JSON.stringify(_params.data),
+            functionName
+          )
         }
       } else {
         debugger
@@ -611,13 +659,13 @@ export default class Sdk {
 
   // nft 列表查询
   nftList(address: string) {
-    return new Promise<NFTLIstRes>(resolve => {
+    return new Promise<NFTLIstRes>((resolve) => {
       debugger
       const params = {
         callback: (res: MetaIdJsRes) => {
           this.callback(res, resolve)
         },
-        address
+        address,
       }
       if (this.isApp) {
         alert('没兼容APP')
@@ -636,18 +684,27 @@ export default class Sdk {
   // 获取用户余额
   getMc(address: string) {
     return new Promise<number>((resolve, reject) => {
-      fetch(`https://api.sensiblequery.com/ft/summary/${address}` )
+      fetch(`https://api.sensiblequery.com/ft/summary/${address}`)
         .then(function (response) {
           return response.json()
         })
         .then((response: GetMcRes) => {
           if (response.code === 0) {
-            if(response.data) {
-              const mc = response.data.find(item => {
-                return item.sensibleId === '3e04f81d7fa7d4d606c3c4c8e8d3a8dcf58b5808740d40a445f3884e126bc7fd00000000' && item.codehash === '777e4dd291059c9f7a0fd563f7204576dcceb791' && item.genesis=== '54256eb1b9c815a37c4af1b82791ec6bdf5b3fa3'
+            if (response.data) {
+              const mc = response.data.find((item) => {
+                return (
+                  item.sensibleId ===
+                    '3e04f81d7fa7d4d606c3c4c8e8d3a8dcf58b5808740d40a445f3884e126bc7fd00000000' &&
+                  item.codehash === '777e4dd291059c9f7a0fd563f7204576dcceb791' &&
+                  item.genesis === '54256eb1b9c815a37c4af1b82791ec6bdf5b3fa3'
+                )
               })
               if (mc) {
-                resolve(new Decimal(mc.balance + mc.pendingBalance).div(Math.pow(10, mc.decimal)).toNumber())
+                resolve(
+                  new Decimal(mc.balance + mc.pendingBalance)
+                    .div(Math.pow(10, mc.decimal))
+                    .toNumber()
+                )
               } else {
                 resolve(0)
               }
@@ -677,13 +734,16 @@ export default class Sdk {
         window['getBalanceCallBack'] = (res) => {
           res = JSON.parse(res)
           const bsv = res.data
-          this.callback({
-            code: res.code,
-            data: {
-              bsv: bsv,
-              satoshis: new Decimal(bsv).mul(Math.pow(10, 8))
-            }
-          }, resolve)
+          this.callback(
+            {
+              code: res.code,
+              data: {
+                bsv: bsv,
+                satoshis: new Decimal(bsv).mul(Math.pow(10, 8)),
+              },
+            },
+            resolve
+          )
         }
         if (window.appMetaIdJsV2) {
           window.appMetaIdJsV2?.getBalance(store.state.token!.access_token, 'getBalanceCallBack')
@@ -713,15 +773,18 @@ export default class Sdk {
         res = {
           code: 400,
           data: {
-            message: res
+            message: res,
           },
           status: 'fail',
-          handlerId: ''
+          handlerId: '',
         }
       }
     }
     if (res.code !== 200 && res.code !== 205) {
-      if (res.data.message !== 'The NFT is not for sale because  the corresponding SellUtxo cannot be found.') {
+      if (
+        res.data.message !==
+        'The NFT is not for sale because  the corresponding SellUtxo cannot be found.'
+      ) {
         ElMessage.error(res.data.message)
       }
     }
