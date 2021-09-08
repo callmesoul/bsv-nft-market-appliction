@@ -98,7 +98,7 @@
                 <span class="type">({{ $t('owner') }})</span>
               </div>
             </div>
-            <!-- <div
+            <div
               class="btn btn-block"
               :class="{
                 'btn-gray':
@@ -106,10 +106,10 @@
                   !metabot.nftIsReady ||
                   (store.state.userInfo && store.state.userInfo.metaId === metabot.nftOwnerMetaId),
               }"
-              @click.stop="buy(metabot)"
+              @click.stop="toDetail(metabot)"
             >
               {{ new Decimal(metabot.nftPrice).div(Math.pow(10, 8)).toString() }} BSV
-            </div> -->
+            </div>
           </div>
         </a>
       </div>
