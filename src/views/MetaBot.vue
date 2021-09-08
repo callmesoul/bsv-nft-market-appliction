@@ -20,7 +20,7 @@
 
   <!-- banner -->
   <div class="banner container">
-    <a><img src="@/assets/images/banner.png" alt="" /></a>
+    <a @click="toMetabot"><img src="@/assets/images/banner.png" alt="" /></a>
   </div>
 
   <div class="metabot-tags container">
@@ -166,6 +166,10 @@ function search() {
     sectionIndex.value = -1
     getSearchDatas(true)
   }
+}
+
+function toMetabot() {
+  window.open('https://www.metabot.world')
 }
 
 function toDetail(metabot: GetMetaBotListResItem) {

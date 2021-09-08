@@ -1,8 +1,8 @@
 <template>
   <!-- banner -->
-  <!-- <div class="banner container">
-    <a><img src="@/assets/images/banner.png" alt="" /></a>
-  </div> -->
+  <div class="banner container">
+    <a @click="toMetabot"><img src="@/assets/images/banner.png" alt="" /></a>
+  </div>
 
   <div class="home">
     <!-- 推荐作品 -->
@@ -170,6 +170,10 @@ async function getNftList(isCover: boolean = false) {
     }
     isShowNftListSkeleton.value = false
   }
+}
+
+function toMetabot() {
+  window.open('https://www.metabot.world')
 }
 
 // 获取推荐列表
