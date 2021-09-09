@@ -263,7 +263,13 @@ function getDatas(isCover = false) {
         pagination.nothing = true
       }
       // @ts-ignore
-      countdown.value = res.data.countdown
+      if (res.data.countdown > 0) {
+        // @ts-ignore
+        countdown.value = res.data.countdown + 1000
+      } else {
+        // @ts-ignore
+        countdown.value = res.data.countdown
+      }
       isShowSkeleton.value = false
     }
     resolve()
