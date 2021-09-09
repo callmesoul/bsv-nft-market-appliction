@@ -133,22 +133,33 @@
                 <img class="avatar" :src="$filters.avatar(nft.val.foundryMetaId)" />
                 <div class="author-msg flex1">
                   <div class="creater">{{ $t('creater') }}: {{ nft.val.foundryName }}</div>
-                  <div class="metaid" v-if="nft.val.foundryMetaId">MetaID:{{ nft.val.foundryMetaId.slice(0, 6) }}</div>
+                  <div class="metaid" v-if="nft.val.foundryMetaId">
+                    MetaID:{{ nft.val.foundryMetaId.slice(0, 6) }}
+                  </div>
                 </div>
               </div>
-              <CertTemp @click="toCert" :isCert="nft.val.foundryMetaId === '3c03f6b8783fa672bb34953519110944dab1d8a23711c7df4f1dd9e16e5b823c' || nft.val.foundryMetaId === '974e2977d5c9446f7f48fd82c9ea51f82749b9ef7c00d26b73bc450d167d5f31' ? true : false" />
+              <CertTemp
+                @click="toCert"
+                :isCert="
+                  nft.val.foundryMetaId ===
+                    '3c03f6b8783fa672bb34953519110944dab1d8a23711c7df4f1dd9e16e5b823c' ||
+                  nft.val.foundryMetaId ===
+                    '974e2977d5c9446f7f48fd82c9ea51f82749b9ef7c00d26b73bc450d167d5f31'
+                    ? true
+                    : false
+                "
+              />
             </div>
             <div class="drsc flex1 flex flex-v">
               <div class="title flex flex-align-center">
                 <template v-if="nft.val.putAway">
-                  {{$t('seller')}}<img :src="$filters.avatar(nft.val.ownerMetaId)" /> <span>{{nft.val.ownerName}}</span> {{ $t('theIntro') }}：
+                  {{ $t('seller') }}<img :src="$filters.avatar(nft.val.ownerMetaId)" />
+                  <span>{{ nft.val.ownerName }}</span> {{ $t('theIntro') }}：
                 </template>
-                <template v-else>
-                  {{$t('drsc')}}:
-                </template>
+                <template v-else> {{ $t('drsc') }}: </template>
               </div>
               <div class="cont flex1">
-                <pre>{{ nft.val.putAway ? nft.val.sellDesc : nft.val.describe}}</pre>
+                <pre>{{ nft.val.putAway ? nft.val.sellDesc : nft.val.describe }}</pre>
               </div>
             </div>
 
@@ -163,30 +174,41 @@
             </template> -->
             <!-- <div class="btn btn-block"  @click="buy">{{ $t('use') }} {{ nft.val.amount }} BSV {{ $t('buy') }}</div> -->
             <div class="operate-warp">
-              <div
-                class="btn btn-block"
-                :class="{'btn-gray': !nft.val.putAway}"
-                @click="buy"
-                v-if="
-                  !store.state.userInfo ||
-                  (store.state.userInfo && store.state.userInfo.metaId !== nft.val.ownerMetaId)
-                "
-              >
-                <template v-if="nft.val.putAway">{{ i18n.locale.value === 'zh' ? `以 ${ new Decimal(nft.val.amount).div(Math.pow(10, 8)).toString() } BSV 购买` : `Buy Now At ${new Decimal(nft.val.amount).div(10 ** 8).toString()} BSV` }}</template>
-                <template v-else>{{$t('isBeBuyedOrCanceled')}}</template>
-              </div>
-              <template
-                v-else-if="
-                  store.state.userInfo && store.state.userInfo.metaId === nft.val.ownerMetaId
-                "
-              >
-                <div class="flex flex-align-center  putAway-warp" v-if="nft.val.putAway" >
-                  <div class="btn btn-block btn-plain flex1" @click="offSale">{{ $t('offsale') }}</div>
-                  <!-- <template v-if="now > nft.val.remainingTime">
+              <template v-if="nft.val.sellState === 3">
+                <div class="btn btn-block btn-gray">{{ $t('comingSoon ') }}</div>
+              </template>
+              <template v-else>
+                <div
+                  class="btn btn-block"
+                  :class="{ 'btn-gray': !nft.val.putAway }"
+                  @click="buy"
+                  v-if="
+                    !store.state.userInfo ||
+                    (store.state.userInfo && store.state.userInfo.metaId !== nft.val.ownerMetaId)
+                  "
+                >
+                  <template v-if="nft.val.putAway">{{
+                    i18n.locale.value === 'zh'
+                      ? `以 ${new Decimal(nft.val.amount).div(Math.pow(10, 8)).toString()} BSV 购买`
+                      : `Buy Now At ${new Decimal(nft.val.amount).div(10 ** 8).toString()} BSV`
+                  }}</template>
+                  <template v-else>{{ $t('isBeBuyedOrCanceled') }}</template>
+                </div>
+                <template
+                  v-else-if="
+                    store.state.userInfo && store.state.userInfo.metaId === nft.val.ownerMetaId
+                  "
+                >
+                  <div class="flex flex-align-center putAway-warp" v-if="nft.val.putAway">
+                    <div class="btn btn-block btn-plain flex1" @click="offSale">
+                      {{ $t('offsale') }}
+                    </div>
+                    <!-- <template v-if="now > nft.val.remainingTime">
                     <div class="btn btn-block flex1" @click="toSale">{{$t('saleAgain')}}</div>
                   </template> -->
-                </div>
-                <div class="btn btn-block" v-else @click="toSale">{{ $t('sale') }}</div>
+                  </div>
+                  <div class="btn btn-block" v-else @click="toSale">{{ $t('sale') }}</div>
+                </template>
               </template>
             </div>
           </div>
@@ -215,11 +237,9 @@
                     <div class="key">{{ $t('workclass') }}：</div>
                     <div class="value flex1">
                       <template v-if="nft.val.classify && nft.val.classify.length > 0">
-                        <span v-for="item in nft.val.classify" :key="item">{{$t(item)}}</span>
+                        <span v-for="item in nft.val.classify" :key="item">{{ $t(item) }}</span>
                       </template>
-                      <template v-else>
-                        --
-                      </template>
+                      <template v-else> -- </template>
                     </div>
                   </div>
                   <div class="work-detail-item flex flex-align-baseline">
@@ -251,11 +271,13 @@
                     </div>
                   </div>
                   <div class="work-detail-item flex flex-align-center">
-                    <div class="key">{{$t('issueMetaTxId')}}：</div>
+                    <div class="key">{{ $t('issueMetaTxId') }}：</div>
                     <div class="value flex1 nowrap">
                       {{ nft.val.issueMetaTxId }}
                       <a class="copy" @click="copy(nft.val.issueMetaTxId)">{{ $t('copy') }}</a>
-                      <a class="copy" @click="toWhatsonchain(nft.val.issueMetaTxId)">{{ $t('look') }}</a>
+                      <a class="copy" @click="toWhatsonchain(nft.val.issueMetaTxId)">{{
+                        $t('look')
+                      }}</a>
                     </div>
                   </div>
                 </div>
@@ -271,7 +293,9 @@
                         />
                         <div class="author-msg flex1">
                           <div class="creater">{{ nft.val.foundryName }}</div>
-                          <div class="metaid" v-if="nft.val.foundryMetaId">MetaID: {{ nft.val.foundryMetaId.slice(0, 6) }}</div>
+                          <div class="metaid" v-if="nft.val.foundryMetaId">
+                            MetaID: {{ nft.val.foundryMetaId.slice(0, 6) }}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -287,7 +311,9 @@
                         />
                         <div class="author-msg flex1">
                           <div class="creater">{{ nft.val.ownerName }}</div>
-                          <div class="metaid" v-if="nft.val.ownerMetaId">MetaID:{{ nft.val.ownerMetaId.slice(0, 6) }}</div>
+                          <div class="metaid" v-if="nft.val.ownerMetaId">
+                            MetaID:{{ nft.val.ownerMetaId.slice(0, 6) }}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -297,7 +323,7 @@
                   <div class="work-detail-item flex flex-align-center">
                     <div class="key">{{ $t('worktype') }}：</div>
                     <div class="value flex1">
-                      {{ nftTypes.find((item) => item.value === nft.val.type)?.name }} 
+                      {{ nftTypes.find((item) => item.value === nft.val.type)?.name }}
                       <!-- 1920*1080PX
                       5.2M -->
                     </div>
@@ -380,7 +406,19 @@ import { toClipboard } from '@soerenmartius/vue3-clipboard'
 import { ElLoading, ElMessage, ElSkeleton, ElSkeletonItem, ElMessageBox } from 'element-plus'
 import { useRoute } from 'vue-router'
 // @ts-ignore
-import { BuyNft, GetMyNftEligibility, GetMySelledNfts, GetNftDetail, GetNftIssue, GetNftIssueyTxId, GetNFTOwnerAddress, Langs, NftApiCode, NFTApiGetNFTDetail, TransactionRecord } from '@/api'
+import {
+  BuyNft,
+  GetMyNftEligibility,
+  GetMySelledNfts,
+  GetNftDetail,
+  GetNftIssue,
+  GetNftIssueyTxId,
+  GetNFTOwnerAddress,
+  Langs,
+  NftApiCode,
+  NFTApiGetNFTDetail,
+  TransactionRecord,
+} from '@/api'
 // @ts-ignore
 import dayjs from 'dayjs'
 import { useStore } from '@/store'
@@ -391,6 +429,7 @@ import { router } from '@/router'
 import NftOffSale from '@/utils/offSale'
 import NFTDetail from '@/utils/nftDetail'
 import { metafileUrl } from '@/utils/util'
+import Buy from '@/utils/buy'
 
 const i18n = useI18n()
 const route = useRoute()
@@ -429,8 +468,8 @@ function getDetail() {
     const _nft = await NFTDetail(
       typeof route.params.genesisId === 'string' ? route.params.genesisId : '',
       typeof route.params.codehash === 'string' ? route.params.codehash : '',
-      typeof route.params.tokenIndex === 'string' ? route.params.tokenIndex : '',
-    ).catch(() => isShowSkeleton.value = false)
+      typeof route.params.tokenIndex === 'string' ? route.params.tokenIndex : ''
+    ).catch(() => (isShowSkeleton.value = false))
     if (_nft && typeof _nft !== 'boolean') {
       nft.val = _nft
       // countDownTimeLeft()
@@ -494,15 +533,21 @@ function countDownTimeLeft() {
     if (nft.val.remainingTime >= now) {
       nft.val.remainingTime = nft.val.remainingTime - 1000
       day.value = Math.abs(dayjs(now).diff(nft.val.remainingTime, 'day'))
-      hour.value = Math.abs(dayjs(now).diff(nft.val.remainingTime, 'hour')) - (day.value * 24)
-      minute.value = Math.abs(dayjs(now).diff(nft.val.remainingTime, 'minute')) - (day.value * 24 * 60) - (hour.value * 60)
-      second.value = Math.abs(dayjs(now).diff(nft.val.remainingTime, 's')) - (day.value * 24 * 60 * 60) - (hour.value * 60 * 60) - (minute.value * 60)
+      hour.value = Math.abs(dayjs(now).diff(nft.val.remainingTime, 'hour')) - day.value * 24
+      minute.value =
+        Math.abs(dayjs(now).diff(nft.val.remainingTime, 'minute')) -
+        day.value * 24 * 60 -
+        hour.value * 60
+      second.value =
+        Math.abs(dayjs(now).diff(nft.val.remainingTime, 's')) -
+        day.value * 24 * 60 * 60 -
+        hour.value * 60 * 60 -
+        minute.value * 60
     } else {
       clearInterval(interval)
     }
   }, 1000)
 }
-
 
 function toLink() {
   const url = `${import.meta.env.VITE_WhatsonChain}/tx/${nft.val.tx}`
@@ -511,33 +556,30 @@ function toLink() {
 
 function offSale() {
   const loading = ElLoading.service({
-      lock: true,
-      text: 'Loading',
-      spinner: 'el-icon-loading',
-      background: 'rgba(0, 0, 0, 0.7)',
-      customClass: 'full-loading',
+    lock: true,
+    text: 'Loading',
+    spinner: 'el-icon-loading',
+    background: 'rgba(0, 0, 0, 0.7)',
+    customClass: 'full-loading',
   })
   ElMessageBox.confirm(`${i18n.t('offsaleConfirm')} ${nft.val.nftName} ?`, i18n.t('niceWarning'), {
     confirmButtonText: i18n.t('confirm'),
     cancelButtonText: i18n.t('cancel'),
-    closeOnClickModal: false
-  }).then(async () => {
-    NftOffSale(nft.val, loading)
-      .then(() => {
-        loading.close()
-      })
-      .catch(() => {
-        loading.close()
-      })
+    closeOnClickModal: false,
   })
-  .catch(() => loading.close())
+    .then(async () => {
+      NftOffSale(nft.val, loading)
+        .then(() => {
+          loading.close()
+        })
+        .catch(() => {
+          loading.close()
+        })
+    })
+    .catch(() => loading.close())
 }
 
-
 async function buy() {
-  if (!nft.val.putAway) return
-  
-  await checkSdkStatus()
   const loading = ElLoading.service({
     lock: true,
     text: 'Loading',
@@ -545,153 +587,32 @@ async function buy() {
     background: 'rgba(0, 0, 0, 0.7)',
     customClass: 'full-loading',
   })
-
-  
-
-  // const getAddressRes = await GetNFTOwnerAddress({ tokenId: nft.val.tokenId }).catch(() =>
-  //   loading.close()
-  // )
-  // if (getAddressRes && getAddressRes.code === NftApiCode.success) {
-    
-  // }
-
-
-  const params = {
-      codehash: nft.val.codeHash,
-      genesis: nft.val.genesis,
-      tokenIndex: nft.val.tokenIndex,
-      genesisTxid: nft.val.genesisTxId,
-      // address: getAddressRes.data.address,
-      sensibleId: nft.val.sensibleId,
-      sellTxId: nft.val.sellTxId,
-      sellContractTxId: nft.val.sellContractTxId,
-      amount: new Decimal(nft.val.amount).toNumber()
-    }
-    // 需要消费金额
-    const useAmountRes = await store.state.sdk
-      ?.nftBuy({
-        checkOnly: true,
-        ...params
-      })
-      .catch(() => {
-        loading.close()
-      })
-    if (useAmountRes?.code === 200) {
-      const useAmount = useAmountRes.data.amount! + nft.val.amount
-      // 查询用户余额
-    const userBalanceRes = await store.state.sdk?.getBalance()
-    if (userBalanceRes && userBalanceRes.code === 200) {
-      if (userBalanceRes.data.satoshis > useAmount) {
-        // 余额足够
-        ElMessageBox.confirm(
-          `${i18n.t('useAmountTips')}: ${useAmount} SATS`,
-          i18n.t('niceWarning'),
-          {
-            confirmButtonText: i18n.t('confirm'),
-            cancelButtonText: i18n.t('cancel'),
-            closeOnClickModal: false
-          }
-        ).then(async () => {
-          // 确认支付
-          const res = await store.state.sdk?.nftBuy(params).catch(() => {
-            loading.close()
-          })
-          if (res?.code === 200) {
-            nft.val.ownerMetaId = store.state.userInfo!.metaId
-            nft.val.ownerName = store.state.userInfo!.name
-            nft.val.putAway = false
-            ElMessage.success(i18n.t('buySuccess'))
-            loading.close()
-            router.replace({ name: 'nftSuccess', 
-              params: { 
-                genesisId: nft.val.genesis,
-                tokenIndex: nft.val.tokenIndex,
-                codehash: nft.val.codeHash
-              },
-              query: {
-                type: 'buyed'
-              }
-            })
-
-            /* // 上链完 nft buy 协议 要 上报服务器
-            const response = await BuyNft({
-              tokenId: nft.val.tokenId,
-              payMentAddress: store.state.userInfo!.address,
-              collectionAddress: nft.val.ownerAddress,
-              payTxId: res.data.txid,
-              amount: new Decimal(nft.val.amount).toNumber(),
-            }).catch(() => loading.close())
-              if (response && response.code === NftApiCode.success) {
-                nft.val.ownerMetaId = store.state.userInfo!.metaId
-                nft.val.ownerName = store.state.userInfo!.name
-                nft.val.putAway = false
-                ElMessage.success(i18n.t('buySuccess'))
-                loading.close()
-              } */
-            } else {
-              loading.close()
-              if (res) {
-                nftNotCanBuy(res)
-              }
-            }
-          })
-          .catch(() => loading.close())
-        } else {
-          // 余额不足
-          loading.close()
-          ElMessageBox.alert(
-            `
-          <p>${i18n.t('useAmountTips')}: ${useAmount} SATS</p>
-          <p>${i18n.t('insufficientBalance')}</p>
-        `,
-            {
-              confirmButtonText: i18n.t('confirm'),
-              dangerouslyUseHTMLString: true,
-            }
-          )
-          return
-        }
-      }
-    } else {
+  Buy(nft.val)
+    .then(() => {
+      nft.val.ownerMetaId = store.state.userInfo!.metaId
+      nft.val.ownerName = store.state.userInfo!.name
+      nft.val.putAway = false
+      ElMessage.success(i18n.t('buySuccess'))
       loading.close()
-      if (useAmountRes) {
-        nftNotCanBuy(useAmountRes)
-      }
-    }
-
-  // const response = await store.state.sdk?.nftBuy({
-  //   txId: nft.val.sellTxId,
-  //   ... params
-  // })
-  // if (response?.code === 200) {
-  //   // 购买完要上链 nft buy 协议
-  //   const buyProtocolRes = await store.state.sdk?.createNftBuyProtocol({
-  //     txId: response.data.txid,
-  //     sellTxId: nft.val.sellTxId,
-  //     createdAt: new Date().getTime(),
-  //     txHex: response.data.txHex,
-  //     satoshisPrice: new Decimal(nft.val.amount).mul(10**8).toString(),
-  //     buyerMetaId: store.state.userInfo!.metaId,
-  //     ... params
-  //   })
-  //   if (buyProtocolRes?.code === 200) {
-  //     // 上链完 nft buy 协议 要 上报服务器
-  //     const res = await BuyNft({
-  //       tokenId: nft.val.tokenId,
-  //       payMentAddress: store.state.userInfo!.address,
-  //       collectionAddress: store.state.userInfo!.address
-  //     })
-  //     if (res.code === NftApiCode.success) {
-  //       ElMessage.success(i18n.t('buySuccess'))
-  //     }
-  //   }
-  // }
-
-  // loading.close()
+      router.replace({
+        name: 'nftSuccess',
+        params: {
+          genesisId: nft.val.genesis,
+          tokenIndex: nft.val.tokenIndex,
+          codehash: nft.val.codeHash,
+        },
+        query: {
+          type: 'buyed',
+        },
+      })
+    })
+    .catch((res) => {
+      loading.close()
+      if (res) nftNotCanBuy(res)
+    })
 }
 
-
-function toWhatsonchain (txId: string) {
+function toWhatsonchain(txId: string) {
   window.open(`https://whatsonchain.com/tx/${txId}`)
 }
 
@@ -722,20 +643,25 @@ function toCert() {
 
 // getNft()
 
-function nftNotCanBuy (res: any) {
-  if (res.code === 204 && res.data && res.data.message === 'The NFT is not for sale because  the corresponding SellUtxo cannot be found.') {
+function nftNotCanBuy(res: any) {
+  if (
+    (res.code === 204 &&
+      res.data &&
+      res.data.message ===
+        'The NFT is not for sale because  the corresponding SellUtxo cannot be found.') ||
+    res.data.message === '258: txn-mempool-conflict'
+  ) {
     ElMessage.error(i18n.t('nftNotCanBuy'))
     router.back()
   }
 }
 
-
-async function toSale () {
+async function toSale() {
   // 檢查是否有權限
   const res = await GetMyNftEligibility({
     MetaId: store.state.userInfo!.metaId,
     IssueMetaId: nft.val.foundryMetaId,
-    lang: i18n.locale.value === 'en' ? Langs.EN : Langs.CN
+    lang: i18n.locale.value === 'en' ? Langs.EN : Langs.CN,
   })
   if (res.code !== 0) {
     ElMessage.error(res.data)
@@ -746,8 +672,8 @@ async function toSale () {
     params: {
       genesisId: nft.val.genesis,
       codehash: nft.val.codeHash,
-      tokenIndex: nft.val.tokenIndex
-    }
+      tokenIndex: nft.val.tokenIndex,
+    },
   })
 }
 
@@ -764,7 +690,7 @@ onMounted(() => {
 
 // if (route.params.genesisId && route.params.codehash && route.params.tokenIndex) {
 //   getDetail()
-  // getRecord()
+// getRecord()
 // }
 </script>
 <style lang="scss" scoped src="./Detail.scss"></style>

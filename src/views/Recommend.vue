@@ -4,7 +4,7 @@
       <img @click="back" src="@/assets/images/bannet_icon_ins.svg" class="back-icon" />
       <div class="flex1 cont">
         <div class="title">
-          {{$t('recommentprod')}}
+          {{ $t('recommentprod') }}
         </div>
         <div class="drsc">{{ $t('recommenttext') }}</div>
       </div>
@@ -23,12 +23,8 @@
       </NftSkeleton>
     </div>
     <template v-if="!isShowSkeleton">
-      <LoadMore
-      :pagination="pagination"
-      @getMore="getMore"
-      v-if="nfts.length > 0"
-    />
-    <IsNull v-else />
+      <LoadMore :pagination="pagination" @getMore="getMore" v-if="nfts.length > 0" />
+      <IsNull v-else />
     </template>
   </div>
 </template>
@@ -55,11 +51,11 @@ function getRecommendNftList() {
   return new Promise<void>(async (resolve) => {
     const res = await GetRecommendOnSellNftList({
       Page: pagination.page.toString(),
-      PageSize: pagination.pageSize.toString()
+      PageSize: pagination.pageSize.toString(),
     })
     if (res.code === 0) {
       if (res.data.results.items.length > 0) {
-        res.data.results.items.map(item => {
+        res.data.results.items.map((item) => {
           const data = item.nftDataStr ? JSON.parse(item.nftDataStr) : null
           const classify = setDataStrclassify(data)
           nfts.push({
@@ -71,7 +67,7 @@ function getRecommendNftList() {
             tokenId: item.nftGenesis + item.nftTokenIndex,
             coverUrl: item.nftIcon,
             putAway: item.nftIsReady,
-            metaId: item.nftOwnerMetaId,
+            metaId: item.nftIssueMetaId,
             productName: item.nftName,
             deadlineTime: 0,
             genesis: item.nftGenesis,
@@ -116,8 +112,6 @@ function getMore() {
 function back() {
   router.back()
 }
-
-
 </script>
 
 <style lang="scss" scoped src="./Recommend.scss"></style>
