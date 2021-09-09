@@ -105,10 +105,7 @@
       <div class="input-item drsc">
         <textarea v-model="nft.intro" :placeholder="$t('drscplac')"></textarea>
       </div>
-      <div
-        class="input-item type flex flex-align-center"
-        @click="isShowClassifyModal = true; isShowSeriesModal = false "
-      >
+      <div class="input-item type flex flex-align-center" @click="openClassifyModal">
         <div class="select-warp flex flex-align-center">
           <div class="key flex1">{{ $t('choosetype') }}</div>
           <div class="value">
@@ -149,10 +146,7 @@
           </ElPopover>
         </div>
         <div class="cont">
-          <div
-            class="input-item flex flex-align-center"
-            @click="isShowSeriesModal = true; isShowClassifyModal = false"
-          >
+          <div class="input-item flex flex-align-center" @click="openSeriesModal">
             <div class="select-warp flex flex-align-center">
               <div class="key flex1">{{ $t('chooseserices') }}</div>
               <div class="value">
@@ -302,7 +296,6 @@ const isShowClassifyModal = ref(false)
 const createTypeIndex = ref(0)
 function changeCreateType() {
   createTypeIndex.value = createTypeIndex.value === 0 ? 1 : 0
-  
 }
 
 const dialogVisible = false
@@ -364,7 +357,15 @@ const isShowCreateSeriesModal = ref(false)
 const isShowSeriesModal = ref(false)
 const series: any[] = reactive([])
 
+function openSeriesModal() {
+  isShowSeriesModal.value = true
+  isShowClassifyModal.value = false
+}
 
+function openClassifyModal() {
+  isShowClassifyModal.value = true
+  isShowSeriesModal.value = false
+}
 // async function getSeries() {
 //   const res = await GetMyNftSummaryList({ Page: '1', PageSize: '99', Address: store.state.userInfo!.address })
 //   if (res.code === 0) {
@@ -420,7 +421,7 @@ async function createSerie() {
 
   const response = await store.state.sdk?.genesisNFT({
     seriesName: serie.name,
-    nftTotal: serie.number
+    nftTotal: serie.number,
   })
   if (response && response.code === 200) {
     const res = await CreateSerice({
@@ -437,10 +438,10 @@ async function createSerie() {
         series: serie.name,
         maxNumber: serie.number,
         currentNumber: 0,
-        codeHash: response.data.codehash,
-        genesis: response.data.genesisId,
-        genesisTxId: response.data.genesisTxid,
-        sensibleId: response.data.sensibleId
+        codeHash: response.data.codehash,
+        genesis: response.data.genesisId,
+        genesisTxId: response.data.genesisTxid,
+        sensibleId: response.data.sensibleId,
       })
       serie.name = ''
       serie.number = ''
@@ -480,9 +481,9 @@ async function checkTxIdStatus() {
     nft.tx = ''
     ElMessage.error(i18n.t('notRightTxId'))
   } else if (result.status === TxIdStatus.Success) {
-    if (result.data){
+    if (result.data) {
       // MetaFile
-    if (result.data.parentNodeName === 'MetaFile') {
+      if (result.data.parentNodeName === 'MetaFile') {
         nft.type = '1'
       } else if (result.data.parentNodeName === 'MetaAccessContent') {
         nft.type = '3'
@@ -501,50 +502,50 @@ const enum TxIdStatus {
   NotCreate = 1,
   NotOwner = 2,
   Success = 3,
-  NotRightTxId = 4
+  NotRightTxId = 4,
 }
 
-async function checkTxId () {
+async function checkTxId() {
   return new Promise<{
-    status: TxIdStatus,
+    status: TxIdStatus
     data?: any
-  }>(async resolve => {
+  }>(async (resolve) => {
     const response = await GetTxData(nft.tx)
-      if (response.code == 200 && response.result.data.length > 0) {
-        const data = response.result.data[0]
+    if (response.code == 200 && response.result.data.length > 0) {
+      const data = response.result.data[0]
 
-        // check user owner 
-        if (data.rootTxId === store.state.userInfo?.metaId) {
-          if (nft.type === '3' && createTypeIndex.value !== 1) {
-            if (data.parentNodeName !== 'MetaAccessContent') {
-              resolve({
-                status: TxIdStatus.NotRightTxId,
-                data
-              })
-            } else {
-              resolve({
-                status: TxIdStatus.Success,
-                data
-              })
-            }
+      // check user owner
+      if (data.rootTxId === store.state.userInfo?.metaId) {
+        if (nft.type === '3' && createTypeIndex.value !== 1) {
+          if (data.parentNodeName !== 'MetaAccessContent') {
+            resolve({
+              status: TxIdStatus.NotRightTxId,
+              data,
+            })
           } else {
             resolve({
               status: TxIdStatus.Success,
-              data
+              data,
             })
           }
         } else {
           resolve({
-            status: TxIdStatus.NotOwner,
-            data
+            status: TxIdStatus.Success,
+            data,
           })
         }
       } else {
         resolve({
-          status: TxIdStatus.NotCreate
+          status: TxIdStatus.NotOwner,
+          data,
         })
       }
-      /* const res = await GetTxStatus({
+    } else {
+      resolve({
+        status: TxIdStatus.NotCreate,
+      })
+    }
+    /* const res = await GetTxStatus({
         txId: nft.tx,
       })
       if (res.code === NftApiCode.success) {
@@ -572,7 +573,7 @@ async function createNft() {
   const result = await store.state.sdk?.checkUserCanIssueNft({
     metaId: store.state.userInfo!.metaId,
     address: store.state.userInfo!.address,
-    language: i18n.locale.value === 'en' ? Langs.EN : Langs.CN
+    language: i18n.locale.value === 'en' ? Langs.EN : Langs.CN,
   })
   if (!result) return
 
@@ -627,10 +628,10 @@ async function createNft() {
     background: 'rgba(0, 0, 0, 0.7)',
     customClass: 'full-loading',
   })
-  
+
   let seriesIndex = -1
   if (selectedSeries[0]) {
-    seriesIndex = series.findIndex(item => item.series === selectedSeries[0])
+    seriesIndex = series.findIndex((item) => item.series === selectedSeries[0])
   }
 
   const params = {
@@ -638,9 +639,9 @@ async function createNft() {
     nftname: nft.nftName,
     nftdesc: nft.intro,
     nfticon: {
-        fileType: coverFile.data_type,
-        fileName: coverFile.name,
-        data: coverFile.hexData,
+      fileType: coverFile.data_type,
+      fileName: coverFile.name,
+      data: coverFile.hexData,
     },
     nftwebsite: '',
     nftissuerName: store.state.userInfo!.name,
@@ -653,12 +654,11 @@ async function createNft() {
         data: originalFile.hexData,
       },
       contentTxId: nft.tx,
-      num: parseInt(nft.intro)
     },
     codeHash: seriesIndex !== -1 ? series[seriesIndex].codeHash : undefined,
     genesis: seriesIndex !== -1 ? series[seriesIndex].genesis : undefined,
     genesisTxId: seriesIndex !== -1 ? series[seriesIndex].genesisTxId : undefined,
-    sensibleId: seriesIndex !== -1 ? series[seriesIndex].sensibleId : undefined
+    sensibleId: seriesIndex !== -1 ? series[seriesIndex].sensibleId : undefined,
   }
   debugger
   const useAmount = await await store.state.sdk
@@ -671,19 +671,25 @@ async function createNft() {
     })
 
   const userBalanceRes = await store.state.sdk?.getBalance()
-  if (userBalanceRes && userBalanceRes.code === 200 && typeof useAmount === 'number' && userBalanceRes.data.satoshis > useAmount) {
+  if (
+    userBalanceRes &&
+    userBalanceRes.code === 200 &&
+    typeof useAmount === 'number' &&
+    userBalanceRes.data.satoshis > useAmount
+  ) {
     ElMessageBox.confirm(`${i18n.t('useAmountTips')}: ${useAmount} SATS`, i18n.t('niceWarning'), {
       confirmButtonText: i18n.t('confirm'),
       cancelButtonText: i18n.t('cancel'),
-      closeOnClickModal: false
-    }).then(async () => {
-      // 余额足够且确认支付
-      const res = await store.state.sdk?.createNFT(params).catch(() => {
-        loading.close()
-      })
-      debugger
-      if (res && typeof res !== 'number') {
-        /* ElMessage.success(i18n.t('castingsuccess'))
+      closeOnClickModal: false,
+    })
+      .then(async () => {
+        // 余额足够且确认支付
+        const res = await store.state.sdk?.createNFT(params).catch(() => {
+          loading.close()
+        })
+        debugger
+        if (res && typeof res !== 'number') {
+          /* ElMessage.success(i18n.t('castingsuccess'))
         router.replace({ name: 'createSuccess', 
           params: { 
             genesisId: res.genesisId,
@@ -692,68 +698,69 @@ async function createNft() {
           }
         }) */
 
+          // 上传源文件到阿里云
+          // const originalFileForm = new FormData()
+          // originalFileForm.append('file', originalFile.raw ? originalFile.raw : '')
+          // const fileUrl = await Upload(originalFileForm)
 
-        // 上传源文件到阿里云
-        // const originalFileForm = new FormData()
-        // originalFileForm.append('file', originalFile.raw ? originalFile.raw : '')
-        // const fileUrl = await Upload(originalFileForm)
-
-        // 上传封面图到阿里云
-        // const coverForm = new FormData()
-        // coverForm.append('file', coverFile.raw ? coverFile.raw : '')
-        // const coverUrl = await Upload(coverForm)
-        const params = {
-          nftName: nft.nftName,
-          intro: nft.intro,
-          type: nft.type,
-          seriesName: selectedSeries[0],
-          tx: res.txId,
-          classify: nft.classify.join(','),
-          fileUrl: 'test',
-          coverUrl: 'test',
-          tokenId: res.genesisId + res.tokenIndex,
-          nftId: res.txId,
-          codeHash: res.codehash,
-          genesis: res.genesisId,
-          genesisTxId: res.genesisTxid,
-          tokenIndex: res.tokenIndex,
+          // 上传封面图到阿里云
+          // const coverForm = new FormData()
+          // coverForm.append('file', coverFile.raw ? coverFile.raw : '')
+          // const coverUrl = await Upload(coverForm)
+          const params = {
+            nftName: nft.nftName,
+            intro: nft.intro,
+            type: nft.type,
+            seriesName: selectedSeries[0],
+            tx: res.txId,
+            classify: nft.classify.join(','),
+            fileUrl: 'test',
+            coverUrl: 'test',
+            tokenId: res.genesisId + res.tokenIndex,
+            nftId: res.txId,
+            codeHash: res.codehash,
+            genesis: res.genesisId,
+            genesisTxId: res.genesisTxid,
+            tokenIndex: res.tokenIndex,
+          }
+          const response = await CreateNft(params)
+          if (response.code === NftApiCode.success) {
+            ElMessage.success(i18n.t('castingsuccess'))
+            router.replace({
+              name: 'nftSuccess',
+              params: {
+                genesisId: res.genesisId,
+                tokenIndex: res.tokenIndex,
+                codehash: res.codehash,
+              },
+              query: {
+                type: 'created',
+                txId: res.txId,
+              },
+            })
+          }
         }
-        const response = await CreateNft(params)
-        if (response.code === NftApiCode.success) {
-          ElMessage.success(i18n.t('castingsuccess'))
-          /* router.replace({ name: 'nftSuccess', 
-            params: { 
-              genesisId: res.genesisId,
-              tokenIndex: res.tokenIndex,
-              codehash: res.codehash,
-            },
-            query: {
-              type: 'created',
-              txId: res.txId
-            }
-          }) */
+        if (loading) {
+          loading.close()
         }
-      }
-      if (loading) {
-        loading.close()
-      }
-    })
-    .catch(() => loading.close())
+      })
+      .catch(() => loading.close())
   } else {
     loading.close()
     if (typeof useAmount === 'number') {
-      ElMessageBox.alert(`
+      ElMessageBox.alert(
+        `
         <p>${i18n.t('useAmountTips')}: ${useAmount} SATS</p>
         <p>${i18n.t('insufficientBalance')}</p>
-      `, {
+      `,
+        {
           confirmButtonText: i18n.t('confirm'),
-          dangerouslyUseHTMLString: true
-      })
+          dangerouslyUseHTMLString: true,
+        }
+      )
     }
     return
   }
 }
-
-
 </script>
 <style lang="scss" scoped src="./Create.scss"></style>
