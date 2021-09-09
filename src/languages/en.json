@@ -173,5 +173,6 @@
   "tariffDescription3cont": "Generally, the miner fee for delisting is about 20,000 satoshis, and the total delisting fee for users is miner fee + 10,000 sats. ",
   "tariffDescription4cont": "Opening conditions for casting function (temporary conditions): The user's MC holdings are ≥50,000; Note: The general NFT casting fee is 20,000 to 40,000 satoshis, and the user needs to pay a total of about 30,000 to 50,000 satoshis for the casting and platform fees to the platform. ",
   "buySellTxIdFail": "Can't get SellTxId, please try again later ",
-  "comingSoon ": "Coming Soon"
+  "comingSoon ": "Coming Soon",
+  "sellCountDown": "Countdown to start of sales"
 }

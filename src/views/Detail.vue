@@ -645,10 +645,11 @@ function toCert() {
 
 function nftNotCanBuy(res: any) {
   if (
-    res.code === 204 &&
-    res.data &&
-    res.data.message ===
-      'The NFT is not for sale because  the corresponding SellUtxo cannot be found.'
+    (res.code === 204 &&
+      res.data &&
+      res.data.message ===
+        'The NFT is not for sale because  the corresponding SellUtxo cannot be found.') ||
+    res.data.message === '258: txn-mempool-conflict'
   ) {
     ElMessage.error(i18n.t('nftNotCanBuy'))
     router.back()

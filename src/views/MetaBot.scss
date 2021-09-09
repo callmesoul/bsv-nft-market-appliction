@@ -119,11 +119,24 @@
         margin-top: 20px;
         display: block;
         &.btn-gray {
-          text-decoration: line-through;
           cursor: not-allowed;
+        }
+        &.line-through {
+          text-decoration: line-through;
         }
       }
     }
+  }
+}
+
+.countdown {
+  margin-top: 40px;
+  text-align: center;
+  .cont {
+    margin-top: 10px;
+    font-size: 32px;
+    font-weight: bold;
+    color: $mainColor;
   }
 }
 
