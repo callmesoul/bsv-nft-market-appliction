@@ -172,5 +172,8 @@
   "tariffDescription2title": "上架",
   "tariffDescription2cont": "前提：NFT的上架 (nft sell) 手续费为10,000 sat左右。如果这个费用有比较大变化，则我们的上架费用也需要相应变化；用户上架总费用为：矿工费+10,000 sat。",
   "tariffDescription3cont": "一般下架的矿工费为2万聪左右，则用户总下架费用为矿工费+10,000 sat。",
-  "tariffDescription4cont": "铸造功能开放条件（暂时条件）：用户的MC持有量≥50,000；说明：一般NFT铸造费用为2～4万聪，则用户需支付铸造费用和平台费用共约3～5万聪给平台。"
+  "tariffDescription4cont": "铸造功能开放条件（暂时条件）：用户的MC持有量≥50,000；说明：一般NFT铸造费用为2～4万聪，则用户需支付铸造费用和平台费用共约3～5万聪给平台。",
+  "buySellTxIdFail": "SellTxId获取不到，请稍后再试",
+  "notCanBuySelf": "不可以买自己的",
+  "comingSoon ": "即将上架"
 }

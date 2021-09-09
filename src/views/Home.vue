@@ -1,7 +1,12 @@
 <template>
   <!-- banner -->
   <div class="banner container">
-    <a @click="toMetabot"><img src="@/assets/images/banner.png" alt="" /></a>
+    <a @click="toMetabot" v-if="i18n.locale.value === 'zh'"
+      ><img src="@/assets/images/cn-banner-metabot.png" alt="Metabot"
+    /></a>
+    <a @click="toMetabot" v-else
+      ><img src="@/assets/images/en-banner-metabot.png" alt="Metabot"
+    /></a>
   </div>
 
   <div class="home">
