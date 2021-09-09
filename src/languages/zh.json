@@ -175,5 +175,6 @@
   "tariffDescription4cont": "铸造功能开放条件（暂时条件）：用户的MC持有量≥50,000；说明：一般NFT铸造费用为2～4万聪，则用户需支付铸造费用和平台费用共约3～5万聪给平台。",
   "buySellTxIdFail": "SellTxId获取不到，请稍后再试",
   "notCanBuySelf": "不可以买自己的",
-  "comingSoon ": "即将上架"
+  "comingSoon ": "即将上架",
+  "sellCountDown": "开始销售倒计时"
 }

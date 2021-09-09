@@ -28,6 +28,21 @@
     /></a>
   </div>
 
+  <VueCountdown
+    :time="countdown"
+    :transform="transformSlotProps"
+    v-slot="{ days, hours, minutes, seconds }"
+    @end="onCountdownEnd"
+    v-if="countdown > 0 && isShowCountdown"
+  >
+    <div class="countdown">
+      <div class="title">#501 - #800 {{ $t('sellCountDown') }}:</div>
+      <div class="cont">
+        {{ parseInt(hours) + parseInt(days) * 24 }} : {{ minutes }} : {{ seconds }}
+      </div>
+    </div>
+  </VueCountdown>
+
   <div class="metabot-tags container">
     <a
       class="metabot-tag"
@@ -103,23 +118,32 @@
                 <span class="type">({{ $t('owner') }})</span>
               </div>
             </div>
-            <div
-              class="btn btn-block"
-              :class="{
-                'btn-gray':
-                  metabot.nftSellState !== 0 ||
-                  !metabot.nftIsReady ||
-                  (store.state.userInfo && store.state.userInfo.metaId === metabot.nftOwnerMetaId),
-              }"
-              @click.stop="buy(metabot)"
-            >
-              <template v-if="metabot.nftSellState === 3">
+
+            <template v-if="metabot.nftSellState === 3">
+              <div class="btn btn-block btn-gray" @click.stop="buy(metabot)">
                 {{ $t('comingSoon ') }}
-              </template>
-              <template v-else>
+              </div>
+            </template>
+            <template v-else>
+              <div
+                class="btn btn-block"
+                :class="{
+                  'btn-gray':
+                    metabot.nftSellState !== 0 ||
+                    !metabot.nftIsReady ||
+                    (store.state.userInfo &&
+                      store.state.userInfo.metaId === metabot.nftOwnerMetaId),
+                  'line-through':
+                    metabot.nftSellState !== 0 ||
+                    !metabot.nftIsReady ||
+                    (store.state.userInfo &&
+                      store.state.userInfo.metaId === metabot.nftOwnerMetaId),
+                }"
+                @click.stop="buy(metabot)"
+              >
                 {{ new Decimal(metabot.nftPrice).div(Math.pow(10, 8)).toString() }} BSV
-              </template>
-            </div>
+              </div>
+            </template>
           </div>
         </a>
       </div>
@@ -148,6 +172,7 @@ import { useI18n } from 'vue-i18n'
 import Decimal from 'decimal.js-light'
 import Buy from '@/utils/buy'
 import NFTDetail from '@/utils/nftDetail'
+import VueCountdown from '@chenfengyuan/vue-countdown'
 
 const store = useStore()
 const router = useRouter()
@@ -160,6 +185,9 @@ const pagination = reactive({
   pageSize: 100,
 })
 
+const countdown = ref(0)
+const isShowCountdown = ref(true)
+
 const sections = [
   { name: '#501-600', start: 501, end: 600 },
   { name: '#601-700', start: 601, end: 700 },
@@ -168,6 +196,25 @@ const sections = [
   { name: '#901-999', start: 901, end: 999 },
 ]
 const sectionIndex = ref(0)
+
+function onCountdownEnd() {
+  pagination.page = 1
+  pagination.loading = false
+  pagination.nothing = false
+  keyword.value = ''
+  sectionIndex.value = 0
+  isShowCountdown.value = false
+  getDatas(true)
+}
+
+function transformSlotProps(props: any) {
+  const formattedProps = {}
+  Object.entries(props).forEach(([key, value]) => {
+    // @ts-ignore
+    formattedProps[key] = value < 10 ? `0${value}` : String(value)
+  })
+  return formattedProps
+}
 
 function search() {
   isShowSkeleton.value = true
@@ -215,6 +262,8 @@ function getDatas(isCover = false) {
       } else {
         pagination.nothing = true
       }
+      // @ts-ignore
+      countdown.value = res.data.countdown
       isShowSkeleton.value = false
     }
     resolve()
@@ -325,11 +374,13 @@ async function buy(metabot: GetMetaBotListResItem) {
 }
 
 function nftNotCanBuy(res: any) {
+  debugger
   if (
-    res.code === 204 &&
-    res.data &&
-    res.data.message ===
-      'The NFT is not for sale because  the corresponding SellUtxo cannot be found.'
+    (res.code === 204 &&
+      res.data &&
+      res.data.message ===
+        'The NFT is not for sale because  the corresponding SellUtxo cannot be found.') ||
+    res.data.message === '258: txn-mempool-conflict'
   ) {
     ElMessage.error(i18n.t('nftNotCanBuy'))
     pagination.page = 1
