@@ -1,8 +1,7 @@
-
 declare interface apiResponse {
   code: number
   msg: string
-  count: number,
+  count: number
   data: any
 }
 declare interface TransactionRecordItem {
@@ -31,10 +30,10 @@ declare interface SeriesItem {
   series: string
 }
 declare interface GetSeriestData extends apiResponse {
-  data: SeriesItem []
+  data: SeriesItem[]
 }
 declare interface GetClassiesData extends apiResponse {
-  data: Classify []
+  data: Classify[]
 }
 declare interface GetTxStatusData extends apiResponse {
   data: {
@@ -72,9 +71,9 @@ declare interface CreateNftParams {
   codeHash: string
   genesis: string
   nftId: string
-  tokenId: string,
-  tokenIndex: string,
-  genesisTxId: string,
+  tokenId: string
+  tokenIndex: string
+  genesisTxId: string
 }
 
 declare interface MyNftsResponstData extends apiResponse {
@@ -99,25 +98,24 @@ declare interface GetNftIssueRes extends apiResponse {
   }
 }
 
-
-declare interface GetMyNftSummaryListParams{
+declare interface GetMyNftSummaryListParams {
   Address: string
   Page: string
   PageSize: string
 }
 
-declare interface GetMyOnSellNftListParams{
+declare interface GetMyOnSellNftListParams {
   Address: string
   Page: string
   PageSize: string
   metaId: string
 }
 
-declare interface GetMyNftSummaryListRes extends apiResponse{
-  data:{
-    total: number,
+declare interface GetMyNftSummaryListRes extends apiResponse {
+  data: {
+    total: number
     results: {
-      items: MyNftSummaryItem []
+      items: MyNftSummaryItem[]
     }
   }
 }
@@ -125,17 +123,17 @@ declare interface GetMyNftSummaryListRes extends apiResponse{
 declare interface MyNftSummaryItem {
   nftCodehash: string
   nftGenesis: string
-  nftSensibleId:string
+  nftSensibleId: string
   nftSymbol: Symbol
-  nftMyCount:number
+  nftMyCount: number
   nftMyPendingCount: number
   nftTotalSupply: number
   nftName: string
   nftDesc: string
   nftIcon: string
-  nftWebsite:string
-  nftIssuer:string
-  nftTimestamp:number
+  nftWebsite: string
+  nftIssuer: string
+  nftTimestamp: number
   nftIssueVersion: string
   nftDataStr: string
   nftSeriesName: string
@@ -174,29 +172,28 @@ declare interface MyNftSummaryItem {
     nftTokenIndex: string
     nftTotalSupply: number
     nftWebsite: string
-  } []
+  }[]
 }
 
-
 declare interface NFTSeriesItem {
-  cover: string,
-  name: string,
+  cover: string
+  name: string
   nftDesc: string
   total: number
-  hasCount: number,
+  hasCount: number
   genesis: string
   codehash: string
 }
 
 declare interface NFTSeriesItemData {
-  cover: string,
-  name: string,
+  cover: string
+  name: string
   nftDesc: string
   total: number
   hasCount: number
 }
 
-declare interface GetSeriesNftListResItem{
+declare interface GetSeriesNftListResItem {
   nftCodehash: string
   nftGenesis: string
   nftGenesisTxid: string
@@ -216,35 +213,34 @@ declare interface GetSeriesNftListResItem{
   nftOwnerMetaId: string
 }
 
-declare interface GetSeriesNftListRes extends apiResponse{
+declare interface GetSeriesNftListRes extends apiResponse {
   data: {
     total: number
     results: {
-      items: GetSeriesNftListResItem []
+      items: GetSeriesNftListResItem[]
     }
   }
 }
 
-declare interface GetMyOnSellNftListRes extends apiResponse{
+declare interface GetMyOnSellNftListRes extends apiResponse {
   data: {
     total: number
     results: {
-      items: GetNftIssueyTxIdResItem []
+      items: GetNftIssueyTxIdResItem[]
     }
   }
 }
 
-declare interface GetMetaBotListRes extends apiResponse{
+declare interface GetMetaBotListRes extends apiResponse {
   data: {
     total: number
     results: {
-      items: GetMetaBotListResItem []
+      items: GetMetaBotListResItem[]
     }
   }
 }
 
-
-declare interface GetMetaBotListResItem{
+declare interface GetMetaBotListResItem {
   nftSellState: number
   nftBalance: number
   nftBuyTimestamp: number
@@ -280,7 +276,7 @@ declare interface GetMetaBotListResItem{
   nftIsReady: boolean
 }
 
-declare interface GetNftIssueyTxIdResItem{
+declare interface GetNftIssueyTxIdResItem {
   nftBalance: number
   nftCodehash: string
   nftDataStr: string
@@ -309,7 +305,7 @@ declare interface GetNftIssueyTxIdResItem{
   nftTotalSupply: number
   nftWebsite: string
 }
-declare interface GetNftIssueyTxIdRes extends apiResponse{
+declare interface GetNftIssueyTxIdRes extends apiResponse {
   data: {
     dataStr: string
     desc: string
@@ -331,7 +327,7 @@ declare interface GetNftIssueyTxIdRes extends apiResponse{
   }
 }
 
-declare interface NFTApiGetNFTDetailRes extends apiResponse{
+declare interface NFTApiGetNFTDetailRes extends apiResponse {
   data: {
     total: number
     results: {
@@ -339,7 +335,7 @@ declare interface NFTApiGetNFTDetailRes extends apiResponse{
         version: string
         responseTime: string
       }
-      items: NFTApiGetNFTDetailResDataItem []
+      items: NFTApiGetNFTDetailResDataItem[]
     }
   }
 }
@@ -373,4 +369,5 @@ declare interface NFTApiGetNFTDetailResDataItem {
   nftSellDesc: string
   nftTokenId: string
   nftIssueMetaTxId: string
+  nftSellState: number
 }
