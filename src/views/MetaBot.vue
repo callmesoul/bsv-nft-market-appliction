@@ -277,6 +277,9 @@ async function buy(metabot: GetMetaBotListResItem) {
   } else if (metabot.nftSellState === 2) {
     ElMessage.warning(i18n.t('isBeBuyed'))
     return
+  } else if (metabot.nftSellState === 3) {
+    ElMessage.warning(i18n.t('comingSoon '))
+    return
   } else {
     if (!metabot.nftIsReady) return
   }

@@ -174,36 +174,41 @@
             </template> -->
             <!-- <div class="btn btn-block"  @click="buy">{{ $t('use') }} {{ nft.val.amount }} BSV {{ $t('buy') }}</div> -->
             <div class="operate-warp">
-              <div
-                class="btn btn-block"
-                :class="{ 'btn-gray': !nft.val.putAway }"
-                @click="buy"
-                v-if="
-                  !store.state.userInfo ||
-                  (store.state.userInfo && store.state.userInfo.metaId !== nft.val.ownerMetaId)
-                "
-              >
-                <template v-if="nft.val.putAway">{{
-                  i18n.locale.value === 'zh'
-                    ? `以 ${new Decimal(nft.val.amount).div(Math.pow(10, 8)).toString()} BSV 购买`
-                    : `Buy Now At ${new Decimal(nft.val.amount).div(10 ** 8).toString()} BSV`
-                }}</template>
-                <template v-else>{{ $t('isBeBuyedOrCanceled') }}</template>
-              </div>
-              <template
-                v-else-if="
-                  store.state.userInfo && store.state.userInfo.metaId === nft.val.ownerMetaId
-                "
-              >
-                <div class="flex flex-align-center putAway-warp" v-if="nft.val.putAway">
-                  <div class="btn btn-block btn-plain flex1" @click="offSale">
-                    {{ $t('offsale') }}
-                  </div>
-                  <!-- <template v-if="now > nft.val.remainingTime">
+              <template v-if="nft.val.sellState === 3">
+                <div class="btn btn-block btn-gray">{{ $t('comingSoon ') }}</div>
+              </template>
+              <template v-else>
+                <div
+                  class="btn btn-block"
+                  :class="{ 'btn-gray': !nft.val.putAway }"
+                  @click="buy"
+                  v-if="
+                    !store.state.userInfo ||
+                    (store.state.userInfo && store.state.userInfo.metaId !== nft.val.ownerMetaId)
+                  "
+                >
+                  <template v-if="nft.val.putAway">{{
+                    i18n.locale.value === 'zh'
+                      ? `以 ${new Decimal(nft.val.amount).div(Math.pow(10, 8)).toString()} BSV 购买`
+                      : `Buy Now At ${new Decimal(nft.val.amount).div(10 ** 8).toString()} BSV`
+                  }}</template>
+                  <template v-else>{{ $t('isBeBuyedOrCanceled') }}</template>
+                </div>
+                <template
+                  v-else-if="
+                    store.state.userInfo && store.state.userInfo.metaId === nft.val.ownerMetaId
+                  "
+                >
+                  <div class="flex flex-align-center putAway-warp" v-if="nft.val.putAway">
+                    <div class="btn btn-block btn-plain flex1" @click="offSale">
+                      {{ $t('offsale') }}
+                    </div>
+                    <!-- <template v-if="now > nft.val.remainingTime">
                     <div class="btn btn-block flex1" @click="toSale">{{$t('saleAgain')}}</div>
                   </template> -->
-                </div>
-                <div class="btn btn-block" v-else @click="toSale">{{ $t('sale') }}</div>
+                  </div>
+                  <div class="btn btn-block" v-else @click="toSale">{{ $t('sale') }}</div>
+                </template>
               </template>
             </div>
           </div>
