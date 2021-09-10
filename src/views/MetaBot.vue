@@ -36,7 +36,7 @@
     v-if="countdown > 0 && isShowCountdown"
   >
     <div class="countdown">
-      <div class="title">#501 - #800 {{ $t('sellCountDown') }}:</div>
+      <div class="title">#201 - #500 {{ $t('sellCountDown') }}:</div>
       <div class="cont">
         {{ parseInt(hours) + parseInt(days) * 24 }} : {{ minutes }} : {{ seconds }}
       </div>
@@ -406,6 +406,10 @@ onMounted(() => {
   pagination.nothing = false
   getDatas(true)
 })
+
+// setInterval(() => {
+//   countdown.value = 10 * 1000
+// }, 2000)
 
 // isShowSkeleton.value = false
 </script>
