@@ -101,8 +101,11 @@
           v-for="metabot in metaBots"
           :key="metabot.nftGenesis + metabot.nftCodehash + metabot.nftTokenIndex"
         >
-          <div class="cover">
+          <!-- <div class="cover">
             <img :src="metafileUrl(metabot.nftIcon)" :alt="metabot.nftName" />
+          </div> -->
+          <div class="cover">
+            <ElImage :lazy="true" :src="metafileUrl(metabot.nftIcon)"></ElImage>
           </div>
           <div class="cont">
             <div class="name">{{ metabot.nftName }}</div>
@@ -173,6 +176,7 @@ import Decimal from 'decimal.js-light'
 import Buy from '@/utils/buy'
 import NFTDetail from '@/utils/nftDetail'
 import VueCountdown from '@chenfengyuan/vue-countdown'
+import { ElImage } from 'element-plus'
 
 const store = useStore()
 const router = useRouter()
@@ -265,13 +269,17 @@ function getDatas(isCover = false) {
       } else {
         pagination.nothing = true
       }
-      // @ts-ignore
-      if (res.data.countdown > 0) {
+      if (countdown.value <= 0) {
         // @ts-ignore
-        countdown.value = res.data.countdown + 1000
-      } else {
-        // @ts-ignore
-        countdown.value = res.data.countdown
+        if (res.data.countdown > 0) {
+          // @ts-ignore
+          countdown.value = res.data.countdown + 1000
+          if (!isShowCountdown.value) isShowCountdown.value = true
+        } else {
+          // @ts-ignore
+          countdown.value = res.data.countdown
+          if (isShowCountdown.value) isShowCountdown.value = false
+        }
       }
       isShowSkeleton.value = false
     }
