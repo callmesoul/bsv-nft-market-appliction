@@ -131,16 +131,8 @@
               <div
                 class="btn btn-block"
                 :class="{
-                  'btn-gray':
-                    metabot.nftSellState !== 0 ||
-                    !metabot.nftIsReady ||
-                    (store.state.userInfo &&
-                      store.state.userInfo.metaId === metabot.nftOwnerMetaId),
-                  'line-through':
-                    metabot.nftSellState !== 0 ||
-                    !metabot.nftIsReady ||
-                    (store.state.userInfo &&
-                      store.state.userInfo.metaId === metabot.nftOwnerMetaId),
+                  'btn-gray': metabot.nftSellState !== 0 || !metabot.nftIsReady,
+                  'line-through': metabot.nftSellState !== 0 || !metabot.nftIsReady,
                 }"
                 @click.stop="buy(metabot)"
               >
