@@ -36,7 +36,7 @@
     v-if="countdown > 0 && isShowCountdown"
   >
     <div class="countdown">
-      <div class="title">#201 - #500 {{ $t('sellCountDown') }}:</div>
+      <div class="title">#016 - #200 {{ $t('sellCountDown') }}:</div>
       <div class="cont">
         {{ parseInt(hours) + parseInt(days) * 24 }} : {{ minutes }} : {{ seconds }}
       </div>
@@ -185,6 +185,7 @@ const countdown = ref(0)
 const isShowCountdown = ref(true)
 
 const sections = [
+  { name: '#016-200', start: 16, end: 200 },
   { name: '#201-300', start: 201, end: 300 },
   { name: '#301-400', start: 301, end: 400 },
   { name: '#401-500', start: 401, end: 500 },
