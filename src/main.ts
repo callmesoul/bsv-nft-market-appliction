@@ -11,12 +11,6 @@ import ElementPlus from 'element-plus'
 import * as filters from '@/utils/filters'
 import i18n from '@/utils/i18n'
 
-if (import.meta.env.PROD) {
-  setInterval(function () {
-    debugger
-  }, 100)
-}
-
 // ElementLocale.i18n(i18n.global.t)
 
 const app = createApp(App)
