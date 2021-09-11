@@ -178,36 +178,40 @@
                 <div class="btn btn-block btn-gray">{{ $t('comingSoon ') }}</div>
               </template>
               <template v-else>
-                <div
-                  class="btn btn-block"
-                  :class="{ 'btn-gray': !nft.val.putAway }"
-                  @click="buy"
-                  v-if="
-                    !store.state.userInfo ||
-                    (store.state.userInfo && store.state.userInfo.metaId !== nft.val.ownerMetaId)
-                  "
-                >
-                  <template v-if="nft.val.putAway">{{
-                    i18n.locale.value === 'zh'
-                      ? `以 ${new Decimal(nft.val.amount).div(Math.pow(10, 8)).toString()} BSV 购买`
-                      : `Buy Now At ${new Decimal(nft.val.amount).div(10 ** 8).toString()} BSV`
-                  }}</template>
-                  <template v-else>{{ $t('isBeBuyedOrCanceled') }}</template>
-                </div>
-                <template
-                  v-else-if="
-                    store.state.userInfo && store.state.userInfo.metaId === nft.val.ownerMetaId
-                  "
-                >
-                  <div class="flex flex-align-center putAway-warp" v-if="nft.val.putAway">
-                    <div class="btn btn-block btn-plain flex1" @click="offSale">
-                      {{ $t('offsale') }}
-                    </div>
-                    <!-- <template v-if="now > nft.val.remainingTime">
+                <template v-if="isCanBuy">
+                  <div
+                    class="btn btn-block"
+                    :class="{ 'btn-gray': !nft.val.putAway }"
+                    @click="buy"
+                    v-if="
+                      !store.state.userInfo ||
+                      (store.state.userInfo && store.state.userInfo.metaId !== nft.val.ownerMetaId)
+                    "
+                  >
+                    <template v-if="nft.val.putAway">{{
+                      i18n.locale.value === 'zh'
+                        ? `以 ${new Decimal(nft.val.amount)
+                            .div(Math.pow(10, 8))
+                            .toString()} BSV 购买`
+                        : `Buy Now At ${new Decimal(nft.val.amount).div(10 ** 8).toString()} BSV`
+                    }}</template>
+                    <template v-else>{{ $t('isBeBuyedOrCanceled') }}</template>
+                  </div>
+                  <template
+                    v-else-if="
+                      store.state.userInfo && store.state.userInfo.metaId === nft.val.ownerMetaId
+                    "
+                  >
+                    <div class="flex flex-align-center putAway-warp" v-if="nft.val.putAway">
+                      <div class="btn btn-block btn-plain flex1" @click="offSale">
+                        {{ $t('offsale') }}
+                      </div>
+                      <!-- <template v-if="now > nft.val.remainingTime">
                     <div class="btn btn-block flex1" @click="toSale">{{$t('saleAgain')}}</div>
                   </template> -->
-                  </div>
-                  <div class="btn btn-block" v-else @click="toSale">{{ $t('sale') }}</div>
+                    </div>
+                    <div class="btn btn-block" v-else @click="toSale">{{ $t('sale') }}</div>
+                  </template>
                 </template>
               </template>
             </div>
@@ -462,7 +466,7 @@ const nft: { val: NftItemDetail } = reactive({
 //     resolve()
 //   })
 // }
-
+const isCanBuy = ref(true)
 function getDetail() {
   return new Promise<void>(async (resolve) => {
     const _nft = await NFTDetail(
@@ -472,6 +476,14 @@ function getDetail() {
     ).catch(() => (isShowSkeleton.value = false))
     if (_nft && typeof _nft !== 'boolean') {
       nft.val = _nft
+      if (nft.val.foundryMetaId.slice(0, 6) === '0064d4') isCanBuy.value = false
+      if (
+        nft.val.foundryName.toLowerCase().indexOf('showpayteam') !== -1 &&
+        nft.val.foundryMetaId !== '974e2977d5c9446f7f48fd82c9ea51f82749b9ef7c00d26b73bc450d167d5f31'
+      ) {
+        nft.val.foundryName = '这是个有问题账号'
+        isCanBuy.value = false
+      }
       // countDownTimeLeft()
       isShowSkeleton.value = false
     }
