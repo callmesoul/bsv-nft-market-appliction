@@ -174,7 +174,7 @@ function getRecommendNftList() {
     if (res.code === 0) {
       if (res.data.results.items.length > 0) {
         const results = await SetHomeDatas(res.data.results.items)
-        Nfts.push(...results)
+        recommendNfts.push(...results)
       }
       isShowRecommendSkeleton.value = false
     }
