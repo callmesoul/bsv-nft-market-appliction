@@ -185,7 +185,8 @@ const countdown = ref(0)
 const isShowCountdown = ref(true)
 
 const sections = [
-  { name: '#016-200', start: 16, end: 200 },
+  { name: '#016-100', start: 16, end: 100 },
+  { name: '#101-200', start: 101, end: 200 },
   { name: '#201-300', start: 201, end: 300 },
   { name: '#301-400', start: 301, end: 400 },
   { name: '#401-500', start: 401, end: 500 },
