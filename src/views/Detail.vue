@@ -249,7 +249,7 @@
                   <div class="work-detail-item flex flex-align-baseline">
                     <div class="key">{{ $t('workdrsc') }}：</div>
                     <div class="value flex1">
-                      {{ nft.val.describe }}
+                      <pre>{{ nft.val.describe }}</pre>
                     </div>
                   </div>
                 </div>
