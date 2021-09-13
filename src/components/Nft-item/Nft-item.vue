@@ -1,37 +1,64 @@
 <template>
   <a @click="toDetail()" class="nft-item" :key="item?.tokenId">
     <div class="cover">
-      <img class="cover-image" :src="metafileUrl(item?.coverUrl)" :alt="item?.name" :onerror="coverDefaultImg" />
-      <span v-if="item.classify && item.classify.length > 0">{{$t(item.classify[0])}}</span>
+      <img
+        class="cover-image"
+        :src="metafileUrl(item?.coverUrl)"
+        :alt="item?.name"
+        :onerror="coverDefaultImg"
+      />
+      <span v-if="item.classify && item.classify.length > 0">{{ $t(item.classify[0]) }}</span>
     </div>
     <div class="cont">
       <div class="name">{{ isSelf ? item.productName : item?.name }}</div>
-      <div class="price" v-if="!isSelf">
-        <div class="label">{{ $t('price') }}</div>
-        <div class="aount">{{ new Decimal(item?.amount).div(10**8).toString() }} BSV</div>
-      </div>
-      <div class="author flex flex-align-center">
-        <img :src="$filters.avatar(item?.metaId)" :alt="item?.foundryName" 	onerror="javascript:this.src='https://testshowman.showpay.top/metafile/avatar/a9…1f918ca4342d2b018c641bbb4c293e'" />
-        <span class="username">{{ item?.foundryName }}</span>
+      <div class="content flex">
+        <div class="msg flex1">
+          <div class="price" v-if="!isSelf">
+            <div class="label">{{ $t('price') }}</div>
+            <div class="aount">{{ new Decimal(item?.amount).div(10 ** 8).toString() }} BSV</div>
+          </div>
+          <div class="author flex flex-align-center">
+            <img
+              :src="$filters.avatar(item?.metaId)"
+              :alt="item?.foundryName"
+              onerror="javascript:this.src='https://testshowman.showpay.top/metafile/avatar/a9…1f918ca4342d2b018c641bbb4c293e'"
+            />
+            <span class="username flex1">{{ item?.foundryName }}</span>
+          </div>
+        </div>
+        <img
+          class="cert-icon"
+          src="@/assets/images/cert.svg"
+          v-if="
+            item.metaId === '3c03f6b8783fa672bb34953519110944dab1d8a23711c7df4f1dd9e16e5b823c' ||
+            item.metaId === '974e2977d5c9446f7f48fd82c9ea51f82749b9ef7c00d26b73bc450d167d5f31'
+          "
+        />
       </div>
       <div class="operate flex flex-align-center" v-if="props.isSelf">
         <div class="timeleft flex1">
           <!-- 系列 且拥有数量 > 1 -->
           <template v-if="item.hasCount && item.hasCount > 1">
-            {{$t('series')}} {{item.hasCount}}/{{item.total}}
+            {{ $t('series') }} {{ item.hasCount }}/{{ item.total }}
           </template>
           <template v-else-if="item.putAway">
             <template v-if="overTime">
-              {{$t('overTime')}}
+              {{ $t('overTime') }}
             </template>
             <div v-else class="flex flex-align-center">
-              <img src="@/assets/images/icon_time.svg" /><span>{{day}}{{$t('day')}}{{hour}}{{$t('hour')}}</span>
+              <img src="@/assets/images/icon_time.svg" /><span
+                >{{ day }}{{ $t('day') }}{{ hour }}{{ $t('hour') }}</span
+              >
             </div>
           </template>
         </div>
-        
-        <a class="btn btn-min btn-plain" v-if="item.hasCount && item.hasCount > 1">{{ $t('seeAll') }}</a>
-        <a class="btn btn-min btn-plain" v-else-if="item?.putAway" @click.stop="offSale">{{ $t('offsale') }}</a>
+
+        <a class="btn btn-min btn-plain" v-if="item.hasCount && item.hasCount > 1">{{
+          $t('seeAll')
+        }}</a>
+        <a class="btn btn-min btn-plain" v-else-if="item?.putAway" @click.stop="offSale">{{
+          $t('offsale')
+        }}</a>
         <a class="btn btn-min" v-else @click.stop="toSale">{{ $t('sale') }}</a>
       </div>
     </div>
@@ -44,7 +71,9 @@
         {{ $t('recommenttext') }}
       </div>
       <div class="more">
-        <router-link :to="{ name: 'recommned' }">{{ $t('getmore') }}<img src="@/assets/images/card_icon_ins.svg" /></router-link>
+        <router-link :to="{ name: 'recommned' }"
+          >{{ $t('getmore') }}<img src="@/assets/images/card_icon_ins.svg"
+        /></router-link>
       </div>
     </div>
   </a>
@@ -65,7 +94,6 @@ import _FormItem from 'element-plus/lib/el-form-item'
 import { metafileUrl } from '@/utils/util'
 import NFTDetail from '@/utils/nftDetail'
 
-
 const coverDefaultImg = 'this.src="/state/cover-default.jpg"' //默认图地址
 
 const store = useStore()
@@ -81,75 +109,99 @@ const day = computed(() => {
 const hour = computed(() => {
   if (now > props.item.deadlineTime!) return 0
   const day = dayjs(now).diff(dayjs(props.item.deadlineTime!), 'day')
-  return   Math.abs(dayjs(now).diff(dayjs(props.item.deadlineTime!), 'hour') - (day * 24))
+  return Math.abs(dayjs(now).diff(dayjs(props.item.deadlineTime!), 'hour') - day * 24)
 }) // 剩余小时
-const overTime = computed(() => (props.item.deadlineTime!) <= now) // 是否超过时间
+const overTime = computed(() => props.item.deadlineTime && props.item.deadlineTime <= now) // 是否超过时间
 const props = defineProps<{
-  item: NftItem,
-  isRecommendCard?: boolean,
+  item: NftItem
+  isRecommendCard?: boolean
   isSelf?: boolean
 }>()
 
 function toDetail() {
-  if(props.item.genesis) {
+  if (props.item.genesis) {
     if (props.item.hasCount && props.item.hasCount > 1) {
-      router.push({ name: 'series', params: { genesisId: props.item.genesis, codehash: props.item.codehash}, query: {name: props.item.name}})
+      router.push({
+        name: 'series',
+        params: { genesisId: props.item.genesis, codehash: props.item.codehash },
+        query: { name: props.item.name },
+      })
     } else {
-      router.push({ name: 'detail', params: { tokenIndex: props.item.tokenIndex, genesisId: props.item.genesis, codehash: props.item.codehash }})
+      router.push({
+        name: 'detail',
+        params: {
+          tokenIndex: props.item.tokenIndex,
+          genesisId: props.item.genesis,
+          codehash: props.item.codehash,
+        },
+      })
     }
   }
 }
 
-async function toSale () {
+async function toSale() {
   const res = await GetMyNftEligibility({
     MetaId: store.state.userInfo!.metaId,
     IssueMetaId: props.item.metaId,
-    lang: i18n.locale.value === 'en' ? Langs.EN : Langs.CN
+    lang: i18n.locale.value === 'en' ? Langs.EN : Langs.CN,
   })
   if (res.code === 0) {
     if (props.item?.tokenId) {
-      router.push({ name: 'sale', params: { tokenIndex: props.item.tokenIndex, genesisId: props.item.genesis, codehash: props.item.codehash } })
+      router.push({
+        name: 'sale',
+        params: {
+          tokenIndex: props.item.tokenIndex,
+          genesisId: props.item.genesis,
+          codehash: props.item.codehash,
+        },
+      })
     }
   } else {
     ElMessage.error(res.data)
   }
 }
 
-function offSale () {
+function offSale() {
   const loading = ElLoading.service({
-      lock: true,
-      text: 'Loading',
-      spinner: 'el-icon-loading',
-      background: 'rgba(0, 0, 0, 0.7)',
-      customClass: 'full-loading',
+    lock: true,
+    text: 'Loading',
+    spinner: 'el-icon-loading',
+    background: 'rgba(0, 0, 0, 0.7)',
+    customClass: 'full-loading',
   })
-  ElMessageBox.confirm(`${i18n.t('offsaleConfirm')} ${props.item.productName} ?`, i18n.t('niceWarning'), {
-    confirmButtonText: i18n.t('confirm'),
-    cancelButtonText: i18n.t('cancel'),
-    closeOnClickModal: false
-  })
-  .then(async () => {
-
-    // 先获取详情
-    // const detailRes = await GetNftDetail({
-    //   tokenId: props.item.tokenId
-    // }).catch(() => {
-    //     loading.close()
-    // })
-    const nft = await NFTDetail(props.item.genesis, props.item.codehash, props.item.tokenIndex).catch(() => loading.close())
-    if (nft) {
-      NftOffSale(nft, loading)
-      .then(() => {
-        props.item.putAway = false
-        loading.close()
-      })
-      .catch(() => {
-        loading.close()
-      })
+  ElMessageBox.confirm(
+    `${i18n.t('offsaleConfirm')} ${props.item.productName} ?`,
+    i18n.t('niceWarning'),
+    {
+      confirmButtonText: i18n.t('confirm'),
+      cancelButtonText: i18n.t('cancel'),
+      closeOnClickModal: false,
     }
-  })
-  .catch(() => loading.close())
-  
+  )
+    .then(async () => {
+      // 先获取详情
+      // const detailRes = await GetNftDetail({
+      //   tokenId: props.item.tokenId
+      // }).catch(() => {
+      //     loading.close()
+      // })
+      const nft = await NFTDetail(
+        props.item.genesis,
+        props.item.codehash,
+        props.item.tokenIndex
+      ).catch(() => loading.close())
+      if (nft) {
+        NftOffSale(nft, loading)
+          .then(() => {
+            props.item.putAway = false
+            loading.close()
+          })
+          .catch(() => {
+            loading.close()
+          })
+      }
+    })
+    .catch(() => loading.close())
 }
 </script>
 
