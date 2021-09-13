@@ -174,5 +174,22 @@
   "tariffDescription4cont": "Opening conditions for casting function (temporary conditions): The user's MC holdings are ≥50,000; Note: The general NFT casting fee is 20,000 to 40,000 satoshis, and the user needs to pay a total of about 30,000 to 50,000 satoshis for the casting and platform fees to the platform. ",
   "buySellTxIdFail": "Can't get SellTxId, please try again later ",
   "comingSoon ": "Coming Soon",
-  "sellCountDown": "Countdown to start of sales"
+  "sellCountDown": "Countdown to start of sales",
+  "priceSale": "Price sale",
+  "auctionSale": "Auction sale",
+  "listedInformation": "Listed information ",
+  "auctiontimeplac": "Set the market bidding time, up to 7 days",
+  "auctionPriceplac": "Set the starting price, not less than ",
+  "setABuyItPrice": "Set a buy-it-price (optional) ",
+  "currentBid": "Current bid",
+  "auctionEndTime": "Auction end time",
+  "historicalBid": "Historical bid",
+  "latestBid": "Latest bid",
+  "finishBid": "Complete bid",
+  "auctionBid": "Auction bid",
+  "iWanToBid": "I want to bid",
+  "minimumMarkup": "Minimum markup",
+  "availableAssets": "Available assets",
+  "bid": "bid",
+  "insufficientBalanceToWallet": "Insufficient balance, check my wallet"
 }

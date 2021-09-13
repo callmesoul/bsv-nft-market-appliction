@@ -158,8 +158,11 @@
                 </template>
                 <template v-else> {{ $t('drsc') }}: </template>
               </div>
-              <div class="cont flex1">
-                <pre>{{ nft.val.putAway ? nft.val.sellDesc : nft.val.describe }}</pre>
+              <div class="cont">
+                {{ nft.val.putAway ? nft.val.sellDesc : nft.val.describe }}
+                <a
+                  >...<span @click="isShowDrscDetail = true">{{ $t('getmore') }}</span></a
+                >
               </div>
             </div>
 
@@ -173,30 +176,70 @@
               </div>
             </template> -->
             <!-- <div class="btn btn-block"  @click="buy">{{ $t('use') }} {{ nft.val.amount }} BSV {{ $t('buy') }}</div> -->
-            <div class="operate-warp">
+
+            <div class="auction-msg flex flex-align-center">
+              <div class="auction-msg-item flex1">
+                <div class="title">{{ $t('currentBid') }}：</div>
+                <div class="cont">2.5BSV</div>
+              </div>
+              <div class="auction-msg-item flex1">
+                <div class="title">{{ $t('auctionEndTime') }}：</div>
+                <div class="cont">
+                  {{ day }}<span>{{ $t('day') }}</span
+                  >{{ hour }}<span>{{ $t('hour') }}</span
+                  >{{ minute }}<span>{{ $t('minu') }}</span
+                  >{{ second }}<span>{{ $t('second') }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="operate-warp flex flex-align-center">
               <template v-if="nft.val.sellState === 3">
                 <div class="btn btn-block btn-gray">{{ $t('comingSoon ') }}</div>
               </template>
               <template v-else>
                 <template v-if="isCanBuy">
-                  <div
-                    class="btn btn-block"
-                    :class="{ 'btn-gray': !nft.val.putAway }"
-                    @click="buy"
+                  <!-- 非自己的 -->
+                  <template
                     v-if="
                       !store.state.userInfo ||
                       (store.state.userInfo && store.state.userInfo.metaId !== nft.val.ownerMetaId)
                     "
                   >
-                    <template v-if="nft.val.putAway">{{
-                      i18n.locale.value === 'zh'
-                        ? `以 ${new Decimal(nft.val.amount)
-                            .div(Math.pow(10, 8))
-                            .toString()} BSV 购买`
-                        : `Buy Now At ${new Decimal(nft.val.amount).div(10 ** 8).toString()} BSV`
-                    }}</template>
-                    <template v-else>{{ $t('isBeBuyedOrCanceled') }}</template>
-                  </div>
+                    <!-- 购买 -->
+                    <div
+                      class="btn btn-block flex1 flex flex-align-center flex-pack-center"
+                      :class="{ 'btn-gray': !nft.val.putAway }"
+                      @click="buy"
+                    >
+                      <template v-if="nft.val.putAway">{{
+                        i18n.locale.value === 'zh'
+                          ? `以 ${new Decimal(nft.val.amount)
+                              .div(Math.pow(10, 8))
+                              .toString()} BSV 购买`
+                          : `Buy Now At ${new Decimal(nft.val.amount).div(10 ** 8).toString()} BSV`
+                      }}</template>
+                      <template v-else>{{ $t('isBeBuyedOrCanceled') }}</template>
+                    </div>
+
+                    <div
+                      class="btn btn-block flex1 flex flex-align-center flex-pack-center"
+                      @click="isShowAuctionModal = true"
+                    >
+                      {{ $t('iWanToBid') }}
+                    </div>
+                    <!-- 一口价购买 -->
+                    <div
+                      class="btn btn-block btn-black flex1 flex-align-center flex-pack-center"
+                      @click="buy"
+                    >
+                      <div>
+                        <div class="title">一口价</div>
+                        <div class="cont">4.55 BSV</div>
+                      </div>
+                    </div>
+                  </template>
+                  <!-- 自己的 -->
                   <template
                     v-else-if="
                       store.state.userInfo && store.state.userInfo.metaId === nft.val.ownerMetaId
@@ -395,19 +438,102 @@
                   >
                 </div>
               </div> -->
+
+              <!-- 历史出价 -->
+              <div class="historical-bid" v-if="tabIndex === 2">
+                <div
+                  class="historical-bid-item flex flex-align-center"
+                  v-for="(item, index) in Array.from({ length: 6 })"
+                  :key="index"
+                >
+                  <!-- 用户信息 -->
+                  <div class="author flex1 flex flex-align-center">
+                    <img class="avatar" :src="$filters.avatar(nft.val.foundryMetaId)" />
+                    <div class="author-msg flex1">
+                      <div class="creater">{{ $t('creater') }}: {{ nft.val.foundryName }}</div>
+                      <div class="metaid" v-if="nft.val.foundryMetaId">
+                        MetaID:{{ nft.val.foundryMetaId.slice(0, 6) }}
+                      </div>
+                    </div>
+                  </div>
+                  <!-- 出价信息 -->
+                  <div class="auction-price">
+                    <div class="price flex flex-align-center">
+                      <a class="btn btn-min" v-if="index === 0">{{ $t('latestBid') }}</a>
+                      <span class="title">{{
+                        index === 5 ? $t('auctionBid') : $t('finishBid')
+                      }}</span>
+                      <span class="amount">2.5 BSV</span>
+                    </div>
+                    <div class="time">9月8日 00:21:24</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </template>
     </ElSkeleton>
   </div>
+
+  <!-- drsc detail -->
+  <ElDialog v-model="isShowDrscDetail">
+    <div class="modal-drsc">
+      <pre>{{ nft.val.putAway ? nft.val.sellDesc : nft.val.describe }}</pre>
+    </div>
+  </ElDialog>
+
+  <!-- auction price -->
+  <ElDialog v-model="isShowAuctionModal">
+    <div class="auction-modal">
+      <div class="title">{{ $t('iWanToBid') }}</div>
+      <div class="msg-list">
+        <div class="msg-item flex flex-align-center">
+          <div class="key flex1">{{ $t('currentBid') }}</div>
+          <div class="value">1 BSV</div>
+        </div>
+        <div class="msg-item flex flex-align-center">
+          <div class="key flex1">{{ $t('minimumMarkup') }}</div>
+          <div class="value">0.1 BSV</div>
+        </div>
+      </div>
+      <div class="cont flex flex-align-center">
+        <span>竞拍</span>
+        <input
+          type="number"
+          v-model="auctionPrice"
+          class="warp flex1"
+          @change="onAuctionPriceChange"
+        />
+        <span>BSV</span>
+      </div>
+      <div class="equal">≈1036 CNY</div>
+      <div class="msg-list haved-bsv">
+        <div class="msg-item flex flex-align-center">
+          <div class="key flex1">{{ $t('availableAssets') }}</div>
+          <div class="value">{{ balance }} BSV</div>
+        </div>
+      </div>
+      <div class="btn btn-block" v-if="auctionPrice <= balance">{{ $t('bid') }}</div>
+      <div class="btn btn-block btn-gray" v-else @click="toWallet">
+        {{ $t('insufficientBalanceToWallet') }} <img src="@/assets/images/card_icon_ins.svg" />
+      </div>
+    </div>
+  </ElDialog>
 </template>
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import CertTemp from '@/components/Cert/Cert.vue'
 import { useI18n } from 'vue-i18n'
 import { toClipboard } from '@soerenmartius/vue3-clipboard'
-import { ElLoading, ElMessage, ElSkeleton, ElSkeletonItem, ElMessageBox } from 'element-plus'
+import {
+  ElLoading,
+  ElMessage,
+  ElSkeleton,
+  ElSkeletonItem,
+  ElMessageBox,
+  ElDialog,
+} from 'element-plus'
 import { useRoute } from 'vue-router'
 // @ts-ignore
 import {
@@ -442,9 +568,14 @@ const now = new Date().getTime()
 const tabs = [
   { name: i18n.t('workdetail'), key: 'workdetail' },
   { name: i18n.t('possessionrecord'), key: 'possessionrecord' },
+  { name: i18n.t('historicalBid'), key: 'historicalBid' },
 ]
 let tabIndex = ref(0)
-const isShowSkeleton = ref(true)
+let isShowSkeleton = ref(true)
+let isShowDrscDetail = ref(false)
+let isShowAuctionModal = ref(true)
+let auctionPrice = ref(0)
+let balance = ref(0) // 用户余额
 
 // @ts-ignore
 const nft: { val: NftItemDetail } = reactive({
@@ -466,7 +597,7 @@ const nft: { val: NftItemDetail } = reactive({
 //     resolve()
 //   })
 // }
-const isCanBuy = ref(true)
+let isCanBuy = ref(true)
 function getDetail() {
   return new Promise<void>(async (resolve) => {
     const _nft = await NFTDetail(
@@ -535,10 +666,10 @@ function copy(value: string) {
 }
 
 let interval: NodeJS.Timeout
-const day = ref(0)
-const hour = ref(0)
-const minute = ref(0)
-const second = ref(0)
+let day = ref(0)
+let hour = ref(0)
+let minute = ref(0)
+let second = ref(0)
 
 function countDownTimeLeft() {
   interval = setInterval(() => {
@@ -693,6 +824,13 @@ function more() {
   ElMessage.info(i18n.t('stayTuned'))
 }
 
+async function getBalance() {
+  const res = await store.state.sdk?.getBalance()
+  if (res?.code === 200) {
+    balance = res.data.bsv
+  }
+}
+
 onMounted(() => {
   if (route.params.genesisId && route.params.codehash && route.params.tokenIndex) {
     getDetail()
@@ -704,5 +842,14 @@ onMounted(() => {
 //   getDetail()
 // getRecord()
 // }
+
+// 更改竞拍价格
+function onAuctionPriceChange() {
+  console.log('a')
+}
+
+function toWallet() {
+  window.open(import.meta.env.VITE_AuthUrl)
+}
 </script>
 <style lang="scss" scoped src="./Detail.scss"></style>
