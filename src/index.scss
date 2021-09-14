@@ -107,6 +107,11 @@ body {
     background: #bfc2cc;
     border-color: #bfc2cc;
   }
+  &.btn-black {
+    background: #303133;
+    border-color: #303133;
+    color: #fff;
+  }
   &.btn-block {
     display: block;
     width: auto;
@@ -263,6 +268,10 @@ body {
   svg {
     display: none;
   }
+}
+
+.el-dialog__body {
+  color: #303133 !important;
 }
 
 .v-enter-from,

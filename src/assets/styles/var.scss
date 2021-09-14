@@ -1,30 +1,37 @@
-$bgColor: #F5F7F9;
-$mainColor: #FEB338;
+$bgColor: #f5f7f9;
+$mainColor: #feb338;
 
-%text-ellipsis{
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+%text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @mixin author($avatorWidth, $mrginRight, $nameFontSize, $metaIdFontSize, $marginTop) {
-    .avatar{
-        width: $avatorWidth;
-        height: $avatorWidth;
-        border-radius: 50%;
-        margin-right: $mrginRight;
-        background: #eee;
+  .avatar {
+    width: $avatorWidth;
+    height: $avatorWidth;
+    border-radius: 50%;
+    margin-right: $mrginRight;
+    background: #eee;
+  }
+  .author-msg {
+    .creater {
+      font-weight: 400;
+      font-size: $nameFontSize;
     }
-    .author-msg{
-        .creater{
-            font-weight: 400;
-            font-size: $nameFontSize;
-        }
-        .metaid{
-            font-size: $metaIdFontSize;
-            font-weight: 400;
-            color: #909399;
-            margin-top: $marginTop;
-        }
+    .metaid {
+      font-size: $metaIdFontSize;
+      font-weight: 400;
+      color: #909399;
+      margin-top: $marginTop;
     }
+  }
+}
+
+@mixin text-many-ellipsis($lineNum) {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: $lineNum;
+  -webkit-box-orient: vertical;
 }
