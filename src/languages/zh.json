@@ -193,5 +193,12 @@
   "minimumMarkup": "最低加价",
   "availableAssets": "可用资产",
   "bid": "出价",
-  "insufficientBalanceToWallet": "余额不足，查看我的钱包"
+  "insufficientBalanceToWallet": "余额不足，查看我的钱包",
+  "minGapPriceplac": "设置最少加价",
+  "createAuctionSuccess": "创建拍卖成功",
+  "unStart": "未开始",
+  "bidSuccess": "出价成功",
+  "sealTheDeal": "完成交易",
+  "finalPrice ": "成交价",
+  "finalPrice": "成交价"
 }

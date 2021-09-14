@@ -159,7 +159,7 @@
   "issueMetaTxId": "Issue TXID",
   "look": "Check",
   "isBeCancelSelled": "Has been removed from the shelves and cannot be purchased",
-  "isBeBuyed": "Has been purchased",
+  "isBeBuyed": "Has Been Purchased",
   "isBeBuyedOrCanceled": "Has been purchased or removed",
   "metaBotDrsc": "MetaID's first functional NFT, the unique identity of MetaID and MetaNet supporters ",
   "tariffDescription1title": "Business charge sales ",
@@ -187,9 +187,15 @@
   "latestBid": "Latest bid",
   "finishBid": "Complete bid",
   "auctionBid": "Auction bid",
-  "iWanToBid": "I want to bid",
+  "iWanToBid": "I Want To Bid",
   "minimumMarkup": "Minimum markup",
   "availableAssets": "Available assets",
   "bid": "bid",
-  "insufficientBalanceToWallet": "Insufficient balance, check my wallet"
+  "insufficientBalanceToWallet": "Insufficient balance, check my wallet",
+  "minGapPriceplac": "Set minimum markup",
+  "createAuctionSuccess": "Auction created successfully",
+  "unStart": "Has Not Started",
+  "bidSuccess": "Successful bid",
+  "sealTheDeal": "Seal the deal",
+  "finalPrice": "final price"
 }

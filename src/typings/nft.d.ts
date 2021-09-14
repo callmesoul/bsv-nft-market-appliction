@@ -47,4 +47,10 @@ declare interface NftItemDetail {
   sellDesc: string
   issueMetaTxId: string
   sellState: number
+  isAuction?: boolean
+  startPrice?: string
+  currentPrice?: string
+  minGapPrice?: string
+  auctionTime?: number
+  auctionStatus?: number
 }

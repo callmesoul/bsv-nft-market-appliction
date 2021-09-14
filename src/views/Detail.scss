@@ -88,13 +88,18 @@
       }
       .auction-msg {
         margin-top: 20;
+        .count-down-warp {
+          display: block;
+        }
         .auction-msg-item {
           .title {
             font-size: 14px;
             font-weight: 400;
             color: #606266;
           }
-          .cont {
+          .cont,
+          .count-down {
+            word-break: keep-all;
             margin-top: 5px;
             font-size: 24px;
             font-weight: 500;

@@ -126,6 +126,19 @@
         &.line-through {
           text-decoration: line-through;
         }
+        &.auction-btn {
+          padding: 0;
+          height: 50px;
+          display: flex;
+          .status {
+            font-size: 10px;
+          }
+          .amount {
+            font-size: 13px;
+            font-weight: bold;
+            margin-top: 4px;
+          }
+        }
       }
     }
   }
