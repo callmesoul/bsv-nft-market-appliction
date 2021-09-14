@@ -87,7 +87,7 @@
         }
       }
       .auction-msg {
-        margin-top: 20;
+        margin-top: 20px;
         .count-down-warp {
           display: block;
         }
@@ -150,7 +150,11 @@
       max-width: 720px;
       margin: 0 auto;
     }
-
+    .tab {
+      a {
+        margin-right: 0px !important;
+      }
+    }
     .tab-cont {
       margin-top: 23px;
 
@@ -383,6 +387,23 @@
     .remark {
       .remark-item {
         line-height: 30px;
+      }
+    }
+    .auction-msg {
+      flex-direction: column;
+      align-items: flex-start;
+      .auction-msg-item {
+        margin-bottom: 20px;
+      }
+    }
+    .historical-bid {
+      .historical-bid-item {
+        flex-direction: column;
+        align-items: flex-start;
+        .auction-price {
+          align-self: flex-end;
+          margin-top: 10px;
+        }
       }
     }
   }
