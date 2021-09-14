@@ -53,4 +53,5 @@ declare interface NftItemDetail {
   minGapPrice?: string
   auctionTime?: number
   auctionStatus?: number
+  update_time?: number
 }

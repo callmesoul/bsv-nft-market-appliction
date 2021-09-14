@@ -522,7 +522,7 @@
                       <span class="amount">{{ nft.val.startPrice }} BSV</span>
                     </div>
                     <div class="time">
-                      {{ $filters.dateTimeFormat(nft.val.forgeTime, 'MM月DD日 hh:mm:ss') }}
+                      {{ $filters.dateTimeFormat(nft.val.update_time, 'MM月DD日 hh:mm:ss') }}
                     </div>
                   </div>
                 </div>
@@ -714,6 +714,7 @@ function getDetail() {
             nft.val.sellDesc = item.memo
             nft.val.auctionTime = item.dead_time - new Date().getTime()
             nft.val.auctionStatus = item.status
+            nft.val.update_time = item.update_time
             auctionPrice.value = new Decimal(nft.val.currentPrice)
               .plus(new Decimal(nft.val.minGapPrice))
               .toNumber()
