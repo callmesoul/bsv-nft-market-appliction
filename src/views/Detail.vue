@@ -215,20 +215,20 @@
                 <!-- 拍卖 -->
                 <div class="flex1">
                   <div
-                  class="btn btn-block flex1 flex flex-align-center flex-pack-center"
-                  :class="{ 'btn-gray': nft.val.auctionStatus !== 1 }"
-                  @click="openAuctionModal"
-                >
-                  {{
-                    nft.val.auctionStatus === 0
-                      ? $t('unStart')
-                      : nft.val.auctionStatus === 1
-                      ? $t('iWanToBid')
-                      : nft.val.auctionStatus === 2
-                      ? $t('isBeBuyed')
-                      : ''
-                  }}
-                </div>
+                    class="btn btn-block flex1 flex flex-align-center flex-pack-center"
+                    :class="{ 'btn-gray': nft.val.auctionStatus !== 1 }"
+                    @click="openAuctionModal"
+                  >
+                    {{
+                      nft.val.auctionStatus === 0
+                        ? $t('unStart')
+                        : nft.val.auctionStatus === 1
+                        ? $t('iWanToBid')
+                        : nft.val.auctionStatus === 2
+                        ? $t('isBeBuyed')
+                        : ''
+                    }}
+                  </div>
                   <div class="auctionFailTips">*{{ $t('auctionFailTips') }}</div>
                 </div>
                 <!-- 一口价购买 -->
@@ -710,10 +710,11 @@ function getDetail() {
       }
 
       if (route.query.isAuctioin) {
-        const tabIndex = tabs.findIndex((item) => item.key === 'historicalBid')
-        if (tabIndex === -1) {
+        const _tabIndex = tabs.findIndex((item) => item.key === 'historicalBid')
+        if (_tabIndex === -1) {
           tabs.push({ name: i18n.t('historicalBid'), key: 'historicalBid' })
         }
+        tabIndex.value = 2
         const res = await GetNftAuctions({
           page: 1,
           page_size: 999,
