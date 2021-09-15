@@ -215,9 +215,16 @@
                 <!-- 拍卖 -->
                 <div class="flex1">
                   <div
+                    class="btn btn-block flex1 flex flex-align-center flex-pack-center btn-gray"
+                    v-if="store.state.isApp"
+                  >
+                    APP暂不支持
+                  </div>
+                  <div
                     class="btn btn-block flex1 flex flex-align-center flex-pack-center"
                     :class="{ 'btn-gray': nft.val.auctionStatus !== 1 }"
                     @click="openAuctionModal"
+                    v-else
                   >
                     {{
                       nft.val.auctionStatus === 0
