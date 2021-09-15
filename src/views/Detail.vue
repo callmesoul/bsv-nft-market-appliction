@@ -205,12 +205,7 @@
             </div>
 
             <div class="operate-warp flex flex-align-center">
-              <template v-if="nft.val.sellState === 3">
-                <div class="btn btn-block btn-gray flex1 flex flex-align-center flex-pack-center">
-                  {{ $t('comingSoon ') }}
-                </div>
-              </template>
-              <template v-else-if="nft.val.isAuction">
+              <template v-if="nft.val.isAuction">
                 <!-- 拍卖 -->
                 <div
                   class="btn btn-block flex1 flex flex-align-center flex-pack-center"
@@ -238,6 +233,12 @@
                         </div>
                       </div> -->
               </template>
+              <template v-else-if="nft.val.sellState === 3">
+                <div class="btn btn-block btn-gray flex1 flex flex-align-center flex-pack-center">
+                  {{ $t('comingSoon ') }}
+                </div>
+              </template>
+
               <template v-else>
                 <template v-if="isCanBuy">
                   <!-- 非自己的 -->
