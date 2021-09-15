@@ -17,7 +17,7 @@ module.exports = {
       rootValue: 85.375, // 设计稿宽度 / 10
       propList: ['*'],
       replace: false,
-      mediaQuery: true,
+      mediaQuery: false,
       minPixelValue: 0,
       unitPrecision: 5,
     },
