@@ -198,5 +198,6 @@
   "bidSuccess": "Successful bid",
   "sealTheDeal": "Successful bidding",
   "finalPrice": "final price",
-  "display": "Exhibit"
+  "display": "Exhibit",
+  "NotForSale": "Not for sale"
 }

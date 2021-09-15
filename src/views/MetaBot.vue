@@ -63,16 +63,7 @@
     <template #template>
       <div class="meta-bot-item">
         <div class="cover">
-          <el-skeleton-item
-            variant="image"
-            style="
-              width: 100%;
-              height: 100%;
-              display: block;
-              position: absolute;
-              border-radius: 8px 8px 0 0;
-            "
-          />
+          <el-skeleton-item variant="image" class="el-skeleton-item-image" />
         </div>
         <div class="cont">
           <div class="name"><el-skeleton-item variant="text" style="width: 30%" /></div>
@@ -98,7 +89,7 @@
         <a
           @click="toDetail(metabot)"
           class="meta-bot-item"
-          v-for="metabot in metaBots"
+          v-for="(metabot, index) in metaBots"
           :key="metabot.nftGenesis + metabot.nftCodehash + metabot.nftTokenIndex"
         >
           <!-- <div class="cover">
@@ -122,12 +113,19 @@
               </div>
             </div>
             <!-- 拍卖 -->
-            <template v-if="metabot.isAuction">
-              <template v-if="metabot.isOnlyDisplay">
+            <template v-if="isAuction">
+              <template v-if="index <= 1">
                 <div
                   class="btn btn-block auction-btn flex flex-align-center flex-pack-center btn-gray"
                 >
-                  {{ $t('display') }}
+                  {{ $t('NotForSale') }}
+                </div>
+              </template>
+              <template v-else-if="!metabot.currentPrice">
+                <div
+                  class="btn btn-block auction-btn flex flex-align-center flex-pack-center btn-gray"
+                >
+                  {{ $t('unStart') }}
                 </div>
               </template>
               <template v-else>
@@ -215,10 +213,10 @@ const pagination = reactive({
 
 const countdown = ref(0)
 const isShowCountdown = ref(true)
-const isAuction = computed(() => sections[sectionIndex.value].name === '#003-015')
+const isAuction = computed(() => sections[sectionIndex.value].name === '#001-015')
 
 const sections = [
-  { name: '#003-015', start: 3, end: 15 },
+  { name: '#001-015', start: 1, end: 15 },
   { name: '#016-100', start: 16, end: 100 },
   { name: '#101-200', start: 101, end: 200 },
   { name: '#201-300', start: 201, end: 300 },
@@ -287,7 +285,7 @@ function toDetail(metabot: GetMetaBotListResItem) {
 
 function getDatas(isCover = false) {
   return new Promise<void>(async (resolve) => {
-    if (sections[sectionIndex.value].name === '#003-015') {
+    if (sections[sectionIndex.value].name === '#001-015') {
       metaBots.length = 0
       const res = await GetNftAuctions({
         page: pagination.page,
@@ -295,24 +293,52 @@ function getDatas(isCover = false) {
       })
       if (res.code === 0) {
         // @ts-ignore
-        res.data.unshift(
-          // @ts-ignore
-          {
+        const list = []
+        for (let i = 0; i < 12; i++) {
+          list.push({
             codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
             genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
-            token_index: 0,
-          },
-          {
-            codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
-            genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
-            token_index: 1,
-          },
-          {
-            codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
-            genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
-            token_index: 2,
-          }
+            token_index: i,
+          })
+        }
+        const item12 = res.data.find(
+          (item) =>
+            item.codehash === '0d0fc08db6e27dc0263b594d6b203f55fb5282e2' &&
+            item.genesis === '204dafb6ee543796b4da6f1d4134c1df2609bdf1' &&
+            item.token_index === 12
         )
+        if (!item12)
+          list.push({
+            codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
+            genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
+            token_index: 12,
+          })
+        const item13 = res.data.find(
+          (item) =>
+            item.codehash === '0d0fc08db6e27dc0263b594d6b203f55fb5282e2' &&
+            item.genesis === '204dafb6ee543796b4da6f1d4134c1df2609bdf1' &&
+            item.token_index === 13
+        )
+        if (!item13)
+          list.push({
+            codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
+            genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
+            token_index: 13,
+          })
+        const item14 = res.data.find(
+          (item) =>
+            item.codehash === '0d0fc08db6e27dc0263b594d6b203f55fb5282e2' &&
+            item.genesis === '204dafb6ee543796b4da6f1d4134c1df2609bdf1' &&
+            item.token_index === 14
+        )
+        if (!item14)
+          list.push({
+            codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
+            genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
+            token_index: 14,
+          })
+        // @ts-ignore
+        res.data.unshift(...list)
         for (let i = 0; i < res.data.length; i++) {
           const response = await NFTApiGetNFTDetail({
             codehash: res.data[i].codehash,
@@ -359,8 +385,6 @@ function getDatas(isCover = false) {
               auctionStatus: res.data[i].status,
               currentPrice:
                 res.data[i].buyer_value === '0' ? res.data[i].value : res.data[i].buyer_value,
-              // 0-2只展示
-              isOnlyDisplay: i <= 2 ? true : false,
             })
           }
         }

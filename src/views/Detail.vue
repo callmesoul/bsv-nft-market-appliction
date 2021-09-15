@@ -484,7 +484,7 @@
                   <div class="author flex1 flex flex-align-center">
                     <img class="avatar" :src="$filters.avatar(item.buyer_metaId)" />
                     <div class="author-msg flex1">
-                      <div class="creater">xxx</div>
+                      <div class="creater">{{ item.meta_id_name }}</div>
                       <div class="metaid" v-if="item.buyer_metaId">
                         MetaID:{{ item.buyer_metaId.slice(0, 6) }}
                       </div>
@@ -501,7 +501,7 @@
                       <span class="amount">{{ item.buyer_value }} BSV</span>
                     </div>
                     <div class="time">
-                      {{ $filters.dateTimeFormat(item.update_time, 'MM月DD日 hh:mm:ss') }}
+                      {{ $filters.dateTimeFormat(item.create_time, 'MM月DD日 hh:mm:ss') }}
                     </div>
                   </div>
                 </div>
@@ -576,8 +576,15 @@
           <div class="value">{{ balance }} BSV</div>
         </div>
       </div>
-      <div class="btn btn-block" v-if="auctionPrice <= balance" @click="bid">{{ $t('bid') }}</div>
-      <div class="btn btn-block btn-gray" v-else @click="toWallet">
+      <div
+        class="btn btn-block"
+        v-loading="getBalanceLoading"
+        v-if="auctionPrice <= balance"
+        @click="bid"
+      >
+        {{ $t('bid') }}
+      </div>
+      <div class="btn btn-block btn-gray" v-loading="getBalanceLoading" v-else @click="toWallet">
         {{ $t('insufficientBalanceToWallet') }} <img src="@/assets/images/card_icon_ins.svg" />
       </div>
     </div>
@@ -643,6 +650,7 @@ let isShowDrscDetail = ref(false)
 let isShowAuctionModal = ref(false)
 let auctionPrice = ref(0)
 let balance = ref(0) // 用户余额
+const getBalanceLoading = ref(true)
 const minActionPrice = ref(0) // 最小叫价
 const auctionRecords = reactive<GetNftAuctionHistorysResItem[]>([]) // 最小叫价
 
@@ -725,7 +733,6 @@ function getDetail() {
           }
         }
         getNftAuctionHistorys()
-        getBalance()
       }
       // countDownTimeLeft()
       isShowSkeleton.value = false
@@ -953,6 +960,7 @@ async function getBalance() {
   const res = await store.state.sdk?.getBalance()
   if (res?.code === 200) {
     balance.value = res.data.bsv
+    getBalanceLoading.value = false
   }
 }
 
@@ -983,6 +991,7 @@ async function openAuctionModal() {
   if (nft.val.auctionStatus !== 1) return
   await checkSdkStatus()
   isShowAuctionModal.value = true
+  getBalance()
 }
 
 // 出价
@@ -1000,7 +1009,14 @@ async function bid() {
     genesis: nft.val.genesis,
     token_index: parseInt(nft.val.tokenIndex),
     value: new Decimal(auctionPrice.value).toString(),
-  }).catch(() => loading.close())
+  }).catch((error) => {
+    ElMessage.error(error.response.data.data)
+    getBalanceLoading.value = true
+    isShowSkeleton.value = true
+    isShowAuctionModal.value = false
+    getDetail()
+    loading.close()
+  })
   if (res?.code === 0) {
     const response = await store.state.sdk
       ?.createNFTAuctionBidProtocol({
@@ -1016,7 +1032,14 @@ async function bid() {
       })
       .catch(() => loading.close())
     if (response?.code === 200) {
-      const getRawRes: any = await GetTxRaw(response.data.txId).catch(() => loading.close())
+      const getRawRes: any = await GetTxRaw(response.data.txId).catch((error) => {
+        ElMessage.error(error.response.data.data)
+        getBalanceLoading.value = true
+        isShowSkeleton.value = true
+        isShowAuctionModal.value = false
+        getDetail()
+        loading.close()
+      })
       if (getRawRes.hex) {
         const result = await SubmitBid({
           codehash: nft.val.codeHash,
