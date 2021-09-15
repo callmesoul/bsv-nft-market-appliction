@@ -64,6 +64,19 @@
           color: #606266;
           margin-top: 10px;
           line-height: 24px;
+          position: relative;
+          @include text-many-ellipsis(2);
+          a {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            background: #f5f7f9;
+            span {
+              margin-left: 10px;
+              color: #456fc4;
+              cursor: pointer;
+            }
+          }
         }
       }
       .timeleft {
@@ -73,12 +86,53 @@
           margin: 0 5px;
         }
       }
+      .auction-msg {
+        margin-top: 20px;
+        .count-down-warp {
+          display: block;
+        }
+        .auction-msg-item {
+          .title {
+            font-size: 14px;
+            font-weight: 400;
+            color: #606266;
+          }
+          .cont,
+          .count-down {
+            word-break: keep-all;
+            margin-top: 5px;
+            font-size: 24px;
+            font-weight: 500;
+            span {
+              font-size: 14px;
+              margin: 0 5px;
+            }
+          }
+        }
+      }
       .operate-warp {
         margin-top: 20px;
         .btn {
           margin-right: 20px;
+          height: 62px;
+          box-sizing: border-box;
+          padding: 0;
+          display: flex;
+          font-size: 18px;
           &:last-child {
             margin-right: 0;
+          }
+          &.btn-black {
+            .title {
+              font-size: 12px;
+              font-weight: 500;
+              color: #909399;
+            }
+            .cont {
+              margin-top: 2px;
+              font-size: 18px;
+              font-weight: 500;
+            }
           }
         }
       }
@@ -96,7 +150,11 @@
       max-width: 720px;
       margin: 0 auto;
     }
-
+    .tab {
+      a {
+        margin-right: 0px !important;
+      }
+    }
     .tab-cont {
       margin-top: 23px;
 
@@ -190,7 +248,103 @@
         .price {
         }
       }
+
+      .historical-bid {
+        .historical-bid-item {
+          padding: 20px 0;
+          border-bottom: 1px solid #f2f4f7;
+          .author {
+            @include author(38px, 10px, 16px, 14px, 2px);
+          }
+          .auction-price {
+            text-align: right;
+            .price {
+              .btn {
+                margin-right: 10px;
+              }
+              .title {
+                font-size: 16px;
+                margin-right: 10px;
+              }
+              .amount {
+                font-size: 16px;
+                font-weight: 500;
+                color: #456fc4;
+              }
+            }
+            .time {
+              margin-top: 4px;
+              font-size: 14px;
+              font-weight: 400;
+              color: #909399;
+            }
+          }
+        }
+      }
     }
+  }
+}
+
+.modal-drsc {
+  font-size: 14px;
+  color: #606266;
+  line-height: 24px;
+}
+
+.auction-modal {
+  padding: 15px;
+  .title {
+    font-size: 20px;
+    font-weight: 500;
+    text-align: center;
+  }
+  .msg-list {
+    margin-top: 20px;
+    .msg-item {
+      margin-bottom: 13px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+      .key {
+        font-size: 18px;
+        font-weight: 400;
+        color: #909399;
+      }
+      .value {
+        font-size: 18px;
+        font-weight: 500;
+      }
+    }
+  }
+  .cont {
+    margin-top: 38px;
+    input {
+      margin: 0 45px;
+      line-height: 60px;
+      background: #f5f7fa;
+      text-align: center;
+      border: none;
+      outline: none;
+      font-size: 24px;
+      font-weight: 500;
+      border-radius: 6px;
+    }
+    span {
+      font-size: 18px;
+      font-weight: 500;
+    }
+  }
+  .equal {
+    text-align: center;
+    font-size: 14px;
+    color: #909399;
+    margin-top: 10px;
+  }
+  .haved-bsv {
+    margin-top: 40px;
+  }
+  .btn {
+    margin-top: 13px;
   }
 }
 
@@ -233,6 +387,23 @@
     .remark {
       .remark-item {
         line-height: 30px;
+      }
+    }
+    .auction-msg {
+      flex-direction: column;
+      align-items: flex-start;
+      .auction-msg-item {
+        margin-bottom: 20px;
+      }
+    }
+    .historical-bid {
+      .historical-bid-item {
+        flex-direction: column;
+        align-items: flex-start;
+        .auction-price {
+          align-self: flex-end;
+          margin-top: 10px;
+        }
       }
     }
   }

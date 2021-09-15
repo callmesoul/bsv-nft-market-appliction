@@ -819,4 +819,53 @@ export default class Sdk {
       resolve({ data, attachments })
     })
   }
+
+  createNFTAuctionProtocol(params: {
+    sensibleInfo: //如果type是sensible，则读取这信息
+    {
+      codehash: string //必须 // nft的codehash
+      genesis: string //必须 // nft的genesisId
+      tokenIndex: string //必须 // nft的tokenIndex
+    }
+    auctionDesc: string // 拍卖描述信息
+    auctionContractTxId: string //nft拍卖合约txid（如果没有则为空）
+    basePrice: number // 必填 // nft的起拍价 单位聪
+    minPrceGap: number // 必填项，最少加价项目，单位聪
+    sellPrice: number // 必须 // nft的一口价 单位聪
+    availabeTime: number // 必须 //有效时间
+  }) {
+    return this.sendMetaDataTx({
+      data: JSON.stringify({
+        type: 'sensible', //token类型,如果不使用合约则为空
+        ...params,
+      }),
+      brfcId: '123456789987654',
+      path: '/Protocols/NFTAuction',
+      nodeName: 'NFTAuction',
+    })
+  }
+
+  createNFTAuctionBidProtocol(params: {
+    sensibleInfo: //如果type是sensible，则读取这信息
+    {
+      codehash: string // 必须 // nft的codehash
+      genesis: string // 必须 // nft的genesisId
+      tokenIndex: string // 必须 // nft的tokenIndex
+    }
+    bidDesc: string //出价留言
+    bidPrice: number //必填项 竞拍的出价
+    bidTo: string //出价的拍卖 createNFTAuctionProtocol txid
+    bidType: string //"bid"/"buy" “bid”为普通竞拍出价，“buy”为一口价购买
+  }) {
+    return this.sendMetaDataTx({
+      data: JSON.stringify({
+        type: 'sensible', //token类型,如果不使用合约则为空
+        ...params,
+      }),
+      brfcId: '546dasddsd',
+      path: '/Protocols/NFTAuctionBid',
+      nodeName: 'NFTAuctionBid',
+      payTo: [{ address: '1HrJF7uMf4BE7gAAV3RCKPjpZEXiP81kMQ', amount: params.bidPrice }],
+    })
+  }
 }

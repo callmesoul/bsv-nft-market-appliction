@@ -231,6 +231,45 @@ declare interface GetMyOnSellNftListRes extends apiResponse {
   }
 }
 
+declare interface GetNftAuctionsRes extends apiResponse {
+  data: GetNftAuctionsResItem[]
+}
+
+declare interface GetNftAuctionsResItem {
+  begin_value: string
+  buyer_address: string
+  buyer_metaId: string
+  buyer_value: string
+  codehash: string
+  dead_time: number
+  final_value: string
+  fixed_value: string
+  genesis: string
+  icon: string
+  memo: string
+  one_value: string
+  status: number
+  token_index: number
+  update_time: number
+  value: string
+}
+declare interface GetNftAuctionHistorysRes extends apiResponse {
+  data: GetNftAuctionHistorysResItem[]
+}
+
+declare interface GetNftAuctionHistorysResItem {
+  buyer_address: string
+  buyer_metaId: string
+  buyer_value: string
+  codehash: string
+  genesis: string
+  icon: string
+  id: string
+  status: number
+  token_index: number
+  update_time: number
+  value: string
+}
 declare interface GetMetaBotListRes extends apiResponse {
   data: {
     total: number
@@ -274,6 +313,10 @@ declare interface GetMetaBotListResItem {
   nftTokenIndex: string
   nftWebsite: string
   nftIsReady: boolean
+  isAuction?: boolean
+  auctionStatus?: number
+  currentPrice?: string
+  isOnlyDisplay?: boolean
 }
 
 declare interface GetNftIssueyTxIdResItem {

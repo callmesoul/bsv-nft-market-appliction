@@ -107,6 +107,11 @@ body {
     background: #bfc2cc;
     border-color: #bfc2cc;
   }
+  &.btn-black {
+    background: #303133;
+    border-color: #303133;
+    color: #fff;
+  }
   &.btn-block {
     display: block;
     width: auto;
@@ -219,6 +224,15 @@ body {
   }
 }
 
+input[type='number'] {
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+
+  -moz-appearance: textfield;
+}
+
 .el-dialog {
   border-radius: 12px !important;
   width: 90% !important;
@@ -265,6 +279,10 @@ body {
   }
 }
 
+.el-dialog__body {
+  color: #303133 !important;
+}
+
 .v-enter-from,
 .v-leave-to {
   transition: opacity 0.5s ease;
@@ -284,6 +302,7 @@ body {
 .fade-leave-to {
   opacity: 0;
 }
+
 @media only screen and (max-width: 1040px) {
   .container {
     padding: 0 30px;

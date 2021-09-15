@@ -9,6 +9,8 @@ export enum NftApiCode {
 }
 const apiHttp = new HttpRequest(env.VITE_WalletApi).request
 const nftHttp = new HttpRequest(env.VITE_NftApi).request
+const auctionHttp = new HttpRequest('https://api.nftonshow.com/showbot').request
+// const auctionHttp = new HttpRequest('http://192.168.168.118').request
 export const GetToken = (params: object) => {
   return apiHttp.post('/showmoney/oauth2/oauth/token', params, {
     headers: {
@@ -137,18 +139,31 @@ export const GetNFTOwnerAddress = (params: { tokenId: string }): Promise<apiResp
   return nftHttp.post(`/api/v2/productTransaction/ownerAddress`, params)
 }
 
-export const GetDeadlineTime = (params: { genesis: string, codeHash: string, tokenIndex: string}): Promise<apiResponse> => {
+export const GetDeadlineTime = (params: {
+  genesis: string
+  codeHash: string
+  tokenIndex: string
+}): Promise<apiResponse> => {
   return nftHttp.post(`/api/v2/productTransaction/getShelvesTime`, params)
 }
 
-export const SetDeadlineTime = (params: { genesis: string, codeHash: string, tokenIndex: string, deadlineTime: number }): Promise<apiResponse> => {
+export const SetDeadlineTime = (params: {
+  genesis: string
+  codeHash: string
+  tokenIndex: string
+  deadlineTime: number
+}): Promise<apiResponse> => {
   return nftHttp.post(`/api/v2/productTransaction/setShelvesTime`, params)
 }
 
-export const RemoveDeadlineTime = (params: { genesis: string, codeHash: string, tokenIndex: string, deadlineTime: number }): Promise<apiResponse> => {
+export const RemoveDeadlineTime = (params: {
+  genesis: string
+  codeHash: string
+  tokenIndex: string
+  deadlineTime: number
+}): Promise<apiResponse> => {
   return nftHttp.post(`/api/v2/productTransaction/removeShelvesTime`, params)
 }
-
 
 export const GetNftIssue = (params: {
   genesisId: string
@@ -164,83 +179,79 @@ export const GetMySelledNfts = (params: Pagination): Promise<MyNftsResponstData>
   return nftHttp.post(`/api/v2/product/myShelvesProduct`, params)
 }
 
-export const GetMyNftSummaryList = (params: GetMyNftSummaryListParams): Promise<GetMyNftSummaryListRes> => {
+export const GetMyNftSummaryList = (
+  params: GetMyNftSummaryListParams
+): Promise<GetMyNftSummaryListRes> => {
   return apiHttp.post(`/aggregation/v2/app/sensible/getMyNftSummaryListV2`, params)
 }
 
-
-
-export const GetMyOnSellNftList = (params: GetMyOnSellNftListParams): Promise<GetMyOnSellNftListRes> => {
+export const GetMyOnSellNftList = (
+  params: GetMyOnSellNftListParams
+): Promise<GetMyOnSellNftListRes> => {
   return apiHttp.post(`/aggregation/v2/app/nftOnShow/getMyNftOnShowList`, params)
 }
 
-
-
 export const GetAllOnSellNftList = (params: {
-  PageSize: string,
+  PageSize: string
   Page: string
 }): Promise<GetMyOnSellNftListRes> => {
   return apiHttp.post(`/aggregation/v2/app/nftOnShow/getAllNftOnShowList`, params)
 }
 
 export const GetNftOnShowListByClassify = (params: {
-  PageSize: string,
-  Page: string,
+  PageSize: string
+  Page: string
   classify: string
 }): Promise<GetMyOnSellNftListRes> => {
   return apiHttp.post(`/aggregation/v2/app/nftOnShow/getNftOnShowListByClassify`, params)
 }
 
-
-
 export const GetNftOnShowListBySearch = (params: {
-  PageSize: string,
-  Page: string,
+  PageSize: string
+  Page: string
   SearchWord: string
 }): Promise<GetMyOnSellNftListRes> => {
   return apiHttp.post(`/aggregation/v2/app/nftOnShow/getNftOnShowListBySearch`, params)
 }
 
-
 export const GetSeriesNftList = (params: {
-  Page: string,
-  PageSize: string,
-  Address: string,
+  Page: string
+  PageSize: string
+  Address: string
   codehash: string
   genesis: string
 }): Promise<GetSeriesNftListRes> => {
   return apiHttp.post(`/aggregation/v2/app/sensible/getMyNftSummaryDetailList`, params)
 }
 
-
 export const NFTApiGetNFTDetail = (params: {
-  tokenIndex: string,
+  tokenIndex: string
   codehash: string
   genesis: string
 }): Promise<NFTApiGetNFTDetailRes> => {
   return apiHttp.post(`/aggregation/v2/app/sensible/getOneNftSummaryDetail`, params)
 }
 
-
 export const GetRecommendOnSellNftList = (params: {
-  PageSize: string,
+  PageSize: string
   Page: string
 }): Promise<GetMyOnSellNftListRes> => {
   return apiHttp.post(`/aggregation/v2/app/nftOnShow/getRecommendNftOnShowList`, params)
 }
 
-export enum Langs  {
+export enum Langs {
   CN = 'cn',
-  EN = 'en'
+  EN = 'en',
 }
 export const GetMyNftEligibility = (params: {
   MetaId: string
   IssueMetaId: string
   lang: Langs
 }): Promise<apiResponse> => {
-  return apiHttp.get(`/aggregation/v2/app/nftOnShow/getMyNftEligibility/${params.MetaId}//${params.IssueMetaId}/${params.lang}`)
+  return apiHttp.get(
+    `/aggregation/v2/app/nftOnShow/getMyNftEligibility/${params.MetaId}//${params.IssueMetaId}/${params.lang}`
+  )
 }
-
 
 export const GetMetaBotList = (params: {
   PageSize: string
@@ -250,7 +261,6 @@ export const GetMetaBotList = (params: {
 }): Promise<GetMetaBotListRes> => {
   return apiHttp.post(`/aggregation/v2/app/metaBot/getMetaBotListByBetweenNumber`, params)
 }
-
 
 export const GetMetaBotListByBetweenNumber = (params: {
   PageSize: string
@@ -267,4 +277,82 @@ export const GetMetaBotListBySearch = (params: {
   SearchWord: string
 }): Promise<GetMetaBotListRes> => {
   return apiHttp.post(`/aggregation/v2/app/metaBot/getMetaBotListBySearch`, params)
+}
+
+export const CreateNftAuction = (params: {
+  codehash: string
+  genesis: string
+  token_index: number
+  value: string
+  fixed_value: string
+  begin_value: string
+  icon: string
+  memo: string
+  one_value: string
+  dead_time: number
+  auction_tx: string
+}): Promise<GetMetaBotListRes> => {
+  return auctionHttp.post(`/v1/app/admin/addMetaBot`, params)
+}
+
+export const GetNftAuctions = (params: {
+  page: number
+  page_size: number
+}): Promise<GetNftAuctionsRes> => {
+  return auctionHttp.post(`/v1/app/metabot/all`, params)
+}
+
+export const CheckUserCanAuction = (params: {
+  codehash: string
+  genesis: string
+  token_index: number
+  value: string
+}): Promise<GetMetaBotListRes> => {
+  return auctionHttp.post(`/v1/app/metabot/offerCheck`, params)
+}
+
+export const SubmitBid = (params: {
+  codehash: string
+  genesis: string
+  token_index: number
+  value: string
+  tx: string
+  raw_tx: string
+  buyer_meta_id: string
+  buyer_address: string
+}): Promise<GetMetaBotListRes> => {
+  return auctionHttp.post(`/v1/app/metabot/offer`, params)
+}
+
+export const GetNftAuctionHistorys = (params: {
+  codehash: string
+  genesis: string
+  token_index: number
+  page: number
+  page_size: number
+}): Promise<GetNftAuctionHistorysRes> => {
+  return auctionHttp.post(`/v1/app/metabot/itemHistory`, params)
+}
+
+export const GetUserAuctionHistorys = (params: {
+  meta_id: string
+  page: number
+  page_size: number
+}): Promise<GetMetaBotListRes> => {
+  return auctionHttp.post(`/v1/app/metabot/metaId`, params)
+}
+
+export const GetTxRaw = (txid: string): Promise<GetMetaBotListRes> => {
+  return new Promise((resolve, reject) => {
+    fetch(`https://apiv2.metasv.com/tx/${txid}/raw`)
+      .then(function (response) {
+        return response.json()
+      })
+      .then((response) => {
+        resolve(response)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
 }
