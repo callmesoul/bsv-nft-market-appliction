@@ -159,7 +159,13 @@
                 <template v-else> {{ $t('drsc') }}: </template>
               </div>
               <div class="cont">
-                {{ nft.val.putAway ? nft.val.sellDesc : nft.val.describe }}
+                {{
+                  nft.val.isAuction
+                    ? nft.val.auctionDrsc
+                    : nft.val.putAway
+                    ? nft.val.sellDesc
+                    : nft.val.describe
+                }}
                 <a
                   >...<span @click="isShowDrscDetail = true">{{ $t('getmore') }}</span></a
                 >
@@ -207,7 +213,8 @@
             <div class="operate-warp flex flex-align-center">
               <template v-if="nft.val.isAuction">
                 <!-- 拍卖 -->
-                <div
+                <div class="flex1">
+                  <div
                   class="btn btn-block flex1 flex flex-align-center flex-pack-center"
                   :class="{ 'btn-gray': nft.val.auctionStatus !== 1 }"
                   @click="openAuctionModal"
@@ -221,6 +228,8 @@
                       ? $t('isBeBuyed')
                       : ''
                   }}
+                </div>
+                  <div class="auctionFailTips">*{{ $t('auctionFailTips') }}</div>
                 </div>
                 <!-- 一口价购买 -->
                 <!-- <div
@@ -502,7 +511,7 @@
                       <span class="amount">{{ item.buyer_value }} BSV</span>
                     </div>
                     <div class="time">
-                      {{ $filters.dateTimeFormat(item.create_time, 'MM月DD日 hh:mm:ss') }}
+                      {{ $filters.dateTimeFormat(item.create_time, 'MM月DD日 HH:mm:ss') }}
                     </div>
                   </div>
                 </div>
@@ -525,7 +534,7 @@
                       <span class="amount">{{ nft.val.startPrice }} BSV</span>
                     </div>
                     <div class="time">
-                      {{ $filters.dateTimeFormat(nft.val.update_time, 'MM月DD日 hh:mm:ss') }}
+                      {{ $filters.dateTimeFormat(nft.val.update_time, 'MM月DD日 HH:mm:ss') }}
                     </div>
                   </div>
                 </div>
@@ -540,7 +549,13 @@
   <!-- drsc detail -->
   <ElDialog v-model="isShowDrscDetail">
     <div class="modal-drsc">
-      <pre>{{ nft.val.putAway ? nft.val.sellDesc : nft.val.describe }}</pre>
+      <pre>{{
+        nft.val.isAuction
+          ? nft.val.auctionDrsc
+          : nft.val.putAway
+          ? nft.val.sellDesc
+          : nft.val.describe
+      }}</pre>
     </div>
   </ElDialog>
 
@@ -722,7 +737,7 @@ function getDetail() {
             if (new Decimal(nft.val.minGapPrice).toNumber() < 0.00001) {
               nft.val.minGapPrice = '0.00001'
             }
-            nft.val.sellDesc = item.memo
+            nft.val.auctionDrsc = item.memo
             nft.val.auctionTime = item.dead_time - new Date().getTime()
             debugger
             nft.val.auctionStatus = item.status
