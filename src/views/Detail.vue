@@ -533,9 +533,9 @@
                       <span class="title">{{ $t('auctionBid') }}</span>
                       <span class="amount">{{ nft.val.startPrice }} BSV</span>
                     </div>
-                    <div class="time">
+                    <!-- <div class="time">
                       {{ $filters.dateTimeFormat(nft.val.update_time, 'MM月DD日 HH:mm:ss') }}
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </div>
