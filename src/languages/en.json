@@ -200,5 +200,5 @@
   "finalPrice": "final price",
   "display": "Exhibit",
   "NotForSale": "Not for sale",
-  "auctionFailTips": "If the auction fails, the funds will be returned within 1 minute"
+  "auctionFailTips": "If the bid fails, the funds will be returned within 1 minute"
 }
