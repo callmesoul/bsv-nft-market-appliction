@@ -86,7 +86,7 @@
           </div>
           <el-skeleton-item
             class="btn btn-block btn-gray"
-            variant="button "
+            variant="button"
             style="width: 100%; box-sizing: border-box; border: none"
           />
         </div>
@@ -123,27 +123,36 @@
             </div>
             <!-- 拍卖 -->
             <template v-if="metabot.isAuction">
-              <div
-                class="btn btn-block auction-btn flex flex-align-center flex-pack-center"
-                :class="{ 'btn-gray': metabot.auctionStatus !== 1 }"
-              >
-                <div>
-                  <div class="status">
-                    {{
-                      metabot.auctionStatus === 0
-                        ? $t('unStart')
-                        : metabot.auctionStatus === 1
-                        ? $t('currentBid')
-                        : metabot.auctionStatus === 2
-                        ? $t('finalPrice')
-                        : ''
-                    }}
-                  </div>
-                  <div class="amount" v-if="metabot.auctionStatus !== 0">
-                    {{ metabot.currentPrice }} BSV
+              <template v-if="metabot.isOnlyDisplay">
+                <div
+                  class="btn btn-block auction-btn flex flex-align-center flex-pack-center btn-gray"
+                >
+                  {{ $t('display') }}
+                </div>
+              </template>
+              <template v-else>
+                <div
+                  class="btn btn-block auction-btn flex flex-align-center flex-pack-center"
+                  :class="{ 'btn-gray': metabot.auctionStatus !== 1 }"
+                >
+                  <div>
+                    <div class="status">
+                      {{
+                        metabot.auctionStatus === 0
+                          ? $t('unStart')
+                          : metabot.auctionStatus === 1
+                          ? $t('currentBid')
+                          : metabot.auctionStatus === 2
+                          ? $t('finalPrice')
+                          : ''
+                      }}
+                    </div>
+                    <div class="amount" v-if="metabot.auctionStatus !== 0">
+                      {{ metabot.currentPrice }} BSV
+                    </div>
                   </div>
                 </div>
-              </div>
+              </template>
             </template>
             <template v-else-if="metabot.nftSellState === 3">
               <div class="btn btn-block btn-gray" @click.stop="buy(metabot)">
@@ -262,7 +271,7 @@ function toMetabot() {
 
 function toDetail(metabot: GetMetaBotListResItem) {
   let query: any = {}
-  if (isAuction.value) {
+  if (isAuction.value && !metabot.isOnlyDisplay) {
     query.isAuctioin = true
   }
   router.push({
@@ -285,6 +294,25 @@ function getDatas(isCover = false) {
         page_size: pagination.pageSize,
       })
       if (res.code === 0) {
+        // @ts-ignore
+        res.data.unshift(
+          // @ts-ignore
+          {
+            codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
+            genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
+            token_index: 0,
+          },
+          {
+            codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
+            genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
+            token_index: 1,
+          },
+          {
+            codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
+            genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
+            token_index: 2,
+          }
+        )
         for (let i = 0; i < res.data.length; i++) {
           const response = await NFTApiGetNFTDetail({
             codehash: res.data[i].codehash,
@@ -331,6 +359,8 @@ function getDatas(isCover = false) {
               auctionStatus: res.data[i].status,
               currentPrice:
                 res.data[i].buyer_value === '0' ? res.data[i].value : res.data[i].buyer_value,
+              // 0-2只展示
+              isOnlyDisplay: i <= 2 ? true : false,
             })
           }
         }

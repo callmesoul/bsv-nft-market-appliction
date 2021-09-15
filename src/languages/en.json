@@ -197,5 +197,6 @@
   "unStart": "Has Not Started",
   "bidSuccess": "Successful bid",
   "sealTheDeal": "Successful bidding",
-  "finalPrice": "final price"
+  "finalPrice": "final price",
+  "display": "Exhibit"
 }

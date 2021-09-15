@@ -206,7 +206,9 @@
 
             <div class="operate-warp flex flex-align-center">
               <template v-if="nft.val.sellState === 3">
-                <div class="btn btn-block btn-gray">{{ $t('comingSoon ') }}</div>
+                <div class="btn btn-block btn-gray flex1 flex flex-align-center flex-pack-center">
+                  {{ $t('comingSoon ') }}
+                </div>
               </template>
               <template v-else-if="nft.val.isAuction">
                 <!-- 拍卖 -->
@@ -493,7 +495,7 @@
                     <div class="price flex flex-align-center">
                       <a class="btn btn-min" v-if="index === 0 || auctionRecords.length === 1">
                         <template v-if="item.status === 2">{{ $t('sealTheDeal') }}</template>
-                        <template>{{ $t('latestBid') }}</template>
+                        <template v-else>{{ $t('latestBid') }}</template>
                       </a>
                       <span class="title">{{ $t('auctionBid') }}</span>
                       <span class="amount">{{ item.buyer_value }} BSV</span>
@@ -507,11 +509,11 @@
                 <div class="historical-bid-item flex flex-align-center">
                   <!-- 用户信息 -->
                   <div class="author flex1 flex flex-align-center">
-                    <img class="avatar" :src="$filters.avatar(nft.val.issueMetaTxId)" />
+                    <img class="avatar" :src="$filters.avatar(nft.val.foundryMetaId)" />
                     <div class="author-msg flex1">
                       <div class="creater">{{ nft.val.foundryName }}</div>
-                      <div class="metaid" v-if="nft.val.issueMetaTxId">
-                        MetaID:{{ nft.val.issueMetaTxId.slice(0, 6) }}
+                      <div class="metaid" v-if="nft.val.foundryMetaId">
+                        MetaID:{{ nft.val.foundryMetaId.slice(0, 6) }}
                       </div>
                     </div>
                   </div>
@@ -713,6 +715,7 @@ function getDetail() {
             }
             nft.val.sellDesc = item.memo
             nft.val.auctionTime = item.dead_time - new Date().getTime()
+            debugger
             nft.val.auctionStatus = item.status
             nft.val.update_time = item.update_time
             auctionPrice.value = new Decimal(nft.val.currentPrice)
@@ -722,6 +725,7 @@ function getDetail() {
           }
         }
         getNftAuctionHistorys()
+        getBalance()
       }
       // countDownTimeLeft()
       isShowSkeleton.value = false
@@ -979,7 +983,6 @@ async function openAuctionModal() {
   if (nft.val.auctionStatus !== 1) return
   await checkSdkStatus()
   isShowAuctionModal.value = true
-  getBalance()
 }
 
 // 出价
