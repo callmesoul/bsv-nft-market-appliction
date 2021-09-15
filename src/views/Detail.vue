@@ -264,25 +264,21 @@
                       (store.state.userInfo && store.state.userInfo.metaId !== nft.val.ownerMetaId)
                     "
                   >
-                    <template>
-                      <!-- 购买 -->
-                      <div
-                        class="btn btn-block flex1 flex flex-align-center flex-pack-center"
-                        :class="{ 'btn-gray': !nft.val.putAway }"
-                        @click="buy"
-                      >
-                        <template v-if="nft.val.putAway">{{
-                          i18n.locale.value === 'zh'
-                            ? `以 ${new Decimal(nft.val.amount)
-                                .div(Math.pow(10, 8))
-                                .toString()} BSV 购买`
-                            : `Buy Now At ${new Decimal(nft.val.amount)
-                                .div(10 ** 8)
-                                .toString()} BSV`
-                        }}</template>
-                        <template v-else>{{ $t('isBeBuyedOrCanceled') }}</template>
-                      </div>
-                    </template>
+                    <!-- 购买 -->
+                    <div
+                      class="btn btn-block flex1 flex flex-align-center flex-pack-center"
+                      :class="{ 'btn-gray': !nft.val.putAway }"
+                      @click="buy"
+                    >
+                      <template v-if="nft.val.putAway">{{
+                        i18n.locale.value === 'zh'
+                          ? `以 ${new Decimal(nft.val.amount)
+                              .div(Math.pow(10, 8))
+                              .toString()} BSV 购买`
+                          : `Buy Now At ${new Decimal(nft.val.amount).div(10 ** 8).toString()} BSV`
+                      }}</template>
+                      <template v-else>{{ $t('isBeBuyedOrCanceled') }}</template>
+                    </div>
                   </template>
                   <!-- 自己的 -->
                   <template
