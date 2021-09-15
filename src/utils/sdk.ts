@@ -865,7 +865,7 @@ export default class Sdk {
       brfcId: '546dasddsd',
       path: '/Protocols/NFTAuctionBid',
       nodeName: 'NFTAuctionBid',
-      payTo: [{ address: '19qscsZj61QZTyGw5F4MoFH8wrEmNqsMZ7', amount: params.bidPrice }],
+      payTo: [{ address: '1HrJF7uMf4BE7gAAV3RCKPjpZEXiP81kMQ', amount: params.bidPrice }],
     })
   }
 }
