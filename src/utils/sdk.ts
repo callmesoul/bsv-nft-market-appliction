@@ -529,11 +529,9 @@ export default class Sdk {
   }
 
   // nft 铸造
-  issueNFT(
-    params: NFTIssueParams,
-    parentResolve?: ((value: IssueNFTResData | PromiseLike<IssueNFTResData>) => void) | undefined
-  ) {
+  issueNFT(params: NFTIssueParams) {
     return new Promise<IssueNFTResData>((resolve, reject) => {
+      alert('issueNFT start')
       const _params = {
         data: {
           iconType: 'pic',
@@ -541,17 +539,10 @@ export default class Sdk {
           ...params,
         },
         callback: (res: MetaIdJsRes) => {
-          debugger
+          alert('issueNFT res' + JSON.stringify(res))
           console.log('issueNFT res')
           console.log(res)
-          // 当报错是token supply is fixed 时， 一直轮询，直到成功或其他报错
-          if (res.data && res.data.message === 'token supply is fixed') {
-            setTimeout(() => {
-              this.issueNFT(params, resolve)
-            }, doubleTimeOut)
-          } else {
-            this.callback(res, parentResolve ? parentResolve : resolve)
-          }
+          this.callback(res, resolve)
         },
       }
       if (this.isApp) {
@@ -559,6 +550,7 @@ export default class Sdk {
         // @ts-ignore
         window[functionName] = _params.callback
         _params.data.content.classifyList = JSON.parse(_params.data.content.classifyList)
+        alert('window.appMetaIdJsV2?.issueNFT' + JSON.stringify(window.appMetaIdJsV2?.issueNFT))
         if (window.appMetaIdJsV2) {
           window.appMetaIdJsV2?.issueNFT(
             store.state.token!.access_token,
