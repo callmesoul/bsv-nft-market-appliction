@@ -202,5 +202,6 @@
   "finalPrice ": "成交价",
   "finalPrice": "成交价",
   "display": "展示",
-  "NotForSale": "非卖品"
+  "NotForSale": "非卖品",
+  "auctionFailTips": "如竞标失败，资金将于1分钟之内退回"
 }
