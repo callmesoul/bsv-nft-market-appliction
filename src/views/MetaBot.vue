@@ -303,7 +303,7 @@ function getDatas(isCover = false) {
       if (res.code === 0) {
         // @ts-ignore
         const list = []
-        for (let i = 0; i < 12; i++) {
+        for (let i = 0; i < 7; i++) {
           list.push({
             codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
             genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
