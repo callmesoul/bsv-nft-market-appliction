@@ -101,7 +101,12 @@
               :transform="transformSlotProps"
               v-slot="{ days, hours, minutes, seconds }"
               @end="onCountdownEnd"
-              v-if="metabot.isAuction && metabot.auctionStatus === 1"
+              v-if="
+                metabot.isAuction &&
+                metabot.auctionStatus === 1 &&
+                metabot.auctionDeadTime &&
+                metabot.auctionDeadTime > now
+              "
             >
               <span class="dot"></span
               ><span>{{ parseInt(hours) + parseInt(days) * 24 }}:{{ minutes }}:{{ seconds }}</span>
@@ -223,7 +228,7 @@ const pagination = reactive({
 const countdown = ref(0)
 const isShowCountdown = ref(true)
 const isAuction = computed(() => sections[sectionIndex.value].name === '#001-015')
-
+const now = new Date().getTime()
 const sections = [
   { name: '#001-015', start: 1, end: 15 },
   { name: '#016-100', start: 16, end: 100 },
