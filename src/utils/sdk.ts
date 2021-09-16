@@ -127,10 +127,16 @@ export default class Sdk {
       if (!params.encrypt) params.encrypt = '0'
       if (!params.dataType) params.dataType = 'application/json'
       const accessToken = store.state.token ? store.state.token?.access_token : ''
+      const callback = (res: MetaIdJsRes) => {
+        this.callback(res, resolve)
+      }
+      const onCancel = (res: MetaIdJsRes) => {
+        this.callback(res, resolve)
+      }
       if (this.isApp) {
         const functionName: string = `sendMetaDataTxCallBack`
         // @ts-ignore
-        window[functionName] = params.callback
+        window[functionName] = callback
         if (window.appMetaIdJsV2) {
           window.appMetaIdJsV2?.sendMetaDataTx(accessToken, JSON.stringify(params), functionName)
         } else {
@@ -138,12 +144,8 @@ export default class Sdk {
         }
       } else {
         const _params = {
-          callback: (res: MetaIdJsRes) => {
-            this.callback(res, resolve)
-          },
-          onCancel: (res: MetaIdJsRes) => {
-            reject(res)
-          },
+          callback,
+          onCancel,
           metaIdTag,
           accessToken,
           ...params,
@@ -153,16 +155,7 @@ export default class Sdk {
         ;(window as any).handleNotEnoughMoney = (res: MetaIdJsRes) => {
           reject()
         }
-        this.metaidjs?.sendMetaDataTx({
-          callback: (res: MetaIdJsRes) => {
-            this.callback(res, resolve)
-          },
-          onCancel: (res: MetaIdJsRes) => {
-            reject(res)
-          },
-          accessToken,
-          ...params,
-        })
+        this.metaidjs?.sendMetaDataTx(_params)
       }
     })
   }
