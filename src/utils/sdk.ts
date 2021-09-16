@@ -476,6 +476,7 @@ export default class Sdk {
           seriesName: params.seriesName,
         },
         callback: (res: SdkGenesisNFTRes) => {
+          alert('genesisNFT  rss' + JSON.stringify(res))
           this.callback(res, resolve)
         },
       }
@@ -551,6 +552,7 @@ export default class Sdk {
         window[functionName] = _params.callback
         _params.data.content.classifyList = JSON.parse(_params.data.content.classifyList)
         alert('window.appMetaIdJsV2?.issueNFT' + JSON.stringify(window.appMetaIdJsV2?.issueNFT))
+        console.log(_params.data)
         if (window.appMetaIdJsV2) {
           window.appMetaIdJsV2?.issueNFT(
             store.state.token!.access_token,
