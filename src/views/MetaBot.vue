@@ -310,41 +310,65 @@ function getDatas(isCover = false) {
             token_index: i,
           })
         }
-        const item12 = res.data.find(
+        const item7 = res.data.find(
           (item) =>
             item.codehash === '0d0fc08db6e27dc0263b594d6b203f55fb5282e2' &&
             item.genesis === '204dafb6ee543796b4da6f1d4134c1df2609bdf1' &&
-            item.token_index === 12
+            item.token_index === 7
         )
-        if (!item12)
+        if (!item7)
           list.push({
             codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
             genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
-            token_index: 12,
+            token_index: 7,
           })
-        const item13 = res.data.find(
+        const item8 = res.data.find(
           (item) =>
             item.codehash === '0d0fc08db6e27dc0263b594d6b203f55fb5282e2' &&
             item.genesis === '204dafb6ee543796b4da6f1d4134c1df2609bdf1' &&
-            item.token_index === 13
+            item.token_index === 8
         )
-        if (!item13)
+        if (!item8)
           list.push({
             codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
             genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
-            token_index: 13,
+            token_index: 8,
           })
-        const item14 = res.data.find(
+        const item9 = res.data.find(
           (item) =>
             item.codehash === '0d0fc08db6e27dc0263b594d6b203f55fb5282e2' &&
             item.genesis === '204dafb6ee543796b4da6f1d4134c1df2609bdf1' &&
-            item.token_index === 14
+            item.token_index === 9
         )
-        if (!item14)
+        if (!item9)
           list.push({
             codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
             genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
-            token_index: 14,
+            token_index: 9,
+          })
+        const item10 = res.data.find(
+          (item) =>
+            item.codehash === '0d0fc08db6e27dc0263b594d6b203f55fb5282e2' &&
+            item.genesis === '204dafb6ee543796b4da6f1d4134c1df2609bdf1' &&
+            item.token_index === 10
+        )
+        if (!item10)
+          list.push({
+            codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
+            genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
+            token_index: 10,
+          })
+        const item11 = res.data.find(
+          (item) =>
+            item.codehash === '0d0fc08db6e27dc0263b594d6b203f55fb5282e2' &&
+            item.genesis === '204dafb6ee543796b4da6f1d4134c1df2609bdf1' &&
+            item.token_index === 11
+        )
+        if (!item11)
+          list.push({
+            codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
+            genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
+            token_index: 11,
           })
         // @ts-ignore
         res.data.unshift(...list)
