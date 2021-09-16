@@ -857,6 +857,9 @@ export default class Sdk {
     bidTo: string //出价的拍卖 createNFTAuctionProtocol txid
     bidType: string //"bid"/"buy" “bid”为普通竞拍出价，“buy”为一口价购买
   }) {
+    const mode = import.meta.env.MODE
+    const address =
+      mode === 'prod' ? '1HrJF7uMf4BE7gAAV3RCKPjpZEXiP81kMQ' : '13JYVkJHCpaUsMgb9eRR4qSWF5KaoHtb31'
     return this.sendMetaDataTx({
       data: JSON.stringify({
         type: 'sensible', //token类型,如果不使用合约则为空
@@ -865,7 +868,7 @@ export default class Sdk {
       brfcId: '546dasddsd',
       path: '/Protocols/NFTAuctionBid',
       nodeName: 'NFTAuctionBid',
-      payTo: [{ address: '1HrJF7uMf4BE7gAAV3RCKPjpZEXiP81kMQ', amount: params.bidPrice }],
+      payTo: [{ address, amount: params.bidPrice }],
     })
   }
 }
