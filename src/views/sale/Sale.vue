@@ -70,9 +70,12 @@
           <a :class="{ active: tabIndex === 0 }" @click="changeTabIndex(0)">{{
             $t('priceSale')
           }}</a>
-          <!-- <a :class="{ active: tabIndex === 1 }" @click="changeTabIndex(1)">{{
-            $t('auctionSale')
-          }}</a> -->
+          <a
+            :class="{ active: tabIndex === 1 }"
+            @click="changeTabIndex(1)"
+            v-if="mode !== 'prod'"
+            >{{ $t('auctionSale') }}</a
+          >
         </div>
 
         <div class="cont-warp">
@@ -286,6 +289,7 @@ const tabIndex = ref(0)
 const auctionPrice = ref('')
 const minGapPrice = ref('') // 最少加价
 const auctionTime = ref('') // 拍卖时间
+const mode = import.meta.env.MODE
 
 // @ts-ignore
 const nft: { val: NftItemDetail } = reactive({

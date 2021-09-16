@@ -286,8 +286,15 @@
                       store.state.userInfo && store.state.userInfo.metaId === nft.val.ownerMetaId
                     "
                   >
-                    <div class="flex flex-align-center putAway-warp" v-if="nft.val.putAway">
-                      <div class="btn btn-block btn-plain flex1" @click="offSale">
+                    <div class="flex flex-align-center putAway-warp flex1" v-if="nft.val.putAway">
+                      <div
+                        class="
+                          btn btn-block btn-plain
+                          flex1
+                          flex flex-align-center flex-pack-center
+                        "
+                        @click="offSale"
+                      >
                         {{ $t('offsale') }}
                       </div>
                       <!-- <template v-if="now > nft.val.remainingTime">
