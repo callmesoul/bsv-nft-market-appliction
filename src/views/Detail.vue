@@ -214,12 +214,6 @@
               <template v-if="nft.val.isAuction">
                 <!-- 拍卖 -->
                 <div class="flex1">
-                  <!-- <div
-                    class="btn btn-block flex1 flex flex-align-center flex-pack-center btn-gray"
-                    v-if="store.state.isApp"
-                  >
-                    APP暂不支持
-                  </div> -->
                   <div
                     class="btn btn-block flex1 flex flex-align-center flex-pack-center"
                     :class="{ 'btn-gray': nft.val.auctionStatus !== 1 }"
@@ -1057,11 +1051,8 @@ async function bid() {
         bidType: 'bid',
       })
       .catch(() => loading.close())
-    alert('sdk createNFTAuctionBidProtocol' + response)
     if (response?.code === 200) {
-      alert('sdk createNFTAuctionBidProtocol 200')
       const getRawRes: any = await GetTxRaw(response.data.txId).catch((error) => {
-        alert('GetTxRaw fail' + error.response)
         ElMessage.error(error.response.data.data)
         getBalanceLoading.value = true
         isShowSkeleton.value = true
@@ -1069,9 +1060,7 @@ async function bid() {
         getDetail()
         loading.close()
       })
-      alert('GetTxRaw success' + getRawRes)
       if (getRawRes.hex) {
-        alert('GetTxRaw success getRawRes.hex')
         const result = await SubmitBid({
           codehash: nft.val.codeHash,
           genesis: nft.val.genesis,
@@ -1082,10 +1071,8 @@ async function bid() {
           buyer_meta_id: store.state.userInfo!.metaId,
           buyer_address: store.state.userInfo!.address,
         }).catch((error) => {
-          alert('SubmitBid fail' + error)
           loading.close()
         })
-        alert('SubmitBid success' + result)
         if (result?.code === 0) {
           ElMessage.success(i18n.t('bidSuccess'))
           isShowAuctionModal.value = false
