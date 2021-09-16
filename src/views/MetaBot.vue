@@ -21,9 +21,9 @@
   <!-- banner -->
   <div class="banner container">
     <a v-if="i18n.locale.value === 'zh'"
-      ><img src="@/assets/images/nos-banner.png" alt="Metabot"
+      ><img src="@/assets/images/nos-banner2.png" alt="Metabot"
     /></a>
-    <a v-else><img src="@/assets/images/nos-banner-en.png" alt="Metabot" /></a>
+    <a v-else><img src="@/assets/images/nos-banner-en2.png" alt="Metabot" /></a>
   </div>
 
   <VueCountdown
