@@ -312,7 +312,6 @@ export default class Sdk {
         }
       | number
     >(async (resolve, reject) => {
-      alert('createNFT start')
       let { nftTotal, codeHash, genesis, genesisTxId, sensibleId, ..._params } = params
       let amount = 0
       const issueOperate = async () => {
@@ -478,7 +477,10 @@ export default class Sdk {
   }
 
   // nft 铸造
-  issueNFT(params: NFTIssueParams) {
+  issueNFT(
+    params: NFTIssueParams,
+    parentResolve?: ((value: IssueNFTResData | PromiseLike<IssueNFTResData>) => void) | undefined
+  ) {
     return new Promise<IssueNFTResData>((resolve, reject) => {
       const _params = {
         data: {
@@ -487,7 +489,7 @@ export default class Sdk {
           ...params,
         },
         callback: (res: MetaIdJsRes) => {
-          alert('issueNFT res' + JSON.stringify(res))
+          debugger
           console.log('issueNFT res')
           console.log(res)
           // 当报错是token supply is fixed 时， 一直轮询，直到成功或其他报错
@@ -498,6 +500,7 @@ export default class Sdk {
         const functionName: string = `issueNFTCallBack`
         // @ts-ignore
         window[functionName] = _params.callback
+        _params.data.content.classifyList = JSON.parse(_params.data.content.classifyList)
         if (window.appMetaIdJsV2) {
           window.appMetaIdJsV2?.issueNFT(
             store.state.token!.access_token,
@@ -843,7 +846,7 @@ export default class Sdk {
   }) {
     const mode = import.meta.env.MODE
     const address =
-      mode === 'prod' ? '1HrJF7uMf4BE7gAAV3RCKPjpZEXiP81kMQ' : '13JYVkJHCpaUsMgb9eRR4qSWF5KaoHtb31'
+      mode === 'prod' ? '16JPvTD8jHS2CgWwrg8NrQyxSxZ51srjvk' : '13JYVkJHCpaUsMgb9eRR4qSWF5KaoHtb31'
     return this.sendMetaDataTx({
       data: JSON.stringify({
         type: 'sensible', //token类型,如果不使用合约则为空
