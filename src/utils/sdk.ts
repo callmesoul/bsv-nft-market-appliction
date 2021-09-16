@@ -210,11 +210,9 @@ export default class Sdk {
     parentReject?: any
   ) {
     return new Promise<void>(async (resolve, reject) => {
-      alert('checkNftTxIdStatus start')
       axios
         .get(`https://api.sensiblequery.com/tx/${txId}`)
         .then((res) => {
-          alert('checkNftTxIdStatus res' + JSON.stringify(res))
           if (res.data.code === 0) {
             if (parentResolve) parentResolve()
             else resolve()
@@ -317,7 +315,36 @@ export default class Sdk {
       alert('createNFT start')
       let { nftTotal, codeHash, genesis, genesisTxId, sensibleId, ..._params } = params
       let amount = 0
-
+      const issueOperate = async () => {
+        if (!params.checkOnly) {
+          await this.checkNftTxIdStatus(genesisTxId!).catch(() => reject('createNFT error'))
+        }
+        const issueRes = await this.issueNFT({
+          genesisId: genesis!,
+          genesisTxid: genesisTxId!,
+          codehash: codeHash!,
+          sensibleId: sensibleId,
+          ..._params,
+        })
+        if (issueRes.code === 200) {
+          if (issueRes.data.amount) {
+            amount += issueRes.data.amount
+          }
+          if (params.checkOnly) {
+            resolve(Math.ceil(amount))
+          } else {
+            resolve({
+              ...issueRes.data,
+              codehash: codeHash!,
+              sensibleId: sensibleId!,
+              genesisId: genesis!,
+              genesisTxid: genesisTxId!,
+            })
+          }
+        } else {
+          reject('createNFT error')
+        }
+      }
       if (!codeHash || !genesis || !genesisTxId || !sensibleId) {
         // genesisNFT
         const res = await this.genesisNFT({
@@ -338,94 +365,16 @@ export default class Sdk {
             sensibleId = res.data.sensibleId
           }
           debugger
-          const result = await this.issueOperate(
-            _params,
-            genesisTxId,
-            genesis,
-            codeHash,
-            sensibleId,
-            amount
-          )
-          if (result) {
-            resolve(result)
-          }
+          await issueOperate()
         } else {
           reject('createNFT error')
         }
       } else {
-        const result = await this.issueOperate(
-          _params,
-          genesisTxId,
-          genesis,
-          codeHash,
-          sensibleId,
-          amount
-        )
-        if (result) {
-          resolve(result)
-        }
+        await issueOperate()
       }
     })
   }
 
-  issueOperate(
-    params: any,
-    genesisTxId: string,
-    genesis: string,
-    codeHash: string,
-    sensibleId: string,
-    amount: number
-  ) {
-    return new Promise<
-      | {
-          // genesisNFT response data
-          codehash: string
-          genesisId: string
-          genesisTxid: string
-          sensibleId: string
-          // issueNFT response data
-          metaTdid: string
-          nftId: string
-          tokenId: string
-          txId: string
-          tokenIndex: string
-        }
-      | number
-    >(async (resolve, reject) => {
-      alert('start issueOperate')
-      if (!params.checkOnly) {
-        alert('checkOnly start')
-        await this.checkNftTxIdStatus(genesisTxId).catch(() => reject('createNFT error'))
-      }
-      alert('checkOnly finish')
-      const issueRes = await this.issueNFT({
-        genesisId: genesis!,
-        genesisTxid: genesisTxId!,
-        codehash: codeHash!,
-        sensibleId: sensibleId,
-        ...params,
-      })
-      alert('issueRes ' + JSON.stringify(issueRes))
-      if (issueRes.code === 200) {
-        if (issueRes.data.amount) {
-          amount += issueRes.data.amount
-        }
-        if (params.checkOnly) {
-          resolve(Math.ceil(amount))
-        } else {
-          resolve({
-            ...issueRes.data,
-            codehash: codeHash!,
-            sensibleId: sensibleId!,
-            genesisId: genesis!,
-            genesisTxid: genesisTxId!,
-          })
-        }
-      } else {
-        reject('createNFT error')
-      }
-    })
-  }
   // setIssuePrams (params: NFTIssueParams) {
   //   return new Promise((resolve) => {
   //     let nfticon
@@ -476,7 +425,6 @@ export default class Sdk {
           seriesName: params.seriesName,
         },
         callback: (res: SdkGenesisNFTRes) => {
-          alert('genesisNFT  rss' + JSON.stringify(res))
           this.callback(res, resolve)
         },
       }
@@ -532,7 +480,6 @@ export default class Sdk {
   // nft 铸造
   issueNFT(params: NFTIssueParams) {
     return new Promise<IssueNFTResData>((resolve, reject) => {
-      alert('issueNFT start')
       const _params = {
         data: {
           iconType: 'pic',
@@ -543,6 +490,7 @@ export default class Sdk {
           alert('issueNFT res' + JSON.stringify(res))
           console.log('issueNFT res')
           console.log(res)
+          // 当报错是token supply is fixed 时， 一直轮询，直到成功或其他报错
           this.callback(res, resolve)
         },
       }
@@ -550,9 +498,6 @@ export default class Sdk {
         const functionName: string = `issueNFTCallBack`
         // @ts-ignore
         window[functionName] = _params.callback
-        _params.data.content.classifyList = JSON.parse(_params.data.content.classifyList)
-        alert('window.appMetaIdJsV2?.issueNFT' + JSON.stringify(window.appMetaIdJsV2?.issueNFT))
-        console.log(_params.data)
         if (window.appMetaIdJsV2) {
           window.appMetaIdJsV2?.issueNFT(
             store.state.token!.access_token,
