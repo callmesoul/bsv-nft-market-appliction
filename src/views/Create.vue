@@ -660,7 +660,6 @@ async function createNft() {
     genesisTxId: seriesIndex !== -1 ? series[seriesIndex].genesisTxId : undefined,
     sensibleId: seriesIndex !== -1 ? series[seriesIndex].sensibleId : undefined,
   }
-  debugger
   const useAmount = await await store.state.sdk
     ?.createNFT({
       checkOnly: true,
@@ -669,7 +668,6 @@ async function createNft() {
     .catch(() => {
       loading.close()
     })
-
   const userBalanceRes = await store.state.sdk?.getBalance()
   if (
     userBalanceRes &&

@@ -62,6 +62,7 @@
         <a class="btn btn-min" v-else @click.stop="toSale">{{ $t('sale') }}</a>
       </div>
     </div>
+    <!-- 推荐卡片 -->
     <div class="recommend-card flex flex-v" v-if="props.isRecommendCard">
       <div class="icon">
         <img src="@/assets/images/card_icon_fire.svg" />

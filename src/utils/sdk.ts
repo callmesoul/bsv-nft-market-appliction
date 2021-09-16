@@ -127,10 +127,16 @@ export default class Sdk {
       if (!params.encrypt) params.encrypt = '0'
       if (!params.dataType) params.dataType = 'application/json'
       const accessToken = store.state.token ? store.state.token?.access_token : ''
+      const callback = (res: MetaIdJsRes) => {
+        this.callback(res, resolve)
+      }
+      const onCancel = (res: MetaIdJsRes) => {
+        this.callback(res, resolve)
+      }
       if (this.isApp) {
         const functionName: string = `sendMetaDataTxCallBack`
         // @ts-ignore
-        window[functionName] = params.callback
+        window[functionName] = callback
         if (window.appMetaIdJsV2) {
           window.appMetaIdJsV2?.sendMetaDataTx(accessToken, JSON.stringify(params), functionName)
         } else {
@@ -138,12 +144,8 @@ export default class Sdk {
         }
       } else {
         const _params = {
-          callback: (res: MetaIdJsRes) => {
-            this.callback(res, resolve)
-          },
-          onCancel: (res: MetaIdJsRes) => {
-            reject(res)
-          },
+          callback,
+          onCancel,
           metaIdTag,
           accessToken,
           ...params,
@@ -153,16 +155,7 @@ export default class Sdk {
         ;(window as any).handleNotEnoughMoney = (res: MetaIdJsRes) => {
           reject()
         }
-        this.metaidjs?.sendMetaDataTx({
-          callback: (res: MetaIdJsRes) => {
-            this.callback(res, resolve)
-          },
-          onCancel: (res: MetaIdJsRes) => {
-            reject(res)
-          },
-          accessToken,
-          ...params,
-        })
+        this.metaidjs?.sendMetaDataTx(_params)
       }
     })
   }
@@ -500,13 +493,7 @@ export default class Sdk {
           console.log('issueNFT res')
           console.log(res)
           // 当报错是token supply is fixed 时， 一直轮询，直到成功或其他报错
-          if (res.data && res.data.message === 'token supply is fixed') {
-            setTimeout(() => {
-              this.issueNFT(params, resolve)
-            }, doubleTimeOut)
-          } else {
-            this.callback(res, parentResolve ? parentResolve : resolve)
-          }
+          this.callback(res, resolve)
         },
       }
       if (this.isApp) {
@@ -817,6 +804,58 @@ export default class Sdk {
         }
       })
       resolve({ data, attachments })
+    })
+  }
+
+  createNFTAuctionProtocol(params: {
+    sensibleInfo: //如果type是sensible，则读取这信息
+    {
+      codehash: string //必须 // nft的codehash
+      genesis: string //必须 // nft的genesisId
+      tokenIndex: string //必须 // nft的tokenIndex
+    }
+    auctionDesc: string // 拍卖描述信息
+    auctionContractTxId: string //nft拍卖合约txid（如果没有则为空）
+    basePrice: number // 必填 // nft的起拍价 单位聪
+    minPrceGap: number // 必填项，最少加价项目，单位聪
+    sellPrice: number // 必须 // nft的一口价 单位聪
+    availabeTime: number // 必须 //有效时间
+  }) {
+    return this.sendMetaDataTx({
+      data: JSON.stringify({
+        type: 'sensible', //token类型,如果不使用合约则为空
+        ...params,
+      }),
+      brfcId: '123456789987654',
+      path: '/Protocols/NFTAuction',
+      nodeName: 'NFTAuction',
+    })
+  }
+
+  createNFTAuctionBidProtocol(params: {
+    sensibleInfo: //如果type是sensible，则读取这信息
+    {
+      codehash: string // 必须 // nft的codehash
+      genesis: string // 必须 // nft的genesisId
+      tokenIndex: string // 必须 // nft的tokenIndex
+    }
+    bidDesc: string //出价留言
+    bidPrice: number //必填项 竞拍的出价
+    bidTo: string //出价的拍卖 createNFTAuctionProtocol txid
+    bidType: string //"bid"/"buy" “bid”为普通竞拍出价，“buy”为一口价购买
+  }) {
+    const mode = import.meta.env.MODE
+    const address =
+      mode === 'prod' ? '16JPvTD8jHS2CgWwrg8NrQyxSxZ51srjvk' : '13JYVkJHCpaUsMgb9eRR4qSWF5KaoHtb31'
+    return this.sendMetaDataTx({
+      data: JSON.stringify({
+        type: 'sensible', //token类型,如果不使用合约则为空
+        ...params,
+      }),
+      brfcId: '546dasddsd',
+      path: '/Protocols/NFTAuctionBid',
+      nodeName: 'NFTAuctionBid',
+      payTo: [{ address, amount: params.bidPrice }],
     })
   }
 }

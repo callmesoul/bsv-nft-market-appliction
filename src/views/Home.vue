@@ -2,11 +2,9 @@
   <!-- banner -->
   <div class="banner container">
     <a @click="toMetabot" v-if="i18n.locale.value === 'zh'"
-      ><img src="@/assets/images/cn-banner-metabot.png" alt="Metabot"
+      ><img src="@/assets/images/nos-banner2.png" alt="Metabot"
     /></a>
-    <a @click="toMetabot" v-else
-      ><img src="@/assets/images/en-banner-metabot.png" alt="Metabot"
-    /></a>
+    <a @click="toMetabot" v-else><img src="@/assets/images/nos-banner-en2.png" alt="Metabot" /></a>
   </div>
 
   <div class="home">
@@ -119,6 +117,7 @@ import { classifyList } from '@/config'
 import { useI18n } from 'vue-i18n'
 import { setDataStrclassify } from '@/utils/util'
 import SetHomeDatas from '@/utils/homeSetData'
+import { router } from '@/router'
 
 const i18n = useI18n()
 const store = useStore()
@@ -161,7 +160,7 @@ async function getNftList(isCover: boolean = false) {
 }
 
 function toMetabot() {
-  window.open('https://www.metabot.world')
+  router.push({ name: 'metaBot' })
 }
 
 // 获取推荐列表
