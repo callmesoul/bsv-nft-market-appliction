@@ -660,16 +660,16 @@ async function createNft() {
     genesisTxId: seriesIndex !== -1 ? series[seriesIndex].genesisTxId : undefined,
     sensibleId: seriesIndex !== -1 ? series[seriesIndex].sensibleId : undefined,
   }
-  debugger
   const useAmount = await await store.state.sdk
     ?.createNFT({
       checkOnly: true,
       ...params,
     })
     .catch(() => {
+      alert(3)
       loading.close()
     })
-
+  alert(4 + JSON.stringify(useAmount))
   const userBalanceRes = await store.state.sdk?.getBalance()
   if (
     userBalanceRes &&
@@ -685,9 +685,11 @@ async function createNft() {
       .then(async () => {
         // 余额足够且确认支付
         const res = await store.state.sdk?.createNFT(params).catch(() => {
+          alert(1)
           loading.close()
         })
         debugger
+        alert(2)
         if (res && typeof res !== 'number') {
           /* ElMessage.success(i18n.t('castingsuccess'))
         router.replace({ name: 'createSuccess', 
@@ -724,6 +726,7 @@ async function createNft() {
             tokenIndex: res.tokenIndex,
           }
           const response = await CreateNft(params)
+          alert(6 + JSON.stringify(response))
           if (response.code === NftApiCode.success) {
             ElMessage.success(i18n.t('castingsuccess'))
             router.replace({
