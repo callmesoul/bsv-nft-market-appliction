@@ -370,6 +370,46 @@ function getDatas(isCover = false) {
             genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
             token_index: 11,
           })
+
+        const item12 = res.data.find(
+          (item) =>
+            item.codehash === '0d0fc08db6e27dc0263b594d6b203f55fb5282e2' &&
+            item.genesis === '204dafb6ee543796b4da6f1d4134c1df2609bdf1' &&
+            item.token_index === 12
+        )
+        if (!item12)
+          list.push({
+            codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
+            genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
+            token_index: 12,
+          })
+
+        const item13 = res.data.find(
+          (item) =>
+            item.codehash === '0d0fc08db6e27dc0263b594d6b203f55fb5282e2' &&
+            item.genesis === '204dafb6ee543796b4da6f1d4134c1df2609bdf1' &&
+            item.token_index === 13
+        )
+        if (!item13)
+          list.push({
+            codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
+            genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
+            token_index: 13,
+          })
+
+        const item14 = res.data.find(
+          (item) =>
+            item.codehash === '0d0fc08db6e27dc0263b594d6b203f55fb5282e2' &&
+            item.genesis === '204dafb6ee543796b4da6f1d4134c1df2609bdf1' &&
+            item.token_index === 14
+        )
+        if (!item14)
+          list.push({
+            codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
+            genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
+            token_index: 14,
+          })
+
         // @ts-ignore
         res.data.unshift(...list)
         for (let i = 0; i < res.data.length; i++) {
