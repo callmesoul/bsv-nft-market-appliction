@@ -131,7 +131,7 @@ export default class Sdk {
         this.callback(res, resolve)
       }
       const onCancel = (res: MetaIdJsRes) => {
-        this.callback(res, resolve)
+        reject(res)
       }
       if (this.isApp) {
         const functionName: string = `sendMetaDataTxCallBack`
