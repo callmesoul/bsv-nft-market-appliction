@@ -317,6 +317,7 @@ declare interface GetMetaBotListResItem {
   auctionStatus?: number
   currentPrice?: string
   isOnlyDisplay?: boolean
+  auctionDeadTime?: number
 }
 
 declare interface GetNftIssueyTxIdResItem {

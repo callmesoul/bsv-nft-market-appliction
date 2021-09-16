@@ -215,16 +215,9 @@
                 <!-- 拍卖 -->
                 <div class="flex1">
                   <div
-                    class="btn btn-block flex1 flex flex-align-center flex-pack-center btn-gray"
-                    v-if="store.state.isApp"
-                  >
-                    APP暂不支持
-                  </div>
-                  <div
                     class="btn btn-block flex1 flex flex-align-center flex-pack-center"
                     :class="{ 'btn-gray': nft.val.auctionStatus !== 1 }"
                     @click="openAuctionModal"
-                    v-else
                   >
                     {{
                       nft.val.auctionStatus === 0
@@ -264,25 +257,21 @@
                       (store.state.userInfo && store.state.userInfo.metaId !== nft.val.ownerMetaId)
                     "
                   >
-                    <template>
-                      <!-- 购买 -->
-                      <div
-                        class="btn btn-block flex1 flex flex-align-center flex-pack-center"
-                        :class="{ 'btn-gray': !nft.val.putAway }"
-                        @click="buy"
-                      >
-                        <template v-if="nft.val.putAway">{{
-                          i18n.locale.value === 'zh'
-                            ? `以 ${new Decimal(nft.val.amount)
-                                .div(Math.pow(10, 8))
-                                .toString()} BSV 购买`
-                            : `Buy Now At ${new Decimal(nft.val.amount)
-                                .div(10 ** 8)
-                                .toString()} BSV`
-                        }}</template>
-                        <template v-else>{{ $t('isBeBuyedOrCanceled') }}</template>
-                      </div>
-                    </template>
+                    <!-- 购买 -->
+                    <div
+                      class="btn btn-block flex1 flex flex-align-center flex-pack-center"
+                      :class="{ 'btn-gray': !nft.val.putAway }"
+                      @click="buy"
+                    >
+                      <template v-if="nft.val.putAway">{{
+                        i18n.locale.value === 'zh'
+                          ? `以 ${new Decimal(nft.val.amount)
+                              .div(Math.pow(10, 8))
+                              .toString()} BSV 购买`
+                          : `Buy Now At ${new Decimal(nft.val.amount).div(10 ** 8).toString()} BSV`
+                      }}</template>
+                      <template v-else>{{ $t('isBeBuyedOrCanceled') }}</template>
+                    </div>
                   </template>
                   <!-- 自己的 -->
                   <template
@@ -290,8 +279,15 @@
                       store.state.userInfo && store.state.userInfo.metaId === nft.val.ownerMetaId
                     "
                   >
-                    <div class="flex flex-align-center putAway-warp" v-if="nft.val.putAway">
-                      <div class="btn btn-block btn-plain flex1" @click="offSale">
+                    <div class="flex flex-align-center putAway-warp flex1" v-if="nft.val.putAway">
+                      <div
+                        class="
+                          btn btn-block btn-plain
+                          flex1
+                          flex flex-align-center flex-pack-center
+                        "
+                        @click="offSale"
+                      >
                         {{ $t('offsale') }}
                       </div>
                       <!-- <template v-if="now > nft.val.remainingTime">
@@ -1074,7 +1070,9 @@ async function bid() {
           raw_tx: getRawRes.hex,
           buyer_meta_id: store.state.userInfo!.metaId,
           buyer_address: store.state.userInfo!.address,
-        }).catch(() => loading.close())
+        }).catch((error) => {
+          loading.close()
+        })
         if (result?.code === 0) {
           ElMessage.success(i18n.t('bidSuccess'))
           isShowAuctionModal.value = false

@@ -21,9 +21,9 @@
   <!-- banner -->
   <div class="banner container">
     <a v-if="i18n.locale.value === 'zh'"
-      ><img src="@/assets/images/nos-banner.png" alt="Metabot"
+      ><img src="@/assets/images/nos-banner2.png" alt="Metabot"
     /></a>
-    <a v-else><img src="@/assets/images/nos-banner-en.png" alt="Metabot" /></a>
+    <a v-else><img src="@/assets/images/nos-banner-en2.png" alt="Metabot" /></a>
   </div>
 
   <VueCountdown
@@ -95,6 +95,17 @@
           </div> -->
           <div class="cover">
             <ElImage :lazy="true" :src="metafileUrl(metabot.nftIcon)"></ElImage>
+            <VueCountdown
+              class="countdown"
+              :time="metabot.auctionDeadTime ? metabot.auctionDeadTime - new Date().getTime() : 0"
+              :transform="transformSlotProps"
+              v-slot="{ days, hours, minutes, seconds }"
+              @end="onCountdownEnd"
+              v-if="metabot.isAuction && metabot.auctionStatus === 1"
+            >
+              <span class="dot"></span
+              ><span>{{ parseInt(hours) + parseInt(days) * 24 }}:{{ minutes }}:{{ seconds }}</span>
+            </VueCountdown>
           </div>
           <div class="cont">
             <div class="name">{{ metabot.nftName }}</div>
@@ -381,6 +392,7 @@ function getDatas(isCover = false) {
               nftIsReady: item.nftIsReady,
               isAuction: true,
               auctionStatus: res.data[i].status,
+              auctionDeadTime: res.data[i].dead_time,
               currentPrice:
                 res.data[i].buyer_value === '0' ? res.data[i].value : res.data[i].buyer_value,
             })
