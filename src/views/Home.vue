@@ -2,9 +2,9 @@
   <!-- banner -->
   <div class="banner container">
     <a @click="toMetabot" v-if="i18n.locale.value === 'zh'"
-      ><img src="@/assets/images/nos-banner.png" alt="Metabot"
+      ><img src="@/assets/images/nos-banner2.png" alt="Metabot"
     /></a>
-    <a @click="toMetabot" v-else><img src="@/assets/images/nos-banner-en.png" alt="Metabot" /></a>
+    <a @click="toMetabot" v-else><img src="@/assets/images/nos-banner-en2.png" alt="Metabot" /></a>
   </div>
 
   <div class="home">
