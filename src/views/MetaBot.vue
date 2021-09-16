@@ -240,13 +240,15 @@ const sections = [
 const sectionIndex = ref(0)
 
 function onCountdownEnd() {
-  pagination.page = 1
-  pagination.loading = false
-  pagination.nothing = false
-  keyword.value = ''
-  sectionIndex.value = 0
-  isShowCountdown.value = false
-  getDatas(true)
+  setTimeout(() => {
+    pagination.page = 1
+    pagination.loading = false
+    pagination.nothing = false
+    keyword.value = ''
+    sectionIndex.value = 0
+    isShowCountdown.value = false
+    getDatas(true)
+  }, 3000)
 }
 
 function transformSlotProps(props: any) {
