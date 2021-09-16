@@ -312,38 +312,10 @@ export default class Sdk {
         }
       | number
     >(async (resolve, reject) => {
+      alert('createNFT start')
       let { nftTotal, codeHash, genesis, genesisTxId, sensibleId, ..._params } = params
       let amount = 0
-      const issueOperate = async () => {
-        if (!params.checkOnly) {
-          await this.checkNftTxIdStatus(genesisTxId!).catch(() => reject('createNFT error'))
-        }
-        const issueRes = await this.issueNFT({
-          genesisId: genesis!,
-          genesisTxid: genesisTxId!,
-          codehash: codeHash!,
-          sensibleId: sensibleId,
-          ..._params,
-        })
-        if (issueRes.code === 200) {
-          if (issueRes.data.amount) {
-            amount += issueRes.data.amount
-          }
-          if (params.checkOnly) {
-            resolve(Math.ceil(amount))
-          } else {
-            resolve({
-              ...issueRes.data,
-              codehash: codeHash!,
-              sensibleId: sensibleId!,
-              genesisId: genesis!,
-              genesisTxid: genesisTxId!,
-            })
-          }
-        } else {
-          reject('createNFT error')
-        }
-      }
+
       if (!codeHash || !genesis || !genesisTxId || !sensibleId) {
         // genesisNFT
         const res = await this.genesisNFT({
@@ -364,16 +336,92 @@ export default class Sdk {
             sensibleId = res.data.sensibleId
           }
           debugger
-          await issueOperate()
+          const result = await this.issueOperate(
+            _params,
+            genesisTxId,
+            genesis,
+            codeHash,
+            sensibleId,
+            amount
+          )
+          if (result) {
+            resolve(result)
+          }
         } else {
           reject('createNFT error')
         }
       } else {
-        await issueOperate()
+        const result = await this.issueOperate(
+          _params,
+          genesisTxId,
+          genesis,
+          codeHash,
+          sensibleId,
+          amount
+        )
+        if (result) {
+          resolve(result)
+        }
       }
     })
   }
 
+  issueOperate(
+    params: any,
+    genesisTxId: string,
+    genesis: string,
+    codeHash: string,
+    sensibleId: string,
+    amount: number
+  ) {
+    return new Promise<
+      | {
+          // genesisNFT response data
+          codehash: string
+          genesisId: string
+          genesisTxid: string
+          sensibleId: string
+          // issueNFT response data
+          metaTdid: string
+          nftId: string
+          tokenId: string
+          txId: string
+          tokenIndex: string
+        }
+      | number
+    >(async (resolve, reject) => {
+      alert('start issueOperate')
+      if (!params.checkOnly) {
+        await this.checkNftTxIdStatus(genesisTxId!).catch(() => reject('createNFT error'))
+      }
+      const issueRes = await this.issueNFT({
+        genesisId: genesis!,
+        genesisTxid: genesisTxId!,
+        codehash: codeHash!,
+        sensibleId: sensibleId,
+        ...params,
+      })
+      alert('issueRes ' + JSON.stringify(issueRes))
+      if (issueRes.code === 200) {
+        if (issueRes.data.amount) {
+          amount += issueRes.data.amount
+        }
+        if (params.checkOnly) {
+          resolve(Math.ceil(amount))
+        } else {
+          resolve({
+            ...issueRes.data,
+            codehash: codeHash!,
+            sensibleId: sensibleId!,
+            genesisId: genesis!,
+            genesisTxid: genesisTxId!,
+          })
+        }
+      } else {
+        reject('createNFT error')
+      }
+    })
+  }
   // setIssuePrams (params: NFTIssueParams) {
   //   return new Promise((resolve) => {
   //     let nfticon
