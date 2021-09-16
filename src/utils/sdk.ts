@@ -210,9 +210,11 @@ export default class Sdk {
     parentReject?: any
   ) {
     return new Promise<void>(async (resolve, reject) => {
+      alert('checkNftTxIdStatus start')
       axios
         .get(`https://api.sensiblequery.com/tx/${txId}`)
         .then((res) => {
+          alert('checkNftTxIdStatus res' + JSON.stringify(res))
           if (res.data.code === 0) {
             if (parentResolve) parentResolve()
             else resolve()
@@ -392,8 +394,10 @@ export default class Sdk {
     >(async (resolve, reject) => {
       alert('start issueOperate')
       if (!params.checkOnly) {
-        await this.checkNftTxIdStatus(genesisTxId!).catch(() => reject('createNFT error'))
+        alert('checkOnly start')
+        await this.checkNftTxIdStatus(genesisTxId).catch(() => reject('createNFT error'))
       }
+      alert('checkOnly finish')
       const issueRes = await this.issueNFT({
         genesisId: genesis!,
         genesisTxid: genesisTxId!,
