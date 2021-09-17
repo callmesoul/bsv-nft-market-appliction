@@ -31,10 +31,7 @@
       <!-- 登录用户 -->
       <ElDropdown trigger="click" v-else>
         <div class="user-info flex flex-align-center">
-          <img
-            :src="$filters.avatar(store.state.userInfo?.showId)"
-            :alt="store.state.userInfo?.name"
-          />
+          <NftUserAvatar bg="gray" class="avatar" :metaId="store.state.userInfo?.showId" :hasmask="store.state.userInfo.avatarType === 'nft-metabot'" />
           <div class="username">{{ store.state.userInfo?.name }}</div>
         </div>
         <template #dropdown>
@@ -91,6 +88,7 @@ import { ref } from 'vue'
 import { useStore, Mutation } from '@/store/index'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
+import NftUserAvatar from '@/components/NftUserAvatar/NftUserAvatar.vue'
 
 const i18n = useI18n()
 const env = import.meta.env

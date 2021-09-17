@@ -143,6 +143,8 @@ declare interface MyNftSummaryItem {
   nftIsReady: boolean
   nftOwnerMetaId: string
   nftIssueMetaId: string
+  nftOwnerAvatarType: string
+  nftIssueAvatarType: string
   nftDetailItemList?: {
     nftBalance: number
     nftCodehash: string
@@ -318,6 +320,8 @@ declare interface GetMetaBotListResItem {
   currentPrice?: string
   isOnlyDisplay?: boolean
   auctionDeadTime?: number
+  nftOwnerAvatarType: string
+  nftIssueAvatarType: string
 }
 
 declare interface GetNftIssueyTxIdResItem {
@@ -348,6 +352,8 @@ declare interface GetNftIssueyTxIdResItem {
   nftTokenIndex: string
   nftTotalSupply: number
   nftWebsite: string
+  nftOwnerAvatarType: string
+  nftIssueAvatarType :string
 }
 declare interface GetNftIssueyTxIdRes extends apiResponse {
   data: {
@@ -414,4 +420,6 @@ declare interface NFTApiGetNFTDetailResDataItem {
   nftTokenId: string
   nftIssueMetaTxId: string
   nftSellState: number
+  nftOwnerAvatarType : string
+  nftIssueAvatarType : string
 }

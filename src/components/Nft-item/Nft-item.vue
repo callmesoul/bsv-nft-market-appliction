@@ -18,9 +18,14 @@
             <div class="aount">{{ new Decimal(item?.amount).div(10 ** 8).toString() }} BSV</div>
           </div>
           <div class="author flex flex-align-center">
+            <img src="@/assets/images/ava_mask.png" class="mask" v-if="item.issueUserAvatarType === 'nft-metabot'" />
             <img
+              class="avatar"
               :src="$filters.avatar(item?.metaId)"
               :alt="item?.foundryName"
+              :class="{
+                hasmask:item.avatarType === 'nft-metabot'
+              }"
               onerror="javascript:this.src='https://testshowman.showpay.top/metafile/avatar/a9…1f918ca4342d2b018c641bbb4c293e'"
             />
             <span class="username flex1">{{ item?.foundryName }}</span>

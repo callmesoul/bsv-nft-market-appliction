@@ -116,12 +116,12 @@
             <div class="name">{{ metabot.nftName }}</div>
             <div class="user-list">
               <div class="user-item flex flex-align-center">
-                <img class="avatar" :src="$filters.avatar(metabot.nftIssueMetaId)" />
+                <NftUserAvatar class="avatar" :metaId ="metabot.nftIssueMetaId" :hasmask="metabot.nftIssueAvatarType === 'nft-metabot'" />
                 <span class="name">{{ metabot.nftIssuer }}</span>
                 <span class="type">({{ $t('creater') }})</span>
               </div>
               <div class="user-item flex flex-align-center">
-                <img class="avatar" :src="$filters.avatar(metabot.nftOwnerMetaId)" />
+                <NftUserAvatar class="avatar" :metaId ="metabot.nftOwnerMetaId" :hasmask="metabot.nftOwnerAvatarType === 'nft-metabot'" />
                 <span class="name">{{ metabot.nftOwnerName }}</span>
                 <span class="type">({{ $t('owner') }})</span>
               </div>
@@ -214,6 +214,7 @@ import Buy from '@/utils/buy'
 import NFTDetail from '@/utils/nftDetail'
 import VueCountdown from '@chenfengyuan/vue-countdown'
 import { ElImage } from 'element-plus'
+import NftUserAvatar from '@/components/NftUserAvatar/NftUserAvatar.vue'
 
 const store = useStore()
 const router = useRouter()
@@ -472,6 +473,8 @@ function getDatas(isCover = false) {
               isAuction: true,
               auctionStatus: res.data[i].status,
               auctionDeadTime: res.data[i].dead_time,
+              nftOwnerAvatarType: item.nftOwnerAvatarType,
+              nftIssueAvatarType: item.nftIssueAvatarType,
               currentPrice:
                 res.data[i].buyer_value === '0' ? res.data[i].value : res.data[i].buyer_value,
             })

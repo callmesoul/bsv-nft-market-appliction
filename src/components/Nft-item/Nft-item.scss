@@ -62,13 +62,21 @@
       }
     }
     .author {
+      position: relative;
       margin-top: 15px;
-      img {
+      .mask{
+        position: absolute;
+        height: 100%;
+      }
+      .avatar {
         width: 20px;
         height: 20px;
         border-radius: 50%;
         margin-right: 10px;
         background: #fff;
+        &.hasmask{
+          border-radius:unset;
+        }
       }
       .username {
         font-size: 14px;

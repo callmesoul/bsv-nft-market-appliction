@@ -75,7 +75,8 @@ header{
         .user-info{
             cursor: pointer;
             font-size: 14px;
-            img{
+            .avatar{
+                position: relative;
                 width: 22Px;
                 height: 22Px;
                 margin-right: 6px;
