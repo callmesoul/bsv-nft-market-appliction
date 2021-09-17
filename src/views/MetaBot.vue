@@ -116,12 +116,20 @@
             <div class="name">{{ metabot.nftName }}</div>
             <div class="user-list">
               <div class="user-item flex flex-align-center">
-                <NftUserAvatar class="avatar" :metaId ="metabot.nftIssueMetaId" :hasmask="metabot.nftIssueAvatarType === 'nft-metabot'" />
+                <NftUserAvatar
+                  class="avatar"
+                  :metaId="metabot.nftIssueMetaId"
+                  :hasmask="metabot.nftIssueAvatarType === 'nft-metabot'"
+                />
                 <span class="name">{{ metabot.nftIssuer }}</span>
                 <span class="type">({{ $t('creater') }})</span>
               </div>
               <div class="user-item flex flex-align-center">
-                <NftUserAvatar class="avatar" :metaId ="metabot.nftOwnerMetaId" :hasmask="metabot.nftOwnerAvatarType === 'nft-metabot'" />
+                <NftUserAvatar
+                  class="avatar"
+                  :metaId="metabot.nftOwnerMetaId"
+                  :hasmask="metabot.nftOwnerAvatarType === 'nft-metabot'"
+                />
                 <span class="name">{{ metabot.nftOwnerName }}</span>
                 <span class="type">({{ $t('owner') }})</span>
               </div>
@@ -178,6 +186,24 @@
                   </div>
                 </div>
               </template>
+            </template>
+            <template
+              v-else-if="
+                metabot.nftSellState === 2 ||
+                  metabot.nftSellState === 1 ||
+                  metabot.nftSellState === 0
+              "
+            >
+              <div
+                class="btn btn-block "
+                :class="{
+                  'btn-gray': metabot.nftSellState !== 0 || !metabot.nftIsReady,
+                  'line-through': metabot.nftSellState !== 0 || !metabot.nftIsReady,
+                }"
+                @click.stop="buy(metabot)"
+              >
+                {{ new Decimal(metabot.nftPrice).div(Math.pow(10, 8)).toString() }} BSV
+              </div>
             </template>
             <template v-else-if="metabot.nftSellState === 3">
               <div class="btn btn-block btn-gray" @click.stop="buy(metabot)">
