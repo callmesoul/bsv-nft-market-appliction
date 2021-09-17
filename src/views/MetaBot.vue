@@ -301,7 +301,7 @@ function toDetail(metabot: GetMetaBotListResItem) {
 
 function getDatas(isCover = false) {
   return new Promise<void>(async (resolve) => {
-    if (sections[sectionIndex.value].name === '#001-015') {
+    /*     if (sections[sectionIndex.value].name === '#001-015') {
       metaBots.length = 0
       const res = await GetNftAuctions({
         page: pagination.page,
@@ -472,35 +472,110 @@ function getDatas(isCover = false) {
       }
       isShowSkeleton.value = false
     } else {
-      const res = await GetMetaBotList({
-        Page: pagination.page.toString(),
-        PageSize: pagination.pageSize.toString(),
-        Start: sections[sectionIndex.value].start,
-        End: sections[sectionIndex.value].end,
-      })
-      if (res.code === 0) {
-        if (isCover) {
-          metaBots.length = 0
-        }
-        if (res.data.results.items.length > 0) {
-          metaBots.push(...res.data.results.items)
-        } else {
-          pagination.nothing = true
-        }
-        if (countdown.value <= 0) {
-          // @ts-ignore
-          if (res.data.countdown > 0) {
-            // @ts-ignore
-            countdown.value = res.data.countdown + 1000
-            if (!isShowCountdown.value) isShowCountdown.value = true
-          } else {
-            // @ts-ignore
-            countdown.value = res.data.countdown
-            if (isShowCountdown.value) isShowCountdown.value = false
+      
+    } */
+
+    const res = await GetMetaBotList({
+      Page: pagination.page.toString(),
+      PageSize: pagination.pageSize.toString(),
+      Start: sections[sectionIndex.value].start,
+      End: sections[sectionIndex.value].end,
+    })
+    if (res.code === 0) {
+      if (isCover) {
+        metaBots.length = 0
+      }
+      if (sections[sectionIndex.value].name === '#001-015') {
+        const auctionRes = await GetNftAuctions({
+          page: pagination.page,
+          page_size: pagination.pageSize,
+        })
+        if (auctionRes.code === 0) {
+          for (let i = 0; i < auctionRes.data.length; i++) {
+            const auctionItem = auctionRes.data[i]
+            const item = res.data.results.items.find(
+              (item) =>
+                item.nftCodehash === auctionItem.codehash &&
+                item.nftGenesis === auctionItem.genesis &&
+                item.nftTokenIndex === auctionItem.token_index.toString()
+            )
+            if (item) {
+              item.isAuction = true
+              ;(item.auctionStatus = auctionItem.status),
+                (item.auctionDeadTime = auctionItem.dead_time),
+                (item.currentPrice =
+                  auctionItem.buyer_value === '0' ? auctionItem.value : auctionItem.buyer_value)
+            } else {
+              const response = await NFTApiGetNFTDetail({
+                codehash: auctionItem.codehash,
+                genesis: auctionItem.genesis,
+                tokenIndex: auctionItem.token_index.toString(),
+              })
+              if (response.code === 0) {
+                const item = response.data.results.items[0]
+                res.data.results.items.push({
+                  nftSellState: item.nftSellState,
+                  nftBalance: item.nftBalance,
+                  nftBuyTimestamp: 0,
+                  nftBuyTxId: '',
+                  nftCancelTimestamp: 0,
+                  nftCancelTxId: '',
+                  nftCodehash: item.nftCodehash,
+                  nftDataStr: item.nftDataStr,
+                  nftDesc: item.nftDesc,
+                  nftGenesis: item.nftGenesis,
+                  nftGenesisTxId: item.nftGenesisTxId,
+                  nftIcon: item.nftIcon,
+                  nftIssueAvatarTxId: item.nftIssueMetaId,
+                  nftIssueMetaId: item.nftIssueMetaId,
+                  nftIssueTimestamp: item.nftTimestamp,
+                  nftIssueVersion: '',
+                  nftIssuer: item.nftIssuer,
+                  nftName: item.nftName,
+                  nftOwnerAvatarTxId: item.nftOwnerAvatarTxId,
+                  nftOwnerMetaId: item.nftOwnerMetaId,
+                  nftOwnerName: item.nftOwnerName,
+                  nftPrice: item.nftPrice,
+                  nftSellContractTxId: item.nftSellContractTxId,
+                  nftSellDesc: item.nftSellDesc,
+                  nftSellTimestamp: 0,
+                  nftSellTxId: item.nftSellTxId,
+                  nftSensibleId: item.nftSensibleId,
+                  nftSeriesName: '',
+                  nftSymbol: '',
+                  nftTimestamp: 0,
+                  nftTokenIndex: item.nftTokenIndex,
+                  nftWebsite: '',
+                  nftIsReady: item.nftIsReady,
+                  isAuction: true,
+                  auctionStatus: auctionItem.status,
+                  auctionDeadTime: auctionItem.dead_time,
+                  currentPrice:
+                    auctionItem.buyer_value === '0' ? auctionItem.value : auctionItem.buyer_value,
+                })
+              }
+            }
           }
         }
-        isShowSkeleton.value = false
       }
+      if (res.data.results.items.length > 0) {
+        metaBots.push(...res.data.results.items)
+      } else {
+        pagination.nothing = true
+      }
+      if (countdown.value <= 0) {
+        // @ts-ignore
+        if (res.data.countdown > 0) {
+          // @ts-ignore
+          countdown.value = res.data.countdown + 1000
+          if (!isShowCountdown.value) isShowCountdown.value = true
+        } else {
+          // @ts-ignore
+          countdown.value = res.data.countdown
+          if (isShowCountdown.value) isShowCountdown.value = false
+        }
+      }
+      isShowSkeleton.value = false
     }
     resolve()
   })
