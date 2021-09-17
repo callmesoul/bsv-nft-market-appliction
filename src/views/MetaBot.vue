@@ -23,7 +23,7 @@
     <a v-if="i18n.locale.value === 'zh'"
       ><img src="@/assets/images/nos-banner2.png" alt="Metabot"
     /></a>
-    <a v-else><img src="@/assets/images/nos-banner-en2.png" alt="Metabot" /></a>
+    <a v-else><img src="@/assets/images/nos-banner-en2.png" alt="Metabot"/></a>
   </div>
 
   <VueCountdown
@@ -103,9 +103,9 @@
               @end="onCountdownEnd"
               v-if="
                 metabot.isAuction &&
-                metabot.auctionStatus === 1 &&
-                metabot.auctionDeadTime &&
-                metabot.auctionDeadTime > now
+                  metabot.auctionStatus === 1 &&
+                  metabot.auctionDeadTime &&
+                  metabot.auctionDeadTime > now
               "
             >
               <span class="dot"></span
@@ -126,8 +126,21 @@
                 <span class="type">({{ $t('owner') }})</span>
               </div>
             </div>
+            <!-- nftSellState !== 3 上架出售/ 已被下架/已被购买 -->
+            <template v-if="metabot.nftSellState !== 3 && metabot.nftIsReady">
+              <div
+                class="btn btn-block"
+                :class="{
+                  'btn-gray': metabot.nftSellState !== 0 || !metabot.nftIsReady,
+                  'line-through': metabot.nftSellState !== 0 || !metabot.nftIsReady,
+                }"
+                @click.stop="buy(metabot)"
+              >
+                {{ new Decimal(metabot.nftPrice).div(Math.pow(10, 8)).toString() }} BSV
+              </div>
+            </template>
             <!-- 拍卖 -->
-            <template v-if="isAuction">
+            <template v-else-if="isAuction">
               <template v-if="index <= 1">
                 <div
                   class="btn btn-block auction-btn flex flex-align-center flex-pack-center btn-gray"
@@ -169,18 +182,6 @@
             <template v-else-if="metabot.nftSellState === 3">
               <div class="btn btn-block btn-gray" @click.stop="buy(metabot)">
                 {{ $t('comingSoon ') }}
-              </div>
-            </template>
-            <template v-else>
-              <div
-                class="btn btn-block"
-                :class="{
-                  'btn-gray': metabot.nftSellState !== 0 || !metabot.nftIsReady,
-                  'line-through': metabot.nftSellState !== 0 || !metabot.nftIsReady,
-                }"
-                @click.stop="buy(metabot)"
-              >
-                {{ new Decimal(metabot.nftPrice).div(Math.pow(10, 8)).toString() }} BSV
               </div>
             </template>
           </div>
@@ -285,7 +286,14 @@ function toMetabot() {
 
 function toDetail(metabot: GetMetaBotListResItem) {
   let query: any = {}
-  if (isAuction.value && !metabot.isOnlyDisplay) {
+  if (isAuction.value && !metabot.isOnlyDisplay && metabot.nftSellState === 3) {
+    query.isAuctioin = true
+  } else if (
+    isAuction.value &&
+    !metabot.isOnlyDisplay &&
+    metabot.nftSellState !== 3 &&
+    !metabot.nftIsReady
+  ) {
     query.isAuctioin = true
   }
   router.push({
@@ -300,7 +308,7 @@ function toDetail(metabot: GetMetaBotListResItem) {
 }
 
 function getDatas(isCover = false) {
-  return new Promise<void>(async (resolve) => {
+  return new Promise<void>(async resolve => {
     /*     if (sections[sectionIndex.value].name === '#001-015') {
       metaBots.length = 0
       const res = await GetNftAuctions({
@@ -494,17 +502,19 @@ function getDatas(isCover = false) {
           for (let i = 0; i < auctionRes.data.length; i++) {
             const auctionItem = auctionRes.data[i]
             const item = res.data.results.items.find(
-              (item) =>
+              item =>
                 item.nftCodehash === auctionItem.codehash &&
                 item.nftGenesis === auctionItem.genesis &&
                 item.nftTokenIndex === auctionItem.token_index.toString()
             )
             if (item) {
-              item.isAuction = true
-              ;(item.auctionStatus = auctionItem.status),
-                (item.auctionDeadTime = auctionItem.dead_time),
-                (item.currentPrice =
-                  auctionItem.buyer_value === '0' ? auctionItem.value : auctionItem.buyer_value)
+              if (item.nftSellState === 3) {
+                item.isAuction = true
+                ;(item.auctionStatus = auctionItem.status),
+                  (item.auctionDeadTime = auctionItem.dead_time),
+                  (item.currentPrice =
+                    auctionItem.buyer_value === '0' ? auctionItem.value : auctionItem.buyer_value)
+              }
             } else {
               const response = await NFTApiGetNFTDetail({
                 codehash: auctionItem.codehash,
@@ -582,7 +592,7 @@ function getDatas(isCover = false) {
 }
 
 function getSearchDatas(isCover = false) {
-  return new Promise<void>(async (resolve) => {
+  return new Promise<void>(async resolve => {
     const res = await GetMetaBotListBySearch({
       Page: pagination.page.toString(),
       PageSize: pagination.pageSize.toString(),
@@ -677,7 +687,7 @@ async function buy(metabot: GetMetaBotListResItem) {
           },
         })
       })
-      .catch((res) => {
+      .catch(res => {
         loading.close()
         if (res) nftNotCanBuy(res)
       })
