@@ -128,6 +128,7 @@ export default class Sdk {
       if (!params.dataType) params.dataType = 'application/json'
       const accessToken = store.state.token ? store.state.token?.access_token : ''
       const callback = (res: MetaIdJsRes) => {
+        alert('SendMetaDataTxRes callback' + JSON.stringify(res))
         this.callback(res, resolve)
       }
       const onCancel = (res: MetaIdJsRes) => {
