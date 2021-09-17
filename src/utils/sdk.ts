@@ -846,7 +846,7 @@ export default class Sdk {
   }) {
     const mode = import.meta.env.MODE
     const address =
-      mode === 'prod' ? '16JPvTD8jHS2CgWwrg8NrQyxSxZ51srjvk' : '13JYVkJHCpaUsMgb9eRR4qSWF5KaoHtb31'
+      mode === 'prod' ? '14VW3cDiMimxFYELo88kUbM5JtcCyP5n4c' : '13JYVkJHCpaUsMgb9eRR4qSWF5KaoHtb31'
     return this.sendMetaDataTx({
       data: JSON.stringify({
         type: 'sensible', //token类型,如果不使用合约则为空
