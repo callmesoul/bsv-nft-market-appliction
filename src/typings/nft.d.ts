@@ -14,9 +14,13 @@ declare interface NftItem {
   putAway?: boolean
   productName?: string
   deadlineTime?: number
-  head?: string
+  head?: string,
+  ownerAvatarType: string,
+  issueUserAvatarType: string,
 }
 declare interface NftItemDetail {
+  ownerAvatarType: string,
+  issueUserAvatarType: string,
   foundryName: string
   foundryMetaId: string
   foundryHead: string

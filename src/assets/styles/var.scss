@@ -9,9 +9,9 @@ $mainColor: #feb338;
 
 @mixin author($avatorWidth, $mrginRight, $nameFontSize, $metaIdFontSize, $marginTop) {
   .avatar {
+    position: relative;
     width: $avatorWidth;
     height: $avatorWidth;
-    border-radius: 50%;
     margin-right: $mrginRight;
     background: #eee;
   }

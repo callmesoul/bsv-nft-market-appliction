@@ -130,7 +130,7 @@
             </div>
             <div class="creater-msg">
               <div class="author flex flex-align-center">
-                <img class="avatar" :src="$filters.avatar(nft.val.foundryMetaId)" />
+                <NftUserAvatar class="avatar" :metaId="nft.val.foundryMetaId" :hasmask="nft.val.issueUserAvatarType === 'nft-metabot'" />
                 <div class="author-msg flex1">
                   <div class="creater">{{ $t('creater') }}: {{ nft.val.foundryName }}</div>
                   <div class="metaid" v-if="nft.val.foundryMetaId">
@@ -153,7 +153,7 @@
             <div class="drsc flex1 flex flex-v">
               <div class="title flex flex-align-center">
                 <template v-if="nft.val.putAway">
-                  {{ $t('seller') }}<img :src="$filters.avatar(nft.val.ownerMetaId)" />
+                  {{ $t('seller') }}<NftUserAvatar :metaId="nft.val.ownerMetaId" :hasmask="nft.val.ownerAvatarType === 'nft-metabot'" />
                   <span>{{ nft.val.ownerName }}</span> {{ $t('theIntro') }}：
                 </template>
                 <template v-else> {{ $t('drsc') }}: </template>
@@ -380,11 +380,7 @@
                     <div class="key">{{ $t('creater') }}：</div>
                     <div class="value flex1">
                       <div class="author flex flex-align-center">
-                        <img
-                          class="avatar"
-                          :src="$filters.avatar(nft.val.foundryMetaId)"
-                          :alt="nft.val.foundryName"
-                        />
+                        <NftUserAvatar class="avatar" :metaId="nft.val.foundryMetaId" :hasmask="nft.val.issueUserAvatarType === 'nft-metabot'" />
                         <div class="author-msg flex1">
                           <div class="creater">{{ nft.val.foundryName }}</div>
                           <div class="metaid" v-if="nft.val.foundryMetaId">
@@ -398,11 +394,7 @@
                     <div class="key">{{ $t('haveder') }}：</div>
                     <div class="value flex1">
                       <div class="author flex flex-align-center">
-                        <img
-                          class="avatar"
-                          :src="$filters.avatar(nft.val.ownerMetaId)"
-                          :alt="nft.val.ownerName"
-                        />
+                        <NftUserAvatar class="avatar" :metaId="nft.val.ownerMetaId" :hasmask="nft.val.ownerAvatarType === 'nft-metabot'" />
                         <div class="author-msg flex1">
                           <div class="creater">{{ nft.val.ownerName }}</div>
                           <div class="metaid" v-if="nft.val.ownerMetaId">
@@ -495,7 +487,7 @@
                 >
                   <!-- 用户信息 -->
                   <div class="author flex1 flex flex-align-center">
-                    <img class="avatar" :src="$filters.avatar(item.buyer_metaId)" />
+                    <NftUserAvatar class="avatar" :metaId="item.buyer_metaId" :hasmask="item.avatarType === 'nft-metabot'" />
                     <div class="author-msg flex1">
                       <div class="creater">{{ item.meta_id_name }}</div>
                       <div class="metaid" v-if="item.buyer_metaId">
@@ -522,7 +514,7 @@
                 <div class="historical-bid-item flex flex-align-center">
                   <!-- 用户信息 -->
                   <div class="author flex1 flex flex-align-center">
-                    <img class="avatar" :src="$filters.avatar(nft.val.foundryMetaId)" />
+                    <NftUserAvatar class="avatar" :metaId = "nft.val.foundryMetaId" :hasmask="nft.val.issueUserAvatarType === 'nft-metabot'" />
                     <div class="author-msg flex1">
                       <div class="creater">{{ nft.val.foundryName }}</div>
                       <div class="metaid" v-if="nft.val.foundryMetaId">
@@ -612,6 +604,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import CertTemp from '@/components/Cert/Cert.vue'
+import NftUserAvatar from '@/components/NftUserAvatar/NftUserAvatar.vue'
 import { useI18n } from 'vue-i18n'
 import { toClipboard } from '@soerenmartius/vue3-clipboard'
 import {
@@ -750,6 +743,8 @@ function getDetail() {
               .plus(new Decimal(nft.val.minGapPrice))
               .toNumber()
             minActionPrice.value = auctionPrice.value
+            console.log('nft val',nft.val);
+            
           }
         }
         getNftAuctionHistorys()

@@ -121,6 +121,7 @@
       .user-list {
         margin-top: 8px;
         .user-item {
+          position: relative;
           margin-bottom: 8px;
           &:last-child {
             margin-bottom: 0;
@@ -130,6 +131,7 @@
             height: 18px;
             border-radius: 50%;
             margin-right: 4px;
+            overflow: hidden;
           }
           .name {
             @extend %text-ellipsis;

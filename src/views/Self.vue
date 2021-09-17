@@ -135,7 +135,9 @@ function getMyNfts (isCover: boolean = false) {
                         tokenIndex: nft?.nftTokenIndex ? nft?.nftTokenIndex : '',
                         codehash: item.nftCodehash,
                         total: item.nftTotalSupply,
-                        hasCount: count
+                        hasCount: count,
+                        ownerAvatarType: item.nftOwnerAvatarType,
+                        issueUserAvatarType: item.nftIssueAvatarType
                     })
                 })
             } else {
