@@ -23,7 +23,7 @@
     <a v-if="i18n.locale.value === 'zh'"
       ><img src="@/assets/images/nos-banner2.png" alt="Metabot"
     /></a>
-    <a v-else><img src="@/assets/images/nos-banner-en2.png" alt="Metabot" /></a>
+    <a v-else><img src="@/assets/images/nos-banner-en2.png" alt="Metabot"/></a>
   </div>
 
   <VueCountdown
@@ -103,9 +103,9 @@
               @end="onCountdownEnd"
               v-if="
                 metabot.isAuction &&
-                metabot.auctionStatus === 1 &&
-                metabot.auctionDeadTime &&
-                metabot.auctionDeadTime > now
+                  metabot.auctionStatus === 1 &&
+                  metabot.auctionDeadTime &&
+                  metabot.auctionDeadTime > now
               "
             >
               <span class="dot"></span
@@ -126,8 +126,21 @@
                 <span class="type">({{ $t('owner') }})</span>
               </div>
             </div>
+            <!-- nftSellState !== 3 上架出售/ 已被下架/已被购买 -->
+            <template v-if="metabot.nftSellState !== 3 && metabot.nftIsReady">
+              <div
+                class="btn btn-block"
+                :class="{
+                  'btn-gray': metabot.nftSellState !== 0 || !metabot.nftIsReady,
+                  'line-through': metabot.nftSellState !== 0 || !metabot.nftIsReady,
+                }"
+                @click.stop="buy(metabot)"
+              >
+                {{ new Decimal(metabot.nftPrice).div(Math.pow(10, 8)).toString() }} BSV
+              </div>
+            </template>
             <!-- 拍卖 -->
-            <template v-if="isAuction">
+            <template v-else-if="isAuction">
               <template v-if="index <= 1">
                 <div
                   class="btn btn-block auction-btn flex flex-align-center flex-pack-center btn-gray"
@@ -169,18 +182,6 @@
             <template v-else-if="metabot.nftSellState === 3">
               <div class="btn btn-block btn-gray" @click.stop="buy(metabot)">
                 {{ $t('comingSoon ') }}
-              </div>
-            </template>
-            <template v-else>
-              <div
-                class="btn btn-block"
-                :class="{
-                  'btn-gray': metabot.nftSellState !== 0 || !metabot.nftIsReady,
-                  'line-through': metabot.nftSellState !== 0 || !metabot.nftIsReady,
-                }"
-                @click.stop="buy(metabot)"
-              >
-                {{ new Decimal(metabot.nftPrice).div(Math.pow(10, 8)).toString() }} BSV
               </div>
             </template>
           </div>
@@ -286,7 +287,14 @@ function toMetabot() {
 
 function toDetail(metabot: GetMetaBotListResItem) {
   let query: any = {}
-  if (isAuction.value && !metabot.isOnlyDisplay) {
+  if (isAuction.value && !metabot.isOnlyDisplay && metabot.nftSellState === 3) {
+    query.isAuctioin = true
+  } else if (
+    isAuction.value &&
+    !metabot.isOnlyDisplay &&
+    metabot.nftSellState !== 3 &&
+    !metabot.nftIsReady
+  ) {
     query.isAuctioin = true
   }
   router.push({
@@ -301,8 +309,8 @@ function toDetail(metabot: GetMetaBotListResItem) {
 }
 
 function getDatas(isCover = false) {
-  return new Promise<void>(async (resolve) => {
-    if (sections[sectionIndex.value].name === '#001-015') {
+  return new Promise<void>(async resolve => {
+    /*     if (sections[sectionIndex.value].name === '#001-015') {
       metaBots.length = 0
       const res = await GetNftAuctions({
         page: pagination.page,
@@ -475,42 +483,119 @@ function getDatas(isCover = false) {
       }
       isShowSkeleton.value = false
     } else {
-      const res = await GetMetaBotList({
-        Page: pagination.page.toString(),
-        PageSize: pagination.pageSize.toString(),
-        Start: sections[sectionIndex.value].start,
-        End: sections[sectionIndex.value].end,
-      })
-      if (res.code === 0) {
-        if (isCover) {
-          metaBots.length = 0
-        }
-        if (res.data.results.items.length > 0) {
-          metaBots.push(...res.data.results.items)
-        } else {
-          pagination.nothing = true
-        }
-        if (countdown.value <= 0) {
-          // @ts-ignore
-          if (res.data.countdown > 0) {
-            // @ts-ignore
-            countdown.value = res.data.countdown + 1000
-            if (!isShowCountdown.value) isShowCountdown.value = true
-          } else {
-            // @ts-ignore
-            countdown.value = res.data.countdown
-            if (isShowCountdown.value) isShowCountdown.value = false
+      
+    } */
+
+    const res = await GetMetaBotList({
+      Page: pagination.page.toString(),
+      PageSize: pagination.pageSize.toString(),
+      Start: sections[sectionIndex.value].start,
+      End: sections[sectionIndex.value].end,
+    })
+    if (res.code === 0) {
+      if (isCover) {
+        metaBots.length = 0
+      }
+      if (sections[sectionIndex.value].name === '#001-015') {
+        const auctionRes = await GetNftAuctions({
+          page: pagination.page,
+          page_size: pagination.pageSize,
+        })
+        if (auctionRes.code === 0) {
+          for (let i = 0; i < auctionRes.data.length; i++) {
+            const auctionItem = auctionRes.data[i]
+            const item = res.data.results.items.find(
+              item =>
+                item.nftCodehash === auctionItem.codehash &&
+                item.nftGenesis === auctionItem.genesis &&
+                item.nftTokenIndex === auctionItem.token_index.toString()
+            )
+            if (item) {
+              if (item.nftSellState === 3) {
+                item.isAuction = true
+                ;(item.auctionStatus = auctionItem.status),
+                  (item.auctionDeadTime = auctionItem.dead_time),
+                  (item.currentPrice =
+                    auctionItem.buyer_value === '0' ? auctionItem.value : auctionItem.buyer_value)
+              }
+            } else {
+              const response = await NFTApiGetNFTDetail({
+                codehash: auctionItem.codehash,
+                genesis: auctionItem.genesis,
+                tokenIndex: auctionItem.token_index.toString(),
+              })
+              if (response.code === 0) {
+                const item = response.data.results.items[0]
+                res.data.results.items.push({
+                  nftSellState: item.nftSellState,
+                  nftBalance: item.nftBalance,
+                  nftBuyTimestamp: 0,
+                  nftBuyTxId: '',
+                  nftCancelTimestamp: 0,
+                  nftCancelTxId: '',
+                  nftCodehash: item.nftCodehash,
+                  nftDataStr: item.nftDataStr,
+                  nftDesc: item.nftDesc,
+                  nftGenesis: item.nftGenesis,
+                  nftGenesisTxId: item.nftGenesisTxId,
+                  nftIcon: item.nftIcon,
+                  nftIssueAvatarTxId: item.nftIssueMetaId,
+                  nftIssueMetaId: item.nftIssueMetaId,
+                  nftIssueTimestamp: item.nftTimestamp,
+                  nftIssueVersion: '',
+                  nftIssuer: item.nftIssuer,
+                  nftName: item.nftName,
+                  nftOwnerAvatarTxId: item.nftOwnerAvatarTxId,
+                  nftOwnerMetaId: item.nftOwnerMetaId,
+                  nftOwnerName: item.nftOwnerName,
+                  nftPrice: item.nftPrice,
+                  nftSellContractTxId: item.nftSellContractTxId,
+                  nftSellDesc: item.nftSellDesc,
+                  nftSellTimestamp: 0,
+                  nftSellTxId: item.nftSellTxId,
+                  nftSensibleId: item.nftSensibleId,
+                  nftSeriesName: '',
+                  nftSymbol: '',
+                  nftTimestamp: 0,
+                  nftTokenIndex: item.nftTokenIndex,
+                  nftWebsite: '',
+                  nftIsReady: item.nftIsReady,
+                  isAuction: true,
+                  auctionStatus: auctionItem.status,
+                  auctionDeadTime: auctionItem.dead_time,
+                  currentPrice:
+                    auctionItem.buyer_value === '0' ? auctionItem.value : auctionItem.buyer_value,
+                })
+              }
+            }
           }
         }
-        isShowSkeleton.value = false
       }
+      if (res.data.results.items.length > 0) {
+        metaBots.push(...res.data.results.items)
+      } else {
+        pagination.nothing = true
+      }
+      if (countdown.value <= 0) {
+        // @ts-ignore
+        if (res.data.countdown > 0) {
+          // @ts-ignore
+          countdown.value = res.data.countdown + 1000
+          if (!isShowCountdown.value) isShowCountdown.value = true
+        } else {
+          // @ts-ignore
+          countdown.value = res.data.countdown
+          if (isShowCountdown.value) isShowCountdown.value = false
+        }
+      }
+      isShowSkeleton.value = false
     }
     resolve()
   })
 }
 
 function getSearchDatas(isCover = false) {
-  return new Promise<void>(async (resolve) => {
+  return new Promise<void>(async resolve => {
     const res = await GetMetaBotListBySearch({
       Page: pagination.page.toString(),
       PageSize: pagination.pageSize.toString(),
@@ -605,7 +690,7 @@ async function buy(metabot: GetMetaBotListResItem) {
           },
         })
       })
-      .catch((res) => {
+      .catch(res => {
         loading.close()
         if (res) nftNotCanBuy(res)
       })

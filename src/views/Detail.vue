@@ -130,7 +130,11 @@
             </div>
             <div class="creater-msg">
               <div class="author flex flex-align-center">
-                <NftUserAvatar class="avatar" :metaId="nft.val.foundryMetaId" :hasmask="nft.val.issueUserAvatarType === 'nft-metabot'" />
+                <NftUserAvatar
+                  class="avatar"
+                  :metaId="nft.val.foundryMetaId"
+                  :hasmask="nft.val.issueUserAvatarType === 'nft-metabot'"
+                />
                 <div class="author-msg flex1">
                   <div class="creater">{{ $t('creater') }}: {{ nft.val.foundryName }}</div>
                   <div class="metaid" v-if="nft.val.foundryMetaId">
@@ -153,7 +157,11 @@
             <div class="drsc flex1 flex flex-v">
               <div class="title flex flex-align-center">
                 <template v-if="nft.val.putAway">
-                  {{ $t('seller') }}<NftUserAvatar :metaId="nft.val.ownerMetaId" :hasmask="nft.val.ownerAvatarType === 'nft-metabot'" />
+                  {{ $t('seller')
+                  }}<NftUserAvatar
+                    :metaId="nft.val.ownerMetaId"
+                    :hasmask="nft.val.ownerAvatarType === 'nft-metabot'"
+                  />
                   <span>{{ nft.val.ownerName }}</span> {{ $t('theIntro') }}：
                 </template>
                 <template v-else> {{ $t('drsc') }}: </template>
@@ -182,7 +190,6 @@
               </div>
             </template> -->
             <!-- <div class="btn btn-block"  @click="buy">{{ $t('use') }} {{ nft.val.amount }} BSV {{ $t('buy') }}</div> -->
-
             <div class="auction-msg flex flex-align-center" v-if="nft.val.isAuction">
               <div class="auction-msg-item flex1">
                 <div class="title">{{ $t('currentBid') }}：</div>
@@ -196,7 +203,7 @@
                     :transform="transformSlotProps"
                     v-slot="{ days, hours, minutes, seconds }"
                     @end="auctionCountDownFinish"
-                    v-if="nft.val.isAuction"
+                    v-if="nft.val.isAuction && nft.val.auctionStatus === 1"
                     class="count-down-warp"
                   >
                     <div class="count-down">
@@ -254,7 +261,8 @@
                   <template
                     v-if="
                       !store.state.userInfo ||
-                      (store.state.userInfo && store.state.userInfo.metaId !== nft.val.ownerMetaId)
+                        (store.state.userInfo &&
+                          store.state.userInfo.metaId !== nft.val.ownerMetaId)
                     "
                   >
                     <!-- 购买 -->
@@ -380,7 +388,11 @@
                     <div class="key">{{ $t('creater') }}：</div>
                     <div class="value flex1">
                       <div class="author flex flex-align-center">
-                        <NftUserAvatar class="avatar" :metaId="nft.val.foundryMetaId" :hasmask="nft.val.issueUserAvatarType === 'nft-metabot'" />
+                        <NftUserAvatar
+                          class="avatar"
+                          :metaId="nft.val.foundryMetaId"
+                          :hasmask="nft.val.issueUserAvatarType === 'nft-metabot'"
+                        />
                         <div class="author-msg flex1">
                           <div class="creater">{{ nft.val.foundryName }}</div>
                           <div class="metaid" v-if="nft.val.foundryMetaId">
@@ -394,7 +406,11 @@
                     <div class="key">{{ $t('haveder') }}：</div>
                     <div class="value flex1">
                       <div class="author flex flex-align-center">
-                        <NftUserAvatar class="avatar" :metaId="nft.val.ownerMetaId" :hasmask="nft.val.ownerAvatarType === 'nft-metabot'" />
+                        <NftUserAvatar
+                          class="avatar"
+                          :metaId="nft.val.ownerMetaId"
+                          :hasmask="nft.val.ownerAvatarType === 'nft-metabot'"
+                        />
                         <div class="author-msg flex1">
                           <div class="creater">{{ nft.val.ownerName }}</div>
                           <div class="metaid" v-if="nft.val.ownerMetaId">
@@ -409,7 +425,7 @@
                   <div class="work-detail-item flex flex-align-center">
                     <div class="key">{{ $t('worktype') }}：</div>
                     <div class="value flex1">
-                      {{ nftTypes.find((item) => item.value === nft.val.type)?.name }}
+                      {{ nftTypes.find(item => item.value === nft.val.type)?.name }}
                       <!-- 1920*1080PX
                       5.2M -->
                     </div>
@@ -487,7 +503,11 @@
                 >
                   <!-- 用户信息 -->
                   <div class="author flex1 flex flex-align-center">
-                    <NftUserAvatar class="avatar" :metaId="item.buyer_metaId" :hasmask="item.avatarType === 'nft-metabot'" />
+                    <NftUserAvatar
+                      class="avatar"
+                      :metaId="item.buyer_metaId"
+                      :hasmask="item.avatarType === 'nft-metabot'"
+                    />
                     <div class="author-msg flex1">
                       <div class="creater">{{ item.meta_id_name }}</div>
                       <div class="metaid" v-if="item.buyer_metaId">
@@ -514,7 +534,11 @@
                 <div class="historical-bid-item flex flex-align-center">
                   <!-- 用户信息 -->
                   <div class="author flex1 flex flex-align-center">
-                    <NftUserAvatar class="avatar" :metaId = "nft.val.foundryMetaId" :hasmask="nft.val.issueUserAvatarType === 'nft-metabot'" />
+                    <NftUserAvatar
+                      class="avatar"
+                      :metaId="nft.val.foundryMetaId"
+                      :hasmask="nft.val.issueUserAvatarType === 'nft-metabot'"
+                    />
                     <div class="author-msg flex1">
                       <div class="creater">{{ nft.val.foundryName }}</div>
                       <div class="metaid" v-if="nft.val.foundryMetaId">
@@ -688,7 +712,7 @@ const nft: { val: NftItemDetail } = reactive({
 // }
 let isCanBuy = ref(true)
 function getDetail() {
-  return new Promise<void>(async (resolve) => {
+  return new Promise<void>(async resolve => {
     const _nft = await NFTDetail(
       typeof route.params.genesisId === 'string' ? route.params.genesisId : '',
       typeof route.params.codehash === 'string' ? route.params.codehash : '',
@@ -706,7 +730,8 @@ function getDetail() {
       }
 
       if (route.query.isAuctioin) {
-        const _tabIndex = tabs.findIndex((item) => item.key === 'historicalBid')
+        nft.val.isAuction = true
+        const _tabIndex = tabs.findIndex(item => item.key === 'historicalBid')
         if (_tabIndex === -1) {
           tabs.push({ name: i18n.t('historicalBid'), key: 'historicalBid' })
         }
@@ -717,20 +742,25 @@ function getDetail() {
         })
         if (res.code === 0) {
           const item = res.data.find(
-            (item) =>
+            item =>
               item.codehash === nft.val.codeHash &&
               item.genesis === nft.val.genesis &&
               nft.val.tokenIndex === item.token_index.toString()
           )
           if (item) {
-            nft.val.isAuction = true
             nft.val.startPrice = item.value
             nft.val.amount = new Decimal(item.value).toNumber()
             nft.val.currentPrice = item.buyer_value === '0' ? item.value : item.buyer_value
             nft.val.minGapPrice =
               item.buyer_value === '0'
-                ? new Decimal(item.value).mul(0.05).toFixed(8).toString()
-                : new Decimal(item.buyer_value).mul(0.05).toFixed(8).toString()
+                ? new Decimal(item.value)
+                    .mul(0.05)
+                    .toFixed(8)
+                    .toString()
+                : new Decimal(item.buyer_value)
+                    .mul(0.05)
+                    .toFixed(8)
+                    .toString()
             if (new Decimal(nft.val.minGapPrice).toNumber() < 0.00001) {
               nft.val.minGapPrice = '0.00001'
             }
@@ -743,8 +773,9 @@ function getDetail() {
               .plus(new Decimal(nft.val.minGapPrice))
               .toNumber()
             minActionPrice.value = auctionPrice.value
-            console.log('nft val',nft.val);
-            
+          } else {
+            debugger
+            nft.val.auctionStatus = 0
           }
         }
         getNftAuctionHistorys()
@@ -768,7 +799,7 @@ function getDetail() {
 const records: TransactionRecordItem[] = reactive([])
 
 function getRecord() {
-  return new Promise<void>(async (resolve) => {
+  return new Promise<void>(async resolve => {
     if (typeof route.params.tokenId === 'string') {
       const res = await TransactionRecord({
         tokenId: route.params.tokenId,
@@ -896,7 +927,7 @@ async function buy() {
         },
       })
     })
-    .catch((res) => {
+    .catch(res => {
       loading.close()
       if (res) nftNotCanBuy(res)
     })
@@ -1024,7 +1055,7 @@ async function bid() {
     genesis: nft.val.genesis,
     token_index: parseInt(nft.val.tokenIndex),
     value: new Decimal(auctionPrice.value).toString(),
-  }).catch((error) => {
+  }).catch(error => {
     ElMessage.error(error.response.data.data)
     getBalanceLoading.value = true
     isShowSkeleton.value = true
@@ -1047,7 +1078,7 @@ async function bid() {
       })
       .catch(() => loading.close())
     if (response?.code === 200) {
-      const getRawRes: any = await GetTxRaw(response.data.txId).catch((error) => {
+      const getRawRes: any = await GetTxRaw(response.data.txId).catch(error => {
         ElMessage.error(error.response.data.data)
         getBalanceLoading.value = true
         isShowSkeleton.value = true
@@ -1065,7 +1096,7 @@ async function bid() {
           raw_tx: getRawRes.hex,
           buyer_meta_id: store.state.userInfo!.metaId,
           buyer_address: store.state.userInfo!.address,
-        }).catch((error) => {
+        }).catch(error => {
           loading.close()
         })
         if (result?.code === 0) {
