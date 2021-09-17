@@ -194,7 +194,7 @@
   "insufficientBalanceToWallet": "Insufficient balance, check my wallet",
   "minGapPriceplac": "Set minimum markup",
   "createAuctionSuccess": "Auction created successfully",
-  "unStart": "Has Not Started",
+  "unStart": "Not Started",
   "bidSuccess": "Successful bid",
   "sealTheDeal": "Successful bidding",
   "finalPrice": "final price",

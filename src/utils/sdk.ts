@@ -84,7 +84,7 @@ export default class Sdk {
   }
 
   getUserInfo() {
-    return new Promise<MetaIdJsRes>((resolve) => {
+    return new Promise<MetaIdJsRes>(resolve => {
       const params = {
         accessToken: store.state.token ? store.state.token?.access_token : '',
         callback: (res: MetaIdJsRes) => {
@@ -95,7 +95,7 @@ export default class Sdk {
         const functionName: string = `getUserInfoCallBack`
         const that = this
         // @ts-ignore
-        window[functionName] = function (res) {
+        window[functionName] = function(res) {
           that.callback(res, resolve)
         }
         if (window.appMetaIdJsV2) {
@@ -144,14 +144,14 @@ export default class Sdk {
         }
       } else {
         const _params = {
-          callback,
-          onCancel,
-          metaIdTag,
-          accessToken,
-          ...params,
-        }
+            callback,
+            onCancel,
+            metaIdTag,
+            accessToken,
+            ...params,
+          }
 
-        // 处理余额不足回调
+          // 处理余额不足回调
         ;(window as any).handleNotEnoughMoney = (res: MetaIdJsRes) => {
           reject()
         }
@@ -212,7 +212,7 @@ export default class Sdk {
     return new Promise<void>(async (resolve, reject) => {
       axios
         .get(`https://api.sensiblequery.com/tx/${txId}`)
-        .then((res) => {
+        .then(res => {
           if (res.data.code === 0) {
             if (parentResolve) parentResolve()
             else resolve()
@@ -232,7 +232,7 @@ export default class Sdk {
             }
           }
         })
-        .catch((err) => {
+        .catch(err => {
           setTimeout(() => {
             this.checkNftTxIdStatus(
               txId,
@@ -254,10 +254,10 @@ export default class Sdk {
   ) {
     return new Promise<void>((resolve, reject) => {
       fetch(`${import.meta.env.VITE_WalletApi}/showMANDB/api/v1/metanet/getNode/${txId}`)
-        .then(function (response) {
+        .then(function(response) {
           return response.json()
         })
-        .then((response) => {
+        .then(response => {
           if (response) {
             if (response.code === 200) {
               if (parentResolve) parentResolve()
@@ -459,10 +459,10 @@ export default class Sdk {
           params.metaId
         }/${params.address}/0/${params.language}`
       )
-        .then(function (response) {
+        .then(function(response) {
           return response.json()
         })
-        .then((response) => {
+        .then(response => {
           if (response.code === 0) {
             resolve(true)
           } else {
@@ -646,7 +646,7 @@ export default class Sdk {
 
   // nft 列表查询
   nftList(address: string) {
-    return new Promise<NFTLIstRes>((resolve) => {
+    return new Promise<NFTLIstRes>(resolve => {
       debugger
       const params = {
         callback: (res: MetaIdJsRes) => {
@@ -672,13 +672,13 @@ export default class Sdk {
   getMc(address: string) {
     return new Promise<number>((resolve, reject) => {
       fetch(`https://api.sensiblequery.com/ft/summary/${address}`)
-        .then(function (response) {
+        .then(function(response) {
           return response.json()
         })
         .then((response: GetMcRes) => {
           if (response.code === 0) {
             if (response.data) {
-              const mc = response.data.find((item) => {
+              const mc = response.data.find(item => {
                 return (
                   item.sensibleId ===
                     '3e04f81d7fa7d4d606c3c4c8e8d3a8dcf58b5808740d40a445f3884e126bc7fd00000000' &&
@@ -715,10 +715,10 @@ export default class Sdk {
 
   // 获取用户余额
   getBalance() {
-    return new Promise<GetBalanceRes>((resolve) => {
+    return new Promise<GetBalanceRes>(resolve => {
       if (this.isApp) {
         //@ts-ignore
-        window['getBalanceCallBack'] = (res) => {
+        window['getBalanceCallBack'] = res => {
           res = JSON.parse(res)
           const bsv = res.data
           this.callback(
@@ -780,7 +780,7 @@ export default class Sdk {
 
   // 处理附件
   setAttachments(_data: any, fileAttrs: { name: string; encrypt: string }[]) {
-    return new Promise<{ data: any; attachments: any }>((resolve) => {
+    return new Promise<{ data: any; attachments: any }>(resolve => {
       const attachments: {
         fileName: string
         fileType: string
