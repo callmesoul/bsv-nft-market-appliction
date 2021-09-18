@@ -501,10 +501,14 @@ export default class Sdk {
           this.callback(res, resolve)
         },
       }
+      alert('issueNFT isApp' + JSON.stringify(this.isApp))
       if (this.isApp) {
+        alert('into issueNFT isApp')
         const functionName: string = `issueNFTCallBack`
+        alert('set issueNFT functionName')
         // @ts-ignore
         window[functionName] = _params.callback
+        alert('set window issueNFT functionName')
         _params.data.content.classifyList = JSON.parse(_params.data.content.classifyList)
         alert('window.appMetaIdJsV2?.issueNFT' + JSON.stringify(_params))
         alert('window.appMetaIdJsV2?.issueNFT' + window.appMetaIdJsV2?.issueNFT)
