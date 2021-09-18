@@ -859,5 +859,29 @@ export default class Sdk {
     })
   }
 
-  signMessage(params: {})
+  signMessage(params: { message: string; path?: string }) {
+    return new Promise<MetaIdJsRes>(resolve => {
+      if (!params.path) params.path = '0/0'
+      const callback = (res: MetaIdJs) => {
+        this.callback(res, resolve)
+      }
+      if (this.isApp) {
+        const functionName = 'signMessageCallBack'
+        // @ts-ignore
+        window[functionName] = callBack
+        if (window.appMetaIdJsV2) {
+          window.appMetaIdJsV2?.signMessage(store.state.token!.access_token, 'getBalanceCallBack')
+        } else {
+          window.appMetaIdJs?.signMessage(store.state.token!.access_token, 'getBalanceCallBack')
+        }
+      } else {
+        //@ts-ignore
+        debugger
+        this.metaidjs.signMessage({
+          data: params,
+          callback,
+        })
+      }
+    })
+  }
 }
