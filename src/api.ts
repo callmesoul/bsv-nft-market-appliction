@@ -17,7 +17,7 @@ export const GetToken = (params: object) => {
       'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
     },
     transformRequest: [
-      function (data: object) {
+      function(data: object) {
         return qs.stringify(data)
       },
     ],
@@ -163,6 +163,16 @@ export const RemoveDeadlineTime = (params: {
   deadlineTime: number
 }): Promise<apiResponse> => {
   return nftHttp.post(`/api/v2/productTransaction/removeShelvesTime`, params)
+}
+
+export const Login = (params: {
+  metaId: string
+  xpub: string
+  msg: string
+  timestamp: string
+  type: string
+}): Promise<apiResponse> => {
+  return nftHttp.post(`/api/v2/user/login`, params)
 }
 
 export const GetNftIssue = (params: {
@@ -345,13 +355,13 @@ export const GetUserAuctionHistorys = (params: {
 export const GetTxRaw = (txid: string): Promise<GetMetaBotListRes> => {
   return new Promise((resolve, reject) => {
     fetch(`https://apiv2.metasv.com/tx/${txid}/raw`)
-      .then(function (response) {
+      .then(function(response) {
         return response.json()
       })
-      .then((response) => {
+      .then(response => {
         resolve(response)
       })
-      .catch((error) => {
+      .catch(error => {
         reject(error)
       })
   })
