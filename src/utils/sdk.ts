@@ -511,7 +511,10 @@ export default class Sdk {
         alert('set window issueNFT functionName')
         alert('_params' + JSON.stringify(_params))
         try {
-          _params.data.content.classifyList = JSON.parse(_params.data.content.classifyList)
+          if (typeof _params.data.content.classifyList === 'string') {
+            alert('JSON.parse classifyList')
+            _params.data.content.classifyList = JSON.parse(_params.data.content.classifyList)
+          }
           alert('set classifyList success')
         } catch (error) {
           alert(JSON.stringify(error))
