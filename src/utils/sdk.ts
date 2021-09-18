@@ -858,4 +858,6 @@ export default class Sdk {
       payTo: [{ address, amount: params.bidPrice }],
     })
   }
+
+  signMessage(params: {})
 }
