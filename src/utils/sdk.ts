@@ -492,6 +492,7 @@ export default class Sdk {
           debugger
           console.log('issueNFT res')
           console.log(res)
+          alert('window.appMetaIdJsV2?.issueNFT callback' + JSON.stringify(res))
           // 当报错是token supply is fixed 时， 一直轮询，直到成功或其他报错
           this.callback(res, resolve)
         },
@@ -500,7 +501,9 @@ export default class Sdk {
         const functionName: string = `issueNFTCallBack`
         // @ts-ignore
         window[functionName] = _params.callback
+
         _params.data.content.classifyList = JSON.parse(_params.data.content.classifyList)
+        alert('window.appMetaIdJsV2?.issueNFT' + JSON.stringify(_params))
         if (window.appMetaIdJsV2) {
           window.appMetaIdJsV2?.issueNFT(
             store.state.token!.access_token,
