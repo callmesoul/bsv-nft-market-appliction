@@ -509,6 +509,7 @@ export default class Sdk {
         // @ts-ignore
         window[functionName] = _params.callback
         alert('set window issueNFT functionName')
+        alert('_params' + JSON.stringify(_params))
         try {
           _params.data.content.classifyList = JSON.parse(_params.data.content.classifyList)
           alert('set classifyList success')
