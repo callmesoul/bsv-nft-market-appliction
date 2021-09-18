@@ -315,9 +315,11 @@ export default class Sdk {
       let { nftTotal, codeHash, genesis, genesisTxId, sensibleId, ..._params } = params
       let amount = 0
       const issueOperate = async () => {
+        alert('issueOperate')
         if (!params.checkOnly) {
           await this.checkNftTxIdStatus(genesisTxId!).catch(() => reject('createNFT error'))
         }
+        alert('createNFT issueNFT')
         const issueRes = await this.issueNFT({
           genesisId: genesis!,
           genesisTxid: genesisTxId!,
@@ -424,6 +426,7 @@ export default class Sdk {
           seriesName: params.seriesName,
         },
         callback: (res: SdkGenesisNFTRes) => {
+          alert('genesisNFT callback' + JSON.stringify(res))
           this.callback(res, resolve)
         },
       }
@@ -481,6 +484,7 @@ export default class Sdk {
     params: NFTIssueParams,
     parentResolve?: ((value: IssueNFTResData | PromiseLike<IssueNFTResData>) => void) | undefined
   ) {
+    alert('into issueNFT')
     return new Promise<IssueNFTResData>((resolve, reject) => {
       const _params = {
         data: {
