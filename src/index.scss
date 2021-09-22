@@ -112,6 +112,10 @@ body {
     border-color: #303133;
     color: #fff;
   }
+  &.btn-default {
+    background: #fff;
+    border-color: #fff;
+  }
   &.btn-block {
     display: block;
     width: auto;
@@ -231,6 +235,27 @@ input[type='number'] {
   }
 
   -moz-appearance: textfield;
+}
+
+.modal {
+  max-width: 480px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  .el-dialog__header {
+    text-align: center;
+    .el-dialog__title {
+      font-size: 18px;
+      font-weight: 500;
+    }
+  }
+  .el-dialog__body {
+    padding-top: 0;
+    padding-bottom: 0;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
 }
 
 .el-dialog {

@@ -320,8 +320,8 @@ declare interface GetMetaBotListResItem {
   currentPrice?: string
   isOnlyDisplay?: boolean
   auctionDeadTime?: number
-  nftOwnerAvatarType: string
-  nftIssueAvatarType: string
+  nftOwnerAvatarType?: string
+  nftIssueAvatarType?: string
 }
 
 declare interface GetNftIssueyTxIdResItem {

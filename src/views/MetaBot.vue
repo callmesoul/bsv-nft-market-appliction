@@ -20,10 +20,12 @@
 
   <!-- banner -->
   <div class="banner container">
-    <a v-if="i18n.locale.value === 'zh'"
-      ><img src="@/assets/images/nos-banner2.png" alt="Metabot"
+    <a @click="toMetabot" v-if="i18n.locale.value === 'zh'"
+      ><img src="@/assets/images/cn-banner-metabot.png" alt="Metabot"
     /></a>
-    <a v-else><img src="@/assets/images/nos-banner-en2.png" alt="Metabot"/></a>
+    <a @click="toMetabot" v-else
+      ><img src="@/assets/images/cn-banner-metabot.png" alt="Metabot"
+    /></a>
   </div>
 
   <VueCountdown
@@ -228,7 +230,6 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted, computed } from 'vue'
 import { useStore } from '@/store'
-import LoadMore from '@/components/LoadMore/LoadMore.vue'
 import IsNull from '../components/IsNull/IsNull.vue'
 import { useRouter } from 'vue-router'
 import { GetMetaBotList, GetMetaBotListBySearch, GetNftAuctions, NFTApiGetNFTDetail } from '@/api'

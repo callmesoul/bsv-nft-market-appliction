@@ -566,7 +566,7 @@
   </div>
 
   <!-- drsc detail -->
-  <ElDialog v-model="isShowDrscDetail">
+  <ElDialog v-model="isShowDrscDetail" custom-class="modal" :title="$t('seller') + $t('drsc')">
     <div class="modal-drsc">
       <pre>{{
         nft.val.isAuction
@@ -576,6 +576,11 @@
           : nft.val.describe
       }}</pre>
     </div>
+    <template #footer>
+      <div class="modal-footer" slot="footer">
+        <div class="btn btn-default">{{ $t('confirm') }}</div>
+      </div>
+    </template>
   </ElDialog>
 
   <!-- auction price -->

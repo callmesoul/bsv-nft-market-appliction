@@ -293,7 +293,8 @@
   color: #606266;
   line-height: 24px;
   pre {
-    white-space: normal;
+    white-space: pre-wrap;
+    word-break: break-word;
   }
 }
 

@@ -485,7 +485,7 @@ export default class Sdk {
       const _params = {
         data: {
           iconType: 'pic',
-          // payTo: [{ address: import.meta.env.VITE_AppAddress, amount: 10000 }],
+          payTo: [{ address: import.meta.env.VITE_AppAddress, amount: 10000 }],
           ...params,
         },
         callback: (res: MetaIdJsRes) => {

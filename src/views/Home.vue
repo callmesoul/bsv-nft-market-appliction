@@ -1,11 +1,11 @@
 <template>
   <!-- banner -->
-  <div class="banner container">
+  <!-- <div class="banner container">
     <a @click="toMetabot" v-if="i18n.locale.value === 'zh'"
       ><img src="@/assets/images/nos-banner2.png" alt="Metabot"
     /></a>
     <a @click="toMetabot" v-else><img src="@/assets/images/nos-banner-en2.png" alt="Metabot" /></a>
-  </div>
+  </div>-->
 
   <div class="home">
     <!-- 推荐作品 -->
@@ -15,6 +15,7 @@
         :count="8"
         :isReCommend="true"
         class="section-cont nft-list"
+
       >
         <template #default>
           <div class="section-cont nft-list">
@@ -49,17 +50,17 @@
       </div>
       <div class="section-screen flex flex-align-center">
         <div class="tags flex1 flex flex-align-center flex-wrap-wrap">
-          <a :class="{ active: classify === 'all' }" @click="changeClassify('all')">{{
-            $t('all')
-          }}</a>
+          <a :class="{ active: classify === 'all' }" @click="changeClassify('all')">
+            {{
+              $t('all')
+            }}
+          </a>
           <a
             :class="{ active: classify === item.classify }"
             v-for="item in classifyList"
             :key="item.classify"
             @click="changeClassify(item.classify)"
-          >
-            {{ $t(item.classify) }}
-          </a>
+          >{{ $t(item.classify) }}</a>
         </div>
         <div class="search-warp flex flex-align-center">
           <input
@@ -98,14 +99,10 @@
 <script setup lang="ts">
 import {
   GetAllOnSellNftList,
-  GetClassies,
   GetNftOnShowListByClassify,
   GetNftOnShowListBySearch,
-  GetProductClassifyList,
-  GetProductList,
   GetRecommendOnSellNftList,
   NftApiCode,
-  Search,
 } from '@/api'
 import NftItem from '@/components/Nft-item/Nft-item.vue'
 import NftSkeleton from '@/components/NftSkeleton/NftSkeleton.vue'
@@ -165,7 +162,7 @@ function toMetabot() {
 
 // 获取推荐列表
 function getRecommendNftList() {
-  return new Promise<void>(async (resolve) => {
+  return new Promise<void>(async resolve => {
     const res = await GetRecommendOnSellNftList({
       Page: '1',
       PageSize: '7',
@@ -226,4 +223,5 @@ async function search() {
 getRecommendNftList()
 getNftList()
 </script>
-<style lang="scss" scoped src="./Home.scss"></style>
+<style lang="scss" scoped src="./Home.scss">
+</style>

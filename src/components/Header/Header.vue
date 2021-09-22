@@ -1,9 +1,9 @@
 <template>
   <header class="flex flex-align-center">
     <div class="header-left flex1 flex flex-align-center">
-      <a class="menu" @click="isShowDrawer = true"
-        ><img src="@/assets/images/menu.svg" alt="menu"
-      /></a>
+      <a class="menu" @click="isShowDrawer = true"></a>
+        <img src="@/assets/images/menu.svg" alt="menu" />
+      </a>
       <!-- 分割线 -->
       <span class="line"></span>
       <router-link to="/" class="logo flex flex-align-center">
@@ -12,10 +12,14 @@
     </div>
     <nav class="flex flex-align-center flex-pack-center">
       <router-link to="/">{{ $t('marketplace') }}</router-link>
-      <router-link to="/create">{{ $t('createnft') }}</router-link>
+      <router-link
+        to="/create"
+        v-if="!store.state.isApp || (store.state.isApp && mode !== 'prod')"
+      >{{ $t('createnft') }}</router-link>
       <router-link to="/metaBot" class="flex flex-align-center">
-        MetaBot <img src="@/assets/images/nav_icon_hot.svg" alt="MetaBot"
-      /></router-link>
+        MetaBot
+        <img src="@/assets/images/nav_icon_hot.svg" alt="MetaBot" />
+      </router-link>
     </nav>
     <div class="operate flex flex-align-center">
       <!-- 登录按钮 -->
@@ -25,22 +29,28 @@
         @click="auth"
         v-loading="store.state.userInfoLoading"
         element-loading-background="rgba(255, 255, 255, 0.7)"
-        >{{ $t('signinandout') }}</a
-      >
+      >{{ $t('signinandout') }}</a>
 
       <!-- 登录用户 -->
       <ElDropdown trigger="click" v-else>
         <div class="user-info flex flex-align-center">
-          <NftUserAvatar bg="gray" class="avatar" :metaId="store.state.userInfo?.showId" :hasmask="store.state.userInfo.avatarType === 'nft-metabot'" />
+          <NftUserAvatar
+            bg="gray"
+            class="avatar"
+            :metaId="store.state.userInfo?.showId"
+            :hasmask="store.state.userInfo.avatarType === 'nft-metabot'"
+          />
           <div class="username">{{ store.state.userInfo?.name }}</div>
         </div>
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item @click="toSelf">{{ $t('mynft') }}</el-dropdown-item>
             <el-dropdown-item @click="toWallet">{{ $t('mywallet') }}</el-dropdown-item>
-            <el-dropdown-item @click="toTariffDescription">{{
-              $t('tariffDescription ')
-            }}</el-dropdown-item>
+            <el-dropdown-item @click="toTariffDescription">
+              {{
+                $t('tariffDescription ')
+              }}
+            </el-dropdown-item>
             <el-dropdown-item @click="logout">{{ $t('logout') }}</el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -57,7 +67,7 @@
               <el-dropdown-item v-for="lang in i18n.availableLocales" :key="lang" :disabled="lang === i18n.locale.value" >{{ $t(lang) }}</el-dropdown-item>
             </el-dropdown-menu>
           </template>
-        </ElDropdown> -->
+      </ElDropdown>-->
     </div>
   </header>
 
@@ -65,12 +75,15 @@
   <el-drawer modal-class="menu-drawer" v-model="isShowDrawer" direction="ttb">
     <nav class="mobile-nav-modal">
       <router-link to="/" @click.stop="isShowDrawer = false">{{ $t('marketplace') }}</router-link>
-      <router-link to="/create" @click.stop="isShowDrawer = false">{{
-        $t('createnft')
-      }}</router-link>
+      <router-link
+        to="/create"
+        @click.stop="isShowDrawer = false"
+        v-if="!store.state.isApp || (store.state.isApp && mode !== 'prod')"
+      >{{ $t('createnft') }}</router-link>
       <router-link to="/metaBot" @click.stop="isShowDrawer = false">
-        MetaBot <img src="@/assets/images/nav_icon_hot.svg" alt="MetaBot"
-      /></router-link>
+        MetaBot
+        <img src="@/assets/images/nav_icon_hot.svg" alt="MetaBot" />
+      </router-link>
     </nav>
   </el-drawer>
 </template>
@@ -96,6 +109,7 @@ const store = useStore()
 const route = useRoute()
 const router = useRouter()
 const isShowDrawer = ref(false)
+const mode = import.meta.env.MODE
 
 // 跳转授权
 function auth() {
@@ -132,4 +146,5 @@ function toTariffDescription() {
 }
 </script>
 
-<style lang="scss" scoped src="./Header.scss"></style>
+<style lang="scss" scoped src="./Header.scss">
+</style>

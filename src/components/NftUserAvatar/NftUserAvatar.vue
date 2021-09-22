@@ -17,8 +17,8 @@ import { defineProps } from 'vue'
 const props = defineProps<{
   hasmask: boolean
   metaId: string
-  bg: string
-  alt: string
+  bg?: string
+  alt?: string
 }>()
 </script>
 
