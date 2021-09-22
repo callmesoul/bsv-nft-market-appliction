@@ -315,11 +315,9 @@ export default class Sdk {
       let { nftTotal, codeHash, genesis, genesisTxId, sensibleId, ..._params } = params
       let amount = 0
       const issueOperate = async () => {
-        alert('issueOperate')
         if (!params.checkOnly) {
           await this.checkNftTxIdStatus(genesisTxId!).catch(() => reject('createNFT error'))
         }
-        alert('createNFT issueNFT')
         const issueRes = await this.issueNFT({
           genesisId: genesis!,
           genesisTxid: genesisTxId!,
@@ -426,7 +424,6 @@ export default class Sdk {
           seriesName: params.seriesName,
         },
         callback: (res: SdkGenesisNFTRes) => {
-          alert('genesisNFT callback' + JSON.stringify(res))
           this.callback(res, resolve)
         },
       }
@@ -484,7 +481,6 @@ export default class Sdk {
     params: NFTIssueParams,
     parentResolve?: ((value: IssueNFTResData | PromiseLike<IssueNFTResData>) => void) | undefined
   ) {
-    alert('into issueNFT')
     return new Promise<IssueNFTResData>((resolve, reject) => {
       const _params = {
         data: {
@@ -496,31 +492,21 @@ export default class Sdk {
           debugger
           console.log('issueNFT res')
           console.log(res)
-          alert('window.appMetaIdJsV2?.issueNFT callback' + JSON.stringify(res))
           // 当报错是token supply is fixed 时， 一直轮询，直到成功或其他报错
           this.callback(res, resolve)
         },
       }
-      alert('issueNFT isApp' + JSON.stringify(this.isApp))
       if (this.isApp) {
-        alert('into issueNFT isApp')
         const functionName: string = `issueNFTCallBack`
-        alert('set issueNFT functionName')
         // @ts-ignore
         window[functionName] = _params.callback
-        alert('set window issueNFT functionName')
-        alert('_params' + JSON.stringify(_params))
         try {
           if (typeof _params.data.content.classifyList === 'string') {
-            alert('JSON.parse classifyList')
             _params.data.content.classifyList = JSON.parse(_params.data.content.classifyList)
           }
-          alert('set classifyList success')
         } catch (error) {
           alert(JSON.stringify(error))
         }
-        alert('window.appMetaIdJsV2?.issueNFT' + JSON.stringify(_params))
-        alert('window.appMetaIdJsV2?.issueNFT' + window.appMetaIdJsV2?.issueNFT)
         if (window.appMetaIdJsV2) {
           window.appMetaIdJsV2?.issueNFT(
             store.state.token!.access_token,
