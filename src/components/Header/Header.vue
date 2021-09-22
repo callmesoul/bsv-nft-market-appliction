@@ -1,7 +1,7 @@
 <template>
   <header class="flex flex-align-center">
     <div class="header-left flex1 flex flex-align-center">
-      <a class="menu" @click="isShowDrawer = true"></a>
+      <a class="menu" @click="isShowDrawer = true">
         <img src="@/assets/images/menu.svg" alt="menu" />
       </a>
       <!-- 分割线 -->
