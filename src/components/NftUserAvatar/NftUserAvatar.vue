@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="avatar">
     <img src="@/assets/images/ava_mask_2.png" class="mask" v-if="hasmask && bg === 'gray'" />
     <img src="@/assets/images/ava_mask.png" class="mask" v-if="hasmask && bg !== 'gray'" />
     <img
@@ -22,4 +22,5 @@ const props = defineProps<{
 }>()
 </script>
 
-<style lang="scss" scoped src="./NftUserAvatar.scss"></style>
+<style lang="scss" scoped src="./NftUserAvatar.scss">
+</style>

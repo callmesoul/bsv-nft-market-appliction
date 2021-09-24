@@ -1,5 +1,60 @@
 <template>
-  <div class="self">
+  <div class="user-msg">
+    <div class="container">
+      <div class="user-msg-warp flex flex-align-center flex-pack-center">
+        <div class="flex-box">
+          <div class="avatar">
+            <NftUserAvatar
+              :metaId="store.state.userInfo ? store.state.userInfo.metaId : ''"
+              :hasmask="false"
+            />
+          </div>
+          <div class="name">{{ store.state.userInfo?.name }}</div>
+          <div class="metaid flex flex-align-center">
+            MetaID: {{ store.state.userInfo?.metaId.slice(0, 6) }}
+            <a
+              @click="toTxLink"
+            >{{ $t('txDetail') }}</a>
+          </div>
+          <CertTemp />
+        </div>
+        <!-- operate -->
+        <div class="operate flex flex-align-center">
+          <div class="operate-item flex flex-align-center" @click="openRecordModal">
+            <img src="@/assets/images/me_icon_record.svg" />
+            {{ $t('ransactionRecord') }}
+          </div>
+          <div class="operate-item flex flex-align-center">
+            <img src="@/assets/images/me_icon_more.svg" />
+            {{ $t('more') }}
+            <ElDropdown class="operate-item" trigger="click" placement="bottom-end">
+              <span class="el-dropdown-link">Dropdown List</span>
+              <template #dropdown>
+                <ElDropdownMenu class="more-list">
+                  <ElDropdownItem
+                    class="more-item flex flex-align-center"
+                    @click="openUrl('showBuzz')"
+                  >
+                    <img src="@/assets/images/logo_showbuzz@2x.png" />
+                    {{ $t('look') }}ShowBuzz
+                  </ElDropdownItem>
+                  <ElDropdownItem
+                    class="more-item flex flex-align-center"
+                    @click="openUrl('metaCenter')"
+                  >
+                    <img src="@/assets/images/logo_metacenter@2x.png" />
+                    {{ $t('look') }}MetaCenter
+                  </ElDropdownItem>
+                </ElDropdownMenu>
+              </template>
+            </ElDropdown>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--
     <div class="banner container">
       <a class="banner-item">
         <img class="cover" src="@/assets/images/banner_bg.svg" />
@@ -15,76 +70,157 @@
           </div>
         </div>
       </a>
-    </div>
+  </div>-->
 
-    <div class="section container">
-      <div class="section-header flex flex-align-center">
-        <div class="tab flex flex-align-center">
-          <a
-            :class="{ active: index === tabIndex }"
-            v-for="(tab, index) in tabs"
-            :key="index"
-            @click="changeTabIndex(index)"
-            >{{ tab.name }}</a
-          >
-        </div>
+  <div class="section container">
+    <div class="section-header flex flex-align-center">
+      <div class="tab flex flex-align-center">
+        <a
+          :class="{ active: index === tabIndex }"
+          v-for="(tab, index) in tabs"
+          :key="index"
+          @click="changeTabIndex(index)"
+        >{{ tab.name }}</a>
       </div>
-      <NftSkeleton
-        :loading="isShowNftListSkeleton"
-        :count="pagination.pageSize"
-        class="section-cont nft-list"
-      >
-        <template #default>
-          <div class="section-cont nft-list">
-            <template v-for="nft in nfts">
-              <NftItem :item="nft" :isSelf="true" />
-            </template>
+    </div>
+    <NftSkeleton
+      :loading="isShowNftListSkeleton"
+      :count="pagination.pageSize"
+      class="section-cont nft-list"
+    >
+      <template #default>
+        <div class="section-cont nft-list">
+          <template v-for="nft in nfts">
+            <NftItem :item="nft" :isSelf="true" />
+          </template>
+        </div>
+      </template>
+    </NftSkeleton>
+  </div>
+
+  <LoadMore :pagination="pagination" @getMore="getMore" v-if="nfts.length > 0" />
+
+  <div class="nft-null flex flex-align-center flex-pack-center" v-if="nfts.length <= 0">
+    <div>
+      <img src="@/assets/images/default_icon_casting.svg" />
+      <div class="tips">
+        {{ $t('nftNullTips') }}
+        <router-link :to="{ name: 'create' }">{{ $t('Casting') }}</router-link>
+      </div>
+    </div>
+  </div>
+
+  <!-- record -->
+  <ElDialog v-model="isShowRecordModal">
+    <template #title>
+      <div class="tab record-tab">
+        <a
+          v-for="(tab, index) in recordTabs"
+          :class="{ active: index === recordTabIndex }"
+          @click="changeRecordTab(index)"
+        >{{ $t(tab.key) }}</a>
+      </div>
+    </template>
+    <div class="record-list">
+      <ElSkeleton :loading="isShowRcordSkeleton" animated :count="recordPagination.pageSize">
+        <template #template>
+          <div class="record-item flex">
+            <ElSkeletonItem variant="image" class="cover" />
+            <div class="cont flex1 flex flex-v flex-pack-justify">
+              <div class="top flex flex flex-align-center">
+                <div class="title flex1">
+                  <ElSkeletonItem variant="text" style="width:40%" />
+                </div>
+                <div class="price" :class="{ active: recordTabIndex === 1 }">
+                  <ElSkeletonItem variant="text" style="width:20%" />
+                </div>
+              </div>
+              <div class="time">
+                <ElSkeletonItem variant="text" style="width:20%" />
+              </div>
+              <div class="bottom flex flex-align-center">
+                <div class="seller flex1 flex flex-align-center">
+                  <ElSkeletonItem variant="text" style="width:30%" />
+                </div>
+                <a @click="store.state.sdk?.toTxLink('')">
+                  <ElSkeletonItem variant="text" style="width:10%" />
+                </a>
+              </div>
+            </div>
           </div>
         </template>
-      </NftSkeleton>
+        <template #default>
+          <div class="record-item flex" v-for="record in Array.from({ length: 10 })">
+            <ElImage class="cover" :lazy="true" :preview-src-list="[]" fit="contain" />
+            <div class="cont flex1 flex flex-v flex-pack-justify">
+              <div class="top flex flex flex-align-center">
+                <div
+                  class="title flex1"
+                >{{ recordTabIndex === 0 ? $t('buy') : $t('sell') }} MetaBot #003</div>
+                <div
+                  class="price"
+                  :class="{ active: recordTabIndex === 1 }"
+                >{{ recordTabIndex === 0 ? '-' : '+' }}136.7865 BSV</div>
+              </div>
+              <div class="time">2021-08-24 16:32</div>
+              <div class="bottom flex flex-align-center">
+                <div class="seller flex1 flex flex-align-center">
+                  {{ $t('seller') }}:
+                  <img src /> 欧阳家声
+                </div>
+                <a @click="store.state.sdk?.toTxLink('')">{{ $t('look') }}TX</a>
+              </div>
+            </div>
+          </div>
+        </template>
+      </ElSkeleton>
     </div>
-    <LoadMore :pagination="pagination" @getMore="getMore" />
-  </div>
+  </ElDialog>
 </template>
 <script setup lang="ts">
 import {
   GetDeadlineTime,
   GetMyNftSummaryList,
-  GetMyOnSellNftList,
-  GetMySelledNfts,
-  GetNftIssue,
-  MyNfts,
-  NftApiCode,
+  GetMyOnSellNftList
 } from '@/api'
 import NftItem from '@/components/Nft-item/Nft-item.vue'
 import { useStore } from '@/store'
 import { reactive, ref } from 'vue'
-import SeriesItem from '@/components/SeriesItem/SeriesItem.vue'
 import LoadMore from '@/components/LoadMore/LoadMore.vue'
 import NftSkeleton from '@/components/NftSkeleton/NftSkeleton.vue'
 import { useI18n } from 'vue-i18n'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElDropdown, ElDropdownItem, ElDropdownMenu, ElDialog, ElImage, ElSkeleton, ElSkeletonItem } from 'element-plus'
 import { router } from '@/router'
 import { setDataStrclassify } from '@/utils/util'
+import NftUserAvatar from '@/components/NftUserAvatar/NftUserAvatar.vue'
+import CertTemp from '@/components/Cert/Cert.vue'
 
 const i18n = useI18n()
 const store = useStore()
 const pagination = reactive({
   ...store.state.pagination,
-  pageSize: 6,
+  pageSize: 12,
 })
 const selledPagination = reactive({
   ...store.state.pagination,
-  pageSize: 6,
+  pageSize: 12,
 })
-
+const recordPagination = reactive({
+  ...store.state.pagination,
+  pageSize: 12,
+})
 const tabs = [{ name: i18n.t('mynft') }, { name: i18n.t('mySellNft') }]
+const recordTabs = [{ name: i18n.t('purchaseHistory'), key: 'purchaseHistory' }, { name: i18n.t('saleRecord'), key: 'saleRecord' }]
 const tabIndex = ref(0)
 const nfts: NftItem[] = reactive([])
 const selledNfts: NftItem[] = reactive([])
 const isShowNftListSkeleton = ref(true)
 const isShowSelledNftListSkeleton = ref(true)
 const seriesList: NFTSeriesItem[] = reactive([])
+const isShowRecordModal = ref(false)
+const recordTabIndex = ref(0)
+const isShowRcordSkeleton = ref(true)
+
 
 function changeTabIndex(index: number) {
   isShowNftListSkeleton.value = true
@@ -100,7 +236,7 @@ function changeTabIndex(index: number) {
 }
 
 function getMyNfts(isCover: boolean = false) {
-  return new Promise<void>(async resolve => {
+  return new Promise<void>(async (resolve) => {
     const res = await GetMyNftSummaryList({
       Address: store.state.userInfo!.address,
       Page: pagination.page.toString(),
@@ -111,7 +247,7 @@ function getMyNfts(isCover: boolean = false) {
         nfts.length = 0
       }
       if (res.data.results.items.length > 0) {
-        res.data.results.items.map(item => {
+        res.data.results.items.map((item) => {
           const nft =
             item.nftDetailItemList && item.nftDetailItemList[0]
               ? item.nftDetailItemList[0]
@@ -121,20 +257,20 @@ function getMyNfts(isCover: boolean = false) {
             count > 1 && item.nftSeriesName && item.nftSeriesName !== ''
               ? item.nftSeriesName
               : item.nftName
-              ? item.nftName
-              : '--'
+                ? item.nftName
+                : '--'
           const data:
             | {
-                nftname: string
-                nftdesc: string
-                nfticon: string
-                nftwebsite: string
-                nftissuerName: string
-                nftType: string
-                classifyList: string
-                originalFileTxid: string
-                contentTxId: string
-              }
+              nftname: string
+              nftdesc: string
+              nfticon: string
+              nftwebsite: string
+              nftissuerName: string
+              nftType: string
+              classifyList: string
+              originalFileTxid: string
+              contentTxId: string
+            }
             | undefined = nft && nft.nftDataStr !== '' ? JSON.parse(nft.nftDataStr) : undefined
           const classify = setDataStrclassify(data)
           nfts.push({
@@ -176,7 +312,7 @@ function getMore() {
 }
 
 function getMySelledNfts(isCover: boolean = false) {
-  return new Promise<void>(async resolve => {
+  return new Promise<void>(async (resolve) => {
     const res = await GetMyOnSellNftList({
       Page: selledPagination.page.toString(),
       PageSize: selledPagination.pageSize.toString(),
@@ -226,13 +362,42 @@ function getMySelledNfts(isCover: boolean = false) {
   })
 }
 
+function toTxLink() {
+  if (store.state.userInfo) {
+    store.state.sdk?.toTxLink(store.state.userInfo.metaId)
+  }
+}
+
+function openUrl(type: string) {
+  let url = type === 'showBuzz' ? `https://www.showbuzz.app/user_index/user_buzz/${store.state.userInfo?.metaId}` : ``
+  window.open(url)
+}
+
+function changeRecordTab(index: number) {
+  if (recordTabIndex.value === index) return
+  recordPagination.page = 1
+  recordPagination.loading = false
+  recordPagination.nothing = false
+  recordTabIndex.value = index
+  getRecordList(true)
+}
+
+function openRecordModal() {
+  isShowRecordModal.value = true
+  getRecordList(true)
+}
+
+async function getRecordList(isCover: boolean = false) {
+  const res = ''
+}
+
 if (store.state.token) {
   // 还没拿到用户信息的时候要等待拿用户信息完再调接口
   if (store.state.userInfo) {
     getMyNfts()
   } else {
     store.watch(
-      state => state.userInfo,
+      (state) => state.userInfo,
       () => {
         getMyNfts()
       }
@@ -243,4 +408,5 @@ if (store.state.token) {
   router.replace('/')
 }
 </script>
-<style lang="scss" scoped src="./Self.scss"></style>
+<style lang="scss" scoped src="./Self.scss">
+</style>

@@ -146,7 +146,7 @@
                   >MetaID:{{ nft.val.foundryMetaId.slice(0, 6) }}</div>
                 </div>
               </div>
-              <CertTemp @click="toCert" :metaId="nft.val.foundryMetaId" />
+              <CertTemp :metaId="nft.val.foundryMetaId" />
             </div>
             <div class="drsc flex1 flex flex-v">
               <div class="title flex flex-align-center">
@@ -960,11 +960,6 @@ function share() {
     .catch(() => {
       ElMessage.success(i18n.t('copyerror'))
     })
-}
-
-//
-function toCert() {
-  ElMessage.info(i18n.t('stayTuned'))
 }
 
 // async function getNft () {
