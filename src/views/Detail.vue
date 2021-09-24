@@ -587,7 +587,7 @@
     </div>
     <template #footer>
       <div class="modal-footer" slot="footer">
-        <div class="btn btn-default">{{ $t('confirm') }}</div>
+        <div class="btn btn-default" @click="isShowDrscDetail = false">{{ $t('confirm') }}</div>
       </div>
     </template>
   </ElDialog>
