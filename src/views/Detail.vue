@@ -513,7 +513,7 @@
                     <NftUserAvatar
                       class="avatar"
                       :metaId="item.buyer_metaId"
-                      :hasmask="item.avatarType === 'nft-metabot'"
+                      :hasmask="item?.avatarType === 'nft-metabot'"
                     />
                     <div class="author-msg flex1">
                       <div class="creater">{{ item.meta_id_name }}</div>

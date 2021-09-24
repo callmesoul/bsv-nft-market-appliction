@@ -24,9 +24,16 @@ export const units: Unit[] = [
   },
 ]
 
+export const canCreateCardClassifyListMetaids = [
+  'aaf66589caf185d6840a51cd47a91cb2fbf831c0eb6a4c32ab31f3e3b3fa5bc2',
+  'baac7625edf7a3dcc28385917a6fc9a72798ffd3657da8bc22ce59fdeb3b35e0',
+]
 export const classifyList = [
   { classify: 'art' },
-  { classify: 'card', disabled: true },
+  {
+    classify: 'card',
+    disabled: true,
+  },
   { classify: 'alias', disabled: true },
   { classify: 'avatar', disabled: true },
   { classify: 'rights', disabled: true },
@@ -46,4 +53,6 @@ export const certedMetaIds = [
   'fc0a92af9977f4b3bf82492508c18ab28f666922eb8ee52dcefd5b7f2a690f83',
   '69f5a1cfa00ae301cc911978861b0e8c0dadf42486f64aabe3ffef7c94cf9490',
   '446988fc6cc0240c0a81c9e95e41183aa162a8a1aafef89dc30ef6c310ca4362',
+  'aaf66589caf185d6840a51cd47a91cb2fbf831c0eb6a4c32ab31f3e3b3fa5bc2',
+  'baac7625edf7a3dcc28385917a6fc9a72798ffd3657da8bc22ce59fdeb3b35e0',
 ]

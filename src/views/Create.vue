@@ -4,10 +4,14 @@
       <img class="icon" src="@/assets/images/icon_casting.svg" />
       <div class="title flex1 flex flex-align-center">
         <span class="flex1">{{ $t('createNft') }}</span>
-        <a @click="changeCreateType"
-          >{{ createTypeIndex === 0 ? $t('createbytx') : $t('createbylocal')
-          }}<i class="el-icon-arrow-right"></i
-        ></a>
+        <a @click="changeCreateType">
+          {{
+            createTypeIndex === 0 ? $t('createbytx') : $t('createbylocal')
+          }}
+          <i
+            class="el-icon-arrow-right"
+          ></i>
+        </a>
       </div>
     </div>
     <div class="cont-warp">
@@ -15,28 +19,38 @@
         <template v-for="(type, index) in _nftTypes">
           <template v-if="type.disabled">
             <ElTooltip effect="dark" :content="$t('stayTuned')" placement="top">
-              <a :class="{ active: type.value === nft.type }" @click="changeTag(index)">{{
-                $t(type.key)
-              }}</a>
+              <a :class="{ active: type.value === nft.type }" @click="changeTag(index)">
+                {{
+                  $t(type.key)
+                }}
+              </a>
             </ElTooltip>
           </template>
           <template v-else>
             <a
               :class="{ active: type.value === nft.type, disabled: type.disabled }"
               @click="changeTag(index)"
-              >{{ $t(type.key) }}</a
-            >
+            >{{ $t(type.key) }}</a>
           </template>
         </template>
       </div>
       <div class="tips">
-        <template v-if="createTypeIndex === 1">{{ $t('nftTxidTips') }} <br /></template>
-        <template v-if="nft.type === '1'"> {{ $t('nftImageDrsc') }}<br /> </template>
-        <template v-if="nft.type === '3'">
-          {{ $t('nftCopyrightDrsc') }}<br />
-          {{ $t('nftCopyrightDrsc2') }}<br />
+        <template v-if="createTypeIndex === 1">
+          {{ $t('nftTxidTips') }}
+          <br />
         </template>
-        {{ $t('createtips2') }}<br />
+        <template v-if="nft.type === '1'">
+          {{ $t('nftImageDrsc') }}
+          <br />
+        </template>
+        <template v-if="nft.type === '3'">
+          {{ $t('nftCopyrightDrsc') }}
+          <br />
+          {{ $t('nftCopyrightDrsc2') }}
+          <br />
+        </template>
+        {{ $t('createtips2') }}
+        <br />
         {{ $t('createtips3') }}
       </div>
       <!-- txId 铸造 -->
@@ -123,7 +137,7 @@
             disabled="disabled"
             :visible="isShowClassifyModal"
             @confirm="isShowClassifyModal = false"
-            :list="classifyList"
+            :list="classList"
             :selecteds="nft.classify"
           />
         </div>
@@ -170,9 +184,7 @@
                   <div
                     class="btn btn-block create-series-btn"
                     @click="isShowCreateSeriesModal = true"
-                  >
-                    {{ $t('createSerie') }}
-                  </div>
+                  >{{ $t('createSerie') }}</div>
                 </template>
               </PickerModel>
             </div>
@@ -197,15 +209,13 @@
         </template>
       </div>
     </div>
-  </div> -->
+  </div>-->
 
   <!-- 创建系列 -->
   <ElDialog v-model="isShowCreateSeriesModal">
     <div class="create-series">
       <div class="title">{{ $t('createSerieProd') }}</div>
-      <div class="drsc">
-        {{ $t('createSerieTips') }}
-      </div>
+      <div class="drsc">{{ $t('createSerieTips') }}</div>
       <input type="text" v-model="serie.name" :placeholder="$t('createSeriesNamePlar')" />
       <input
         type="number"
@@ -252,13 +262,32 @@ import {
 import { useStore } from '@/store'
 import { router } from '@/router'
 import PickerModel from '@/components/PickerModal/PickerModel.vue'
-import { nftTypes, classifyList } from '@/config'
-// import { IssueNFTResData, SdkGenesisNFTRes } from '@/typings/sdk'
+import { nftTypes, classifyList, canCreateCardClassifyListMetaids } from '@/config'
+import { computed } from '@vue/runtime-core'
 
+const classList = reactive(classifyList)
 const _nftTypes = reactive(nftTypes)
-
 const i18n = useI18n()
 const store = useStore()
+
+
+function setUserCreatCard() {
+  if (store.state.userInfo) {
+    const index = canCreateCardClassifyListMetaids.findIndex(item => item === store.state.userInfo?.metaId)
+    if (index !== -1) {
+      const cardIndex = classList.findIndex(item => item.classify === 'card')
+      classList[cardIndex].disabled = false
+    }
+  }
+}
+
+if (store.state.userInfo) {
+  setUserCreatCard()
+} else {
+  store.watch((state) => state.userInfo, () => {
+    setUserCreatCard()
+  })
+}
 
 //分类
 // const classifies = reactive([])
@@ -761,4 +790,5 @@ async function createNft() {
   }
 }
 </script>
-<style lang="scss" scoped src="./Create.scss"></style>
+<style lang="scss" scoped src="./Create.scss">
+</style>
