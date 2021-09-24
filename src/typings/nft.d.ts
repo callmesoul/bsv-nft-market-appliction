@@ -16,6 +16,7 @@ declare interface NftItem {
   deadlineTime?: number
   head?: string
   ownerAvatarType?: string
+  avatarType?: string
   issueUserAvatarType?: string
 }
 declare interface NftItemDetail {

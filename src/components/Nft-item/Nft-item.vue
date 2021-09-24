@@ -18,13 +18,17 @@
             <div class="aount">{{ new Decimal(item?.amount).div(10 ** 8).toString() }} BSV</div>
           </div>
           <div class="author flex flex-align-center">
-            <img src="@/assets/images/ava_mask.png" class="mask" v-if="item.issueUserAvatarType === 'nft-metabot'" />
+            <img
+              src="@/assets/images/ava_mask.png"
+              class="mask"
+              v-if="item.issueUserAvatarType === 'nft-metabot'"
+            />
             <img
               class="avatar"
               :src="$filters.avatar(item?.metaId)"
               :alt="item?.foundryName"
               :class="{
-                hasmask:item.avatarType === 'nft-metabot'
+                hasmask: item.avatarType === 'nft-metabot'
               }"
               onerror="javascript:this.src='https://testshowman.showpay.top/metafile/avatar/a9…1f918ca4342d2b018c641bbb4c293e'"
             />
@@ -34,36 +38,34 @@
         <img
           class="cert-icon"
           src="@/assets/images/cert.svg"
-          v-if="
-            item.metaId === '3c03f6b8783fa672bb34953519110944dab1d8a23711c7df4f1dd9e16e5b823c' ||
-            item.metaId === '974e2977d5c9446f7f48fd82c9ea51f82749b9ef7c00d26b73bc450d167d5f31'
-          "
+          v-if="certedMetaIds.find(_item => _item === item.metaId)"
         />
       </div>
       <div class="operate flex flex-align-center" v-if="props.isSelf">
         <div class="timeleft flex1">
           <!-- 系列 且拥有数量 > 1 -->
-          <template v-if="item.hasCount && item.hasCount > 1">
-            {{ $t('series') }} {{ item.hasCount }}/{{ item.total }}
-          </template>
+          <template
+            v-if="item.hasCount && item.hasCount > 1"
+          >{{ $t('series') }} {{ item.hasCount }}/{{ item.total }}</template>
           <template v-else-if="item.putAway">
-            <template v-if="overTime">
-              {{ $t('overTime') }}
-            </template>
+            <template v-if="overTime">{{ $t('overTime') }}</template>
             <div v-else class="flex flex-align-center">
-              <img src="@/assets/images/icon_time.svg" /><span
-                >{{ day }}{{ $t('day') }}{{ hour }}{{ $t('hour') }}</span
-              >
+              <img src="@/assets/images/icon_time.svg" />
+              <span>{{ day }}{{ $t('day') }}{{ hour }}{{ $t('hour') }}</span>
             </div>
           </template>
         </div>
 
-        <a class="btn btn-min btn-plain" v-if="item.hasCount && item.hasCount > 1">{{
-          $t('seeAll')
-        }}</a>
-        <a class="btn btn-min btn-plain" v-else-if="item?.putAway" @click.stop="offSale">{{
-          $t('offsale')
-        }}</a>
+        <a class="btn btn-min btn-plain" v-if="item.hasCount && item.hasCount > 1">
+          {{
+            $t('seeAll')
+          }}
+        </a>
+        <a class="btn btn-min btn-plain" v-else-if="item?.putAway" @click.stop="offSale">
+          {{
+            $t('offsale')
+          }}
+        </a>
         <a class="btn btn-min" v-else @click.stop="toSale">{{ $t('sale') }}</a>
       </div>
     </div>
@@ -73,13 +75,12 @@
         <img src="@/assets/images/card_icon_fire.svg" />
       </div>
       <div class="title">{{ $t('recommentprod') }}</div>
-      <div class="drsc flex1">
-        {{ $t('recommenttext') }}
-      </div>
+      <div class="drsc flex1">{{ $t('recommenttext') }}</div>
       <div class="more">
-        <router-link :to="{ name: 'recommned' }"
-          >{{ $t('getmore') }}<img src="@/assets/images/card_icon_ins.svg"
-        /></router-link>
+        <router-link :to="{ name: 'recommned' }">
+          {{ $t('getmore') }}
+          <img src="@/assets/images/card_icon_ins.svg" />
+        </router-link>
       </div>
     </div>
   </a>
@@ -99,6 +100,7 @@ import dayjs from 'dayjs'
 import _FormItem from 'element-plus/lib/el-form-item'
 import { metafileUrl } from '@/utils/util'
 import NFTDetail from '@/utils/nftDetail'
+import { certedMetaIds } from '@/config'
 
 const coverDefaultImg = 'this.src="/state/cover-default.jpg"' //默认图地址
 
@@ -211,4 +213,5 @@ function offSale() {
 }
 </script>
 
-<style lang="scss" scoped src="./Nft-item.scss"></style>
+<style lang="scss" scoped src="./Nft-item.scss">
+</style>
