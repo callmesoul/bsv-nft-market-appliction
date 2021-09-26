@@ -674,7 +674,7 @@ export default class Sdk {
     })
   }
 
-  // 获取用户余额
+  // 获取用户MC余额
   getMc(address: string) {
     return new Promise<number>((resolve, reject) => {
       fetch(`https://api.sensiblequery.com/ft/summary/${address}`)
@@ -705,11 +705,11 @@ export default class Sdk {
               resolve(0)
             }
           } else {
-            reject('ftList error')
+            reject('getMc')
           }
         })
         .catch(() => {
-          reject('ftList error')
+          reject('getMc')
         })
     })
   }
