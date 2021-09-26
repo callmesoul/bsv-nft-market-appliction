@@ -97,7 +97,6 @@ import { Decimal } from 'decimal.js-light'
 import NftOffSale from '@/utils/offSale'
 // @ts-ignore
 import dayjs from 'dayjs'
-import _FormItem from 'element-plus/lib/el-form-item'
 import { metafileUrl } from '@/utils/util'
 import NFTDetail from '@/utils/nftDetail'
 import { certedMetaIds } from '@/config'

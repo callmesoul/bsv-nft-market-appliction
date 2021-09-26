@@ -93,9 +93,7 @@ import {
   ElDropdown,
   ElDropdownItem,
   ElDropdownMenu,
-  ElLoading,
-  ElDrawer,
-  locale,
+  ElDrawer
 } from 'element-plus'
 import { ref } from 'vue'
 import { useStore, Mutation } from '@/store/index'

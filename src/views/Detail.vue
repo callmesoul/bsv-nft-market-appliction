@@ -7,8 +7,7 @@
           <ElSkeletonItem class="cover" variant="image" />
           <div class="cont flex1 flex flex-v">
             <div class="name flex flex-align-center">
-              <ElSkeletonItem class="text" variant="text" />
-              <ElSkeletonItem variant="image" />
+              <ElSkeletonItem class="text" variant="text" style="width: 80%" />
             </div>
             <div class="creater-msg">
               <div class="author flex flex-align-center">
@@ -18,21 +17,25 @@
                   <ElSkeletonItem class="metaid" variant="text" />
                 </div>
               </div>
-              <CertTemp />
+              <div class="cert">
+                <ElSkeletonItem class="text " variant="text" style="width: 20%" />
+              </div>
             </div>
             <div class="drsc flex1 flex flex-v">
               <ElSkeletonItem class="title" variant="h1" />
               <div class="cont flex1">
-                <ElSkeletonItem variant="text" />
+                <ElSkeletonItem variant="text" style="width: 80%" />
+                <ElSkeletonItem variant="text" style="width: 60%; margin-top: 15px;" />
+                <ElSkeletonItem variant="text" style="width: 40%; margin-top: 15px;" />
               </div>
             </div>
 
-            <template>
-              <div class="timeleft">
-                <ElSkeletonItem variant="text" />
-              </div>
+            <div class="timeleft">
+              <ElSkeletonItem variant="text" />
+            </div>
+            <div class="operate-warp">
               <ElSkeletonItem class="btn btn-block" variant="button" />
-            </template>
+            </div>
           </div>
         </div>
         <div class="bottom">
@@ -140,10 +143,9 @@
                 />
                 <div class="author-msg flex1">
                   <div class="creater">{{ $t('creater') }}: {{ nft.val.foundryName }}</div>
-                  <div
-                    class="metaid"
-                    v-if="nft.val.foundryMetaId"
-                  >MetaID:{{ nft.val.foundryMetaId.slice(0, 6) }}</div>
+                  <div class="metaid" v-if="nft.val.foundryMetaId">
+                    MetaID:{{ nft.val.foundryMetaId.slice(0, 6) }}
+                  </div>
                 </div>
               </div>
               <CertTemp @click="toCert" :metaId="nft.val.foundryMetaId" />
@@ -151,9 +153,7 @@
             <div class="drsc flex1 flex flex-v">
               <div class="title flex flex-align-center">
                 <template v-if="nft.val.putAway">
-                  {{
-                    $t('seller')
-                  }}
+                  {{ $t('seller') }}
                   <NftUserAvatar
                     :metaId="nft.val.ownerMetaId"
                     :hasmask="nft.val.ownerAvatarType === 'nft-metabot'"
@@ -168,8 +168,8 @@
                   nft.val.isAuction
                     ? nft.val.auctionDrsc
                     : nft.val.putAway
-                      ? nft.val.sellDesc
-                      : nft.val.describe
+                    ? nft.val.sellDesc
+                    : nft.val.describe
                 }}
                 <a>
                   ...
@@ -232,10 +232,10 @@
                       nft.val.auctionStatus === 0
                         ? $t('unStart')
                         : nft.val.auctionStatus === 1
-                          ? $t('iWanToBid')
-                          : nft.val.auctionStatus === 2
-                            ? $t('isBeBuyed')
-                            : ''
+                        ? $t('iWanToBid')
+                        : nft.val.auctionStatus === 2
+                        ? $t('isBeBuyed')
+                        : ''
                     }}
                   </div>
                   <div class="auctionFailTips">*{{ $t('auctionFailTips') }}</div>
@@ -252,9 +252,9 @@
                 </div>-->
               </template>
               <template v-else-if="nft.val.sellState === 3">
-                <div
-                  class="btn btn-block btn-gray flex1 flex flex-align-center flex-pack-center"
-                >{{ $t('comingSoon ') }}</div>
+                <div class="btn btn-block btn-gray flex1 flex flex-align-center flex-pack-center">
+                  {{ $t('comingSoon ') }}
+                </div>
               </template>
 
               <template v-else>
@@ -263,8 +263,8 @@
                   <template
                     v-if="
                       !store.state.userInfo ||
-                      (store.state.userInfo &&
-                        store.state.userInfo.metaId !== nft.val.ownerMetaId)
+                        (store.state.userInfo &&
+                          store.state.userInfo.metaId !== nft.val.ownerMetaId)
                     "
                   >
                     <!-- 购买 -->
@@ -277,9 +277,11 @@
                         {{
                           i18n.locale.value === 'zh'
                             ? `以 ${new Decimal(nft.val.amount)
-                              .div(Math.pow(10, 8))
-                              .toString()} BSV 购买`
-                            : `Buy Now At ${new Decimal(nft.val.amount).div(10 ** 8).toString()} BSV`
+                                .div(Math.pow(10, 8))
+                                .toString()} BSV 购买`
+                            : `Buy Now At ${new Decimal(nft.val.amount)
+                                .div(10 ** 8)
+                                .toString()} BSV`
                         }}
                       </template>
                       <template v-else>{{ $t('isBeBuyedOrCanceled') }}</template>
@@ -295,7 +297,9 @@
                       <div
                         class="btn btn-block btn-plain flex1 flex flex-align-center flex-pack-center"
                         @click="offSale"
-                      >{{ $t('offsale') }}</div>
+                      >
+                        {{ $t('offsale') }}
+                      </div>
                       <!-- <template v-if="now > nft.val.remainingTime">
                     <div class="btn btn-block flex1" @click="toSale">{{$t('saleAgain')}}</div>
                       </template>-->
@@ -304,7 +308,9 @@
                       class="btn btn-block flex1 flex flex-align-center flex-pack-center"
                       v-else
                       @click="toSale"
-                    >{{ $t('sale') }}</div>
+                    >
+                      {{ $t('sale') }}
+                    </div>
                   </template>
                 </template>
               </template>
@@ -320,7 +326,8 @@
                 v-for="(tab, index) in tabs"
                 :key="index"
                 @click="changeTabIndex(index)"
-              >{{ $t(tab.key) }}</a>
+                >{{ $t(tab.key) }}</a
+              >
             </div>
             <div class="tab-cont">
               <!-- 作品细节 -->
@@ -355,10 +362,7 @@
                     <div class="key">{{ $t('contractaddr') }}：</div>
                     <div class="value flex1 nowrap">
                       {{ nft.val.sellTxId }}
-                      <a
-                        class="copy"
-                        @click="copy(nft.val.sellTxId)"
-                      >{{ $t('copy') }}</a>
+                      <a class="copy" @click="copy(nft.val.sellTxId)">{{ $t('copy') }}</a>
                       <a class="copy" @click="toWhatsonchain(nft.val.sellTxId)">{{ $t('look') }}</a>
                     </div>
                   </div>
@@ -366,10 +370,7 @@
                     <div class="key">TokenID：</div>
                     <div class="value flex1 nowrap">
                       {{ nft.val.tokenId }}
-                      <a
-                        class="copy"
-                        @click="copy(nft.val.tokenId)"
-                      >{{ $t('copy') }}</a>
+                      <a class="copy" @click="copy(nft.val.tokenId)">{{ $t('copy') }}</a>
                       <!-- <a class="copy" @click="toWhatsonchain(nft.val.tokenId)">{{ $t('look') }}</a> -->
                     </div>
                   </div>
@@ -377,14 +378,9 @@
                     <div class="key">{{ $t('issueMetaTxId') }}：</div>
                     <div class="value flex1 nowrap">
                       {{ nft.val.issueMetaTxId }}
-                      <a
-                        class="copy"
-                        @click="copy(nft.val.issueMetaTxId)"
-                      >{{ $t('copy') }}</a>
+                      <a class="copy" @click="copy(nft.val.issueMetaTxId)">{{ $t('copy') }}</a>
                       <a class="copy" @click="toWhatsonchain(nft.val.issueMetaTxId)">
-                        {{
-                          $t('look')
-                        }}
+                        {{ $t('look') }}
                       </a>
                     </div>
                   </div>
@@ -401,10 +397,9 @@
                         />
                         <div class="author-msg flex1">
                           <div class="creater">{{ nft.val.foundryName }}</div>
-                          <div
-                            class="metaid"
-                            v-if="nft.val.foundryMetaId"
-                          >MetaID: {{ nft.val.foundryMetaId.slice(0, 6) }}</div>
+                          <div class="metaid" v-if="nft.val.foundryMetaId">
+                            MetaID: {{ nft.val.foundryMetaId.slice(0, 6) }}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -420,10 +415,9 @@
                         />
                         <div class="author-msg flex1">
                           <div class="creater">{{ nft.val.ownerName }}</div>
-                          <div
-                            class="metaid"
-                            v-if="nft.val.ownerMetaId"
-                          >MetaID:{{ nft.val.ownerMetaId.slice(0, 6) }}</div>
+                          <div class="metaid" v-if="nft.val.ownerMetaId">
+                            MetaID:{{ nft.val.ownerMetaId.slice(0, 6) }}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -517,10 +511,9 @@
                     />
                     <div class="author-msg flex1">
                       <div class="creater">{{ item.meta_id_name }}</div>
-                      <div
-                        class="metaid"
-                        v-if="item.buyer_metaId"
-                      >MetaID:{{ item.buyer_metaId.slice(0, 6) }}</div>
+                      <div class="metaid" v-if="item.buyer_metaId">
+                        MetaID:{{ item.buyer_metaId.slice(0, 6) }}
+                      </div>
                     </div>
                   </div>
                   <!-- 出价信息 -->
@@ -533,9 +526,9 @@
                       <span class="title">{{ $t('auctionBid') }}</span>
                       <span class="amount">{{ item.buyer_value }} BSV</span>
                     </div>
-                    <div
-                      class="time"
-                    >{{ $filters.dateTimeFormat(item.create_time, 'MM月DD日 HH:mm:ss') }}</div>
+                    <div class="time">
+                      {{ $filters.dateTimeFormat(item.create_time, 'MM月DD日 HH:mm:ss') }}
+                    </div>
                   </div>
                 </div>
 
@@ -549,10 +542,9 @@
                     />
                     <div class="author-msg flex1">
                       <div class="creater">{{ nft.val.foundryName }}</div>
-                      <div
-                        class="metaid"
-                        v-if="nft.val.foundryMetaId"
-                      >MetaID:{{ nft.val.foundryMetaId.slice(0, 6) }}</div>
+                      <div class="metaid" v-if="nft.val.foundryMetaId">
+                        MetaID:{{ nft.val.foundryMetaId.slice(0, 6) }}
+                      </div>
                     </div>
                   </div>
                   <!-- 出价信息 -->
@@ -581,8 +573,8 @@
         nft.val.isAuction
           ? nft.val.auctionDrsc
           : nft.val.putAway
-            ? nft.val.sellDesc
-            : nft.val.describe
+          ? nft.val.sellDesc
+          : nft.val.describe
       }}</pre>
     </div>
     <template #footer>
@@ -630,7 +622,9 @@
         v-loading="getBalanceLoading"
         v-if="auctionPrice <= balance"
         @click="bid"
-      >{{ $t('bid') }}</div>
+      >
+        {{ $t('bid') }}
+      </div>
       <div class="btn btn-block btn-gray" v-loading="getBalanceLoading" v-else @click="toWallet">
         {{ $t('insufficientBalanceToWallet') }}
         <img src="@/assets/images/card_icon_ins.svg" />
@@ -767,13 +761,13 @@ function getDetail() {
             nft.val.minGapPrice =
               item.buyer_value === '0'
                 ? new Decimal(item.value)
-                  .mul(0.05)
-                  .toFixed(8)
-                  .toString()
+                    .mul(0.05)
+                    .toFixed(8)
+                    .toString()
                 : new Decimal(item.buyer_value)
-                  .mul(0.05)
-                  .toFixed(8)
-                  .toString()
+                    .mul(0.05)
+                    .toFixed(8)
+                    .toString()
             if (new Decimal(nft.val.minGapPrice).toNumber() < 0.00001) {
               nft.val.minGapPrice = '0.00001'
             }
@@ -982,7 +976,7 @@ function nftNotCanBuy(res: any) {
     (res.code === 204 &&
       res.data &&
       res.data.message ===
-      'The NFT is not for sale because  the corresponding SellUtxo cannot be found.') ||
+        'The NFT is not for sale because  the corresponding SellUtxo cannot be found.') ||
     res.data.message === '258: txn-mempool-conflict'
   ) {
     ElMessage.error(i18n.t('nftNotCanBuy'))
@@ -1124,7 +1118,6 @@ async function bid() {
       }
     }
   }
-
 }
 
 async function getNftAuctionHistorys() {
@@ -1141,5 +1134,4 @@ async function getNftAuctionHistorys() {
   }
 }
 </script>
-<style lang="scss" scoped src="./Detail.scss">
-</style>
+<style lang="scss" scoped src="./Detail.scss"></style>
