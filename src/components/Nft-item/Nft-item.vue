@@ -18,13 +18,17 @@
             <div class="aount">{{ new Decimal(item?.amount).div(10 ** 8).toString() }} BSV</div>
           </div>
           <div class="author flex flex-align-center">
-            <img src="@/assets/images/ava_mask.png" class="mask" v-if="item.issueUserAvatarType === 'nft-metabot'" />
+            <img
+              src="@/assets/images/ava_mask.png"
+              class="mask"
+              v-if="item.issueUserAvatarType === 'nft-metabot'"
+            />
             <img
               class="avatar"
               :src="$filters.avatar(item?.metaId)"
               :alt="item?.foundryName"
               :class="{
-                hasmask:item.avatarType === 'nft-metabot'
+                hasmask: item.avatarType === 'nft-metabot',
               }"
               onerror="javascript:this.src='https://testshowman.showpay.top/metafile/avatar/a9…1f918ca4342d2b018c641bbb4c293e'"
             />
@@ -36,7 +40,7 @@
           src="@/assets/images/cert.svg"
           v-if="
             item.metaId === '3c03f6b8783fa672bb34953519110944dab1d8a23711c7df4f1dd9e16e5b823c' ||
-            item.metaId === '974e2977d5c9446f7f48fd82c9ea51f82749b9ef7c00d26b73bc450d167d5f31'
+              item.metaId === '974e2977d5c9446f7f48fd82c9ea51f82749b9ef7c00d26b73bc450d167d5f31'
           "
         />
       </div>
@@ -96,7 +100,6 @@ import { Decimal } from 'decimal.js-light'
 import NftOffSale from '@/utils/offSale'
 // @ts-ignore
 import dayjs from 'dayjs'
-import _FormItem from 'element-plus/lib/el-form-item'
 import { metafileUrl } from '@/utils/util'
 import NFTDetail from '@/utils/nftDetail'
 

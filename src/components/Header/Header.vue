@@ -31,7 +31,12 @@
       <!-- 登录用户 -->
       <ElDropdown trigger="click" v-else>
         <div class="user-info flex flex-align-center">
-          <NftUserAvatar bg="gray" class="avatar" :metaId="store.state.userInfo?.showId" :hasmask="store.state.userInfo.avatarType === 'nft-metabot'" />
+          <NftUserAvatar
+            bg="gray"
+            class="avatar"
+            :metaId="store.state.userInfo?.showId"
+            :hasmask="store.state.userInfo.avatarType === 'nft-metabot'"
+          />
           <div class="username">{{ store.state.userInfo?.name }}</div>
         </div>
         <template #dropdown>
@@ -76,14 +81,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  ElDropdown,
-  ElDropdownItem,
-  ElDropdownMenu,
-  ElLoading,
-  ElDrawer,
-  locale,
-} from 'element-plus'
+import { ElDropdown, ElDropdownItem, ElDropdownMenu, ElLoading, ElDrawer } from 'element-plus'
 import { ref } from 'vue'
 import { useStore, Mutation } from '@/store/index'
 import { useI18n } from 'vue-i18n'
