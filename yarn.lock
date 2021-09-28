@@ -2419,6 +2419,11 @@ es-module-lexer@^0.6.0:
   resolved "https://registry.nlark.com/es-module-lexer/download/es-module-lexer-0.6.0.tgz?cache=0&sync_timestamp=1623712410619&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fes-module-lexer%2Fdownload%2Fes-module-lexer-0.6.0.tgz#e72ab05b7412e62b9be37c37a09bdb6000d706f0"
   integrity sha1-5yqwW3QS5iub43w3oJvbYADXBvA=
 
+es-module-lexer@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.nlark.com/es-module-lexer/download/es-module-lexer-0.7.1.tgz?cache=0&sync_timestamp=1632013002926&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fes-module-lexer%2Fdownload%2Fes-module-lexer-0.7.1.tgz#c2c8e0f46f2df06274cdaf0dd3f3b33e0a0b267d"
+  integrity sha1-wsjg9G8t8GJ0za8N0/OzPgoLJn0=
+
 esbuild@^0.12.8:
   version "0.12.25"
   resolved "https://registry.nlark.com/esbuild/download/esbuild-0.12.25.tgz?cache=0&sync_timestamp=1630598715108&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fesbuild%2Fdownload%2Fesbuild-0.12.25.tgz#c2131cef022cf9fe94aaa5e00110b27fc976221a"
@@ -6883,6 +6888,16 @@ universalify@^2.0.0:
   resolved "https://registry.yarnpkg.com/universalify/-/universalify-2.0.0.tgz#75a4984efedc4b08975c5aeb73f530d02df25717"
   integrity sha512-hAZsKq7Yy11Zu1DE0OzWjw7nnLZmJZYTDZZyEFHZdUhV8FkH5MCfoU1XMaxXovpyW5nq5scPqq0ZDP9Zyl04oQ==
 
+unplugin-element-plus@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.nlark.com/unplugin-element-plus/download/unplugin-element-plus-0.1.0.tgz#eb68721f152a79ebe39a7404cc60cfcd6a8e587b"
+  integrity sha1-62hyHxUqeevjmnQEzGDPzWqOWHs=
+  dependencies:
+    "@rollup/pluginutils" "^4.1.0"
+    es-module-lexer "^0.7.1"
+    magic-string "^0.25.7"
+    unplugin "^0.2.7"
+
 unplugin-vue-components@^0.15.4:
   version "0.15.4"
   resolved "https://registry.npmmirror.com/unplugin-vue-components/download/unplugin-vue-components-0.15.4.tgz#f1a84f82f814b23a521ff2d6469cafb642f862f8"
@@ -6899,7 +6914,7 @@ unplugin-vue-components@^0.15.4:
     resolve "^1.20.0"
     unplugin "^0.2.13"
 
-unplugin@^0.2.13:
+unplugin@^0.2.13, unplugin@^0.2.7:
   version "0.2.16"
   resolved "https://registry.npmmirror.com/unplugin/download/unplugin-0.2.16.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Funplugin%2Fdownload%2Funplugin-0.2.16.tgz#6f34e9f5068ca3ec92a36b016f47b5ad8bb875ca"
   integrity sha1-bzTp9QaMo+ySo2sBb0e1rYu4dco=

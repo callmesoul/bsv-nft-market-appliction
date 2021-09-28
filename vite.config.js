@@ -5,8 +5,7 @@ import pkg from './package.json'
 import styleImport from 'vite-plugin-style-import'
 import vueI18n from '@intlify/vite-plugin-vue-i18n'
 import { svgBuilder } from './svgBuilder'
-import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import ElementPlus from 'unplugin-element-plus/vite'
 
 export default ({ mode }) => {
   console.log('mode')
@@ -18,9 +17,7 @@ export default ({ mode }) => {
     plugins: [
       vue(),
       // element-plus 按需加载
-      Components({
-        resolvers: [ElementPlusResolver()],
-      }),
+      ElementPlus(),
       // 多语言加载
       vueI18n({
         // if you want to use Vue I18n Legacy API, you need to set `compositionOnly: false`

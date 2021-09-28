@@ -211,7 +211,7 @@ export default class Sdk {
   ) {
     return new Promise<void>(async (resolve, reject) => {
       axios
-        .get(`https://api.sensiblequery.com/tx/${txId}`)
+        .get(`https://sensiblequery.show.sv/tx/${txId}`)
         .then(res => {
           if (res.data.code === 0) {
             if (parentResolve) parentResolve()

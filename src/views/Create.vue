@@ -5,12 +5,8 @@
       <div class="title flex1 flex flex-align-center">
         <span class="flex1">{{ $t('createNft') }}</span>
         <a @click="changeCreateType">
-          {{
-            createTypeIndex === 0 ? $t('createbytx') : $t('createbylocal')
-          }}
-          <i
-            class="el-icon-arrow-right"
-          ></i>
+          {{ createTypeIndex === 0 ? $t('createbytx') : $t('createbylocal') }}
+          <i class="el-icon-arrow-right"></i>
         </a>
       </div>
     </div>
@@ -20,9 +16,7 @@
           <template v-if="type.disabled">
             <ElTooltip effect="dark" :content="$t('stayTuned')" placement="top">
               <a :class="{ active: type.value === nft.type }" @click="changeTag(index)">
-                {{
-                  $t(type.key)
-                }}
+                {{ $t(type.key) }}
               </a>
             </ElTooltip>
           </template>
@@ -30,7 +24,8 @@
             <a
               :class="{ active: type.value === nft.type, disabled: type.disabled }"
               @click="changeTag(index)"
-            >{{ $t(type.key) }}</a>
+              >{{ $t(type.key) }}</a
+            >
           </template>
         </template>
       </div>
@@ -184,7 +179,9 @@
                   <div
                     class="btn btn-block create-series-btn"
                     @click="isShowCreateSeriesModal = true"
-                  >{{ $t('createSerie') }}</div>
+                  >
+                    {{ $t('createSerie') }}
+                  </div>
                 </template>
               </PickerModel>
             </div>
@@ -270,10 +267,11 @@ const _nftTypes = reactive(nftTypes)
 const i18n = useI18n()
 const store = useStore()
 
-
 function setUserCreatCard() {
   if (store.state.userInfo) {
-    const index = canCreateCardClassifyListMetaids.findIndex(item => item === store.state.userInfo?.metaId)
+    const index = canCreateCardClassifyListMetaids.findIndex(
+      item => item === store.state.userInfo?.metaId
+    )
     if (index !== -1) {
       const cardIndex = classList.findIndex(item => item.classify === 'card')
       classList[cardIndex].disabled = false
@@ -284,9 +282,12 @@ function setUserCreatCard() {
 if (store.state.userInfo) {
   setUserCreatCard()
 } else {
-  store.watch((state) => state.userInfo, () => {
-    setUserCreatCard()
-  })
+  store.watch(
+    state => state.userInfo,
+    () => {
+      setUserCreatCard()
+    }
+  )
 }
 
 //分类
@@ -435,7 +436,7 @@ async function createSerie() {
     ElMessage.error(i18n.t('createSeriesNumberPlar'))
     return
   }
-  const index = series.findIndex((item) => item.name === serie.name)
+  const index = series.findIndex(item => item.name === serie.name)
   if (index !== -1) {
     ElMessage.error(i18n.t('havedSameNameSeries'))
     return
@@ -538,7 +539,7 @@ async function checkTxId() {
   return new Promise<{
     status: TxIdStatus
     data?: any
-  }>(async (resolve) => {
+  }>(async resolve => {
     const response = await GetTxData(nft.tx)
     if (response.code == 200 && response.result.data.length > 0) {
       const data = response.result.data[0]
@@ -660,7 +661,7 @@ async function createNft() {
 
   let seriesIndex = -1
   if (selectedSeries[0]) {
-    seriesIndex = series.findIndex((item) => item.series === selectedSeries[0])
+    seriesIndex = series.findIndex(item => item.series === selectedSeries[0])
   }
 
   const params = {
@@ -790,5 +791,4 @@ async function createNft() {
   }
 }
 </script>
-<style lang="scss" scoped src="./Create.scss">
-</style>
+<style lang="scss" scoped src="./Create.scss"></style>
