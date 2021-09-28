@@ -234,7 +234,7 @@ import {
   ElMessageBox,
 } from 'element-plus'
 
-import { checkSdkStatus, tranfromImgFile } from '@/utils/util'
+import { checkSdkStatus, checkUserCanIssueNft, tranfromImgFile } from '@/utils/util'
 import { ref, reactive } from '@vue/reactivity'
 import { useI18n } from 'vue-i18n'
 import {
@@ -406,7 +406,7 @@ async function createSerie() {
     ElMessage.error(i18n.t('createSeriesNumberPlar'))
     return
   }
-  const index = series.findIndex((item) => item.name === serie.name)
+  const index = series.findIndex(item => item.name === serie.name)
   if (index !== -1) {
     ElMessage.error(i18n.t('havedSameNameSeries'))
     return
@@ -509,7 +509,7 @@ async function checkTxId() {
   return new Promise<{
     status: TxIdStatus
     data?: any
-  }>(async (resolve) => {
+  }>(async resolve => {
     const response = await GetTxData(nft.tx)
     if (response.code == 200 && response.result.data.length > 0) {
       const data = response.result.data[0]
@@ -570,11 +570,7 @@ async function createNft() {
   // 檢查sdk狀態
   await checkSdkStatus()
 
-  const result = await store.state.sdk?.checkUserCanIssueNft({
-    metaId: store.state.userInfo!.metaId,
-    address: store.state.userInfo!.address,
-    language: i18n.locale.value === 'en' ? Langs.EN : Langs.CN,
-  })
+  const result = await checkUserCanIssueNft()
   if (!result) return
 
   // nft 类型
@@ -631,7 +627,7 @@ async function createNft() {
 
   let seriesIndex = -1
   if (selectedSeries[0]) {
-    seriesIndex = series.findIndex((item) => item.series === selectedSeries[0])
+    seriesIndex = series.findIndex(item => item.series === selectedSeries[0])
   }
 
   const params = {

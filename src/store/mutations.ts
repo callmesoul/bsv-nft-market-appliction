@@ -42,8 +42,8 @@ export const mutations: MutationTree<State> & Mutations = {
     state.sdk = null
   },
   async [Mutation.NFTLOGIN](state: State) {
-    const timestamp = new Date().getTime().toString()
-    const message = state.userInfo!.metaId + timestamp
+    const timestamp = new Date().getTime()
+    const message = state.userInfo!.metaId + timestamp.toString()
     const response = await state.sdk!.signMessage({
       message,
     })

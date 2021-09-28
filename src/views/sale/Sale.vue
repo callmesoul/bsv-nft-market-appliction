@@ -136,7 +136,7 @@
                     v-model="auctionPrice"
                     :placeholder="
                       $t('auctionPriceplac') +
-                      new Decimal(Math.pow(10, 8)).div(units[unitIndex].sats).mul(0.5)
+                        new Decimal(Math.pow(10, 8)).div(units[unitIndex].sats).mul(0.5)
                     "
                     @change="auctionAmountChange"
                     type="number"
@@ -301,7 +301,7 @@ const saleAmount = ref('')
 const saleIntro = ref('')
 
 function getDetail() {
-  return new Promise<void>(async (resolve) => {
+  return new Promise<void>(async resolve => {
     const _nft = await NFTDetail(
       typeof route.params.genesisId === 'string' ? route.params.genesisId : '',
       typeof route.params.codehash === 'string' ? route.params.codehash : '',
@@ -388,25 +388,25 @@ async function confirmSale() {
               })
               if (res?.code === 200) {
                 // 检查txId状态，确认上链后再跳转，防止上链延迟，跳转后拿不到数据
-                await store.state.sdk?.checkNftTxIdStatus(res.data.sellTxId)
-                await store.state.sdk?.checkNftTxIdStatus(res.data.txid)
-                ElMessage.success(i18n.t('saleSuccess'))
-                router.back()
+                // await store.state.sdk?.checkNftTxIdStatus(res.data.sellTxId)
+                // await store.state.sdk?.checkNftTxIdStatus(res.data.txid)
+                // ElMessage.success(i18n.t('saleSuccess'))
+                // router.back()
 
                 // 上报时间
-                /* const response = await SetDeadlineTime({
-              genesis: nft.val.genesis,
-              codeHash: nft.val.codeHash,
-              tokenIndex: nft.val.tokenIndex,
-              deadlineTime: new Date(saleTime.value).getTime()
-            }).catch((res) => alert('SetDeadlineTime response fail' + JSON.stringify(res)))
-            if (response && response.code === NftApiCode.success) {
-              // 检查txId状态，确认上链后再跳转，防止上链延迟，跳转后拿不到数据
-              await store.state.sdk?.checkNftTxIdStatus(res.data.sellTxId)
-              await store.state.sdk?.checkNftTxIdStatus(res.data.txid)
-              ElMessage.success(i18n.t('saleSuccess'))
-              router.back()
-            } */
+                const response = await SetDeadlineTime({
+                  genesis: nft.val.genesis,
+                  codeHash: nft.val.codeHash,
+                  tokenIndex: nft.val.tokenIndex,
+                  deadlineTime: new Date(saleTime.value).getTime(),
+                }).catch(res => alert('SetDeadlineTime response fail' + JSON.stringify(res)))
+                if (response && response.code === NftApiCode.success) {
+                  // 检查txId状态，确认上链后再跳转，防止上链延迟，跳转后拿不到数据
+                  await store.state.sdk?.checkNftTxIdStatus(res.data.sellTxId)
+                  await store.state.sdk?.checkNftTxIdStatus(res.data.txid)
+                  ElMessage.success(i18n.t('saleSuccess'))
+                  router.back()
+                }
 
                 // sell协议上完 要上报服务器
                 // const response = await SaleNft({
@@ -546,17 +546,26 @@ function changeUnitIndex(index: number) {
   if (saleAmount.value !== '') {
     const oldSats = units[unitIndex.value].sats
     const newSats = units[index].sats
-    saleAmount.value = new Decimal(oldSats).div(newSats).mul(saleAmount.value).toString()
+    saleAmount.value = new Decimal(oldSats)
+      .div(newSats)
+      .mul(saleAmount.value)
+      .toString()
   }
   if (auctionPrice.value !== '') {
     const oldSats = units[unitIndex.value].sats
     const newSats = units[index].sats
-    auctionPrice.value = new Decimal(oldSats).div(newSats).mul(auctionPrice.value).toString()
+    auctionPrice.value = new Decimal(oldSats)
+      .div(newSats)
+      .mul(auctionPrice.value)
+      .toString()
   }
   if (minGapPrice.value !== '') {
     const oldSats = units[unitIndex.value].sats
     const newSats = units[index].sats
-    minGapPrice.value = new Decimal(oldSats).div(newSats).mul(minGapPrice.value).toString()
+    minGapPrice.value = new Decimal(oldSats)
+      .div(newSats)
+      .mul(minGapPrice.value)
+      .toString()
   }
   unitIndex.value = index
 }
