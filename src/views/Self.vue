@@ -12,9 +12,7 @@
           <div class="name">{{ store.state.userInfo?.name }}</div>
           <div class="metaid flex flex-align-center">
             MetaID: {{ store.state.userInfo?.metaId.slice(0, 6) }}
-            <a
-              @click="toTxLink"
-            >{{ $t('txDetail') }}</a>
+            <a @click="toTxLink">{{ $t('txDetail') }}</a>
           </div>
           <CertTemp />
         </div>
@@ -80,7 +78,8 @@
           v-for="(tab, index) in tabs"
           :key="index"
           @click="changeTabIndex(index)"
-        >{{ tab.name }}</a>
+          >{{ tab.name }}</a
+        >
       </div>
     </div>
     <NftSkeleton
@@ -118,7 +117,8 @@
           v-for="(tab, index) in recordTabs"
           :class="{ active: index === recordTabIndex }"
           @click="changeRecordTab(index)"
-        >{{ $t(tab.key) }}</a>
+          >{{ $t(tab.key) }}</a
+        >
       </div>
     </template>
     <div class="record-list">
@@ -150,23 +150,28 @@
           </div>
         </template>
         <template #default>
-          <div class="record-item flex" v-for="record in Array.from({ length: 10 })">
-            <ElImage class="cover" :lazy="true" :preview-src-list="[]" fit="contain" />
+          <div class="record-item flex" v-for="record in records" :key="record.nftSellTxId">
+            <ElImage
+              class="cover"
+              :src="metafileUrl(record.nftIcon)"
+              :lazy="true"
+              :preview-src-list="[]"
+              fit="contain"
+            />
             <div class="cont flex1 flex flex-v flex-pack-justify">
               <div class="top flex flex flex-align-center">
-                <div
-                  class="title flex1"
-                >{{ recordTabIndex === 0 ? $t('buy') : $t('sell') }} MetaBot #003</div>
-                <div
-                  class="price"
-                  :class="{ active: recordTabIndex === 1 }"
-                >{{ recordTabIndex === 0 ? '-' : '+' }}136.7865 BSV</div>
+                <div class="title flex1">
+                  {{ recordTabIndex === 0 ? $t('buy') : $t('sell') }} {{ record.nftName }}
+                </div>
+                <div class="price" :class="{ active: recordTabIndex === 1 }">
+                  {{ recordTabIndex === 0 ? '-' : '+' }}{{ record.nftPrice }}
+                </div>
               </div>
-              <div class="time">2021-08-24 16:32</div>
+              <div class="time">{{ record.nftBuyerTimestamp }}</div>
               <div class="bottom flex flex-align-center">
                 <div class="seller flex1 flex flex-align-center">
-                  {{ $t('seller') }}:
-                  <img src /> 欧阳家声
+                  {{ $t('seller') }}: <img :src="$filters.avatar(record.nftBuyerMetaId)" />
+                  {{ record.nftBuyerName }}
                 </div>
                 <a @click="store.state.sdk?.toTxLink('')">{{ $t('look') }}TX</a>
               </div>
@@ -180,8 +185,10 @@
 <script setup lang="ts">
 import {
   GetDeadlineTime,
+  GetMyNftOnShowBuySuccessList,
+  GetMyNftOnShowSellSuccessList,
   GetMyNftSummaryList,
-  GetMyOnSellNftList
+  GetMyOnSellNftList,
 } from '@/api'
 import NftItem from '@/components/Nft-item/Nft-item.vue'
 import { useStore } from '@/store'
@@ -189,9 +196,18 @@ import { reactive, ref } from 'vue'
 import LoadMore from '@/components/LoadMore/LoadMore.vue'
 import NftSkeleton from '@/components/NftSkeleton/NftSkeleton.vue'
 import { useI18n } from 'vue-i18n'
-import { ElMessage, ElDropdown, ElDropdownItem, ElDropdownMenu, ElDialog, ElImage, ElSkeleton, ElSkeletonItem } from 'element-plus'
+import {
+  ElMessage,
+  ElDropdown,
+  ElDropdownItem,
+  ElDropdownMenu,
+  ElDialog,
+  ElImage,
+  ElSkeleton,
+  ElSkeletonItem,
+} from 'element-plus'
 import { router } from '@/router'
-import { setDataStrclassify } from '@/utils/util'
+import { setDataStrclassify, metafileUrl } from '@/utils/util'
 import NftUserAvatar from '@/components/NftUserAvatar/NftUserAvatar.vue'
 import CertTemp from '@/components/Cert/Cert.vue'
 
@@ -210,7 +226,10 @@ const recordPagination = reactive({
   pageSize: 12,
 })
 const tabs = [{ name: i18n.t('mynft') }, { name: i18n.t('mySellNft') }]
-const recordTabs = [{ name: i18n.t('purchaseHistory'), key: 'purchaseHistory' }, { name: i18n.t('saleRecord'), key: 'saleRecord' }]
+const recordTabs = [
+  { name: i18n.t('purchaseHistory'), key: 'purchaseHistory' },
+  { name: i18n.t('saleRecord'), key: 'saleRecord' },
+]
 const tabIndex = ref(0)
 const nfts: NftItem[] = reactive([])
 const selledNfts: NftItem[] = reactive([])
@@ -220,7 +239,7 @@ const seriesList: NFTSeriesItem[] = reactive([])
 const isShowRecordModal = ref(false)
 const recordTabIndex = ref(0)
 const isShowRcordSkeleton = ref(true)
-
+const records: GetMyNftOnShowSellSuccessListResItem[] = reactive([])
 
 function changeTabIndex(index: number) {
   isShowNftListSkeleton.value = true
@@ -236,7 +255,7 @@ function changeTabIndex(index: number) {
 }
 
 function getMyNfts(isCover: boolean = false) {
-  return new Promise<void>(async (resolve) => {
+  return new Promise<void>(async resolve => {
     const res = await GetMyNftSummaryList({
       Address: store.state.userInfo!.address,
       Page: pagination.page.toString(),
@@ -247,7 +266,7 @@ function getMyNfts(isCover: boolean = false) {
         nfts.length = 0
       }
       if (res.data.results.items.length > 0) {
-        res.data.results.items.map((item) => {
+        res.data.results.items.map(item => {
           const nft =
             item.nftDetailItemList && item.nftDetailItemList[0]
               ? item.nftDetailItemList[0]
@@ -257,20 +276,20 @@ function getMyNfts(isCover: boolean = false) {
             count > 1 && item.nftSeriesName && item.nftSeriesName !== ''
               ? item.nftSeriesName
               : item.nftName
-                ? item.nftName
-                : '--'
+              ? item.nftName
+              : '--'
           const data:
             | {
-              nftname: string
-              nftdesc: string
-              nfticon: string
-              nftwebsite: string
-              nftissuerName: string
-              nftType: string
-              classifyList: string
-              originalFileTxid: string
-              contentTxId: string
-            }
+                nftname: string
+                nftdesc: string
+                nfticon: string
+                nftwebsite: string
+                nftissuerName: string
+                nftType: string
+                classifyList: string
+                originalFileTxid: string
+                contentTxId: string
+              }
             | undefined = nft && nft.nftDataStr !== '' ? JSON.parse(nft.nftDataStr) : undefined
           const classify = setDataStrclassify(data)
           nfts.push({
@@ -312,7 +331,7 @@ function getMore() {
 }
 
 function getMySelledNfts(isCover: boolean = false) {
-  return new Promise<void>(async (resolve) => {
+  return new Promise<void>(async resolve => {
     const res = await GetMyOnSellNftList({
       Page: selledPagination.page.toString(),
       PageSize: selledPagination.pageSize.toString(),
@@ -369,7 +388,10 @@ function toTxLink() {
 }
 
 function openUrl(type: string) {
-  let url = type === 'showBuzz' ? `https://www.showbuzz.app/user_index/user_buzz/${store.state.userInfo?.metaId}` : ``
+  let url =
+    type === 'showBuzz'
+      ? `https://www.showbuzz.app/user_index/user_buzz/${store.state.userInfo?.metaId}`
+      : ``
   window.open(url)
 }
 
@@ -388,7 +410,25 @@ function openRecordModal() {
 }
 
 async function getRecordList(isCover: boolean = false) {
-  const res = ''
+  let res
+  if (recordTabIndex.value === 0) {
+    res = await GetMyNftOnShowSellSuccessList({
+      MetaId: store.state.userInfo!.metaId,
+      Page: pagination.page.toString(),
+      PageSize: pagination.pageSize.toString(),
+    })
+  } else {
+    res = await GetMyNftOnShowBuySuccessList({
+      MetaId: store.state.userInfo!.metaId,
+      Page: pagination.page.toString(),
+      PageSize: pagination.pageSize.toString(),
+    })
+  }
+  if (res.code === 0) {
+    if (isCover) records.length = 0
+    records.push(...res.data.results.items)
+    isShowRcordSkeleton.value = false
+  }
 }
 
 if (store.state.token) {
@@ -397,7 +437,7 @@ if (store.state.token) {
     getMyNfts()
   } else {
     store.watch(
-      (state) => state.userInfo,
+      state => state.userInfo,
       () => {
         getMyNfts()
       }
@@ -408,5 +448,4 @@ if (store.state.token) {
   router.replace('/')
 }
 </script>
-<style lang="scss" scoped src="./Self.scss">
-</style>
+<style lang="scss" scoped src="./Self.scss"></style>

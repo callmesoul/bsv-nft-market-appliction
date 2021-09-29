@@ -280,7 +280,53 @@ declare interface GetMetaBotListRes extends apiResponse {
     }
   }
 }
+declare interface GetMyNftOnShowSellSuccessListRes extends apiResponse {
+  data: {
+    total: number
+    results: {
+      items: GetMyNftOnShowSellSuccessListResItem[]
+    }
+  }
+}
 
+declare interface GetMyNftOnShowSellSuccessListResItem {
+  nftBalance: number
+  nftBuyerAvatarTxId: string
+  nftBuyerAvatarType: string
+  nftBuyerMetaId: string
+  nftBuyerName: string
+  nftBuyerTimestamp: number
+  nftBuyerTimestampStr: string
+  nftBuyerTxId: string
+  nftCodehash: string
+  nftDataStr: string
+  nftDesc: string
+  nftGenesis: string
+  nftGenesisTxId: string
+  nftIcon: string
+  nftIssueAvatarTxId: string
+  nftIssueAvatarType: string
+  nftIssueMetaId: string
+  nftIssueTimestamp: number
+  nftIssueVersion: string
+  nftIssuer: string
+  nftName: string
+  nftOwnerAddress: string
+  nftOwnerAvatarTxId: string
+  nftOwnerAvatarType: string
+  nftOwnerMetaId: string
+  nftOwnerName: string
+  nftPrice: number
+  nftPriceStr: string
+  nftSellContractTxId: string
+  nftSellDesc: string
+  nftSellTxId: string
+  nftSensibleId: string
+  nftSymbol: string
+  nftTimestamp: number
+  nftTokenIndex: string
+  nftWebsite: string
+}
 declare interface GetMetaBotListResItem {
   nftSellState: number
   nftBalance: number
@@ -353,7 +399,7 @@ declare interface GetNftIssueyTxIdResItem {
   nftTotalSupply: number
   nftWebsite: string
   nftOwnerAvatarType: string
-  nftIssueAvatarType :string
+  nftIssueAvatarType: string
 }
 declare interface GetNftIssueyTxIdRes extends apiResponse {
   data: {
@@ -420,6 +466,6 @@ declare interface NFTApiGetNFTDetailResDataItem {
   nftTokenId: string
   nftIssueMetaTxId: string
   nftSellState: number
-  nftOwnerAvatarType : string
-  nftIssueAvatarType : string
+  nftOwnerAvatarType: string
+  nftIssueAvatarType: string
 }
