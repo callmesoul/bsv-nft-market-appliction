@@ -81,3 +81,30 @@
   }
 }
 
+.record-modal {
+  :deep(.el-overlay) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .el-overlay-dialog {
+      position: static;
+      width: 100%;
+
+    }
+  }
+
+  :deep(.el-dialog) {
+    max-width: 550px !important;
+    max-height: 86vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    .el-dialog__body {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+    }
+  }
+}

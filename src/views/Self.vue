@@ -6,96 +6,101 @@
     @openRecordModal="openRecordModal"
   />
   <!-- record -->
-  <ElDialog v-model="isShowRecordModal" custom-class="record-modal">
-    <template #title>
-      <div class="tab record-tab">
-        <a
-          v-for="(tab, index) in recordTabs"
-          :class="{ active: index === recordTabIndex }"
-          @click="changeRecordTab(index)"
-          >{{ $t(tab.key) }}</a
-        >
-      </div>
-    </template>
-    <div class="record-list">
-      <ElSkeleton :loading="isShowRcordSkeleton" animated :count="recordPagination.pageSize">
-        <template #template>
-          <div class="record-item flex">
-            <ElSkeletonItem variant="image" class="cover" />
-            <div class="cont flex1 flex flex-v flex-pack-justify">
-              <div class="top flex flex flex-align-center">
-                <div class="title flex1">
-                  <ElSkeletonItem variant="text" style="width:40%" />
+  <div class="record-modal">
+    <ElDialog v-model="isShowRecordModal" custom-class="" top="0">
+      <template #title>
+        <div class="tab record-tab">
+          <a
+            v-for="(tab, index) in recordTabs"
+            :class="{ active: index === recordTabIndex }"
+            @click="changeRecordTab(index)"
+            >{{ $t(tab.key) }}</a
+          >
+        </div>
+      </template>
+      <div class="record-list">
+        <ElSkeleton :loading="isShowRcordSkeleton" animated :count="recordPagination.pageSize">
+          <template #template>
+            <div class="record-item flex">
+              <ElSkeletonItem variant="image" class="cover" />
+              <div class="cont flex1 flex flex-v flex-pack-justify">
+                <div class="top flex flex flex-align-center">
+                  <div class="title flex1">
+                    <ElSkeletonItem variant="text" style="width:40%" />
+                  </div>
+                  <div class="price" :class="{ active: recordTabIndex === 1 }">
+                    <ElSkeletonItem variant="text" style="width:20%" />
+                  </div>
                 </div>
-                <div class="price" :class="{ active: recordTabIndex === 1 }">
+                <div class="time">
                   <ElSkeletonItem variant="text" style="width:20%" />
                 </div>
-              </div>
-              <div class="time">
-                <ElSkeletonItem variant="text" style="width:20%" />
-              </div>
-              <div class="bottom flex flex-align-center">
-                <div class="seller flex1 flex flex-align-center">
-                  <ElSkeletonItem variant="text" style="width:30%" />
+                <div class="bottom flex flex-align-center">
+                  <div class="seller flex1 flex flex-align-center">
+                    <ElSkeletonItem variant="text" style="width:30%" />
+                  </div>
+                  <a>
+                    <ElSkeletonItem variant="text" style="width:10%" />
+                  </a>
                 </div>
-                <a>
-                  <ElSkeletonItem variant="text" style="width:10%" />
-                </a>
               </div>
             </div>
-          </div>
-        </template>
-        <template #default>
-          <div class="record-item flex" v-for="record in records" :key="record.nftSellTxId">
-            <ElImage
-              class="cover"
-              :src="metafileUrl(record.nftIcon)"
-              :lazy="true"
-              :preview-src-list="[]"
-              fit="contain"
+          </template>
+          <template #default>
+            <div class="record-item flex" v-for="record in records" :key="record.nftSellTxId">
+              <ElImage
+                class="cover"
+                :src="metafileUrl(record.nftIcon)"
+                :lazy="true"
+                :preview-src-list="[]"
+                fit="contain"
+              />
+              <div class="cont flex1 flex flex-v flex-pack-justify">
+                <div class="top flex flex flex-align-center">
+                  <div class="title flex1">
+                    {{ recordTabIndex === 0 ? $t('buy') : $t('sell') }} {{ record.nftName }}
+                  </div>
+                  <div
+                    class="price flex flex-align-center"
+                    :class="{ active: recordTabIndex === 1 }"
+                  >
+                    {{ recordTabIndex === 0 ? '-' : '+'
+                    }}{{ new Decimal(record.nftPrice).div(Math.pow(10, 8)).toString() }} BSV
+                  </div>
+                </div>
+                <div class="time">
+                  {{ dayjs(record.nftBuyerTimestamp).format('YYYY-MM-DD HH:mm') }}
+                </div>
+                <div class="bottom flex flex-align-center">
+                  <div class="seller flex1 flex flex-align-center">
+                    <template v-if="recordTabIndex === 1">
+                      {{ $t('buyer') }}:
+                      <img :src="$filters.avatar(record.nftBuyerMetaId)" />
+                      {{ record.nftBuyerName }}
+                    </template>
+                    <template v-else>
+                      {{ $t('seller') }}:
+                      <img :src="$filters.avatar(record.nftOwnerMetaId)" />
+                      {{ record.nftOwnerName }}
+                    </template>
+                  </div>
+                  <a @click="store.state.sdk?.toTxLink(record.nftSellTxId)">{{ $t('look') }}TX</a>
+                </div>
+              </div>
+            </div>
+            <!-- 加载更多 -->
+            <LoadMore
+              :pagination="recordPagination"
+              @getMore="getMoreRecords"
+              v-if="records.length > 0 && !isShowRcordSkeleton"
             />
-            <div class="cont flex1 flex flex-v flex-pack-justify">
-              <div class="top flex flex flex-align-center">
-                <div class="title flex1">
-                  {{ recordTabIndex === 0 ? $t('buy') : $t('sell') }} {{ record.nftName }}
-                </div>
-                <div class="price flex flex-align-center" :class="{ active: recordTabIndex === 1 }">
-                  {{ recordTabIndex === 0 ? '-' : '+'
-                  }}{{ new Decimal(record.nftPrice).div(Math.pow(10, 8)).toString() }} BSV
-                </div>
-              </div>
-              <div class="time">
-                {{ dayjs(record.nftBuyerTimestamp).format('YYYY-MM-DD HH:mm') }}
-              </div>
-              <div class="bottom flex flex-align-center">
-                <div class="seller flex1 flex flex-align-center">
-                  <template v-if="recordTabIndex === 1">
-                    {{ $t('buyer') }}:
-                    <img :src="$filters.avatar(record.nftBuyerMetaId)" />
-                    {{ record.nftBuyerName }}
-                  </template>
-                  <template v-else>
-                    {{ $t('seller') }}:
-                    <img :src="$filters.avatar(record.nftOwnerMetaId)" />
-                    {{ record.nftOwnerName }}
-                  </template>
-                </div>
-                <a @click="store.state.sdk?.toTxLink(record.nftSellTxId)">{{ $t('look') }}TX</a>
-              </div>
-            </div>
-          </div>
-          <!-- 加载更多 -->
-          <LoadMore
-            :pagination="recordPagination"
-            @getMore="getMoreRecords"
-            v-if="records.length > 0 && !isShowNftListSkeleton"
-          />
-          <!-- 内容为空 -->
-          <IsNull v-else-if="records.length <= 0 && !isShowNftListSkeleton" />
-        </template>
-      </ElSkeleton>
-    </div>
-  </ElDialog>
+            <!-- 内容为空 -->
+            <IsNull v-else-if="records.length <= 0 && !isShowRcordSkeleton" />
+          </template>
+        </ElSkeleton>
+      </div>
+    </ElDialog>
+  </div>
 </template>
 <script setup lang="ts">
 import {
