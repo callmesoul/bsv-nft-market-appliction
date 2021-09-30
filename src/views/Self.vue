@@ -155,47 +155,6 @@
                 </div>
               </div>
             </div>
-            <div class="record-item flex" v-for="record in records" :key="record.nftSellTxId">
-              <ElImage
-                class="cover"
-                :src="metafileUrl(record.nftIcon)"
-                :lazy="true"
-                :preview-src-list="[]"
-                fit="contain"
-              />
-              <div class="cont flex1 flex flex-v flex-pack-justify">
-                <div class="top flex flex flex-align-center">
-                  <div class="title flex1">
-                    {{ recordTabIndex === 0 ? $t('buy') : $t('sell') }} {{ record.nftName }}
-                  </div>
-                  <div
-                    class="price flex flex-align-center"
-                    :class="{ active: recordTabIndex === 1 }"
-                  >
-                    {{ recordTabIndex === 0 ? '-' : '+'
-                    }}{{ new Decimal(record.nftPrice).div(Math.pow(10, 8)).toString() }} BSV
-                  </div>
-                </div>
-                <div class="time">
-                  {{ dayjs(record.nftBuyerTimestamp).format('YYYY-MM-DD HH:mm') }}
-                </div>
-                <div class="bottom flex flex-align-center">
-                  <div class="seller flex1 flex flex-align-center">
-                    <template v-if="recordTabIndex === 0">
-                      {{ recordTabIndex === 0 ? $t('seller') : $t('buyer') }}:
-                      <img :src="$filters.avatar(record.nftBuyerMetaId)" />
-                      {{ record.nftBuyerName }}
-                    </template>
-                    <template v-else>
-                      {{ $t('buyer') }}:
-                      <img :src="$filters.avatar(record.nftOwnerMetaId)" />
-                      {{ record.nftOwnerName }}
-                    </template>
-                  </div>
-                  <a @click="store.state.sdk?.toTxLink('')">{{ $t('look') }}TX</a>
-                </div>
-              </div>
-            </div>
             <!-- 加载更多 -->
             <LoadMore
               :pagination="recordPagination"

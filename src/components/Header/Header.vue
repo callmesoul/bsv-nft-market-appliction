@@ -15,7 +15,8 @@
       <router-link
         to="/create"
         v-if="!store.state.isApp || (store.state.isApp && mode !== 'prod')"
-      >{{ $t('createnft') }}</router-link>
+        >{{ $t('createnft') }}</router-link
+      >
       <router-link to="/metaBot" class="flex flex-align-center">
         MetaBot
         <img src="@/assets/images/nav_icon_hot.svg" alt="MetaBot" />
@@ -29,7 +30,8 @@
         @click="auth"
         v-loading="store.state.userInfoLoading"
         element-loading-background="rgba(255, 255, 255, 0.7)"
-      >{{ $t('signinandout') }}</a>
+        >{{ $t('signinandout') }}</a
+      >
 
       <!-- 登录用户 -->
       <ElDropdown trigger="click" v-else>
@@ -47,9 +49,7 @@
             <el-dropdown-item @click="toSelf">{{ $t('mynft') }}</el-dropdown-item>
             <el-dropdown-item @click="toWallet">{{ $t('mywallet') }}</el-dropdown-item>
             <el-dropdown-item @click="toTariffDescription">
-              {{
-                $t('tariffDescription ')
-              }}
+              {{ $t('tariffDescription ') }}
             </el-dropdown-item>
             <el-dropdown-item @click="logout">{{ $t('logout') }}</el-dropdown-item>
           </el-dropdown-menu>
@@ -79,7 +79,8 @@
         to="/create"
         @click.stop="isShowDrawer = false"
         v-if="!store.state.isApp || (store.state.isApp && mode !== 'prod')"
-      >{{ $t('createnft') }}</router-link>
+        >{{ $t('createnft') }}</router-link
+      >
       <router-link to="/metaBot" @click.stop="isShowDrawer = false">
         MetaBot
         <img src="@/assets/images/nav_icon_hot.svg" alt="MetaBot" />
@@ -89,12 +90,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  ElDropdown,
-  ElDropdownItem,
-  ElDropdownMenu,
-  ElDrawer
-} from 'element-plus'
+import { ElDropdown, ElDropdownItem, ElDropdownMenu, ElDrawer } from 'element-plus'
 import { ref } from 'vue'
 import { useStore, Mutation } from '@/store/index'
 import { useI18n } from 'vue-i18n'
@@ -144,5 +140,4 @@ function toTariffDescription() {
 }
 </script>
 
-<style lang="scss" scoped src="./Header.scss">
-</style>
+<style lang="scss" scoped src="./Header.scss"></style>
