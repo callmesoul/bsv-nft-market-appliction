@@ -766,7 +766,6 @@ function getDetail() {
             }
             nft.val.auctionDrsc = item.memo
             nft.val.auctionTime = item.dead_time - new Date().getTime()
-            debugger
             nft.val.auctionStatus = item.status
             nft.val.update_time = item.update_time
             auctionPrice.value = new Decimal(nft.val.currentPrice)
@@ -774,7 +773,6 @@ function getDetail() {
               .toNumber()
             minActionPrice.value = auctionPrice.value
           } else {
-            debugger
             nft.val.auctionStatus = 0
           }
         }

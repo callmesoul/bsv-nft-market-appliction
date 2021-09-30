@@ -5,7 +5,7 @@ import pkg from './package.json'
 import styleImport from 'vite-plugin-style-import'
 import vueI18n from '@intlify/vite-plugin-vue-i18n'
 import { svgBuilder } from './svgBuilder'
-export default (({mode}) => {
+export default ({ mode }) => {
   console.log('mode')
   console.log(mode)
   // 加载环境配置文件
@@ -16,28 +16,30 @@ export default (({mode}) => {
       vue(),
       // element-plus 按需加载
       styleImport({
-        libs: [{
-          libraryName: 'element-plus',
-          esModule: true,
-          ensureStyleFile: true,
-          resolveStyle: (name) => {
-            name = name.slice(3)
-            return `element-plus/packages/theme-chalk/src/${name}.scss`;
+        libs: [
+          {
+            libraryName: 'element-plus',
+            esModule: true,
+            ensureStyleFile: true,
+            resolveStyle: name => {
+              name = name.slice(3)
+              return `element-plus/packages/theme-chalk/src/${name}.scss`
+            },
+            resolveComponent: name => {
+              return `element-plus/lib/${name}`
+            },
           },
-          resolveComponent: (name) => {
-            return `element-plus/lib/${name}`;
-          },
-        }]
+        ],
       }),
       // 多语言加载
       vueI18n({
         // if you want to use Vue I18n Legacy API, you need to set `compositionOnly: false`
         // compositionOnly: false,
-  
+
         // you need to set i18n resource including paths !
-        include: path.resolve(__dirname, './src/languages/**')
+        include: path.resolve(__dirname, './src/languages/**'),
       }),
-      svgBuilder('./src/assets/svg/')
+      svgBuilder('./src/assets/svg/'),
     ],
     resolve: {
       alias: {
@@ -53,13 +55,13 @@ export default (({mode}) => {
       port: 443,
       https: true,
       open: false,
-      // proxy: {
-      //   '/api/showMANDB': {
-      //     target: env.VITE_WalletApi,
-      //     changeOrigin: true,
-      //     rewrite: (path) => path.replace(/^\/api/, '')
-      //   },
-      // }
+      // 本地调试， 需先把接口的baseurl 设置为 '', 然后target指向对应 ip
+      proxy: {
+        '/api': {
+          target: 'http://192.168.168.184:8012',
+          changeOrigin: true,
+        },
+      },
     },
     build: {
       target: 'es2015',
@@ -67,10 +69,10 @@ export default (({mode}) => {
       sourcemap: mode === 'prod' ? false : 'inline',
       rollupOptions: {
         output: {
-          sourcemap: mode === 'prod' ? false : 'inline'
-        }
-      }
+          sourcemap: mode === 'prod' ? false : 'inline',
+        },
+      },
     },
-    sourcemap: mode === 'prod' ? false : 'inline'
+    sourcemap: mode === 'prod' ? false : 'inline',
   })
-})
+}

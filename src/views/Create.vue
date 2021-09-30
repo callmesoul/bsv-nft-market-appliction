@@ -681,7 +681,6 @@ async function createNft() {
         const res = await store.state.sdk?.createNFT(params).catch(() => {
           loading.close()
         })
-        debugger
         if (res && typeof res !== 'number') {
           /* ElMessage.success(i18n.t('castingsuccess'))
         router.replace({ name: 'createSuccess', 

@@ -47,7 +47,6 @@ export const mutations: MutationTree<State> & Mutations = {
     const response = await state.sdk!.signMessage({
       message,
     })
-    debugger
     const res = await Login({
       metaId: state.userInfo!.metaId,
       xpub: state.userInfo!.xpub,
@@ -55,6 +54,8 @@ export const mutations: MutationTree<State> & Mutations = {
       timestamp,
       type: state.isApp ? '0' : '2',
     })
-    debugger
+    if (res.code === 0) {
+      state.nftToken = res.data.token
+    }
   },
 }

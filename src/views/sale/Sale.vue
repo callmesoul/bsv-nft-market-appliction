@@ -279,6 +279,7 @@ import { UnitName, units } from '@/config'
 import NFTDetail from '@/utils/nftDetail'
 // @ts-ignore
 import dayjs from 'dayjs'
+import { getMyNftEligibility } from '@/utils/util'
 
 const i18n = useI18n()
 const route = useRoute()
@@ -331,15 +332,8 @@ async function confirmSale() {
   if (tabIndex.value === 0) {
     if (saleTime.value === '' || saleAmount.value === '' || saleIntro.value === '') return
     // 檢查是否有權限
-    const res = await GetMyNftEligibility({
-      MetaId: store.state.userInfo!.metaId,
-      IssueMetaId: nft.val.foundryMetaId,
-      lang: i18n.locale.value === 'en' ? Langs.EN : Langs.CN,
-    })
-    if (res.code !== 0) {
-      ElMessage.error(res.data)
-      return
-    }
+    const result = await getMyNftEligibility(nft.val.foundryMetaId)
+    if (!result) return
 
     const loading = ElLoading.service({
       lock: true,

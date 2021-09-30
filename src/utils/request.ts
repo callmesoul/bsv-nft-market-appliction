@@ -8,29 +8,36 @@ export default class HttpRequest {
       baseURL: baseUrl,
     })
     this.request.interceptors.request.use(
-      async (config) => {
-        const token = store.state.token ? store.state.token.access_token : null
-        if (token) {
-          config.headers['Authorization'] = `Bearer ${token}`
+      async config => {
+        const index = config.url?.indexOf('/api/v2/')
+        if (index !== -1) {
+          config.headers['token'] = `${store.state.nftToken}`
+          config.headers['type'] = `2`
+          config.headers['metaId'] = store.state.userInfo?.metaId
+        } else {
+          const token = store.state.token ? store.state.token.access_token : null
+          if (token) {
+            config.headers['Authorization'] = `Bearer ${token}`
+          }
         }
         return config
       },
-      function (error) {
+      function(error) {
         // 对请求错误做些什么
         return Promise.reject(error)
       }
     )
     // 添加响应拦截器
     this.request.interceptors.response.use(
-      function (response) {
+      function(response) {
         // 对响应数据做点什么
         return response.data
       },
-      function (error) {
+      function(error) {
         // const status = error.response.status
         console.log(error.response)
         let message
-        if (error.response.data.error_description){
+        if (error.response.data.error_description) {
           message = error.response.data.error_description
         } else if (error.response.data.message && error.response.data.message !== '') {
           message = error.response.data.message

@@ -8,7 +8,8 @@ export enum NftApiCode {
   success = 0,
 }
 const apiHttp = new HttpRequest(env.VITE_WalletApi).request
-const nftHttp = new HttpRequest(env.VITE_NftApi).request
+// const nftHttp = new HttpRequest(env.VITE_NftApi).request
+const nftHttp = new HttpRequest('').request
 const auctionHttp = new HttpRequest(env.VITE_ShowBotApi).request
 // const auctionHttp = new HttpRequest('http://192.168.168.118').request
 export const GetToken = (params: object) => {
@@ -169,7 +170,7 @@ export const Login = (params: {
   metaId: string
   xpub: string
   msg: string
-  timestamp: string
+  timestamp: number
   type: string
 }): Promise<apiResponse> => {
   return nftHttp.post(`/api/v2/user/login`, params)

@@ -2,7 +2,7 @@ import { Buffer } from 'buffer'
 import { Action, store } from '@/store'
 import { ElMessage } from 'element-plus'
 import i18n from '@/utils/i18n'
-import { Langs } from '@/api'
+import { GetMyNftEligibility, Langs } from '@/api'
 
 export function tranfromImgFile(file: File) {
   return new Promise<MetaFile>((resolve, reject) => {
@@ -121,6 +121,28 @@ export function checkUserCanIssueNft() {
       if (result) {
         resolve(true)
       } else {
+        resolve(false)
+      }
+    } else {
+      resolve(true)
+    }
+  })
+}
+
+export function getMyNftEligibility(IssueMetaId: string) {
+  return new Promise(async resolve => {
+    if (import.meta.env.MODE === 'prod' || import.meta.env.MODE === 'gray') {
+      const res = await GetMyNftEligibility({
+        MetaId: store.state.userInfo!.metaId,
+        lang: i18n.global.locale.value === 'en' ? Langs.EN : Langs.CN,
+        IssueMetaId,
+      }).catch(() => {
+        resolve(false)
+      })
+      if (res?.code === 0) {
+        resolve(true)
+      } else {
+        ElMessage.error(res?.data)
         resolve(false)
       }
     } else {

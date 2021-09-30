@@ -363,7 +363,6 @@ export default class Sdk {
             genesisTxId = res.data.genesisTxid
             sensibleId = res.data.sensibleId
           }
-          debugger
           await issueOperate()
         } else {
           reject('createNFT error')
@@ -445,7 +444,6 @@ export default class Sdk {
           )
         }
       } else {
-        debugger
         // @ts-ignore
         this.metaidjs?.genesisNFT(_params)
       }
@@ -489,7 +487,6 @@ export default class Sdk {
           ...params,
         },
         callback: (res: MetaIdJsRes) => {
-          debugger
           console.log('issueNFT res')
           console.log(res)
           // 当报错是token supply is fixed 时， 一直轮询，直到成功或其他报错
@@ -516,7 +513,6 @@ export default class Sdk {
         }
       } else {
         // @ts-ignore
-        debugger
         this.metaidjs?.issueNFT(_params)
       }
     })
@@ -637,7 +633,6 @@ export default class Sdk {
           )
         }
       } else {
-        debugger
         // @ts-ignore
         this.metaidjs?.nftCancel(_params)
       }
@@ -647,7 +642,6 @@ export default class Sdk {
   // nft 列表查询
   nftList(address: string) {
     return new Promise<NFTLIstRes>(resolve => {
-      debugger
       const params = {
         callback: (res: MetaIdJsRes) => {
           this.callback(res, resolve)
@@ -876,7 +870,6 @@ export default class Sdk {
         }
       } else {
         //@ts-ignore
-        debugger
         this.metaidjs.signMessage({
           data: params,
           callback,
