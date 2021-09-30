@@ -165,10 +165,6 @@ const pagination = reactive({
   pageSize: 12,
 })
 const address = ref('')
-const selledPagination = reactive({
-  ...store.state.pagination,
-  pageSize: 12,
-})
 const tabs = [{ name: i18n.t('mynft') }, { name: i18n.t('mySellNft') }]
 const tabIndex = ref(0)
 const nfts: NftItem[] = reactive([])
@@ -262,8 +258,8 @@ function getMyNfts(isCover: boolean = false) {
 function getMySelledNfts(isCover: boolean = false) {
   return new Promise<void>(async resolve => {
     const res = await GetMyOnSellNftList({
-      Page: selledPagination.page.toString(),
-      PageSize: selledPagination.pageSize.toString(),
+      Page: pagination.page.toString(),
+      PageSize: pagination.pageSize.toString(),
       MetaId: props.user.metaId,
     })
     if (res && res.code === 0) {
@@ -320,9 +316,15 @@ function openUrl(type: string) {
 function getMore() {
   pagination.loading = true
   pagination.page++
-  getMyNfts().then(() => {
-    pagination.loading = false
-  })
+  if (tabIndex.value === 0) {
+    getMyNfts().then(() => {
+      pagination.loading = false
+    })
+  } else {
+    getMySelledNfts().then(() => {
+      pagination.loading = false
+    })
+  }
 }
 
 function openRecordModal() {
