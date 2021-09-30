@@ -23,7 +23,7 @@
   "isca": "ShowPay certified",
   "drsc": "Introduction",
   "timeleft": "Ends in",
-  "buy": "",
+  "buy": "Buy",
   "use": "Buy at",
   "workdetail": "Details",
   "possessionrecord": "Record",
@@ -200,5 +200,13 @@
   "finalPrice": "final price",
   "display": "Exhibit",
   "NotForSale": "Not for sale",
-  "auctionFailTips": "If the bid fails, the funds will be returned within 1 minute"
+  "auctionFailTips": "If the bid fails, the funds will be returned within 1 minute",
+  "txDetail": "TX",
+  "nftNullTips": "You don’t have NFT yet, go",
+  "ransactionRecord": "Transaction Record",
+  "more": "More",
+  "purchaseHistory": "Purchase History",
+  "saleRecord": "Sale record",
+  "sell": "Sell",
+  "buyer": "Buyer"
 }

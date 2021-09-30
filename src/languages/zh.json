@@ -23,7 +23,7 @@
   "isca": "已ShowPay认证",
   "drsc": "描述",
   "timeleft": "剩余时间",
-  "buy": "价格购买",
+  "buy": "购买",
   "use": "以",
   "workdetail": "作品细节",
   "possessionrecord": "拥有记录",
@@ -203,5 +203,13 @@
   "finalPrice": "成交价",
   "display": "展示",
   "NotForSale": "非卖品",
-  "auctionFailTips": "如竞标失败，资金将于1分钟之内退回"
+  "auctionFailTips": "如竞标失败，资金将于1分钟之内退回",
+  "txDetail": "查看TX",
+  "nftNullTips": "您还没有NFT，去",
+  "ransactionRecord": "交易记录",
+  "more": "更多",
+  "purchaseHistory": "购买记录",
+  "saleRecord": "出售记录",
+  "sell": "出售",
+  "buyer": "买家"
 }
