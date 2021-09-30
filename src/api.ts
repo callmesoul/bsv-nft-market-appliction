@@ -45,6 +45,10 @@ export const GetTxData = (txId: string) => {
   })
 }
 
+export const GetMetaIdInfo = (metaId: string) => {
+  return apiHttp.get(`/v2showMANDB/api/v1/query/getMetaIDInfo/${metaId}`)
+}
+
 export const GetProductList = (params: {
   pageSize: number
   page: number

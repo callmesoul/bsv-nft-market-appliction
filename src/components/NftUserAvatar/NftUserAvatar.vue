@@ -13,14 +13,29 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { useStore } from '@/store'
 import { defineProps } from 'vue'
+import { useRouter } from 'vue-router'
 const props = defineProps<{
   hasmask: boolean
   metaId: string
   bg?: string
   alt?: string
 }>()
-</script>
+const store = useStore()
+const router = useRouter()
 
-<style lang="scss" scoped src="./NftUserAvatar.scss">
-</style>
+function toUser() {
+  if (store.state.userInfo && store.state.userInfo.metaId === props.metaId) {
+    router.push({ name: 'self' })
+  } else {
+    router.push({
+      name: 'user',
+      params: {
+        metaId: props.metaId,
+      },
+    })
+  }
+}
+</script>
+<style lang="scss" scoped src="./NftUserAvatar.scss"></style>
