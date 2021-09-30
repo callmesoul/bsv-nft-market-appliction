@@ -119,7 +119,7 @@
 import { GetDeadlineTime, GetMyNftSummaryList, GetMyOnSellNftList } from '@/api'
 import { useStore } from '@/store'
 import { setDataStrclassify } from '@/utils/util'
-import { defineProps, reactive, ref, defineEmit, defineExpose, onMounted } from 'vue'
+import { defineProps, reactive, ref, defineEmit } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import NftItem from '@/components/Nft-item/Nft-item.vue'
@@ -255,11 +255,9 @@ function getMyNfts(isCover: boolean = false) {
   })
 }
 
-onMounted(() => {
-  defineExpose({
-    pagination,
-  })
-})
+// defineExpose({
+//   pagination,
+// })
 
 function getMySelledNfts(isCover: boolean = false) {
   return new Promise<void>(async resolve => {
