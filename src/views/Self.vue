@@ -1,55 +1,213 @@
 <template>
   <div class="user-msg">
     <div class="container">
-      <div class="user-msg-warp flex flex-align-center flex-pack-center">
-        <div class="flex-box">
-          <div class="avatar">
-            <NftUserAvatar
-              :metaId="store.state.userInfo ? store.state.userInfo.metaId : ''"
-              :hasmask="false"
-            />
+      <ElSkeleton :loading="store.state.userInfoLoading" animated>
+        <template #template>
+          <div class="user-msg-warp flex flex-align-center flex-pack-center">
+            <div class="flex-box">
+              <div class="avatar">
+                <ElSkeletonItem variant="image" />
+              </div>
+              <div class="name"><ElSkeletonItem variant="text" /></div>
+              <div class="metaid flex flex-align-center">
+                <ElSkeletonItem variant="text" />
+              </div>
+              <ElSkeletonItem variant="text" />
+            </div>
+            <!-- operate -->
+            <div class="operate flex flex-align-center">
+              <ElSkeletonItem variant="text" />
+            </div>
           </div>
-          <div class="name">{{ store.state.userInfo?.name }}</div>
-          <div class="metaid flex flex-align-center">
-            MetaID: {{ store.state.userInfo?.metaId.slice(0, 6) }}
-            <a @click="toTxLink">{{ $t('txDetail') }}</a>
+        </template>
+        <template #default>
+          <div class="user-msg-warp flex flex-align-center flex-pack-center">
+            <div class="flex-box">
+              <div class="avatar">
+                <NftUserAvatar
+                  :metaId="store.state.userInfo ? store.state.userInfo.metaId : ''"
+                  :hasmask="false"
+                />
+              </div>
+              <div class="name">{{ store.state.userInfo?.name }}</div>
+              <div class="metaid flex flex-align-center">
+                MetaID: {{ store.state.userInfo?.metaId.slice(0, 6) }}
+                <a @click="toTxLink">{{ $t('txDetail') }}</a>
+              </div>
+              <CertTemp />
+            </div>
+            <!-- operate -->
+            <div class="operate flex flex-align-center">
+              <div class="operate-item flex flex-align-center" @click="openRecordModal">
+                <img src="@/assets/images/me_icon_record.svg" />
+                {{ $t('ransactionRecord') }}
+              </div>
+              <div class="operate-item flex flex-align-center">
+                <img src="@/assets/images/me_icon_more.svg" />
+                {{ $t('more') }}
+                <ElDropdown class="operate-item" trigger="click" placement="bottom-end">
+                  <span class="el-dropdown-link">Dropdown List</span>
+                  <template #dropdown>
+                    <ElDropdownMenu class="more-list">
+                      <ElDropdownItem
+                        class="more-item flex flex-align-center"
+                        @click="openUrl('showBuzz')"
+                      >
+                        <img src="@/assets/images/logo_showbuzz@2x.png" />
+                        {{ $t('look') }}ShowBuzz
+                      </ElDropdownItem>
+                      <ElDropdownItem
+                        class="more-item flex flex-align-center"
+                        @click="openUrl('metaCenter')"
+                      >
+                        <img src="@/assets/images/logo_metacenter@2x.png" />
+                        {{ $t('look') }}MetaCenter
+                      </ElDropdownItem>
+                    </ElDropdownMenu>
+                  </template>
+                </ElDropdown>
+              </div>
+            </div>
           </div>
-          <CertTemp />
-        </div>
-        <!-- operate -->
-        <div class="operate flex flex-align-center">
-          <div class="operate-item flex flex-align-center" @click="openRecordModal">
-            <img src="@/assets/images/me_icon_record.svg" />
-            {{ $t('ransactionRecord') }}
-          </div>
-          <div class="operate-item flex flex-align-center">
-            <img src="@/assets/images/me_icon_more.svg" />
-            {{ $t('more') }}
-            <ElDropdown class="operate-item" trigger="click" placement="bottom-end">
-              <span class="el-dropdown-link">Dropdown List</span>
-              <template #dropdown>
-                <ElDropdownMenu class="more-list">
-                  <ElDropdownItem
-                    class="more-item flex flex-align-center"
-                    @click="openUrl('showBuzz')"
-                  >
-                    <img src="@/assets/images/logo_showbuzz@2x.png" />
-                    {{ $t('look') }}ShowBuzz
-                  </ElDropdownItem>
-                  <ElDropdownItem
-                    class="more-item flex flex-align-center"
-                    @click="openUrl('metaCenter')"
-                  >
-                    <img src="@/assets/images/logo_metacenter@2x.png" />
-                    {{ $t('look') }}MetaCenter
-                  </ElDropdownItem>
-                </ElDropdownMenu>
-              </template>
-            </ElDropdown>
-          </div>
-        </div>
-      </div>
+        </template>
+      </ElSkeleton>
     </div>
+
+    <!-- record -->
+    <ElDialog v-model="isShowRecordModal" custom-class="record-modal">
+      <template #title>
+        <div class="tab record-tab">
+          <a
+            v-for="(tab, index) in recordTabs"
+            :class="{ active: index === recordTabIndex }"
+            @click="changeRecordTab(index)"
+            >{{ $t(tab.key) }}</a
+          >
+        </div>
+      </template>
+      <div class="record-list">
+        <ElSkeleton :loading="isShowRcordSkeleton" animated :count="recordPagination.pageSize">
+          <template #template>
+            <div class="record-item flex">
+              <ElSkeletonItem variant="image" class="cover" />
+              <div class="cont flex1 flex flex-v flex-pack-justify">
+                <div class="top flex flex flex-align-center">
+                  <div class="title flex1">
+                    <ElSkeletonItem variant="text" style="width:40%" />
+                  </div>
+                  <div class="price" :class="{ active: recordTabIndex === 1 }">
+                    <ElSkeletonItem variant="text" style="width:20%" />
+                  </div>
+                </div>
+                <div class="time">
+                  <ElSkeletonItem variant="text" style="width:20%" />
+                </div>
+                <div class="bottom flex flex-align-center">
+                  <div class="seller flex1 flex flex-align-center">
+                    <ElSkeletonItem variant="text" style="width:30%" />
+                  </div>
+                  <a @click="store.state.sdk?.toTxLink('')">
+                    <ElSkeletonItem variant="text" style="width:10%" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </template>
+          <template #default>
+            <div class="record-item flex" v-for="record in records" :key="record.nftSellTxId">
+              <ElImage
+                class="cover"
+                :src="metafileUrl(record.nftIcon)"
+                :lazy="true"
+                :preview-src-list="[]"
+                fit="contain"
+              />
+              <div class="cont flex1 flex flex-v flex-pack-justify">
+                <div class="top flex flex flex-align-center">
+                  <div class="title flex1">
+                    {{ recordTabIndex === 0 ? $t('buy') : $t('sell') }} {{ record.nftName }}
+                  </div>
+                  <div
+                    class="price flex flex-align-center"
+                    :class="{ active: recordTabIndex === 1 }"
+                  >
+                    {{ recordTabIndex === 0 ? '-' : '+'
+                    }}{{ new Decimal(record.nftPrice).div(Math.pow(10, 8)).toString() }} BSV
+                  </div>
+                </div>
+                <div class="time">
+                  {{ dayjs(record.nftBuyerTimestamp).format('YYYY-MM-DD HH:mm') }}
+                </div>
+                <div class="bottom flex flex-align-center">
+                  <div class="seller flex1 flex flex-align-center">
+                    <template v-if="recordTabIndex === 0">
+                      {{ recordTabIndex === 0 ? $t('seller') : $t('buyer') }}:
+                      <img :src="$filters.avatar(record.nftBuyerMetaId)" />
+                      {{ record.nftBuyerName }}
+                    </template>
+                    <template v-else>
+                      {{ $t('buyer') }}:
+                      <img :src="$filters.avatar(record.nftOwnerMetaId)" />
+                      {{ record.nftOwnerName }}
+                    </template>
+                  </div>
+                  <a @click="store.state.sdk?.toTxLink('')">{{ $t('look') }}TX</a>
+                </div>
+              </div>
+            </div>
+            <div class="record-item flex" v-for="record in records" :key="record.nftSellTxId">
+              <ElImage
+                class="cover"
+                :src="metafileUrl(record.nftIcon)"
+                :lazy="true"
+                :preview-src-list="[]"
+                fit="contain"
+              />
+              <div class="cont flex1 flex flex-v flex-pack-justify">
+                <div class="top flex flex flex-align-center">
+                  <div class="title flex1">
+                    {{ recordTabIndex === 0 ? $t('buy') : $t('sell') }} {{ record.nftName }}
+                  </div>
+                  <div
+                    class="price flex flex-align-center"
+                    :class="{ active: recordTabIndex === 1 }"
+                  >
+                    {{ recordTabIndex === 0 ? '-' : '+'
+                    }}{{ new Decimal(record.nftPrice).div(Math.pow(10, 8)).toString() }} BSV
+                  </div>
+                </div>
+                <div class="time">
+                  {{ dayjs(record.nftBuyerTimestamp).format('YYYY-MM-DD HH:mm') }}
+                </div>
+                <div class="bottom flex flex-align-center">
+                  <div class="seller flex1 flex flex-align-center">
+                    <template v-if="recordTabIndex === 0">
+                      {{ recordTabIndex === 0 ? $t('seller') : $t('buyer') }}:
+                      <img :src="$filters.avatar(record.nftBuyerMetaId)" />
+                      {{ record.nftBuyerName }}
+                    </template>
+                    <template v-else>
+                      {{ $t('buyer') }}:
+                      <img :src="$filters.avatar(record.nftOwnerMetaId)" />
+                      {{ record.nftOwnerName }}
+                    </template>
+                  </div>
+                  <a @click="store.state.sdk?.toTxLink('')">{{ $t('look') }}TX</a>
+                </div>
+              </div>
+            </div>
+            <!-- 加载更多 -->
+            <LoadMore
+              :pagination="recordPagination"
+              @getMore="getMoreRecords"
+              v-if="records.length > 0 && !isShowNftListSkeleton"
+            />
+            <!-- 内容为空 -->
+            <IsNull v-else-if="records.length <= 0 && !isShowNftListSkeleton" />
+          </template>
+        </ElSkeleton>
+      </div>
+    </ElDialog>
   </div>
 
   <!--
@@ -108,79 +266,6 @@
       </div>
     </div>
   </div>
-
-  <!-- record -->
-  <ElDialog v-model="isShowRecordModal">
-    <template #title>
-      <div class="tab record-tab">
-        <a
-          v-for="(tab, index) in recordTabs"
-          :class="{ active: index === recordTabIndex }"
-          @click="changeRecordTab(index)"
-          >{{ $t(tab.key) }}</a
-        >
-      </div>
-    </template>
-    <div class="record-list">
-      <ElSkeleton :loading="isShowRcordSkeleton" animated :count="recordPagination.pageSize">
-        <template #template>
-          <div class="record-item flex">
-            <ElSkeletonItem variant="image" class="cover" />
-            <div class="cont flex1 flex flex-v flex-pack-justify">
-              <div class="top flex flex flex-align-center">
-                <div class="title flex1">
-                  <ElSkeletonItem variant="text" style="width:40%" />
-                </div>
-                <div class="price" :class="{ active: recordTabIndex === 1 }">
-                  <ElSkeletonItem variant="text" style="width:20%" />
-                </div>
-              </div>
-              <div class="time">
-                <ElSkeletonItem variant="text" style="width:20%" />
-              </div>
-              <div class="bottom flex flex-align-center">
-                <div class="seller flex1 flex flex-align-center">
-                  <ElSkeletonItem variant="text" style="width:30%" />
-                </div>
-                <a @click="store.state.sdk?.toTxLink('')">
-                  <ElSkeletonItem variant="text" style="width:10%" />
-                </a>
-              </div>
-            </div>
-          </div>
-        </template>
-        <template #default>
-          <div class="record-item flex" v-for="record in records" :key="record.nftSellTxId">
-            <ElImage
-              class="cover"
-              :src="metafileUrl(record.nftIcon)"
-              :lazy="true"
-              :preview-src-list="[]"
-              fit="contain"
-            />
-            <div class="cont flex1 flex flex-v flex-pack-justify">
-              <div class="top flex flex flex-align-center">
-                <div class="title flex1">
-                  {{ recordTabIndex === 0 ? $t('buy') : $t('sell') }} {{ record.nftName }}
-                </div>
-                <div class="price" :class="{ active: recordTabIndex === 1 }">
-                  {{ recordTabIndex === 0 ? '-' : '+' }}{{ record.nftPrice }}
-                </div>
-              </div>
-              <div class="time">{{ record.nftBuyerTimestamp }}</div>
-              <div class="bottom flex flex-align-center">
-                <div class="seller flex1 flex flex-align-center">
-                  {{ $t('seller') }}: <img :src="$filters.avatar(record.nftBuyerMetaId)" />
-                  {{ record.nftBuyerName }}
-                </div>
-                <a @click="store.state.sdk?.toTxLink('')">{{ $t('look') }}TX</a>
-              </div>
-            </div>
-          </div>
-        </template>
-      </ElSkeleton>
-    </div>
-  </ElDialog>
 </template>
 <script setup lang="ts">
 import {
@@ -194,6 +279,7 @@ import NftItem from '@/components/Nft-item/Nft-item.vue'
 import { useStore } from '@/store'
 import { reactive, ref } from 'vue'
 import LoadMore from '@/components/LoadMore/LoadMore.vue'
+import IsNull from '../components/IsNull/IsNull.vue'
 import NftSkeleton from '@/components/NftSkeleton/NftSkeleton.vue'
 import { useI18n } from 'vue-i18n'
 import {
@@ -210,6 +296,8 @@ import { router } from '@/router'
 import { setDataStrclassify, metafileUrl } from '@/utils/util'
 import NftUserAvatar from '@/components/NftUserAvatar/NftUserAvatar.vue'
 import CertTemp from '@/components/Cert/Cert.vue'
+import Decimal from 'decimal.js-light'
+import dayjs from 'dayjs'
 
 const i18n = useI18n()
 const store = useStore()
@@ -223,7 +311,6 @@ const selledPagination = reactive({
 })
 const recordPagination = reactive({
   ...store.state.pagination,
-  pageSize: 12,
 })
 const tabs = [{ name: i18n.t('mynft') }, { name: i18n.t('mySellNft') }]
 const recordTabs = [
@@ -330,6 +417,14 @@ function getMore() {
   })
 }
 
+function getMoreRecords() {
+  recordPagination.loading = true
+  recordPagination.page++
+  getRecordList().then(() => {
+    recordPagination.loading = false
+  })
+}
+
 function getMySelledNfts(isCover: boolean = false) {
   return new Promise<void>(async resolve => {
     const res = await GetMyOnSellNftList({
@@ -391,7 +486,7 @@ function openUrl(type: string) {
   let url =
     type === 'showBuzz'
       ? `https://www.showbuzz.app/user_index/user_buzz/${store.state.userInfo?.metaId}`
-      : ``
+      : `https://metacenter.top/#/pages/index/indexCenter?metaId=${store.state.userInfo?.metaId}`
   window.open(url)
 }
 
@@ -410,25 +505,32 @@ function openRecordModal() {
 }
 
 async function getRecordList(isCover: boolean = false) {
-  let res
-  if (recordTabIndex.value === 0) {
-    res = await GetMyNftOnShowSellSuccessList({
-      MetaId: store.state.userInfo!.metaId,
-      Page: pagination.page.toString(),
-      PageSize: pagination.pageSize.toString(),
-    })
-  } else {
-    res = await GetMyNftOnShowBuySuccessList({
-      MetaId: store.state.userInfo!.metaId,
-      Page: pagination.page.toString(),
-      PageSize: pagination.pageSize.toString(),
-    })
-  }
-  if (res.code === 0) {
-    if (isCover) records.length = 0
-    records.push(...res.data.results.items)
-    isShowRcordSkeleton.value = false
-  }
+  return new Promise<void>(async resolve => {
+    let res
+    if (recordTabIndex.value === 0) {
+      res = await GetMyNftOnShowSellSuccessList({
+        MetaId: store.state.userInfo!.metaId,
+        Page: recordPagination.page.toString(),
+        PageSize: recordPagination.pageSize.toString(),
+      })
+    } else {
+      res = await GetMyNftOnShowBuySuccessList({
+        MetaId: store.state.userInfo!.metaId,
+        Page: recordPagination.page.toString(),
+        PageSize: recordPagination.pageSize.toString(),
+      })
+    }
+    if (res.code === 0) {
+      if (isCover) records.length = 0
+      records.push(...res.data.results.items)
+      isShowRcordSkeleton.value = false
+      const totalPages = Math.ceil(res.data.total / recordPagination.pageSize)
+      if (recordPagination.page >= totalPages) {
+        recordPagination.nothing = true
+      }
+    }
+    resolve()
+  })
 }
 
 if (store.state.token) {

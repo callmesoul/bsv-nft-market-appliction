@@ -1,25 +1,52 @@
 @import '@/assets/styles/var.scss';
+
 .user-msg {
   text-align: center;
   background: #fff;
   margin-top: -60px;
   padding-top: 40px;
   padding-bottom: 30px;
+
+  :deep(.el-dialog) {
+    // height: 90%;
+  }
+
   .user-msg-warp {
     position: relative;
   }
+
   .avatar {
+
+    :deep(.el-skeleton__image),
+    :deep(.avatar) {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      margin: 0 auto;
+    }
   }
+
   .name {
     font-size: 18px;
     font-weight: 500;
     margin-top: 15px;
+
+    :deep(.el-skeleton__text) {
+      width: 100px;
+    }
   }
+
   .metaid {
     font-size: 12px;
     color: #909399;
     font-weight: 400;
     margin-top: 5px;
+
+    :deep(.el-skeleton__text) {
+      width: 50px;
+      margin: 0 auto;
+    }
+
     a {
       background: #ecf0f9;
       cursor: pointer;
@@ -31,11 +58,13 @@
       margin-left: 10px;
     }
   }
+
   .cert {
     margin-top: 16px;
     text-align: center;
     justify-content: center;
   }
+
   .operate {
     position: absolute;
     right: 0;
@@ -44,6 +73,7 @@
     margin-top: 0px;
     border: 1px solid #edeff2;
     border-radius: 4px;
+
     .operate-item {
       cursor: pointer;
       padding: 10px 20px;
@@ -51,14 +81,17 @@
       font-size: 12px;
       border-right: 1px solid #edeff2;
       position: relative;
+
       &:last-child {
         border-right: none;
       }
+
       img {
         width: 16px;
         height: 16px;
         margin-right: 5px;
       }
+
       :deep(.el-dropdown),
       .el-dropdown-link {
         position: absolute;
@@ -77,10 +110,12 @@
   .banner-item {
     display: block;
     position: relative;
+
     .cover {
       width: 100%;
       display: block;
     }
+
     .cont {
       position: absolute;
       width: 100%;
@@ -92,16 +127,19 @@
       display: flex;
       align-items: flex-end;
       box-sizing: border-box;
+
       .title {
         font-size: 30px;
         font-weight: 500;
       }
+
       .drsc {
         color: #909399;
         font-size: 16px;
         margin-top: 5px;
         margin-bottom: 20px;
       }
+
       .btn {
         color: inherit;
         text-decoration: none;
@@ -109,6 +147,7 @@
     }
   }
 }
+
 .section {
   margin-top: 40px;
 
@@ -119,8 +158,10 @@
       padding: 0;
       margin-right: 20px;
       color: #909399;
+
       &.active {
         color: #303133;
+
         &::after {
           margin-bottom: -6px;
         }
@@ -132,10 +173,12 @@
 .nft-null {
   height: 300px;
   text-align: center;
+
   .tips {
     margin-top: 8px;
     font-size: 14px;
     color: #909399;
+
     a {
       cursor: pointer;
       color: #456fc4;
@@ -146,6 +189,7 @@
 
 .more-item {
   font-size: 14px;
+
   img {
     width: 24px;
     height: 24px;
@@ -158,46 +202,57 @@
     font-size: 18px;
     color: #909399;
     margin-right: 24px;
+
     &.active {
       color: #303133;
     }
   }
 }
 
+
 .record-list {
   .record-item {
     padding: 20px 0;
     border-bottom: 1px solid #f5f7fa;
+
     .cover {
       width: 70px;
       height: 70px;
       margin-right: 8px;
     }
+
     .cont {
       .top {
         .title {
           font-size: 16px;
           font-weight: 500;
+          text-align: left;
         }
+
         .price {
           font-size: 16px;
           font-weight: 500;
           color: #456fc4;
+
           &.active {
             color: $mainColor;
           }
         }
       }
+
       .time {
         font-size: 14px;
         font-weight: 400;
         color: #606266;
+        text-align: left;
       }
+
       .bottom {
         .seller {
           font-size: 14px;
           font-weight: 400;
           color: #606266;
+
           img {
             border-radius: 50%;
             width: 20px;
@@ -205,6 +260,7 @@
             margin: 0 8px;
           }
         }
+
         a {
           font-size: 12px;
           font-weight: 400;
@@ -214,7 +270,12 @@
       }
     }
   }
+
+  .pagination {
+    margin-top: 20px;
+  }
 }
+
 @media only screen and (max-width: 750px) {
   .banner {
     .banner-item {
@@ -227,6 +288,7 @@
       }
     }
   }
+
   .user-msg {
     .user-msg-warp {
       .flex-box {
