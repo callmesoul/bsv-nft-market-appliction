@@ -7,6 +7,7 @@ import Sale from '@/views/sale/Sale.vue'
 import SaleLegend from '@/views/sale/Legend.vue'
 import Login from '@/views/Login.vue'
 import Self from '@/views/Self.vue'
+import User from '@/views/User.vue'
 import Series from '@/views/Series.vue'
 import MetaBot from '@/views/MetaBot.vue'
 import Recommend from '@/views/Recommend.vue'
@@ -45,7 +46,7 @@ export const router = createRouter({
     { path: '/recommned', name: 'recommned', component: Recommend },
     { path: '/tariffDescription', name: 'tariffDescription', component: TariffDescription },
     { path: '/metaBot', name: 'metaBot', component: MetaBot },
-    { path: '/user/:metaId', name: 'user', component: Self },
+    { path: '/user/:metaId', name: 'user', component: User },
   ],
   async scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {

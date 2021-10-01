@@ -28,7 +28,7 @@
               :src="$filters.avatar(item?.metaId)"
               :alt="item?.foundryName"
               :class="{
-                hasmask: item.avatarType === 'nft-metabot'
+                hasmask: item.avatarType === 'nft-metabot',
               }"
               onerror="javascript:this.src='https://testshowman.showpay.top/metafile/avatar/a9…1f918ca4342d2b018c641bbb4c293e'"
             />
@@ -44,9 +44,9 @@
       <div class="operate flex flex-align-center" v-if="props.isSelf">
         <div class="timeleft flex1">
           <!-- 系列 且拥有数量 > 1 -->
-          <template
-            v-if="item.hasCount && item.hasCount > 1"
-          >{{ $t('series') }} {{ item.hasCount }}/{{ item.total }}</template>
+          <template v-if="item.hasCount && item.hasCount > 1"
+            >{{ $t('series') }} {{ item.hasCount }}/{{ item.total }}</template
+          >
           <template v-else-if="item.putAway">
             <template v-if="overTime">{{ $t('overTime') }}</template>
             <div v-else class="flex flex-align-center">
@@ -57,14 +57,10 @@
         </div>
 
         <a class="btn btn-min btn-plain" v-if="item.hasCount && item.hasCount > 1">
-          {{
-            $t('seeAll')
-          }}
+          {{ $t('seeAll') }}
         </a>
         <a class="btn btn-min btn-plain" v-else-if="item?.putAway" @click.stop="offSale">
-          {{
-            $t('offsale')
-          }}
+          {{ $t('offsale') }}
         </a>
         <a class="btn btn-min" v-else @click.stop="toSale">{{ $t('sale') }}</a>
       </div>
@@ -87,7 +83,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useStore, Mutation } from '@/store/index'
 import { useRouter } from 'vue-router'
 import { GetMyNftEligibility, GetNftDetail, Langs, NftApiCode, OffSale } from '@/api'
@@ -212,5 +208,4 @@ function offSale() {
 }
 </script>
 
-<style lang="scss" scoped src="./Nft-item.scss">
-</style>
+<style lang="scss" scoped src="./Nft-item.scss"></style>

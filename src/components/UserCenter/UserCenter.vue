@@ -78,13 +78,21 @@
   <div class="section container">
     <div class="section-header flex flex-align-center">
       <div class="tab flex flex-align-center">
-        <a
-          :class="{ active: index === tabIndex }"
-          v-for="(tab, index) in tabs"
-          :key="index"
-          @click="changeTabIndex(index)"
-          >{{ tab.name }}</a
-        >
+        <template v-for="(tab, index) in tabs" :key="index">
+          <template
+            v-if="
+              index !== 0 ||
+                (index === 0 && store.state.userInfo && store.state.userInfo.metaId === user.metaId)
+            "
+          >
+            <a
+              :class="{ active: index === tabIndex }"
+              :key="index"
+              @click="changeTabIndex(index)"
+              >{{ tab.name }}</a
+            >
+          </template>
+        </template>
       </div>
     </div>
     <NftSkeleton
@@ -119,7 +127,7 @@
 import { GetDeadlineTime, GetMyNftSummaryList, GetMyOnSellNftList } from '@/api'
 import { useStore } from '@/store'
 import { setDataStrclassify } from '@/utils/util'
-import { defineProps, reactive, ref, defineEmit } from 'vue'
+import { defineProps, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import NftItem from '@/components/Nft-item/Nft-item.vue'
@@ -140,7 +148,7 @@ import Decimal from 'decimal.js-light'
 import dayjs from 'dayjs'
 import { router } from '@/router'
 
-const emit = defineEmit(['openRecordModal'])
+const emit = defineEmits(['openRecordModal'])
 const props = defineProps({
   userInfoLoading: {
     type: Boolean,
@@ -152,6 +160,7 @@ const props = defineProps({
       return {
         metaId: '',
         name: '',
+        address: '',
       }
     },
   },
@@ -164,7 +173,6 @@ const pagination = reactive({
   ...store.state.pagination,
   pageSize: 12,
 })
-const address = ref('')
 const tabs = [{ name: i18n.t('mynft') }, { name: i18n.t('mySellNft') }]
 const tabIndex = ref(0)
 const nfts: NftItem[] = reactive([])
@@ -186,7 +194,7 @@ function changeTabIndex(index: number) {
 function getMyNfts(isCover: boolean = false) {
   return new Promise<void>(async resolve => {
     const res = await GetMyNftSummaryList({
-      Address: address.value,
+      Address: props.user.address,
       Page: pagination.page.toString(),
       PageSize: pagination.pageSize.toString(),
     })
@@ -250,10 +258,6 @@ function getMyNfts(isCover: boolean = false) {
     resolve()
   })
 }
-
-// defineExpose({
-//   pagination,
-// })
 
 function getMySelledNfts(isCover: boolean = false) {
   return new Promise<void>(async resolve => {
@@ -331,26 +335,11 @@ function openRecordModal() {
   emit('openRecordModal')
 }
 
-if (route.name === 'self') {
-  if (store.state.token) {
-    // 还没拿到用户信息的时候要等待拿用户信息完再调接口
-    if (store.state.userInfo) {
-      address.value = store.state.userInfo.address
-      getMyNfts()
-    } else {
-      store.watch(
-        state => state.userInfo,
-        () => {
-          address.value = store.state.userInfo!.address
-          getMyNfts()
-        }
-      )
-    }
-  } else {
-    ElMessage.warning(i18n.t('toLoginTip'))
-    router.replace('/')
-  }
-}
+defineExpose({
+  getMyNfts,
+  getMySelledNfts,
+  changeTabIndex,
+})
 </script>
 
 <style lang="scss" scoped src="./UserCenter.scss"></style>

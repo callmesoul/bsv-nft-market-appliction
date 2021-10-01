@@ -1,5 +1,5 @@
 <template>
-  <div class="avatar">
+  <div class="avatar" @click="toUser">
     <img src="@/assets/images/ava_mask_2.png" class="mask" v-if="hasmask && bg === 'gray'" />
     <img src="@/assets/images/ava_mask.png" class="mask" v-if="hasmask && bg !== 'gray'" />
     <img
@@ -14,7 +14,7 @@
 </template>
 <script lang="ts" setup>
 import { useStore } from '@/store'
-import { defineProps } from 'vue'
+import {} from 'vue'
 import { useRouter } from 'vue-router'
 const props = defineProps<{
   hasmask: boolean
