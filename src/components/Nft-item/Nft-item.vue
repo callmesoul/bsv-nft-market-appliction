@@ -11,21 +11,11 @@
     </div>
     <div class="cont">
       <div class="name">
-        {{
-          store.state.userInfo && store.state.userInfo.metaId === item.metaId
-            ? item.productName
-            : item?.name
-        }}
+        {{ route.name === 'self' ? item.productName : item?.name }}
       </div>
       <div class="content flex">
         <div class="msg flex1">
-          <div
-            class="price"
-            v-if="
-              !store.state.userInfo ||
-                (store.state.userInfo && store.state.userInfo.metaId !== item.metaId)
-            "
-          >
+          <div class="price" v-if="route.name !== 'self'">
             <div class="label">{{ $t('price') }}</div>
             <div class="aount">{{ new Decimal(item?.amount).div(10 ** 8).toString() }} BSV</div>
           </div>
@@ -53,10 +43,7 @@
           v-if="certedMetaIds.find(_item => _item === item.metaId)"
         />
       </div>
-      <div
-        class="operate flex flex-align-center"
-        v-if="store.state.userInfo && store.state.userInfo.metaId === item.metaId"
-      >
+      <div class="operate flex flex-align-center" v-if="route.name === 'self'">
         <div class="timeleft flex1">
           <!-- 系列 且拥有数量 > 1 -->
           <template v-if="item.hasCount && item.hasCount > 1"
@@ -100,7 +87,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useStore, Mutation } from '@/store/index'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { GetMyNftEligibility, GetNftDetail, Langs, NftApiCode, OffSale } from '@/api'
 import { ElDialog, ElLoading, ElMessage, ElMessageBox } from 'element-plus'
 import { useI18n } from 'vue-i18n'
@@ -116,6 +103,7 @@ const coverDefaultImg = 'this.src="/state/cover-default.jpg"' //默认图地址
 
 const store = useStore()
 const router = useRouter()
+const route = useRoute()
 const i18n = useI18n()
 const now = new Date().getTime()
 const appVersion = store.state.version // not reactive!
