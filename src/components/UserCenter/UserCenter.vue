@@ -31,7 +31,7 @@
                 MetaID: {{ user.metaId.slice(0, 6) }}
                 <a @click="store.state.sdk?.toTxLink(user.metaId)">{{ $t('txDetail') }}</a>
               </div>
-              <CertTemp />
+              <CertTemp :metaId="user.metaId" />
             </div>
             <!-- operate -->
             <div class="operate flex flex-align-center">
@@ -130,7 +130,7 @@
 import { GetDeadlineTime, GetMyNftSummaryList, GetMyOnSellNftList } from '@/api'
 import { useStore } from '@/store'
 import { setDataStrclassify } from '@/utils/util'
-import { defineProps, reactive, ref } from 'vue'
+import { computed, defineProps, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import NftItem from '@/components/Nft-item/Nft-item.vue'
@@ -176,7 +176,17 @@ const pagination = reactive({
   ...store.state.pagination,
   pageSize: 12,
 })
-const tabs = [{ name: i18n.t('mynft') }, { name: i18n.t('mySellNft') }]
+const tabs = computed(() => {
+  return [
+    { name: i18n.t('mynft') },
+    {
+      name:
+        store.state.userInfo && store.state.userInfo.metaId === props.user.metaId
+          ? i18n.t('mySellNft')
+          : i18n.t('SellNft'),
+    },
+  ]
+})
 const tabIndex = ref(0)
 const nfts: NftItem[] = reactive([])
 const isShowNftListSkeleton = ref(true)

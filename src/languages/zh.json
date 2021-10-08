@@ -212,5 +212,6 @@
   "saleRecord": "出售记录",
   "sell": "出售",
   "buyer": "买家",
-  "isNull": "暂无内容"
+  "isNull": "暂无内容",
+  "SellNft": "上架的NFT"
 }

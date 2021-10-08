@@ -209,5 +209,6 @@
   "saleRecord": "Sale record",
   "sell": "Sell",
   "buyer": "Buyer",
-  "isNull": "no content yet"
+  "isNull": "no content yet",
+  "SellNft": "Listed NFT"
 }
