@@ -10,10 +10,22 @@
       <span v-if="item.classify && item.classify.length > 0">{{ $t(item.classify[0]) }}</span>
     </div>
     <div class="cont">
-      <div class="name">{{ isSelf ? item.productName : item?.name }}</div>
+      <div class="name">
+        {{
+          store.state.userInfo && store.state.userInfo.metaId === item.metaId
+            ? item.productName
+            : item?.name
+        }}
+      </div>
       <div class="content flex">
         <div class="msg flex1">
-          <div class="price" v-if="!isSelf">
+          <div
+            class="price"
+            v-if="
+              !store.state.userInfo ||
+                (store.state.userInfo && store.state.userInfo.metaId !== item.metaId)
+            "
+          >
             <div class="label">{{ $t('price') }}</div>
             <div class="aount">{{ new Decimal(item?.amount).div(10 ** 8).toString() }} BSV</div>
           </div>
@@ -41,7 +53,10 @@
           v-if="certedMetaIds.find(_item => _item === item.metaId)"
         />
       </div>
-      <div class="operate flex flex-align-center" v-if="props.isSelf">
+      <div
+        class="operate flex flex-align-center"
+        v-if="store.state.userInfo && store.state.userInfo.metaId === item.metaId"
+      >
         <div class="timeleft flex1">
           <!-- 系列 且拥有数量 > 1 -->
           <template v-if="item.hasCount && item.hasCount > 1"
@@ -118,7 +133,6 @@ const overTime = computed(() => props.item.deadlineTime && props.item.deadlineTi
 const props = defineProps<{
   item: NftItem
   isRecommendCard?: boolean
-  isSelf?: boolean
 }>()
 
 function toDetail() {
