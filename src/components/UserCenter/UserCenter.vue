@@ -116,8 +116,11 @@
     <div>
       <img src="@/assets/images/default_icon_casting.svg" />
       <div class="tips">
-        {{ $t('nftNullTips') }}
-        <router-link :to="{ name: 'create' }">{{ $t('Casting') }}</router-link>
+        <template v-if="store.state.userInfo && store.state.userInfo.metaId === user.metaId">
+          {{ $t('nftNullTips') }}
+          <router-link :to="{ name: 'create' }">{{ $t('Casting') }}</router-link>
+        </template>
+        <template v-else>{{ $t('isNull') }}</template>
       </div>
     </div>
   </div>

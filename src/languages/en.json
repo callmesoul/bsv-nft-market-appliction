@@ -208,5 +208,6 @@
   "purchaseHistory": "Purchase History",
   "saleRecord": "Sale record",
   "sell": "Sell",
-  "buyer": "Buyer"
+  "buyer": "Buyer",
+  "isNull": "no content yet"
 }
