@@ -211,5 +211,8 @@
   "purchaseHistory": "购买记录",
   "saleRecord": "出售记录",
   "sell": "出售",
-  "buyer": "买家"
+  "buyer": "买家",
+  "topic": "专题",
+  "topicTips": "不容错过的精彩NFT专题活动",
+  "eventParty": "活动方"
 }

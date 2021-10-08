@@ -17,8 +17,8 @@
         v-if="!store.state.isApp || (store.state.isApp && mode !== 'prod')"
         >{{ $t('createnft') }}</router-link
       >
-      <router-link to="/metaBot" class="flex flex-align-center">
-        MetaBot
+      <router-link to="/topic" class="flex flex-align-center">
+        {{ $t('topic') }}
         <img src="@/assets/images/nav_icon_hot.svg" alt="MetaBot" />
       </router-link>
     </nav>
@@ -81,8 +81,8 @@
         v-if="!store.state.isApp || (store.state.isApp && mode !== 'prod')"
         >{{ $t('createnft') }}</router-link
       >
-      <router-link to="/metaBot" @click.stop="isShowDrawer = false">
-        MetaBot
+      <router-link to="/topic" @click.stop="isShowDrawer = false">
+        {{ $t('topic') }}
         <img src="@/assets/images/nav_icon_hot.svg" alt="MetaBot" />
       </router-link>
     </nav>

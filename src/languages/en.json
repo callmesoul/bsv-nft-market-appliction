@@ -208,5 +208,8 @@
   "purchaseHistory": "Purchase History",
   "saleRecord": "Sale record",
   "sell": "Sell",
-  "buyer": "Buyer"
+  "buyer": "Buyer",
+  "topic": "Topic",
+  "topicTips": "Wonderful NFT special events not to be missed",
+  "eventParty": "Event party"
 }

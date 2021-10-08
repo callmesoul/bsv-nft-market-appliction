@@ -12,6 +12,9 @@ import Series from '@/views/Series.vue'
 import MetaBot from '@/views/MetaBot.vue'
 import Recommend from '@/views/Recommend.vue'
 import TariffDescription from '@/views/app/TariffDescription.vue'
+import TopicIndex from '@/views/topic/Index.vue'
+import TopicDetail from '@/views/topic/Detail.vue'
+import CommonLayout from '@/layouts/CommonLayout.vue'
 import { useStore, Action } from '@/store/index'
 import { ElMessage } from 'element-plus'
 import i18n from '@/utils/i18n'
@@ -47,6 +50,16 @@ export const router = createRouter({
     { path: '/tariffDescription', name: 'tariffDescription', component: TariffDescription },
     { path: '/metaBot', name: 'metaBot', component: MetaBot },
     { path: '/user/:metaId', name: 'user', component: User },
+    {
+      path: '/topic',
+      name: 'topic',
+      component: CommonLayout,
+      redirect: '/topic/index',
+      children: [
+        { path: 'index', name: 'topicIndex', component: TopicIndex },
+        { path: 'detail', name: 'topicDetail', component: TopicDetail },
+      ],
+    },
   ],
   async scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
