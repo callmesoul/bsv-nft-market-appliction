@@ -48,7 +48,7 @@
       </div>
       <div
         class="operate flex flex-align-center"
-        v-if="route.name === 'self' || route.name === 'series"
+        v-if="route.name === 'self' || route.name === 'series'"
       >
         <div class="timeleft flex1">
           <!-- 系列 且拥有数量 > 1 -->
