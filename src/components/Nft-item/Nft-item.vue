@@ -15,7 +15,10 @@
       </div>
       <div class="content flex">
         <div class="msg flex1">
-          <div class="price" v-if="route.name !== 'self' && item.putAway">
+          <div
+            class="price"
+            v-if="route.name !== 'self' && (item.putAway || props.isRecommendCard)"
+          >
             <div class="label">{{ $t('price') }}</div>
             <div class="aount">{{ new Decimal(item?.amount).div(10 ** 8).toString() }} BSV</div>
           </div>
@@ -57,14 +60,17 @@
             </div>
           </template>
         </div>
-
+        <!-- 系列 -->
         <a class="btn btn-min btn-plain" v-if="item.hasCount && item.hasCount > 1">
           {{ $t('seeAll') }}
         </a>
-        <a class="btn btn-min btn-plain" v-else-if="item?.putAway" @click.stop="offSale">
-          {{ $t('offsale') }}
-        </a>
-        <a class="btn btn-min" v-else @click.stop="toSale">{{ $t('sale') }}</a>
+        <template v-else>
+          <!-- 非系列 -->
+          <a class="btn btn-min btn-plain" v-if="item?.putAway" @click.stop="offSale">
+            {{ $t('offsale') }}
+          </a>
+          <a class="btn btn-min" v-else @click.stop="toSale">{{ $t('sale') }}</a>
+        </template>
       </div>
     </div>
     <!-- 推荐卡片 -->
