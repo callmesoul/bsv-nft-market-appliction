@@ -15,7 +15,7 @@
       </div>
       <div class="content flex">
         <div class="msg flex1">
-          <div class="price" v-if="route.name !== 'self'">
+          <div class="price" v-if="route.name !== 'self' && item.putAway">
             <div class="label">{{ $t('price') }}</div>
             <div class="aount">{{ new Decimal(item?.amount).div(10 ** 8).toString() }} BSV</div>
           </div>

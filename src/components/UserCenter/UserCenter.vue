@@ -302,7 +302,7 @@ function getMySelledNfts(isCover: boolean = false) {
             tokenId: item.nftGenesis + item.nftTokenIndex,
             coverUrl: item.nftIcon,
             putAway: item.nftIsReady,
-            metaId: item.nftOwnerMetaId,
+            metaId: item.nftIssueMetaId,
             productName: item.nftName,
             deadlineTime:
               deadlineTimeRes && deadlineTimeRes.data && deadlineTimeRes.data.deadlineTime
