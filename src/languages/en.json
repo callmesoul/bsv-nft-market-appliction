@@ -211,5 +211,9 @@
   "buyer": "Buyer",
   "topic": "Topic",
   "topicTips": "Wonderful NFT special events not to be missed",
-  "eventParty": "Event party"
+  "eventParty": "Event party",
+  "isNull": "no content yet",
+  "SellNft": "Listed NFT",
+  "countryFair": "Country Fair",
+  "countryFairIntro": "Various NFT creation works (not certified)"
 }

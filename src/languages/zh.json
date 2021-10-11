@@ -214,5 +214,9 @@
   "buyer": "买家",
   "topic": "专题",
   "topicTips": "不容错过的精彩NFT专题活动",
-  "eventParty": "活动方"
+  "eventParty": "活动方",
+  "isNull": "暂无内容",
+  "SellNft": "上架的NFT",
+  "countryFair": "集市",
+  "countryFairIntro": "各种各样的NFT创作作品 (未认证)"
 }

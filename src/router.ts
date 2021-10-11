@@ -15,6 +15,7 @@ import TariffDescription from '@/views/app/TariffDescription.vue'
 import TopicIndex from '@/views/topic/Index.vue'
 import TopicDetail from '@/views/topic/Detail.vue'
 import CommonLayout from '@/layouts/CommonLayout.vue'
+import CountryFair from '@/views/CountryFair.vue'
 import { useStore, Action } from '@/store/index'
 import { ElMessage } from 'element-plus'
 import i18n from '@/utils/i18n'
@@ -50,6 +51,7 @@ export const router = createRouter({
     { path: '/tariffDescription', name: 'tariffDescription', component: TariffDescription },
     { path: '/metaBot', name: 'metaBot', component: MetaBot },
     { path: '/user/:metaId', name: 'user', component: User },
+    { path: '/countryFair', name: 'countryFair', component: CountryFair },
     {
       path: '/topic',
       name: 'topic',

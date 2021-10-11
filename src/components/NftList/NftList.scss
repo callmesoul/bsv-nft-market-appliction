@@ -1,0 +1,17 @@
+@media only screen and (max-width: 500px) {
+    .section-screen {
+        flex-direction: column-reverse;
+
+        .search-warp {
+            width: 100%;
+        }
+
+        .tags {
+            margin-top: 15px;
+
+            a {
+                margin-bottom: 15px;
+            }
+        }
+    }
+}

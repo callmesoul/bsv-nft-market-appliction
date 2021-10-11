@@ -11,7 +11,7 @@
       </div>
       <div class="drsc">{{ intro }}</div>
     </div>
-    <div class="search-warp flex flex-align-center">
+    <div class="search-warp flex flex-align-center" v-if="isShowSearch">
       <input
         class="flex1"
         v-model="keyword"
@@ -42,6 +42,10 @@ const props = defineProps({
     default: '',
   },
   isHasBackIcon: {
+    type: Boolean,
+    default: true,
+  },
+  isShowSearch: {
     type: Boolean,
     default: true,
   },

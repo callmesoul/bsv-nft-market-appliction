@@ -10,35 +10,22 @@
       </div>
     </div>
     <div class="recomment-list nft-list">
-      <NftSkeleton
-        :loading="isShowSkeleton"
-        :count="pagination.pageSize"
-        class="section-cont nft-list"
-      >
-        <template #default>
-          <template v-for="nft in nfts" :key="nft.tokenId">
-            <NftItem :item="nft" />
-          </template>
-        </template>
-      </NftSkeleton>
+      <NftList
+        :nfts="nfts"
+        :pagination="pagination"
+        :isShowSkeleton="isShowSkeleton"
+        @get-more="getMore"
+      />
     </div>
-    <template v-if="!isShowSkeleton">
-      <LoadMore :pagination="pagination" @getMore="getMore" v-if="nfts.length > 0" />
-      <IsNull v-else />
-    </template>
   </div>
 </template>
 
 <script lang="ts" setup>
-import NftSkeleton from '@/components/NftSkeleton/NftSkeleton.vue'
-import NftItem from '@/components/Nft-item/Nft-item.vue'
-import LoadMore from '@/components/LoadMore/LoadMore.vue'
-import IsNull from '../components/IsNull/IsNull.vue'
+import NftList from '@/components/NftList/NftList.vue'
 import { reactive, ref } from 'vue'
 import { pagination as _pagination } from '@/config'
-import { GetProductList, GetRecommendOnSellNftList, NftApiCode } from '@/api'
+import { GetRecommendOnSellNftList } from '@/api'
 import { useRouter } from 'vue-router'
-import { setDataStrclassify } from '@/utils/util'
 import SetHomeDatas from '@/utils/homeSetData'
 
 const router = useRouter()
@@ -49,7 +36,7 @@ const pagination = reactive({
 })
 
 function getRecommendNftList() {
-  return new Promise<void>(async (resolve) => {
+  return new Promise<void>(async resolve => {
     const res = await GetRecommendOnSellNftList({
       Page: pagination.page.toString(),
       PageSize: pagination.pageSize.toString(),
@@ -67,23 +54,6 @@ function getRecommendNftList() {
   })
 }
 
-/* function getRecommendNftList(isCover: boolean = false) {
-  return new Promise<void>(async (resolve) => {
-    const res = await GetProductList(pagination)
-    if (res.code === NftApiCode.success) {
-        if (isCover) {
-            nfts.length = 0
-        }
-        nfts.push(...res.data)
-        const totalPages = Math.ceil(res.count / pagination.pageSize)
-        if (pagination.page >= totalPages) pagination.nothing = true
-        isShowSkeleton.value = false
-    }
-    resolve()
-  })
-} */
-getRecommendNftList()
-
 function getMore() {
   pagination.loading = true
   pagination.page++
@@ -95,6 +65,8 @@ function getMore() {
 function back() {
   router.back()
 }
+
+getRecommendNftList()
 </script>
 
 <style lang="scss" scoped src="./Recommend.scss"></style>

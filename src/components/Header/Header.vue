@@ -12,6 +12,7 @@
     </div>
     <nav class="flex flex-align-center flex-pack-center">
       <router-link to="/">{{ $t('marketplace') }}</router-link>
+      <router-link to="/countryFair">{{ $t('countryFair') }}</router-link>
       <router-link
         to="/create"
         v-if="!store.state.isApp || (store.state.isApp && mode !== 'prod')"
@@ -75,6 +76,7 @@
   <el-drawer modal-class="menu-drawer" v-model="isShowDrawer" direction="ttb">
     <nav class="mobile-nav-modal">
       <router-link to="/" @click.stop="isShowDrawer = false">{{ $t('marketplace') }}</router-link>
+      <router-link to="/countryFair">{{ $t('countryFair') }}</router-link>
       <router-link
         to="/create"
         @click.stop="isShowDrawer = false"

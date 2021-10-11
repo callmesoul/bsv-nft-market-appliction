@@ -15,7 +15,6 @@
         :count="8"
         :isReCommend="true"
         class="section-cont nft-list"
-
       >
         <template #default>
           <div class="section-cont nft-list">
@@ -48,52 +47,17 @@
       <div class="section-header flex flex-align-center">
         <div class="title flex1">{{ $t('allmenu') }}</div>
       </div>
-      <div class="section-screen flex flex-align-center">
-        <div class="tags flex1 flex flex-align-center flex-wrap-wrap">
-          <a :class="{ active: classify === 'all' }" @click="changeClassify('all')">
-            {{
-              $t('all')
-            }}
-          </a>
-          <a
-            :class="{ active: classify === item.classify }"
-            v-for="item in classifyList"
-            :key="item.classify"
-            @click="changeClassify(item.classify)"
-          >{{ $t(item.classify) }}</a>
-        </div>
-        <div class="search-warp flex flex-align-center">
-          <input
-            class="flex1"
-            v-model="keyword"
-            :placeholder="$t('search')"
-            @keyup.enter="search"
-            type="text"
-          />
-          <img src="@/assets/images/icon_search.svg" @click="search" />
-        </div>
-      </div>
-      <NftSkeleton
-        :loading="isShowNftListSkeleton"
-        :count="pagination.pageSize"
-        class="section-cont nft-list"
-      >
-        <template #default>
-          <div class="section-cont nft-list">
-            <template v-for="item in Nfts">
-              <NftItem :item="item" />
-            </template>
-          </div>
-        </template>
-      </NftSkeleton>
+      <NftList
+        :nfts="Nfts"
+        :pagination="pagination"
+        :keyword="keyword"
+        :isShowSkeleton="isShowNftListSkeleton"
+        :classify="classify"
+        @search="search"
+        @changeClassify="changeClassify"
+        @getMore="getMore"
+      />
     </div>
-
-    <LoadMore
-      :pagination="pagination"
-      @getMore="getMore"
-      v-if="Nfts.length > 0 && !isShowNftListSkeleton"
-    />
-    <IsNull v-else />
   </div>
 </template>
 <script setup lang="ts">
@@ -108,15 +72,9 @@ import NftItem from '@/components/Nft-item/Nft-item.vue'
 import NftSkeleton from '@/components/NftSkeleton/NftSkeleton.vue'
 import { useStore } from '@/store'
 import { reactive, ref } from 'vue'
-import LoadMore from '@/components/LoadMore/LoadMore.vue'
-import IsNull from '../components/IsNull/IsNull.vue'
-import { classifyList } from '@/config'
-import { useI18n } from 'vue-i18n'
-import { setDataStrclassify } from '@/utils/util'
 import SetHomeDatas from '@/utils/homeSetData'
-import { router } from '@/router'
+import NftList from '@/components/NftList/NftList.vue'
 
-const i18n = useI18n()
 const store = useStore()
 let recommendNfts = reactive<NftItem[]>([])
 let Nfts = reactive<NftItem[]>([])
@@ -154,10 +112,6 @@ async function getNftList(isCover: boolean = false) {
     }
     isShowNftListSkeleton.value = false
   }
-}
-
-function toMetabot() {
-  router.push({ name: 'metaBot' })
 }
 
 // 获取推荐列表
@@ -205,7 +159,8 @@ function changeClassify(classifyName: string) {
 }
 
 // 搜索
-async function search() {
+async function search(_keyword: string) {
+  keyword.value = _keyword
   isShowNftListSkeleton.value = true
   pagination.loading = false
   pagination.nothing = false
@@ -223,5 +178,4 @@ async function search() {
 getRecommendNftList()
 getNftList()
 </script>
-<style lang="scss" scoped src="./Home.scss">
-</style>
+<style lang="scss" scoped src="./Home.scss"></style>
