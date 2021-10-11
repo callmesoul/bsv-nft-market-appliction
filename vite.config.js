@@ -56,12 +56,12 @@ export default ({ mode }) => {
       https: true,
       open: false,
       // 本地调试， 需先把接口的baseurl 设置为 '', 然后target指向对应 ip
-      proxy: {
-        '/api': {
-          target: 'http://192.168.168.184:8012',
-          changeOrigin: true,
-        },
-      },
+      // proxy: {
+      //   '/api': {
+      //     target: 'http://192.168.168.184:8012',
+      //     changeOrigin: true,
+      //   },
+      // },
     },
     build: {
       target: 'es2015',
