@@ -212,11 +212,16 @@
   "saleRecord": "出售记录",
   "sell": "出售",
   "buyer": "买家",
-  "topic": "专题",
+  "topic": "专辑",
   "topicTips": "不容错过的精彩NFT专题活动",
   "eventParty": "活动方",
   "isNull": "暂无内容",
   "SellNft": "上架的NFT",
-  "countryFair": "集市",
-  "countryFairIntro": "各种各样的NFT创作作品 (未认证)"
+  "countryFair": "市集",
+  "countryFairIntro": "各种各样的NFT创作作品 (未认证)",
+  "home": "首页",
+  "countryFairTips": "市集作品声明",
+  "countryFairTipsContent": "市集作品未经认证，购买时请细心",
+  "buyFeeTips": "平台将收取手续费",
+  "sellingPrice": "售价"
 }

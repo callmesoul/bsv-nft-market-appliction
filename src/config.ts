@@ -28,7 +28,7 @@ export const canCreateCardClassifyListMetaids = [
   'aaf66589caf185d6840a51cd47a91cb2fbf831c0eb6a4c32ab31f3e3b3fa5bc2',
   'baac7625edf7a3dcc28385917a6fc9a72798ffd3657da8bc22ce59fdeb3b35e0',
 ]
-export const classifyList = [
+export const classifyList: Classify[] = [
   { classify: 'art' },
   {
     classify: 'card',
@@ -36,6 +36,13 @@ export const classifyList = [
   },
   { classify: 'alias', disabled: true },
   { classify: 'avatar', disabled: true },
+  { classify: 'rights', disabled: true },
+  { classify: 'game' },
+]
+
+// 市集分类
+export const countryFairClassifyList: Classify[] = [
+  { classify: 'art' },
   { classify: 'rights', disabled: true },
   { classify: 'game' },
 ]

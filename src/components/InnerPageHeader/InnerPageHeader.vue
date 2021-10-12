@@ -2,12 +2,15 @@
   <div class="inner-page-header container flex flex-align-center">
     <div class="inner-page-header-left flex1">
       <div class="title flex flex-align-center">
-        <img
-          @click="router.back()"
-          src="@/assets/images/bannet_icon_ins.svg"
-          v-if="isHasBackIcon"
-        />
-        {{ title }}
+        <div class="flex1 flex flex-align-center">
+          <img
+            @click="router.back()"
+            src="@/assets/images/bannet_icon_ins.svg"
+            v-if="isHasBackIcon"
+          />
+          {{ title }}
+        </div>
+        <slot name="right"></slot>
       </div>
       <div class="drsc">{{ intro }}</div>
     </div>

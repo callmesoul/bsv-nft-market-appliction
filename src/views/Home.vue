@@ -53,6 +53,7 @@
         :keyword="keyword"
         :isShowSkeleton="isShowNftListSkeleton"
         :classify="classify"
+        :classifyList="classifyList"
         @search="search"
         @changeClassify="changeClassify"
         @getMore="getMore"
@@ -74,6 +75,7 @@ import { useStore } from '@/store'
 import { reactive, ref } from 'vue'
 import SetHomeDatas from '@/utils/homeSetData'
 import NftList from '@/components/NftList/NftList.vue'
+import { classifyList } from '@/config'
 
 const store = useStore()
 let recommendNfts = reactive<NftItem[]>([])

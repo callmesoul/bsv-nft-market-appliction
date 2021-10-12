@@ -4,7 +4,13 @@
     :intro="$t('countryFairIntro')"
     :is-show-search="false"
     :is-has-back-icon="false"
-  />
+  >
+    <template #right>
+      <div class="country-fair-tips" @click="isShowTipsModal = true">
+        {{ $t('countryFairTips') }}
+      </div>
+    </template>
+  </InnerPageHeader>
 
   <div class="container country-fair">
     <NftList
@@ -13,11 +19,24 @@
       :keyword="keyword"
       :isShowSkeleton="isShowNftListSkeleton"
       :classify="classify"
+      :classifyList="countryFairClassifyList"
       @search="search"
       @changeClassify="changeClassify"
       @get-more="getMore"
     />
   </div>
+
+  <!-- countryFairTips modal -->
+  <ElDialog v-model="isShowTipsModal" custom-class="modal" :title="$t('countryFairTips')">
+    <div class="modal-drsc">
+      {{ $t('countryFairTipsContent') }}
+    </div>
+    <template #footer>
+      <div class="modal-footer" slot="footer">
+        <div class="btn btn-default" @click="isShowTipsModal = false">{{ $t('confirm') }}</div>
+      </div>
+    </template>
+  </ElDialog>
 </template>
 
 <script setup lang="ts">
@@ -25,7 +44,7 @@ import InnerPageHeader from '@/components/InnerPageHeader/InnerPageHeader.vue'
 import { ref } from 'vue-demi'
 import NftList from '@/components/NftList/NftList.vue'
 import { reactive } from 'vue'
-import { pagination as initPagination } from '@/config'
+import { pagination as initPagination, countryFairClassifyList } from '@/config'
 import {
   GetAllOnSellNftList,
   GetNftOnShowListByClassify,
@@ -33,9 +52,11 @@ import {
   NftApiCode,
 } from '@/api'
 import SetHomeDatas from '@/utils/homeSetData'
+import { ElDialog } from 'element-plus'
 
 const classify = ref('all')
 const keyword = ref('')
+const isShowTipsModal = ref(false)
 const isShowNftListSkeleton = ref(true)
 const nfts = reactive<NftItem[]>([])
 const pagination = reactive({

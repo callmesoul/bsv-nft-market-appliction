@@ -215,5 +215,10 @@
   "isNull": "no content yet",
   "SellNft": "Listed NFT",
   "countryFair": "Country Fair",
-  "countryFairIntro": "Various NFT creation works (not certified)"
+  "countryFairIntro": "Various NFT creation works (not certified)",
+  "home": "Home",
+  "countryFairTips": "Market Works Statement",
+  "countryFairTipsContent": "The works in the market are not certified, please be careful when buying",
+  "buyFeeTips": "The platform will charge a handling fee",
+  "sellingPrice": "Selling price"
 }

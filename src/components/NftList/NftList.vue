@@ -1,5 +1,5 @@
 <template>
-  <div class="section-screen flex flex-align-center">
+  <div class="section-screen flex flex-align-center" v-if="classifyList && classifyList.length > 0">
     <div class="tags flex1 flex flex-align-center flex-wrap-wrap">
       <a :class="{ active: classify === 'all' }" @click="emit('changeClassify', 'all')">
         {{ $t('all') }}
@@ -42,7 +42,6 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { classifyList } from '@/config'
 import LoadMore from '@/components/LoadMore/LoadMore.vue'
 import IsNull from '@/components/IsNull/IsNull.vue'
 import NftItem from '@/components/Nft-item/Nft-item.vue'
@@ -54,6 +53,7 @@ interface Props {
   keyword?: string
   nfts: NftItem[]
   classify?: string
+  classifyList?: Classify[]
 }
 const props = withDefaults(defineProps<Props>(), {
   keyword: '',

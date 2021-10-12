@@ -11,17 +11,17 @@
       </router-link>
     </div>
     <nav class="flex flex-align-center flex-pack-center">
-      <router-link to="/">{{ $t('marketplace') }}</router-link>
+      <router-link to="/">{{ $t('home') }}</router-link>
+      <router-link to="/topic" class="flex flex-align-center">
+        {{ $t('topic') }}
+        <img src="@/assets/images/nav_icon_hot.svg" alt="MetaBot" />
+      </router-link>
       <router-link to="/countryFair">{{ $t('countryFair') }}</router-link>
       <router-link
         to="/create"
         v-if="!store.state.isApp || (store.state.isApp && mode !== 'prod')"
         >{{ $t('createnft') }}</router-link
       >
-      <router-link to="/topic" class="flex flex-align-center">
-        {{ $t('topic') }}
-        <img src="@/assets/images/nav_icon_hot.svg" alt="MetaBot" />
-      </router-link>
     </nav>
     <div class="operate flex flex-align-center">
       <!-- 登录按钮 -->
@@ -75,7 +75,11 @@
   <!-- ElDrawer -->
   <el-drawer modal-class="menu-drawer" v-model="isShowDrawer" direction="ttb">
     <nav class="mobile-nav-modal">
-      <router-link to="/" @click.stop="isShowDrawer = false">{{ $t('marketplace') }}</router-link>
+      <router-link to="/" @click.stop="isShowDrawer = false">{{ $t('home') }}</router-link>
+      <router-link to="/topic" @click.stop="isShowDrawer = false">
+        {{ $t('topic') }}
+        <img src="@/assets/images/nav_icon_hot.svg" alt="MetaBot" />
+      </router-link>
       <router-link to="/countryFair">{{ $t('countryFair') }}</router-link>
       <router-link
         to="/create"
@@ -83,10 +87,6 @@
         v-if="!store.state.isApp || (store.state.isApp && mode !== 'prod')"
         >{{ $t('createnft') }}</router-link
       >
-      <router-link to="/topic" @click.stop="isShowDrawer = false">
-        {{ $t('topic') }}
-        <img src="@/assets/images/nav_icon_hot.svg" alt="MetaBot" />
-      </router-link>
     </nav>
   </el-drawer>
 </template>
