@@ -862,7 +862,7 @@ export default class Sdk {
       if (this.isApp) {
         const functionName = 'signMessageCallBack'
         // @ts-ignore
-        window[functionName] = callBack
+        window[functionName] = callback
         if (window.appMetaIdJsV2) {
           window.appMetaIdJsV2?.signMessage(
             store.state.token!.access_token,
