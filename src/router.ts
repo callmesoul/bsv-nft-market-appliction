@@ -28,7 +28,7 @@ export const router = createRouter({
   history: routerHistory,
   strict: true,
   routes: [
-    { path: '/', name: 'home', component: Home },
+    { path: '/', name: 'home', component: Home, meta: { keepAlive: true } },
     { path: '/create', name: 'create', component: Create, meta: { isAuth: true } },
     {
       path: '/nftSuccess/:genesisId/:codehash/:tokenIndex',

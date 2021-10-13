@@ -1,31 +1,35 @@
 <template>
   <Header />
   <div class="main">
+    <!-- <router-view /> -->
     <router-view v-slot="{ Component, route }">
-      <transition name="fade">
-        <component :is="Component" :key="route.meta.usePathKey ? route.path : undefined" />
-        <!-- <keep-alive :include="keeeAliveRouterNames">
-          <component :is="Component" :key="route.meta.usePathKey ? route.path : undefined" />
-        </keep-alive> -->
-        <!-- <template v-if="route.meta.keeeAlive">
-          <keep-alive>
-            <component :is="Component" :key="route.meta.usePathKey ? route.path : undefined" />
-          </keep-alive>
-        </template>
-        <template v-else
-          ><component :is="Component" :key="route.meta.usePathKey ? route.path : undefined"
-        /></template> -->
-      </transition>
+      <Transition name="fade">
+        <div class="transition-warp">
+          <KeepAlive>
+            <component
+              :is="Component"
+              :key="route.meta.usePathKey ? route.path : undefined"
+              v-if="route.meta && route.meta.keepAlive"
+            />
+          </KeepAlive>
+          <component
+            :is="Component"
+            :key="route.meta.usePathKey ? route.path : undefined"
+            v-if="!route.meta || (route.meta && !route.meta.keepAlive)"
+          />
+        </div>
+      </Transition>
     </router-view>
   </div>
   <Footer />
 </template>
 
 <script setup lang="ts">
+import { KeepAlive, Transition, TransitionGroup } from 'vue'
 import Header from './components/Header/Header.vue'
 import Footer from './components/Footer/Footer.vue'
 
-const keeeAliveRouterNames = ['home']
+const keeeAliveRouterNames = ['Home']
 </script>
 <style>
 .main {

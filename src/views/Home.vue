@@ -178,6 +178,7 @@ async function search(_keyword: string) {
 }
 
 getRecommendNftList()
+debugger
 getNftList()
 </script>
 <style lang="scss" scoped src="./Home.scss"></style>

@@ -8,7 +8,6 @@
       :class="{
         hasmask,
       }"
-      onerror="javascript:this.src='https://testshowman.showpay.top/metafile/avatar/a9…1f918ca4342d2b018c641bbb4c293e'"
     />
   </div>
 </template>
