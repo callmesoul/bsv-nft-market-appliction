@@ -46,6 +46,7 @@ import NftList from '@/components/NftList/NftList.vue'
 import { reactive } from 'vue'
 import { pagination as initPagination, countryFairClassifyList } from '@/config'
 import {
+  CertificationType,
   GetAllOnSellNftList,
   GetNftOnShowListByClassify,
   GetNftOnShowListBySearch,
@@ -102,6 +103,7 @@ async function getNftList(isCover: boolean = false) {
     Page: pagination.page.toString(),
     classify: apiType === 'GetNftOnShowListByClassify' ? classify.value : undefined,
     SearchWord: apiType === 'GetNftOnShowListBySearch' ? keyword.value : undefined,
+    CertificationType: CertificationType.unCert,
   })
   if (res.code === NftApiCode.success) {
     if (isCover) nfts.length = 0

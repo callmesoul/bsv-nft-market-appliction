@@ -63,6 +63,7 @@
 </template>
 <script setup lang="ts">
 import {
+  CertificationType,
   GetAllOnSellNftList,
   GetNftOnShowListByClassify,
   GetNftOnShowListBySearch,
@@ -103,6 +104,7 @@ async function getNftList(isCover: boolean = false) {
     Page: pagination.page.toString(),
     classify: apiType === 'GetNftOnShowListByClassify' ? classify.value : undefined,
     SearchWord: apiType === 'GetNftOnShowListBySearch' ? keyword.value : undefined,
+    CertificationType: CertificationType.isCert,
   })
   if (res.code === NftApiCode.success) {
     if (isCover) Nfts.length = 0
