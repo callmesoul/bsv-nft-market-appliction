@@ -864,9 +864,17 @@ export default class Sdk {
         // @ts-ignore
         window[functionName] = callBack
         if (window.appMetaIdJsV2) {
-          window.appMetaIdJsV2?.signMessage(store.state.token!.access_token, 'getBalanceCallBack')
+          window.appMetaIdJsV2?.signMessage(
+            store.state.token!.access_token,
+            JSON.stringify(params),
+            functionName
+          )
         } else {
-          window.appMetaIdJs?.signMessage(store.state.token!.access_token, 'getBalanceCallBack')
+          window.appMetaIdJs?.signMessage(
+            store.state.token!.access_token,
+            JSON.stringify(params),
+            functionName
+          )
         }
       } else {
         //@ts-ignore
