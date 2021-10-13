@@ -25,6 +25,7 @@ import {
   SdkGenesisNFTRes,
   SellNFTParams,
   SendMetaDataTxRes,
+  SignMessageRes,
 } from '@/typings/sdk'
 import { rejects } from 'assert/strict'
 import MetaIdJs, { ProtocolOptions } from 'metaidjs'
@@ -854,9 +855,13 @@ export default class Sdk {
   }
 
   signMessage(params: { message: string; path?: string }) {
-    return new Promise<MetaIdJsRes>(resolve => {
+    return new Promise<SignMessageRes>(resolve => {
       if (!params.path) params.path = '0/0'
-      const callback = (res: MetaIdJs) => {
+      const callback = (res: MetaIdJsRes) => {
+        if (res.code === 200) {
+          res.data.publicKey = res.data.pubkey ? res.data.pubkey : res.data.publicKey
+          res.data.result = res.data.result ? res.data.result : res.data.signMsg
+        }
         this.callback(res, resolve)
       }
       if (this.isApp) {
