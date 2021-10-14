@@ -858,6 +858,9 @@ export default class Sdk {
     return new Promise<SignMessageRes>(resolve => {
       if (!params.path) params.path = '0/0'
       const callback = (res: MetaIdJsRes) => {
+        if (typeof res === 'string') {
+          res = JSON.parse(res)
+        }
         if (res.code === 200) {
           res.data.publicKey = res.data.pubkey ? res.data.pubkey : res.data.publicKey
           res.data.result = res.data.result ? res.data.result : res.data.signMsg
