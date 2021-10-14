@@ -195,9 +195,14 @@ export const GetMyOnSellNftList = (
   return apiHttp.post(`/aggregation/v2/app/nftOnShow/getMyNftOnShowList`, params)
 }
 
+export enum CertificationType {
+  isCert = 1,
+  unCert = 2,
+}
 export const GetAllOnSellNftList = (params: {
   PageSize: string
   Page: string
+  CertificationType: CertificationType
 }): Promise<GetMyOnSellNftListRes> => {
   return apiHttp.post(`/aggregation/v2/app/nftOnShow/getAllNftOnShowList`, params)
 }
@@ -206,6 +211,7 @@ export const GetNftOnShowListByClassify = (params: {
   PageSize: string
   Page: string
   classify: string
+  CertificationType: CertificationType
 }): Promise<GetMyOnSellNftListRes> => {
   return apiHttp.post(`/aggregation/v2/app/nftOnShow/getNftOnShowListByClassify`, params)
 }
@@ -214,6 +220,7 @@ export const GetNftOnShowListBySearch = (params: {
   PageSize: string
   Page: string
   SearchWord: string
+  CertificationType: CertificationType
 }): Promise<GetMyOnSellNftListRes> => {
   return apiHttp.post(`/aggregation/v2/app/nftOnShow/getNftOnShowListBySearch`, params)
 }
@@ -288,6 +295,14 @@ export const GetMyNftOnShowSellSuccessList = (params: {
   PageSize: string
 }): Promise<GetMyNftOnShowSellSuccessListRes> => {
   return apiHttp.post(`/aggregation/v2/app/nftOnShow/getMyNftOnShowSellSuccessList`, params)
+}
+
+export const GetTopicNftList = (params: {
+  TopicType: string
+  Page: string
+  PageSize: string
+}): Promise<GetMetaBotListRes> => {
+  return apiHttp.post(`/aggregation/v2/app/nftOnShow/getTopicNftList`, params)
 }
 
 export const GetMyNftOnShowBuySuccessList = (params: {

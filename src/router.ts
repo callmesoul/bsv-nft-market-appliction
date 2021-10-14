@@ -1,17 +1,23 @@
 import { createRouter, createWebHistory, RouterView } from 'vue-router'
-import Home from '@/views/Home.vue'
-import Create from '@/views/Create.vue'
-import NftSuccess from '@/views/NftSuccess.vue'
-import Detail from '@/views/Detail.vue'
-import Sale from '@/views/sale/Sale.vue'
-import SaleLegend from '@/views/sale/Legend.vue'
-import Login from '@/views/Login.vue'
-import Self from '@/views/Self.vue'
-import User from '@/views/User.vue'
-import Series from '@/views/Series.vue'
-import MetaBot from '@/views/MetaBot.vue'
-import Recommend from '@/views/Recommend.vue'
-import TariffDescription from '@/views/app/TariffDescription.vue'
+const Home = () => import('@/views/Home.vue')
+const Create = () => import('@/views/Create.vue')
+const NftSuccess = () => import('@/views/NftSuccess.vue')
+const Detail = () => import('@/views/Detail.vue')
+const Sale = () => import('@/views/sale/Sale.vue')
+const SaleLegend = () => import('@/views/sale/Legend.vue')
+const Login = () => import('@/views/Login.vue')
+const Self = () => import('@/views/Self.vue')
+const User = () => import('@/views/User.vue')
+const Series = () => import('@/views/Series.vue')
+const MetaBot = () => import('@/views/MetaBot.vue')
+const Recommend = () => import('@/views/Recommend.vue')
+const TariffDescription = () => import('@/views/app/TariffDescription.vue')
+const CertSystemIntro = () => import('@/views/app/CertSystemIntro.vue')
+const TermsOfUse = () => import('@/views/app/TermsOfUse.vue')
+const TopicIndex = () => import('@/views/topic/Index.vue')
+const TopicDetail = () => import('@/views/topic/Detail.vue')
+const CommonLayout = () => import('@/layouts/CommonLayout.vue')
+const CountryFair = () => import('@/views/CountryFair.vue')
 import { useStore, Action } from '@/store/index'
 import { ElMessage } from 'element-plus'
 import i18n from '@/utils/i18n'
@@ -24,7 +30,7 @@ export const router = createRouter({
   history: routerHistory,
   strict: true,
   routes: [
-    { path: '/', component: Home },
+    { path: '/', name: 'home', component: Home, meta: { keepAlive: true } },
     { path: '/create', name: 'create', component: Create, meta: { isAuth: true } },
     {
       path: '/nftSuccess/:genesisId/:codehash/:tokenIndex',
@@ -45,8 +51,21 @@ export const router = createRouter({
     { path: '/login', name: 'login', component: Login },
     { path: '/recommned', name: 'recommned', component: Recommend },
     { path: '/tariffDescription', name: 'tariffDescription', component: TariffDescription },
+    { path: '/termsOfUse', name: 'termsOfUse', component: TermsOfUse },
+    { path: '/certSystemIntro', name: 'certSystemIntro', component: CertSystemIntro },
     { path: '/metaBot', name: 'metaBot', component: MetaBot },
     { path: '/user/:metaId', name: 'user', component: User },
+    { path: '/countryFair', name: 'countryFair', component: CountryFair },
+    {
+      path: '/topic',
+      name: 'topic',
+      component: CommonLayout,
+      redirect: '/topic/index',
+      children: [
+        { path: 'index', name: 'topicIndex', component: TopicIndex },
+        { path: 'detail/:key', name: 'topicDetail', component: TopicDetail },
+      ],
+    },
   ],
   async scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {

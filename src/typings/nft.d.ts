@@ -61,3 +61,12 @@ declare interface NftItemDetail {
   auctionStatus?: number
   update_time?: number
 }
+
+declare interface Topic {
+  cover: string
+  name: string
+  createrMetaId: string
+  createrName: string
+  time: string
+  key: string
+}

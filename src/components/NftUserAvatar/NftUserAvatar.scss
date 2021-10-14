@@ -1,17 +1,20 @@
-.avatar{
+.avatar {
   cursor: pointer;
 }
+
 .mask {
   position: absolute;
-  vertical-align:middle;
+  vertical-align: middle;
   z-index: 1;
   height: 100%;
 }
-.avatar {
-  vertical-align:middle;
+
+.avatar-img {
+  vertical-align: middle;
   height: 100%;
   border-radius: 50%;
   background: #fff;
+
   &.hasmask {
     border-radius: unset;
   }

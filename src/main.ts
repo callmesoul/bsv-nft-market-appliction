@@ -10,6 +10,7 @@ import { router, routerHistory } from '@/router'
 import ElementPlus from 'element-plus'
 import * as filters from '@/utils/filters'
 import i18n from '@/utils/i18n'
+import UserAvatar from '@/components/NftUserAvatar/NftUserAvatar.vue'
 
 // ElementLocale.i18n(i18n.global.t)
 
@@ -19,6 +20,10 @@ const app = createApp(App)
 app.config.globalProperties.$filters = {
   ...filters,
 }
+
+// 全局组件
+app.component('UserAvatar', UserAvatar)
+
 app
   .use(router)
   .use(ElementPlus, {
