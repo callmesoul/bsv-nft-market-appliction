@@ -213,5 +213,9 @@
   "sell": "出售",
   "buyer": "买家",
   "isNull": "暂无内容",
-  "SellNft": "上架的NFT"
+  "SellNft": "上架的NFT",
+  "batchCreate": "批量铸造",
+  "batchCreateDrsc": "在这里你可以批量铸造NFT,而不用一个个铸造这么麻烦",
+  "indexNumber": "序号",
+  "startBatchCreate": "开始批量铸造"
 }

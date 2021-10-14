@@ -210,5 +210,8 @@
   "sell": "Sell",
   "buyer": "Buyer",
   "isNull": "no content yet",
-  "SellNft": "Listed NFT"
+  "SellNft": "Listed NFT",
+  "batchCreate": "Batch casting",
+  "batchCreateDrsc": "Here you can cast NFTs in batches, instead of casting them one by one.",
+  "startBatchCreate": "Start batch casting"
 }
