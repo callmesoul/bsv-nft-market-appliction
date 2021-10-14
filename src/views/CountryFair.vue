@@ -34,14 +34,20 @@
           {{ $t('countryFairTipsContent1') }}
         </div>
         <div class="country-fair-tips-item">
-          {{ $t('countryFairTipsContent2') }}<a>{{ $t('countryFairTipsContent3') }}</a
+          {{ $t('countryFairTipsContent2')
+          }}<router-link :to="{ name: 'termsOfUse' }">{{
+            $t('countryFairTipsContent3')
+          }}</router-link
           >,{{ $t('countryFairTipsContent4') }}
         </div>
         <div class="country-fair-tips-item">
           {{ $t('countryFairTipsContent5') }}
         </div>
         <div class="country-fair-tips-item">
-          {{ $t('countryFairTipsContent6') }} <a>{{ $t('countryFairTipsContent7') }}</a
+          {{ $t('countryFairTipsContent6') }}
+          <router-link :to="{ name: 'certSystemIntro' }">{{
+            $t('countryFairTipsContent7')
+          }}</router-link
           >{{ $t('countryFairTipsContent8') }}
         </div>
       </div>
