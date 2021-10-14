@@ -70,7 +70,7 @@ export const topics: Topic[] = [
   {
     cover: yadiannaBanner,
     name: 'Bitcoin SV Athena Astronaut 雅典娜',
-    createrMetaId: '',
+    createrMetaId: 'fc0a92af9977f4b3bf82492508c18ab28f666922eb8ee52dcefd5b7f2a690f83',
     createrName: '₿itcoin A Studio',
     time: '2021-10-08',
     key: 'Athena',
