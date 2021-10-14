@@ -297,6 +297,14 @@ export const GetMyNftOnShowSellSuccessList = (params: {
   return apiHttp.post(`/aggregation/v2/app/nftOnShow/getMyNftOnShowSellSuccessList`, params)
 }
 
+export const GetTopicNftList = (params: {
+  TopicType: string
+  Page: string
+  PageSize: string
+}): Promise<GetMetaBotListRes> => {
+  return apiHttp.post(`/aggregation/v2/app/nftOnShow/getTopicNftList`, params)
+}
+
 export const GetMyNftOnShowBuySuccessList = (params: {
   MetaId: string
   Page: string

@@ -1,40 +1,15 @@
 <template>
-  <InnerPageHeader title="MetaBot" :intro="$t('metaBotDrsc')" :keyword="keyword" @search="search" />
+  <InnerPageHeader :title="topic.val.name" :isShowSearch="false" />
 
   <!-- banner -->
   <div class="banner container">
-    <a @click="toMetabot" v-if="i18n.locale.value === 'zh'"
+    <a @click="toMetabot"><img :src="topic.val.cover" alt="Metabot"/></a>
+    <!-- <a @click="toMetabot" v-if="i18n.locale.value === 'zh'"
       ><img src="@/assets/images/cn-banner-metabot.png" alt="Metabot"
     /></a>
     <a @click="toMetabot" v-else
       ><img src="@/assets/images/cn-banner-metabot.png" alt="Metabot"
-    /></a>
-  </div>
-
-  <VueCountdown
-    :time="countdown"
-    :transform="transformSlotProps"
-    v-slot="{ days, hours, minutes, seconds }"
-    @end="onCountdownEnd"
-    v-if="countdown > 0 && isShowCountdown"
-  >
-    <div class="countdown">
-      <div class="title">#016 - #200 {{ $t('sellCountDown') }}:</div>
-      <div class="cont">
-        {{ parseInt(hours) + parseInt(days) * 24 }} : {{ minutes }} : {{ seconds }}
-      </div>
-    </div>
-  </VueCountdown>
-
-  <div class="metabot-tags container">
-    <a
-      class="metabot-tag"
-      :class="{ active: sectionIndex === index }"
-      v-for="(section, index) in sections"
-      :key="index"
-      @click="changeSectionIndex(index)"
-      >{{ section.name }}</a
-    >
+    /></a> -->
   </div>
 
   <el-skeleton
@@ -132,46 +107,6 @@
                 {{ new Decimal(metabot.nftPrice).div(Math.pow(10, 8)).toString() }} BSV
               </div>
             </template>
-            <!-- 拍卖 -->
-            <template v-else-if="isAuction">
-              <template v-if="index <= 1">
-                <div
-                  class="btn btn-block auction-btn flex flex-align-center flex-pack-center btn-gray"
-                >
-                  {{ $t('NotForSale') }}
-                </div>
-              </template>
-              <template v-else-if="!metabot.currentPrice">
-                <div
-                  class="btn btn-block auction-btn flex flex-align-center flex-pack-center btn-gray"
-                >
-                  {{ $t('unStart') }}
-                </div>
-              </template>
-              <template v-else>
-                <div
-                  class="btn btn-block auction-btn flex flex-align-center flex-pack-center"
-                  :class="{ 'btn-gray': metabot.auctionStatus !== 1 }"
-                >
-                  <div>
-                    <div class="status">
-                      {{
-                        metabot.auctionStatus === 0
-                          ? $t('unStart')
-                          : metabot.auctionStatus === 1
-                          ? $t('currentBid')
-                          : metabot.auctionStatus === 2
-                          ? $t('finalPrice')
-                          : ''
-                      }}
-                    </div>
-                    <div class="amount" v-if="metabot.auctionStatus !== 0">
-                      {{ metabot.currentPrice }} BSV
-                    </div>
-                  </div>
-                </div>
-              </template>
-            </template>
             <template
               v-else-if="
                 metabot.nftSellState === 2 ||
@@ -202,20 +137,26 @@
   </el-skeleton>
 
   <div class="page-footer">
-    <!-- <LoadMore
-        :pagination="pagination"
-        @getMore="getMore"
-        v-if="metaBots.length > 0 && !isShowSkeleton"
-      /> -->
-    <IsNull v-if="metaBots.length <= 0" />
+    <LoadMore
+      :pagination="pagination"
+      @getMore="getMore"
+      v-if="metaBots.length > 0 && !isShowSkeleton"
+    />
+    <IsNull v-if="metaBots.length <= 0 && !isShowSkeleton" />
   </div>
 </template>
 <script lang="ts" setup>
 import { ref, reactive, onMounted, computed } from 'vue'
 import { useStore } from '@/store'
 import IsNull from '@/components/IsNull/IsNull.vue'
-import { useRouter } from 'vue-router'
-import { GetMetaBotList, GetMetaBotListBySearch, GetNftAuctions, NFTApiGetNFTDetail } from '@/api'
+import { useRoute, useRouter } from 'vue-router'
+import {
+  GetMetaBotList,
+  GetMetaBotListBySearch,
+  GetNftAuctions,
+  GetTopicNftList,
+  NFTApiGetNFTDetail,
+} from '@/api'
 import { ElLoading, ElMessage, ElMessageBox, ElSkeleton, ElSkeletonItem } from 'element-plus'
 import { checkSdkStatus, metafileUrl } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
@@ -226,35 +167,35 @@ import VueCountdown from '@chenfengyuan/vue-countdown'
 import { ElImage } from 'element-plus'
 import NftUserAvatar from '@/components/NftUserAvatar/NftUserAvatar.vue'
 import InnerPageHeader from '@/components/InnerPageHeader/InnerPageHeader.vue'
+import { topics } from '@/config'
+import LoadMore from '@/components/LoadMore/LoadMore.vue'
 
 const store = useStore()
 const router = useRouter()
+const route = useRoute()
 const i18n = useI18n()
 const isShowSkeleton = ref(true)
 const keyword = ref('')
 const metaBots: GetMetaBotListResItem[] = reactive([])
 const pagination = reactive({
   ...store.state.pagination,
-  pageSize: 100,
+  pageSize: 20,
+})
+const topic: { val: Topic } = reactive({
+  val: {
+    cover: '',
+    name: '',
+    createrMetaId: '',
+    createrName: '',
+    time: '',
+    key: '',
+  },
 })
 
 const countdown = ref(0)
 const isShowCountdown = ref(true)
 const isAuction = computed(() => sections[sectionIndex.value].name === '#001-015')
 const now = new Date().getTime()
-const sections = [
-  { name: '#001-015', start: 1, end: 15 },
-  { name: '#016-100', start: 16, end: 100 },
-  { name: '#101-200', start: 101, end: 200 },
-  { name: '#201-300', start: 201, end: 300 },
-  { name: '#301-400', start: 301, end: 400 },
-  { name: '#401-500', start: 401, end: 500 },
-  { name: '#501-600', start: 501, end: 600 },
-  { name: '#601-700', start: 601, end: 700 },
-  { name: '#701-800', start: 701, end: 800 },
-  { name: '#801-900', start: 801, end: 900 },
-  { name: '#901-999', start: 901, end: 999 },
-]
 const sectionIndex = ref(0)
 
 function onCountdownEnd() {
@@ -299,17 +240,6 @@ function toMetabot() {
 }
 
 function toDetail(metabot: GetMetaBotListResItem) {
-  let query: any = {}
-  if (isAuction.value && !metabot.isOnlyDisplay && metabot.nftSellState === 3) {
-    query.isAuctioin = true
-  } else if (
-    isAuction.value &&
-    !metabot.isOnlyDisplay &&
-    metabot.nftSellState !== 3 &&
-    !metabot.nftIsReady
-  ) {
-    query.isAuctioin = true
-  }
   router.push({
     name: 'detail',
     params: {
@@ -317,291 +247,26 @@ function toDetail(metabot: GetMetaBotListResItem) {
       codehash: metabot.nftCodehash,
       tokenIndex: metabot.nftTokenIndex,
     },
-    query,
   })
 }
 
 function getDatas(isCover = false) {
   return new Promise<void>(async resolve => {
-    /*     if (sections[sectionIndex.value].name === '#001-015') {
-      metaBots.length = 0
-      const res = await GetNftAuctions({
-        page: pagination.page,
-        page_size: pagination.pageSize,
-      })
-      if (res.code === 0) {
-        // @ts-ignore
-        const list = []
-        for (let i = 0; i < 7; i++) {
-          list.push({
-            codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
-            genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
-            token_index: i,
-          })
-        }
-        const item7 = res.data.find(
-          (item) =>
-            item.codehash === '0d0fc08db6e27dc0263b594d6b203f55fb5282e2' &&
-            item.genesis === '204dafb6ee543796b4da6f1d4134c1df2609bdf1' &&
-            item.token_index === 7
-        )
-        if (!item7)
-          list.push({
-            codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
-            genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
-            token_index: 7,
-          })
-        const item8 = res.data.find(
-          (item) =>
-            item.codehash === '0d0fc08db6e27dc0263b594d6b203f55fb5282e2' &&
-            item.genesis === '204dafb6ee543796b4da6f1d4134c1df2609bdf1' &&
-            item.token_index === 8
-        )
-        if (!item8)
-          list.push({
-            codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
-            genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
-            token_index: 8,
-          })
-        const item9 = res.data.find(
-          (item) =>
-            item.codehash === '0d0fc08db6e27dc0263b594d6b203f55fb5282e2' &&
-            item.genesis === '204dafb6ee543796b4da6f1d4134c1df2609bdf1' &&
-            item.token_index === 9
-        )
-        if (!item9)
-          list.push({
-            codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
-            genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
-            token_index: 9,
-          })
-        const item10 = res.data.find(
-          (item) =>
-            item.codehash === '0d0fc08db6e27dc0263b594d6b203f55fb5282e2' &&
-            item.genesis === '204dafb6ee543796b4da6f1d4134c1df2609bdf1' &&
-            item.token_index === 10
-        )
-        if (!item10)
-          list.push({
-            codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
-            genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
-            token_index: 10,
-          })
-        const item11 = res.data.find(
-          (item) =>
-            item.codehash === '0d0fc08db6e27dc0263b594d6b203f55fb5282e2' &&
-            item.genesis === '204dafb6ee543796b4da6f1d4134c1df2609bdf1' &&
-            item.token_index === 11
-        )
-        if (!item11)
-          list.push({
-            codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
-            genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
-            token_index: 11,
-          })
-
-        const item12 = res.data.find(
-          (item) =>
-            item.codehash === '0d0fc08db6e27dc0263b594d6b203f55fb5282e2' &&
-            item.genesis === '204dafb6ee543796b4da6f1d4134c1df2609bdf1' &&
-            item.token_index === 12
-        )
-        if (!item12)
-          list.push({
-            codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
-            genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
-            token_index: 12,
-          })
-
-        const item13 = res.data.find(
-          (item) =>
-            item.codehash === '0d0fc08db6e27dc0263b594d6b203f55fb5282e2' &&
-            item.genesis === '204dafb6ee543796b4da6f1d4134c1df2609bdf1' &&
-            item.token_index === 13
-        )
-        if (!item13)
-          list.push({
-            codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
-            genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
-            token_index: 13,
-          })
-
-        const item14 = res.data.find(
-          (item) =>
-            item.codehash === '0d0fc08db6e27dc0263b594d6b203f55fb5282e2' &&
-            item.genesis === '204dafb6ee543796b4da6f1d4134c1df2609bdf1' &&
-            item.token_index === 14
-        )
-        if (!item14)
-          list.push({
-            codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
-            genesis: '204dafb6ee543796b4da6f1d4134c1df2609bdf1',
-            token_index: 14,
-          })
-
-        // @ts-ignore
-        res.data.unshift(...list)
-        for (let i = 0; i < res.data.length; i++) {
-          const response = await NFTApiGetNFTDetail({
-            codehash: res.data[i].codehash,
-            genesis: res.data[i].genesis,
-            tokenIndex: res.data[i].token_index.toString(),
-          })
-          if (response.code === 0) {
-            const item = response.data.results.items[0]
-            metaBots.push({
-              nftSellState: item.nftSellState,
-              nftBalance: item.nftBalance,
-              nftBuyTimestamp: 0,
-              nftBuyTxId: '',
-              nftCancelTimestamp: 0,
-              nftCancelTxId: '',
-              nftCodehash: item.nftCodehash,
-              nftDataStr: item.nftDataStr,
-              nftDesc: item.nftDesc,
-              nftGenesis: item.nftGenesis,
-              nftGenesisTxId: item.nftGenesisTxId,
-              nftIcon: item.nftIcon,
-              nftIssueAvatarTxId: item.nftIssueMetaId,
-              nftIssueMetaId: item.nftIssueMetaId,
-              nftIssueTimestamp: item.nftTimestamp,
-              nftIssueVersion: '',
-              nftIssuer: item.nftIssuer,
-              nftName: item.nftName,
-              nftOwnerAvatarTxId: item.nftOwnerAvatarTxId,
-              nftOwnerMetaId: item.nftOwnerMetaId,
-              nftOwnerName: item.nftOwnerName,
-              nftPrice: item.nftPrice,
-              nftSellContractTxId: item.nftSellContractTxId,
-              nftSellDesc: item.nftSellDesc,
-              nftSellTimestamp: 0,
-              nftSellTxId: item.nftSellTxId,
-              nftSensibleId: item.nftSensibleId,
-              nftSeriesName: '',
-              nftSymbol: '',
-              nftTimestamp: 0,
-              nftTokenIndex: item.nftTokenIndex,
-              nftWebsite: '',
-              nftIsReady: item.nftIsReady,
-              isAuction: true,
-              auctionStatus: res.data[i].status,
-              auctionDeadTime: res.data[i].dead_time,
-              nftOwnerAvatarType: item.nftOwnerAvatarType,
-              nftIssueAvatarType: item.nftIssueAvatarType,
-              currentPrice:
-                res.data[i].buyer_value === '0' ? res.data[i].value : res.data[i].buyer_value,
-            })
-          }
-        }
-      }
-      isShowSkeleton.value = false
-    } else {
-      
-    } */
-
-    const res = await GetMetaBotList({
+    const res = await GetTopicNftList({
       Page: pagination.page.toString(),
       PageSize: pagination.pageSize.toString(),
-      Start: sections[sectionIndex.value].start,
-      End: sections[sectionIndex.value].end,
+      TopicType: typeof route.params.key === 'string' ? route.params.key : '',
     })
     if (res.code === 0) {
       if (isCover) {
         metaBots.length = 0
       }
-      if (sections[sectionIndex.value].name === '#001-015') {
-        const auctionRes = await GetNftAuctions({
-          page: pagination.page,
-          page_size: pagination.pageSize,
-        })
-        if (auctionRes.code === 0) {
-          for (let i = 0; i < auctionRes.data.length; i++) {
-            const auctionItem = auctionRes.data[i]
-            const item = res.data.results.items.find(
-              item =>
-                item.nftCodehash === auctionItem.codehash &&
-                item.nftGenesis === auctionItem.genesis &&
-                item.nftTokenIndex === auctionItem.token_index.toString()
-            )
-            if (item) {
-              if (item.nftSellState === 3) {
-                item.isAuction = true
-                ;(item.auctionStatus = auctionItem.status),
-                  (item.auctionDeadTime = auctionItem.dead_time),
-                  (item.currentPrice =
-                    auctionItem.buyer_value === '0' ? auctionItem.value : auctionItem.buyer_value)
-              }
-            } else {
-              const response = await NFTApiGetNFTDetail({
-                codehash: auctionItem.codehash,
-                genesis: auctionItem.genesis,
-                tokenIndex: auctionItem.token_index.toString(),
-              })
-              if (response.code === 0) {
-                const item = response.data.results.items[0]
-                res.data.results.items.push({
-                  nftSellState: item.nftSellState,
-                  nftBalance: item.nftBalance,
-                  nftBuyTimestamp: 0,
-                  nftBuyTxId: '',
-                  nftCancelTimestamp: 0,
-                  nftCancelTxId: '',
-                  nftCodehash: item.nftCodehash,
-                  nftDataStr: item.nftDataStr,
-                  nftDesc: item.nftDesc,
-                  nftGenesis: item.nftGenesis,
-                  nftGenesisTxId: item.nftGenesisTxId,
-                  nftIcon: item.nftIcon,
-                  nftIssueAvatarTxId: item.nftIssueMetaId,
-                  nftIssueMetaId: item.nftIssueMetaId,
-                  nftIssueTimestamp: item.nftTimestamp,
-                  nftIssueVersion: '',
-                  nftIssuer: item.nftIssuer,
-                  nftName: item.nftName,
-                  nftOwnerAvatarTxId: item.nftOwnerAvatarTxId,
-                  nftOwnerMetaId: item.nftOwnerMetaId,
-                  nftOwnerName: item.nftOwnerName,
-                  nftPrice: item.nftPrice,
-                  nftSellContractTxId: item.nftSellContractTxId,
-                  nftSellDesc: item.nftSellDesc,
-                  nftSellTimestamp: 0,
-                  nftSellTxId: item.nftSellTxId,
-                  nftSensibleId: item.nftSensibleId,
-                  nftSeriesName: '',
-                  nftSymbol: '',
-                  nftTimestamp: 0,
-                  nftTokenIndex: item.nftTokenIndex,
-                  nftWebsite: '',
-                  nftIsReady: item.nftIsReady,
-                  isAuction: true,
-                  auctionStatus: auctionItem.status,
-                  auctionDeadTime: auctionItem.dead_time,
-                  currentPrice:
-                    auctionItem.buyer_value === '0' ? auctionItem.value : auctionItem.buyer_value,
-                })
-              }
-            }
-          }
-        }
-      }
-      if (res.data.results.items.length > 0) {
-        metaBots.push(...res.data.results.items)
-      } else {
+      metaBots.push(...res.data.results.items)
+      isShowSkeleton.value = false
+      const totalPages = Math.ceil(res.data.total / pagination.pageSize)
+      if (totalPages <= pagination.page) {
         pagination.nothing = true
       }
-      if (countdown.value <= 0) {
-        // @ts-ignore
-        if (res.data.countdown > 0) {
-          // @ts-ignore
-          countdown.value = res.data.countdown + 1000
-          if (!isShowCountdown.value) isShowCountdown.value = true
-        } else {
-          // @ts-ignore
-          countdown.value = res.data.countdown
-          if (isShowCountdown.value) isShowCountdown.value = false
-        }
-      }
-      isShowSkeleton.value = false
     }
     resolve()
   })
@@ -729,6 +394,12 @@ function nftNotCanBuy(res: any) {
 }
 
 onMounted(() => {
+  if (route.params.key) {
+    const topicItem = topics.find(item => item.key === route.params.key)
+    if (topicItem) {
+      topic.val = topicItem
+    }
+  }
   pagination.page = 1
   pagination.loading = false
   pagination.nothing = false

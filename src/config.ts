@@ -1,4 +1,6 @@
 import i18n from '@/utils/i18n'
+import yadiannaBanner from '@/assets/images/banner_yadianna.jpg'
+import metabotBanner from '@/assets/images/banner_metabot.jpg'
 
 export const nftTypes = [
   { name: i18n.global.t('image'), value: '1', disabled: false, key: 'image' },
@@ -62,4 +64,23 @@ export const certedMetaIds = [
   '446988fc6cc0240c0a81c9e95e41183aa162a8a1aafef89dc30ef6c310ca4362',
   'aaf66589caf185d6840a51cd47a91cb2fbf831c0eb6a4c32ab31f3e3b3fa5bc2',
   'baac7625edf7a3dcc28385917a6fc9a72798ffd3657da8bc22ce59fdeb3b35e0',
+]
+
+export const topics: Topic[] = [
+  {
+    cover: yadiannaBanner,
+    name: 'Bitcoin SV Athena Astronaut 雅典娜',
+    createrMetaId: '',
+    createrName: '₿itcoin A Studio',
+    time: '2021-10-08',
+    key: 'Athena',
+  },
+  {
+    cover: metabotBanner,
+    name: 'MetaID首个头像NFT-MetaBot',
+    createrMetaId: '974e2977d5c9446f7f48fd82c9ea51f82749b9ef7c00d26b73bc450d167d5f31',
+    createrName: 'ShowPayTeam',
+    time: '2021-09-08',
+    key: 'MetaBot',
+  },
 ]
