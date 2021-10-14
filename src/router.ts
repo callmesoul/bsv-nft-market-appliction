@@ -12,6 +12,8 @@ const Series = () => import('@/views/Series.vue')
 const MetaBot = () => import('@/views/MetaBot.vue')
 const Recommend = () => import('@/views/Recommend.vue')
 const TariffDescription = () => import('@/views/app/TariffDescription.vue')
+const CertSystemIntro = () => import('@/views/app/CertSystemIntro.vue')
+const TermsOfUse = () => import('@/views/app/TermsOfUse.vue')
 const TopicIndex = () => import('@/views/topic/Index.vue')
 const TopicDetail = () => import('@/views/topic/Detail.vue')
 const CommonLayout = () => import('@/layouts/CommonLayout.vue')
@@ -49,6 +51,8 @@ export const router = createRouter({
     { path: '/login', name: 'login', component: Login },
     { path: '/recommned', name: 'recommned', component: Recommend },
     { path: '/tariffDescription', name: 'tariffDescription', component: TariffDescription },
+    { path: '/termsOfUse', name: 'termsOfUse', component: TermsOfUse },
+    { path: '/certSystemIntro', name: 'certSystemIntro', component: CertSystemIntro },
     { path: '/metaBot', name: 'metaBot', component: MetaBot },
     { path: '/user/:metaId', name: 'user', component: User },
     { path: '/countryFair', name: 'countryFair', component: CountryFair },

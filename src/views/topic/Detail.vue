@@ -3,7 +3,7 @@
 
   <!-- banner -->
   <div class="banner container">
-    <a @click="toMetabot"><img :src="topic.val.cover" alt="Metabot"/></a>
+    <a><img :src="topic.val.cover" alt="Metabot"/></a>
     <!-- <a @click="toMetabot" v-if="i18n.locale.value === 'zh'"
       ><img src="@/assets/images/cn-banner-metabot.png" alt="Metabot"
     /></a>

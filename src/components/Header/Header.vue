@@ -49,8 +49,14 @@
           <el-dropdown-menu>
             <el-dropdown-item @click="toSelf">{{ $t('mynft') }}</el-dropdown-item>
             <el-dropdown-item @click="toWallet">{{ $t('mywallet') }}</el-dropdown-item>
-            <el-dropdown-item @click="toTariffDescription">
+            <el-dropdown-item @click="toPage('tariffDescription')">
               {{ $t('tariffDescription ') }}
+            </el-dropdown-item>
+            <el-dropdown-item @click="toPage('termsOfUse')">
+              {{ $t('termsOfUse') }}
+            </el-dropdown-item>
+            <el-dropdown-item @click="toPage('certSystemIntro')">
+              {{ $t('certSystemIntro') }}
             </el-dropdown-item>
             <el-dropdown-item @click="logout">{{ $t('logout') }}</el-dropdown-item>
           </el-dropdown-menu>
@@ -137,8 +143,8 @@ function toWallet() {
   window.open(import.meta.env.VITE_AuthUrl)
 }
 
-function toTariffDescription() {
-  router.push('/tariffDescription')
+function toPage(name: string) {
+  router.push({ name })
 }
 </script>
 

@@ -233,5 +233,13 @@
   "countryFairTipsContent6": "我们欢迎优秀创作者加入NFTonShow，我们将提供官方认证服务及开辟独创的合作方式，助力您的作品获得最大限度市场认可。点击阅读",
   "countryFairTipsContent7": "《NFT On Show认证系统》",
   "countryFairTipsContent8": "介绍了解如何申请。",
-  "iknow": "知道了"
+  "iknow": "知道了",
+  "termsOfUse": "使用规范",
+  "preface": "前言",
+  "termsOfUseTitle1": "NOS铸造、上架NFT规范",
+  "certSystemIntro ": "认证系统介绍",
+  "certSystemIntro": "认证系统介绍",
+  "certSystemIntroCont1": "NOS认证用户是NOS官方对于个人账号、机构账号以及企业账号信息真实性的一个确认。当用户的账号经过认证之后，用户的账号就会有一个对应的标识，认证信息会记录在链上，在不影响隐私的情况下尽量公开。",
+  "certSystemIntroCont2": "NOS认证是面向所有MetaID用户申请的，同时NOS的认证是需要做KYC以及检测认证的用户名不会侵权、让用户迷惑。也会特别关注认证用户对作品的版权问题。",
+  "certSystemIntroCont3": "NOS上的ShowPay认证是ShowPay作为NOS的商业运营方对平台内容尽量少侵权问题而做的手段之一，是一个平台性质的认证不是MetaId性质的认证。而且这个认证更多是针对艺术类和实物类NFT，以后的功能性NFT大部分无需认证。这个认证不代表ShowPay对该账号或作品价值的认可，用户须自行承担投资风险。"
 }

@@ -1,0 +1,11 @@
+@import './TariffDescription';
+
+.tariff-description .tariff-description-section .tariff-description-title {
+    line-height: 36px;
+    font-size: 16px;
+}
+
+.tariff-description .tariff-description-section .tariff-description-title[data-v-d480adfe]::after {
+    top: 0;
+    margin-top: 12px;
+}
