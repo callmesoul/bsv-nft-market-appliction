@@ -12,7 +12,7 @@ export default class HttpRequest {
         const index = config.url?.indexOf('/api/v2/')
         if (index !== -1) {
           config.headers['token'] = `${store.state.nftToken}`
-          config.headers['type'] = `2`
+          config.headers['type'] = store.state.isApp ? '0' : '2'
           config.headers['metaId'] = store.state.userInfo?.metaId
         } else {
           const token = store.state.token ? store.state.token.access_token : null
