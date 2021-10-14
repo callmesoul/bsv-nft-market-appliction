@@ -217,9 +217,18 @@
   "countryFair": "Country Fair",
   "countryFairIntro": "Various NFT creation works (not certified)",
   "home": "Home",
-  "countryFairTips": "Market Works Statement",
+  "countryFairTips": "Notes on using NFT in the market",
   "countryFairTipsContent": "The works in the market are not certified, please be careful when buying",
   "buyFeeTips": "The platform will charge a handling fee",
   "sellingPrice": "Selling price",
-  "noauction": "No bid"
+  "noauction": "No bid",
+  "countryFairTipsContent1": "NFTonShow is a C2C self-service trading market, and the market is a platform where NFTonShow centrally displays all non-officially certified NFTs, which means that anyone can cast and sell NFTs in the market.",
+  "countryFairTipsContent2": "Please read before using",
+  "countryFairTipsContent3": "\"NFT On Show Usage Guidelines\"",
+  "countryFairTipsContent4": "Once the NFT is put on the market and purchased, it means that it agrees to use the specification and assumes its due responsibilities and risks.",
+  "countryFairTipsContent5": "We will actively review all types of NFTs, and once we find illegal content, we will delete them immediately. \nWe also remind you to be cautious when trading, NFTonShow will not be responsible for non-platform fault.",
+  "countryFairTipsContent6": "We welcome outstanding creators to join NFTonShow. We will provide official certification services and open up original cooperation methods to help your work gain maximum market recognition. \nclick to read",
+  "countryFairTipsContent7": "\"NFT On Show Certification System\"",
+  "countryFairTipsContent8": "Introduce how to apply.",
+  "iknow": "I Know"
 }

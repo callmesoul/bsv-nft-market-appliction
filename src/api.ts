@@ -197,7 +197,7 @@ export const GetMyOnSellNftList = (
 
 export enum CertificationType {
   isCert = 1,
-  unCert = 0,
+  unCert = 2,
 }
 export const GetAllOnSellNftList = (params: {
   PageSize: string

@@ -220,9 +220,18 @@
   "countryFair": "市集",
   "countryFairIntro": "各种各样的NFT创作作品 (未认证)",
   "home": "首页",
-  "countryFairTips": "市集作品声明",
+  "countryFairTips": "市集NFT使用须知",
   "countryFairTipsContent": "市集作品未经认证，购买时请细心",
   "buyFeeTips": "平台将收取手续费",
   "sellingPrice": "售价",
-  "noauction": "无出价"
+  "noauction": "无出价",
+  "countryFairTipsContent1": "NFTonShow是一个C2C的自助交易市场，而市集是NFTonShow集中展示所有未经官方认证NFT的平台，这意味着任何人都可以铸造和在市集出售NFT。",
+  "countryFairTipsContent2": "请您在使用之前阅读",
+  "countryFairTipsContent3": "《NFT On Show 使用规范》",
+  "countryFairTipsContent4": "一旦在市集上架、购买NFT，即代表同意使用规范，并承担其应有的责任与风险。",
+  "countryFairTipsContent5": "我们将积极主动审核各类NFT，一旦发现违规违法内容，将立刻进行删除。我们同时提醒您在交易时须谨慎甄别，NFTonShow将不承担非平台过错的责任。",
+  "countryFairTipsContent6": "我们欢迎优秀创作者加入NFTonShow，我们将提供官方认证服务及开辟独创的合作方式，助力您的作品获得最大限度市场认可。点击阅读",
+  "countryFairTipsContent7": "《NFT On Show认证系统》",
+  "countryFairTipsContent8": "介绍了解如何申请。",
+  "iknow": "知道了"
 }

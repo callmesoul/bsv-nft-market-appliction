@@ -29,11 +29,24 @@
   <!-- countryFairTips modal -->
   <ElDialog v-model="isShowTipsModal" custom-class="modal" :title="$t('countryFairTips')">
     <div class="modal-drsc">
-      {{ $t('countryFairTipsContent') }}
+      <div class="country-fair-tips-item">
+        {{ $t('countryFairTipsContent1') }}
+      </div>
+      <div class="country-fair-tips-item">
+        {{ $t('countryFairTipsContent2') }}<a>{{ $t('countryFairTipsContent3') }}</a
+        >,{{ $t('countryFairTipsContent4') }}
+      </div>
+      <div class="country-fair-tips-item">
+        {{ $t('countryFairTipsContent5') }}
+      </div>
+      <div class="country-fair-tips-item">
+        {{ $t('countryFairTipsContent6') }} <a>{{ $t('countryFairTipsContent7') }}</a
+        >{{ $t('countryFairTipsContent8') }}
+      </div>
     </div>
     <template #footer>
       <div class="modal-footer" slot="footer">
-        <div class="btn btn-default" @click="isShowTipsModal = false">{{ $t('confirm') }}</div>
+        <div class="btn btn-default" @click="isShowTipsModal = false">{{ $t('iknow') }}</div>
       </div>
     </template>
   </ElDialog>
