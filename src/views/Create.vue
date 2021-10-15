@@ -13,12 +13,8 @@
     <div class="cont-warp">
       <div class="tags" v-if="createTypeIndex !== 1">
         <template v-for="(type, index) in _nftTypes">
-          <ElTooltip
-            :effect="Effect.DARK"
-            :content="$t('stayTuned')"
-            placement="top"
-            v-if="type.disabled"
-          >
+          <ElTooltip :effect="Effect.DARK" placement="top" v-if="type.disabled" :offset="-310">
+            <template #content> {{ $t('stayTuned') }} </template>
             <a :class="{ active: type.value === nft.type }" @click="changeTag(index)">
               {{ $t(type.key) }}
             </a>
@@ -148,7 +144,8 @@
             placement="top-start"
             style="word-wrap: break-word; word-break: break-all"
             :width="200"
-            trigger="hover"
+            :offset="-310"
+            trigger="click"
             :content="$t('whatNftSeies')"
           >
             <template #reference>

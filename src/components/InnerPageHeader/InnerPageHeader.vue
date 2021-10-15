@@ -28,7 +28,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
 import { useRouter } from 'vue-router'
 const emit = defineEmits(['search']) // 定义事件
 const props = defineProps({

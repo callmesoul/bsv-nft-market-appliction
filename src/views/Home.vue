@@ -82,6 +82,7 @@ import SetHomeDatas from '@/utils/homeSetData'
 import NftList from '@/components/NftList/NftList.vue'
 import { classifyList } from '@/config'
 import { router } from '@/router'
+import { ElPopover } from 'element-plus'
 
 const store = useStore()
 let recommendNfts = reactive<NftItem[]>([])
