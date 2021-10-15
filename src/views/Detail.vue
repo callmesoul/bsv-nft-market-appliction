@@ -1024,6 +1024,7 @@ async function toSale() {
     ElMessage.error(res.data)
     return
   }
+  debugger
   router.push({
     name: 'sale',
     params: {

@@ -47,8 +47,9 @@
 
     <!-- 所有类别 -->
     <div class="section container">
-      <div class="section-header flex flex-align-center">
-        <div class="title flex1">{{ $t('allmenu') }}</div>
+      <div class="section-header">
+        <div class="title">{{ $t('allmenu') }}</div>
+        <div class="intro">{{ $t('allmenuIntro') }}</div>
       </div>
       <NftList
         :nfts="Nfts"

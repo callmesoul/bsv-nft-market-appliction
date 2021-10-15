@@ -3,6 +3,7 @@
     ref="root"
     :user-info-loading="store.state.userInfoLoading"
     :user="user"
+    :isHideAuthor="true"
     @openRecordModal="openRecordModal"
   />
   <!-- record -->

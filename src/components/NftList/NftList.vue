@@ -28,7 +28,7 @@
     <template #default>
       <div class="section-cont nft-list">
         <template v-for="item in nfts">
-          <NftItem :item="item" />
+          <NftItem :item="item" :isHideAuthor="isHideAuthor" />
         </template>
       </div>
     </template>
@@ -54,10 +54,12 @@ interface Props {
   nfts: NftItem[]
   classify?: string
   classifyList?: Classify[]
+  isHideAuthor: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
   keyword: '',
   classify: 'all',
+  isHideAuthor: false,
 })
 
 const emit = defineEmits(['search', 'changeClassify', 'getMore'])

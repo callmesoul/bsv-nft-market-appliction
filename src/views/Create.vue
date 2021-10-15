@@ -13,20 +13,22 @@
     <div class="cont-warp">
       <div class="tags" v-if="createTypeIndex !== 1">
         <template v-for="(type, index) in _nftTypes">
-          <template v-if="type.disabled">
-            <ElTooltip effect="dark" :content="$t('stayTuned')" placement="top">
-              <a :class="{ active: type.value === nft.type }" @click="changeTag(index)">
-                {{ $t(type.key) }}
-              </a>
-            </ElTooltip>
-          </template>
-          <template v-else>
-            <a
-              :class="{ active: type.value === nft.type, disabled: type.disabled }"
-              @click="changeTag(index)"
-              >{{ $t(type.key) }}</a
-            >
-          </template>
+          <ElTooltip
+            :effect="Effect.DARK"
+            :content="$t('stayTuned')"
+            placement="top"
+            v-if="type.disabled"
+          >
+            <a :class="{ active: type.value === nft.type }" @click="changeTag(index)">
+              {{ $t(type.key) }}
+            </a>
+          </ElTooltip>
+          <a
+            v-else
+            :class="{ active: type.value === nft.type, disabled: type.disabled }"
+            @click="changeTag(index)"
+            >{{ $t(type.key) }}</a
+          >
         </template>
       </div>
       <div class="tips">
@@ -227,18 +229,13 @@
 <script setup lang="ts">
 import {
   ElDialog,
-  ElDropdown,
-  ElDropdownItem,
-  ElDropdownMenu,
-  ElDatePicker,
-  ElSelect,
-  ElOption,
   ElImage,
   ElMessage,
   ElLoading,
   ElTooltip,
   ElPopover,
   ElMessageBox,
+  Effect,
 } from 'element-plus'
 
 import { checkSdkStatus, tranfromImgFile } from '@/utils/util'

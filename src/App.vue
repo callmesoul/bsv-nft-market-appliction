@@ -2,24 +2,7 @@
   <Header />
   <div class="main">
     <!-- <router-view /> -->
-    <router-view v-slot="{ Component, route }">
-      <Transition name="fade">
-        <div class="transition-warp">
-          <KeepAlive>
-            <component
-              :is="Component"
-              :key="route.meta.usePathKey ? route.path : undefined"
-              v-if="route.meta && route.meta.keepAlive"
-            />
-          </KeepAlive>
-          <component
-            :is="Component"
-            :key="route.meta.usePathKey ? route.path : undefined"
-            v-if="!route.meta || (route.meta && !route.meta.keepAlive)"
-          />
-        </div>
-      </Transition>
-    </router-view>
+    <router-view> </router-view>
   </div>
   <Footer />
 </template>
@@ -36,5 +19,6 @@ const keeeAliveRouterNames = ['Home']
   padding-top: 60px;
   padding-bottom: 100px;
   flex: 1;
+  min-height: 0;
 }
 </style>

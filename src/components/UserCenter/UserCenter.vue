@@ -103,7 +103,7 @@
       <template #default>
         <div class="section-cont nft-list">
           <template v-for="nft in nfts">
-            <NftItem :item="nft" :isSelf="true" />
+            <NftItem :item="nft" :isSelf="true" :isHideAuthor="isHideAuthor && tabIndex === 1" />
           </template>
         </div>
       </template>
@@ -166,6 +166,10 @@ const props = defineProps({
         address: '',
       }
     },
+  },
+  isHideAuthor: {
+    type: Boolean,
+    default: false,
   },
 })
 

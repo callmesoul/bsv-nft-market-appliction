@@ -4,8 +4,8 @@ import metabotBanner from '@/assets/images/banner_metabot.jpg'
 
 export const nftTypes = [
   { name: i18n.global.t('image'), value: '1', disabled: false, key: 'image' },
-  { name: i18n.global.t('copyright'), value: '3', disabled: true, key: 'copyright' },
   { name: i18n.global.t('inkind'), value: '2', disabled: true, key: 'inkind' },
+  { name: i18n.global.t('copyright'), value: '3', disabled: true, key: 'copyright' },
 ]
 export enum UnitName {
   SATS = 'SATS',
@@ -31,16 +31,16 @@ export const canCreateCardClassifyListMetaids = [
   'baac7625edf7a3dcc28385917a6fc9a72798ffd3657da8bc22ce59fdeb3b35e0',
 ]
 export const classifyList: Classify[] = [
+  { classify: 'rights', disabled: true },
   { classify: 'art' },
+  { classify: 'music', disabled: true },
+  { classify: 'game' },
+  { classify: 'avatar', disabled: true },
   {
     classify: 'card',
     disabled: true,
   },
-  { classify: 'alias', disabled: true },
-  { classify: 'avatar', disabled: true },
-  { classify: 'rights', disabled: true },
-  { classify: 'music' },
-  { classify: 'game' },
+  // { classify: 'alias', disabled: true },
 ]
 
 // 市集分类

@@ -15,11 +15,11 @@
       </div>
       <div class="content flex">
         <div class="msg flex1">
-          <div class="price" v-if="route.name !== 'self' && (item.amount || props.isRecommendCard)">
+          <div class="price" v-if="item.amount || props.isRecommendCard">
             <div class="label">{{ $t('price') }}</div>
             <div class="aount">{{ new Decimal(item?.amount).div(10 ** 8).toString() }} BSV</div>
           </div>
-          <div class="author flex flex-align-center">
+          <div class="author flex flex-align-center" v-if="!isHideAuthor">
             <img
               src="@/assets/images/ava_mask.png"
               class="mask"
@@ -126,6 +126,7 @@ const overTime = computed(() => props.item.deadlineTime && props.item.deadlineTi
 const props = defineProps<{
   item: NftItem
   isRecommendCard?: boolean
+  isHideAuthor?: boolean
 }>()
 
 function toDetail() {
