@@ -1,13 +1,13 @@
 <template>
   <InnerPageHeader
     :title="$t('countryFair')"
-    :intro="$t('countryFairIntro')"
+    intro=""
     :is-show-search="false"
     :is-has-back-icon="false"
   >
-    <template #right>
-      <div class="country-fair-tips" @click="isShowTipsModal = true">
-        {{ $t('countryFairTips') }}
+    <template #intro>
+      <div class="intro-tips">
+        {{ $t('countryFairIntro') }} <a @click="isShowTipsModal = true">{{ $t('knowMore') }}</a>
       </div>
     </template>
   </InnerPageHeader>

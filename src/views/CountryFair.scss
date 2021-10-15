@@ -1,3 +1,5 @@
+@import '@/assets/styles/var.scss';
+
 .country-fair-tips {
     color: #456FC4;
     font-size: 12px;
@@ -9,6 +11,20 @@
 
     :deep(.nft-list) {
         margin-top: 40px;
+    }
+}
+
+.intro-tips {
+    display: inline-block;
+    background: rgba(254, 179, 56, 0.3);
+    color: #6b6d71;
+    padding: 10px;
+    border-radius: 6px;
+
+
+    a {
+        color: #456FC4;
+        cursor: pointer;
     }
 }
 
