@@ -169,6 +169,7 @@ function changeClassify(classifyName: string) {
 
 // 搜索
 async function search(_keyword: string) {
+  debugger
   keyword.value = _keyword
   isShowNftListSkeleton.value = true
   pagination.loading = false

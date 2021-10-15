@@ -15,12 +15,12 @@
     <div class="search-warp flex flex-align-center">
       <input
         class="flex1"
-        v-model="keyword"
+        v-model="key"
         :placeholder="$t('search')"
-        @keyup.enter="search"
+        @keyup.enter="emit('search', key)"
         type="text"
       />
-      <img src="@/assets/images/icon_search.svg" @click="search" />
+      <img src="@/assets/images/icon_search.svg" @click="emit('search', key)" />
     </div>
   </div>
 
@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import LoadMore from '@/components/LoadMore/LoadMore.vue'
 import IsNull from '@/components/IsNull/IsNull.vue'
 import NftItem from '@/components/Nft-item/Nft-item.vue'
@@ -50,7 +50,7 @@ import NftSkeleton from '@/components/NftSkeleton/NftSkeleton.vue'
 interface Props {
   pagination: Pagination
   isShowSkeleton: boolean
-  keyword: string
+  keyword?: string
   nfts: NftItem[]
   classify?: string
   classifyList?: Classify[]
@@ -61,21 +61,16 @@ const props = withDefaults(defineProps<Props>(), {
   classify: 'all',
   isHideAuthor: false,
 })
-
 const emit = defineEmits(['search', 'changeClassify', 'getMore'])
 
-// 搜索
-function search() {
-  emit('search', props.keyword)
-}
+const key = ref(props.keyword)
 
-function changeClassify(classify: string) {
-  emit('changeClassify', classify)
-}
-
-function getMore() {
-  emit('getMore')
-}
+watch(
+  () => props.keyword,
+  () => {
+    key.value = props.keyword
+  }
+)
 </script>
 
 <style lang="scss" scoped src="./NftList.scss"></style>
