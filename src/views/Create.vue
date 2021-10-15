@@ -19,12 +19,7 @@
               {{ $t(type.key) }}
             </a>
           </ElTooltip> -->
-          <a
-            v-if="type.disabled"
-            :class="{ active: type.value === nft.type, disabled: type.disabled }"
-            @click="ElMessage.info($t('stayTuned'))"
-            >{{ $t(type.key) }}</a
-          >
+          <a v-if="type.disabled" @click="ElMessage.info($t('stayTuned'))">{{ $t(type.key) }}</a>
           <a
             v-else
             :class="{ active: type.value === nft.type, disabled: type.disabled }"
