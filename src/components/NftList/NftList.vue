@@ -50,11 +50,11 @@ import NftSkeleton from '@/components/NftSkeleton/NftSkeleton.vue'
 interface Props {
   pagination: Pagination
   isShowSkeleton: boolean
-  keyword?: string
+  keyword: string
   nfts: NftItem[]
   classify?: string
   classifyList?: Classify[]
-  isHideAuthor: boolean
+  isHideAuthor?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
   keyword: '',
