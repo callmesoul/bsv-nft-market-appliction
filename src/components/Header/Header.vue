@@ -41,6 +41,7 @@
             class="avatar"
             :metaId="store.state.userInfo?.showId"
             :hasmask="store.state.userInfo.avatarType === 'nft-metabot'"
+            :disabled="true"
           />
           <div class="username">{{ store.state.userInfo?.name }}</div>
         </div>

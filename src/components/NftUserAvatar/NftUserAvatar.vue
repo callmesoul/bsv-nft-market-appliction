@@ -20,11 +20,13 @@ const props = defineProps<{
   metaId: string
   bg?: string
   alt?: string
+  disabled?: boolean
 }>()
 const store = useStore()
 const router = useRouter()
 
 function toUser() {
+  if (props.disabled) return
   if (store.state.userInfo && store.state.userInfo.metaId === props.metaId) {
     router.push({ name: 'self' })
   } else {

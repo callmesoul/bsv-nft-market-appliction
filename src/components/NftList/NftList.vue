@@ -17,10 +17,10 @@
         class="flex1"
         v-model="keyword"
         :placeholder="$t('search')"
-        @keyup.enter="emit('search', keyword)"
+        @keyup.enter="search"
         type="text"
       />
-      <img src="@/assets/images/icon_search.svg" @click="emit('search', keyword)" />
+      <img src="@/assets/images/icon_search.svg" @click="search" />
     </div>
   </div>
 
