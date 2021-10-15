@@ -338,7 +338,14 @@
             </div>
 
             <!-- buy-fee-tips -->
-            <div class="buy-fee-tips" v-if="nft.val.putAway">
+            <div
+              class="buy-fee-tips"
+              v-if="
+                nft.val.putAway &&
+                  (!store.state.userInfo ||
+                    (store.state.userInfo && store.state.userInfo.metaId !== nft.val.ownerMetaId))
+              "
+            >
               {{ $t('buyFeeTips') }}:
               {{
                 new Decimal(nft.val.amount)
