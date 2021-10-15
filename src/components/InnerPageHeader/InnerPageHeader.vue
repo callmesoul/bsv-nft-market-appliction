@@ -12,7 +12,7 @@
         </div>
         <slot name="right"></slot>
       </div>
-      <div class="drsc">{{ intro }}</div>
+      <div class="drsc">{{ intro }} <slot name="intro"></slot></div>
     </div>
     <div class="search-warp flex flex-align-center" v-if="isShowSearch">
       <input

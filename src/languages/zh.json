@@ -218,7 +218,7 @@
   "isNull": "暂无内容",
   "SellNft": "上架的NFT",
   "countryFair": "市集",
-  "countryFairIntro": "各种各样的NFT创作作品 (未认证)",
+  "countryFairIntro": "市集上出售的NFT为未经本平台认证的产品，可能存在侵权等风险问题，请用户谨慎甄别。",
   "home": "首页",
   "countryFairTips": "市集NFT使用须知",
   "countryFairTipsContent": "市集作品未经认证，购买时请细心",
@@ -243,5 +243,6 @@
   "certSystemIntroCont2": "NOS认证是面向所有MetaID用户申请的，同时NOS的认证是需要做KYC以及检测认证的用户名不会侵权、让用户迷惑。也会特别关注认证用户对作品的版权问题。",
   "certSystemIntroCont3": "NOS上的ShowPay认证是ShowPay作为NOS的商业运营方对平台内容尽量少侵权问题而做的手段之一，是一个平台性质的认证不是MetaId性质的认证。而且这个认证更多是针对艺术类和实物类NFT，以后的功能性NFT大部分无需认证。这个认证不代表ShowPay对该账号或作品价值的认可，用户须自行承担投资风险。",
   "music": "音乐",
-  "allmenuIntro": "这是一个日新月异的数字艺术平台"
+  "allmenuIntro": "这是一个日新月异的数字艺术平台",
+  "knowMore": "了解更多"
 }
