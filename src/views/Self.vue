@@ -2,7 +2,8 @@
   <UserCenter
     ref="root"
     :user-info-loading="store.state.userInfoLoading"
-    :user="{ metaId: store.state.userInfo?.metaId, name: store.state.userInfo?.name }"
+    :user="user"
+    :isHideAuthor="true"
     @openRecordModal="openRecordModal"
   />
   <!-- record -->
@@ -113,7 +114,7 @@ import {
 } from '@/api'
 import NftItem from '@/components/Nft-item/Nft-item.vue'
 import { useStore } from '@/store'
-import { onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import LoadMore from '@/components/LoadMore/LoadMore.vue'
 import IsNull from '../components/IsNull/IsNull.vue'
 import NftSkeleton from '@/components/NftSkeleton/NftSkeleton.vue'
@@ -137,7 +138,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { router } from '@/router'
 import UserCenter from '@/components/UserCenter/UserCenter.vue'
 
-const root = ref(null)
+const root = ref()
 const i18n = useI18n()
 const store = useStore()
 const recordPagination = reactive({
@@ -156,8 +157,11 @@ const currentUser: { metaId: string; name: string; address?: string } = reactive
   metaId: '',
   name: '',
 })
-const metaId = ref('')
-const address = ref('')
+const user = reactive({
+  name: store.state.userInfo?.name,
+  metaId: store.state.userInfo?.metaId,
+  address: store.state.userInfo?.address,
+})
 
 function getMoreRecords() {
   recordPagination.loading = true
@@ -188,9 +192,25 @@ function openRecordModal() {
 }
 
 onMounted(() => {
-  console.log('===========a========')
-  console.log(root.value)
-  console.log(UserCenter)
+  if (store.state.token) {
+    // 还没拿到用户信息的时候要等待拿用户信息完再调接口
+    if (store.state.userInfo) {
+      root.value.getMyNfts()
+    } else {
+      store.watch(
+        state => state.userInfo,
+        () => {
+          ;(user.name = store.state.userInfo?.name),
+            (user.metaId = store.state.userInfo?.metaId),
+            (user.address = store.state.userInfo?.address),
+            root.value.getMyNfts()
+        }
+      )
+    }
+  } else {
+    ElMessage.warning(i18n.t('toLoginTip'))
+    router.replace('/')
+  }
 })
 
 async function getRecordList(isCover: boolean = false) {

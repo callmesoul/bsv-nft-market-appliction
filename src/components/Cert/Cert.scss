@@ -1,16 +1,23 @@
 @import '@/assets/styles/var.scss';
-.cert{
+
+.cert {
     cursor: pointer;
     font-size: 14px;
     text-align: right;
-    .icon-cert{
-        width:  18px;
+
+    .icon-cert {
+        width: 18px;
         height: 18px;
         margin-right: 6px;
     }
-    .icon-right{
+
+    .icon-right {
         color: $mainColor;
         font-weight: bold;
         font-size: 14px;
+    }
+
+    span {
+        line-height: normal;
     }
 }

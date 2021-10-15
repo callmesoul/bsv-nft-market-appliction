@@ -8,10 +8,10 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { defineProps, ref, computed } from "@vue/runtime-core";
+import { ref, computed } from '@vue/runtime-core'
 import { certedMetaIds } from '@/config'
-import { ElMessage } from "element-plus";
-import { useI18n } from "vue-i18n";
+import { ElMessage } from 'element-plus'
+import { useI18n } from 'vue-i18n'
 const props = defineProps<{
   metaId?: string
 }>()
@@ -22,5 +22,4 @@ function toCert() {
   ElMessage.info(i18n.t('stayTuned'))
 }
 </script>
-<style lang="scss" scoped src="./Cert.scss">
-</style>
+<style lang="scss" scoped src="./Cert.scss"></style>

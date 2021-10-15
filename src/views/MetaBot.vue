@@ -1,22 +1,5 @@
 <template>
-  <div class="inner-page-header container flex flex-align-center">
-    <div class="inner-page-header-left flex1">
-      <div class="title flex flex-align-center">
-        <img @click="router.back()" src="@/assets/images/bannet_icon_ins.svg" />MetaBot
-      </div>
-      <div class="drsc">{{ $t('metaBotDrsc') }}</div>
-    </div>
-    <div class="search-warp flex flex-align-center">
-      <input
-        class="flex1"
-        v-model="keyword"
-        :placeholder="$t('search')"
-        @keyup.enter="search"
-        type="text"
-      />
-      <img src="@/assets/images/icon_search.svg" @click="search" />
-    </div>
-  </div>
+  <InnerPageHeader title="MetaBot" :intro="$t('metaBotDrsc')" :keyword="keyword" @search="search" />
 
   <!-- banner -->
   <div class="banner container">
@@ -242,6 +225,7 @@ import NFTDetail from '@/utils/nftDetail'
 import VueCountdown from '@chenfengyuan/vue-countdown'
 import { ElImage } from 'element-plus'
 import NftUserAvatar from '@/components/NftUserAvatar/NftUserAvatar.vue'
+import InnerPageHeader from '@/components/InnerPageHeader/InnerPageHeader.vue'
 
 const store = useStore()
 const router = useRouter()
@@ -294,11 +278,13 @@ function transformSlotProps(props: any) {
   return formattedProps
 }
 
-function search() {
+function search(_keyword: string) {
+  keyword.value = _keyword
   isShowSkeleton.value = true
   pagination.page = 1
   pagination.loading = false
   pagination.nothing = false
+  debugger
   if (keyword.value === '') {
     sectionIndex.value = 0
     getDatas(true)

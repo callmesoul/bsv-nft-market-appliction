@@ -10,14 +10,16 @@
       <span v-if="item.classify && item.classify.length > 0">{{ $t(item.classify[0]) }}</span>
     </div>
     <div class="cont">
-      <div class="name">{{ isSelf ? item.productName : item?.name }}</div>
+      <div class="name">
+        {{ route.name === 'self' ? item.productName : item?.name }}
+      </div>
       <div class="content flex">
         <div class="msg flex1">
-          <div class="price" v-if="!isSelf">
+          <div class="price" v-if="item.amount || props.isRecommendCard">
             <div class="label">{{ $t('price') }}</div>
             <div class="aount">{{ new Decimal(item?.amount).div(10 ** 8).toString() }} BSV</div>
           </div>
-          <div class="author flex flex-align-center">
+          <div class="author flex flex-align-center" v-if="!isHideAuthor">
             <img
               src="@/assets/images/ava_mask.png"
               class="mask"
@@ -28,25 +30,27 @@
               :src="$filters.avatar(item?.metaId)"
               :alt="item?.foundryName"
               :class="{
-                hasmask: item.avatarType === 'nft-metabot'
+                hasmask: item.avatarType === 'nft-metabot',
               }"
-              onerror="javascript:this.src='https://testshowman.showpay.top/metafile/avatar/a9…1f918ca4342d2b018c641bbb4c293e'"
             />
-            <span class="username flex1">{{ item?.foundryName }}</span>
+            <span class="username">{{ item?.foundryName }}</span>
+            <img
+              class="cert-icon"
+              src="@/assets/images/icon_cer.svg"
+              v-if="certedMetaIds.find(_item => _item === item.metaId)"
+            />
           </div>
         </div>
-        <img
-          class="cert-icon"
-          src="@/assets/images/cert.svg"
-          v-if="certedMetaIds.find(_item => _item === item.metaId)"
-        />
       </div>
-      <div class="operate flex flex-align-center" v-if="props.isSelf">
+      <div
+        class="operate flex flex-align-center"
+        v-if="route.name === 'self' || route.name === 'series'"
+      >
         <div class="timeleft flex1">
           <!-- 系列 且拥有数量 > 1 -->
-          <template
-            v-if="item.hasCount && item.hasCount > 1"
-          >{{ $t('series') }} {{ item.hasCount }}/{{ item.total }}</template>
+          <template v-if="item.hasCount && item.hasCount > 1"
+            >{{ $t('series') }} {{ item.hasCount }}/{{ item.total }}</template
+          >
           <template v-else-if="item.putAway">
             <template v-if="overTime">{{ $t('overTime') }}</template>
             <div v-else class="flex flex-align-center">
@@ -55,18 +59,17 @@
             </div>
           </template>
         </div>
-
+        <!-- 系列 -->
         <a class="btn btn-min btn-plain" v-if="item.hasCount && item.hasCount > 1">
-          {{
-            $t('seeAll')
-          }}
+          {{ $t('seeAll') }}
         </a>
-        <a class="btn btn-min btn-plain" v-else-if="item?.putAway" @click.stop="offSale">
-          {{
-            $t('offsale')
-          }}
-        </a>
-        <a class="btn btn-min" v-else @click.stop="toSale">{{ $t('sale') }}</a>
+        <template v-else>
+          <!-- 非系列 -->
+          <a class="btn btn-min btn-plain" v-if="item?.putAway" @click.stop="offSale">
+            {{ $t('offsale') }}
+          </a>
+          <a class="btn btn-min" v-else @click.stop="toSale">{{ $t('sale') }}</a>
+        </template>
       </div>
     </div>
     <!-- 推荐卡片 -->
@@ -87,9 +90,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useStore, Mutation } from '@/store/index'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { GetMyNftEligibility, GetNftDetail, Langs, NftApiCode, OffSale } from '@/api'
 import { ElDialog, ElLoading, ElMessage, ElMessageBox } from 'element-plus'
 import { useI18n } from 'vue-i18n'
@@ -105,6 +108,7 @@ const coverDefaultImg = 'this.src="/state/cover-default.jpg"' //默认图地址
 
 const store = useStore()
 const router = useRouter()
+const route = useRoute()
 const i18n = useI18n()
 const now = new Date().getTime()
 const appVersion = store.state.version // not reactive!
@@ -122,7 +126,7 @@ const overTime = computed(() => props.item.deadlineTime && props.item.deadlineTi
 const props = defineProps<{
   item: NftItem
   isRecommendCard?: boolean
-  isSelf?: boolean
+  isHideAuthor?: boolean
 }>()
 
 function toDetail() {
@@ -212,5 +216,4 @@ function offSale() {
 }
 </script>
 
-<style lang="scss" scoped src="./Nft-item.scss">
-</style>
+<style lang="scss" scoped src="./Nft-item.scss"></style>

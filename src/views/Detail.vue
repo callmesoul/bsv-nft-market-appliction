@@ -1,6 +1,7 @@
 <template>
   <div class="nft-detail">
     <ElSkeleton :loading="isShowSkeleton" animated>
+      <!-- 骨架屏 -->
       <template #template>
         <div class="top flex container">
           <!-- {{ nft.val.coverUrl }} -->
@@ -117,24 +118,25 @@
         </div>
       </template>
 
+      <!-- 默认内容 -->
       <template #default>
         <div class="top flex container">
-          <!-- {{ nft.val.coverUrl }} -->
-          <el-image
+          <!-- 封面图 -->
+          <ElImage
             class="cover flex flex-align-center flex-pack-center"
             fit="contain"
-            :lazy="true"
             :alt="nft.val.nftName"
             :src="metafileUrl(nft.val.coverUrl)"
             :preview-src-list="[metafileUrl(nft.val.coverUrl)]"
-          ></el-image>
-          <!-- <img class="cover" :src="nft.val.coverUrl" /> -->
+          ></ElImage>
+
           <div class="cont flex1 flex flex-v">
             <div class="name flex flex-align-center">
               <span class="text flex1">{{ nft.val.nftName }}</span>
               <img src="@/assets/images/icon_share.svg" :alt="$t('share')" @click="share" />
             </div>
             <div class="creater-msg">
+              <!-- 铸造者 -->
               <div class="author flex flex-align-center">
                 <NftUserAvatar
                   class="avatar"
@@ -148,8 +150,12 @@
                   </div>
                 </div>
               </div>
+
+              <!-- 认证信息 -->
               <CertTemp :metaId="nft.val.foundryMetaId" />
             </div>
+
+            <!-- 描述 -->
             <div class="drsc flex1 flex flex-v">
               <div class="title flex flex-align-center">
                 <template v-if="nft.val.putAway">
@@ -178,16 +184,30 @@
               </div>
             </div>
 
-            <!-- <template v-if="nft.val.putAway && nft.val.remainingTime">
-              <div class="timeleft">
-                {{ $t('timeleft') }}：<span>{{ day }}</span
+            <div class="putAway-msg flex flex-align-center">
+              <div class="timeleft flex1">
+                <!-- {{ $t('timeleft') }}：<span>{{ day }}</span
                 >{{ $t('day') }}<span>{{ hour }}</span
                 >{{ $t('hour') }}<span>{{ minute }}</span
                 >{{ $t('minu') }}<span>{{ second }}</span
-                >{{ $t('second') }}
+                >{{ $t('second') }} -->
               </div>
-            </template>-->
-            <!-- <div class="btn btn-block"  @click="buy">{{ $t('use') }} {{ nft.val.amount }} BSV {{ $t('buy') }}</div> -->
+
+              <!-- 当自己的NFT上架时也要显示价格 -->
+              <div
+                class="my-sell-price"
+                v-if="
+                  nft.val.putAway &&
+                    store.state.userInfo &&
+                    store.state.userInfo.metaId === nft.val.ownerMetaId
+                "
+              >
+                {{ $t('sellingPrice') }}:
+                {{ new Decimal(nft.val.amount).div(Math.pow(10, 8)).toString() }} BSV
+              </div>
+            </div>
+
+            <!-- 拍卖信息 -->
             <div class="auction-msg flex flex-align-center" v-if="nft.val.isAuction">
               <div class="auction-msg-item flex1">
                 <div class="title">{{ $t('currentBid') }}：</div>
@@ -219,6 +239,7 @@
               </div>
             </div>
 
+            <!-- 操作 -->
             <div class="operate-warp flex flex-align-center">
               <template v-if="nft.val.isAuction">
                 <!-- 拍卖 -->
@@ -314,6 +335,25 @@
                   </template>
                 </template>
               </template>
+            </div>
+
+            <!-- buy-fee-tips -->
+            <div
+              class="buy-fee-tips"
+              v-if="
+                nft.val.putAway &&
+                  (!store.state.userInfo ||
+                    (store.state.userInfo && store.state.userInfo.metaId !== nft.val.ownerMetaId))
+              "
+            >
+              {{ $t('buyFeeTips') }}:
+              {{
+                new Decimal(nft.val.amount)
+                  .mul(0.05)
+                  .div(10 ** 8)
+                  .toString()
+              }}
+              BSV
             </div>
           </div>
         </div>
@@ -645,6 +685,7 @@ import {
   ElSkeletonItem,
   ElMessageBox,
   ElDialog,
+  ElImage,
 } from 'element-plus'
 import { useRoute } from 'vue-router'
 // @ts-ignore
@@ -990,6 +1031,7 @@ async function toSale() {
     ElMessage.error(res.data)
     return
   }
+  debugger
   router.push({
     name: 'sale',
     params: {

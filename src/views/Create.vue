@@ -13,20 +13,24 @@
     <div class="cont-warp">
       <div class="tags" v-if="createTypeIndex !== 1">
         <template v-for="(type, index) in _nftTypes">
-          <template v-if="type.disabled">
-            <ElTooltip effect="dark" :content="$t('stayTuned')" placement="top">
-              <a :class="{ active: type.value === nft.type }" @click="changeTag(index)">
-                {{ $t(type.key) }}
-              </a>
-            </ElTooltip>
-          </template>
-          <template v-else>
-            <a
-              :class="{ active: type.value === nft.type, disabled: type.disabled }"
-              @click="changeTag(index)"
-              >{{ $t(type.key) }}</a
-            >
-          </template>
+          <!-- <ElTooltip :effect="Effect.DARK" placement="top" v-if="type.disabled" :offset="-310">
+            <template #content> {{ $t('stayTuned') }} </template>
+            <a :class="{ active: type.value === nft.type }" @click="changeTag(index)">
+              {{ $t(type.key) }}
+            </a>
+          </ElTooltip> -->
+          <a
+            v-if="type.disabled"
+            :class="{ active: type.value === nft.type, disabled: type.disabled }"
+            @click="ElMessage.info($t('stayTuned'))"
+            >{{ $t(type.key) }}</a
+          >
+          <a
+            v-else
+            :class="{ active: type.value === nft.type, disabled: type.disabled }"
+            @click="changeTag(index)"
+            >{{ $t(type.key) }}</a
+          >
         </template>
       </div>
       <div class="tips">
@@ -142,17 +146,18 @@
       <div class="create-form-item seices">
         <div class="title flex flex-align-center">
           <span class="flex1">{{ $t('isserices') }}</span>
-          <ElPopover
+          <!-- <ElPopover
             placement="top-start"
             style="word-wrap: break-word; word-break: break-all"
             :width="200"
-            trigger="hover"
+            :offset="-310"
+            trigger="click"
             :content="$t('whatNftSeies')"
           >
             <template #reference>
               <a>{{ $t('whatserices') }}</a>
             </template>
-          </ElPopover>
+          </ElPopover> -->
         </div>
         <div class="cont">
           <div class="input-item flex flex-align-center" @click="openSeriesModal">
@@ -227,18 +232,13 @@
 <script setup lang="ts">
 import {
   ElDialog,
-  ElDropdown,
-  ElDropdownItem,
-  ElDropdownMenu,
-  ElDatePicker,
-  ElSelect,
-  ElOption,
   ElImage,
   ElMessage,
   ElLoading,
   ElTooltip,
   ElPopover,
   ElMessageBox,
+  Effect,
 } from 'element-plus'
 
 import { checkSdkStatus, tranfromImgFile } from '@/utils/util'
