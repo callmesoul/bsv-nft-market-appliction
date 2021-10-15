@@ -14,7 +14,6 @@
       <router-link to="/">{{ $t('home') }}</router-link>
       <router-link to="/topic" class="flex flex-align-center">
         {{ $t('topic') }}
-        <img src="@/assets/images/nav_icon_hot.svg" alt="MetaBot" />
       </router-link>
       <router-link to="/countryFair">{{ $t('countryFair') }}</router-link>
       <router-link
@@ -84,7 +83,6 @@
       <router-link to="/" @click.stop="isShowDrawer = false">{{ $t('home') }}</router-link>
       <router-link to="/topic" @click.stop="isShowDrawer = false">
         {{ $t('topic') }}
-        <img src="@/assets/images/nav_icon_hot.svg" alt="MetaBot" />
       </router-link>
       <router-link to="/countryFair">{{ $t('countryFair') }}</router-link>
       <router-link

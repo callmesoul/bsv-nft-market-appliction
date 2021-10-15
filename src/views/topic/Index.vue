@@ -2,6 +2,7 @@
   <InnerPageHeader
     :title="$t('topic')"
     :intro="$t('topicTips')"
+    :isShowSearch="false"
     :keyword="keyword"
     @search="search"
   />

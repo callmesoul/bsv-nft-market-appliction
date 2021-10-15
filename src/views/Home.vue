@@ -1,11 +1,14 @@
 <template>
   <!-- banner -->
-  <!-- <div class="banner container">
-    <a @click="toMetabot" v-if="i18n.locale.value === 'zh'"
+  <div class="banner container">
+    <a @click="toPage('/topic/detail/Athena')"
+      ><img src="@/assets/images/banner_yadianna.jpg" alt="yadianna"
+    /></a>
+    <!-- <a @click="toMetabot" v-if="i18n.locale.value === 'zh'"
       ><img src="@/assets/images/nos-banner2.png" alt="Metabot"
     /></a>
-    <a @click="toMetabot" v-else><img src="@/assets/images/nos-banner-en2.png" alt="Metabot" /></a>
-  </div>-->
+    <a @click="toMetabot" v-else><img src="@/assets/images/nos-banner-en2.png" alt="Metabot" /></a> -->
+  </div>
 
   <div class="home">
     <!-- 推荐作品 -->
@@ -77,6 +80,7 @@ import { reactive, ref } from 'vue'
 import SetHomeDatas from '@/utils/homeSetData'
 import NftList from '@/components/NftList/NftList.vue'
 import { classifyList } from '@/config'
+import { router } from '@/router'
 
 const store = useStore()
 let recommendNfts = reactive<NftItem[]>([])
@@ -177,6 +181,14 @@ async function search(_keyword: string) {
     apiType = 'GetNftOnShowListBySearch'
   }
   getNftList(true)
+}
+
+function toPage(link: string) {
+  if (link.indexOf('https://') !== -1 || link.indexOf('http://') !== -1) {
+    window.open(link)
+  } else {
+    router.push(link)
+  }
 }
 
 getRecommendNftList()

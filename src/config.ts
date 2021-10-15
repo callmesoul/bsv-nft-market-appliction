@@ -39,13 +39,15 @@ export const classifyList: Classify[] = [
   { classify: 'alias', disabled: true },
   { classify: 'avatar', disabled: true },
   { classify: 'rights', disabled: true },
+  { classify: 'music' },
   { classify: 'game' },
 ]
 
 // 市集分类
 export const countryFairClassifyList: Classify[] = [
-  { classify: 'art' },
   { classify: 'rights', disabled: true },
+  { classify: 'art' },
+  { classify: 'music' },
   { classify: 'game' },
 ]
 
