@@ -85,7 +85,9 @@
       <router-link to="/topic" @click.stop="isShowDrawer = false">
         {{ $t('topic') }}
       </router-link>
-      <router-link to="/countryFair">{{ $t('countryFair') }}</router-link>
+      <router-link to="/countryFair" @click.stop="isShowDrawer = false">{{
+        $t('countryFair')
+      }}</router-link>
       <router-link
         to="/create"
         @click.stop="isShowDrawer = false"
