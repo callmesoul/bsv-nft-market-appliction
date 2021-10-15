@@ -1,6 +1,7 @@
 import i18n from '@/utils/i18n'
 import yadiannaBanner from '@/assets/images/banner_yadianna.jpg'
 import metabotBanner from '@/assets/images/banner_metabot.jpg'
+import metaIdCardBanner from '@/assets/images/banner_metaid.png'
 
 export const nftTypes = [
   { name: i18n.global.t('image'), value: '1', disabled: false, key: 'image' },
@@ -76,6 +77,14 @@ export const topics: Topic[] = [
     createrName: '₿itcoin A Studio',
     time: '2021-10-08',
     key: 'Athena',
+  },
+  {
+    cover: metaIdCardBanner,
+    name: 'MetaID创世纪念卡',
+    createrMetaId: '3c03f6b8783fa672bb34953519110944dab1d8a23711c7df4f1dd9e16e5b823c',
+    createrName: 'OpenMetaNetFoundation',
+    time: '2021-09-28',
+    key: 'MetaIdCommemorativeCard',
   },
   {
     cover: metabotBanner,
