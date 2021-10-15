@@ -13,12 +13,18 @@
     <div class="cont-warp">
       <div class="tags" v-if="createTypeIndex !== 1">
         <template v-for="(type, index) in _nftTypes">
-          <ElTooltip :effect="Effect.DARK" placement="top" v-if="type.disabled" :offset="-310">
+          <!-- <ElTooltip :effect="Effect.DARK" placement="top" v-if="type.disabled" :offset="-310">
             <template #content> {{ $t('stayTuned') }} </template>
             <a :class="{ active: type.value === nft.type }" @click="changeTag(index)">
               {{ $t(type.key) }}
             </a>
-          </ElTooltip>
+          </ElTooltip> -->
+          <a
+            v-if="type.disabled"
+            :class="{ active: type.value === nft.type, disabled: type.disabled }"
+            @click="ElMessage.info($t('stayTuned'))"
+            >{{ $t(type.key) }}</a
+          >
           <a
             v-else
             :class="{ active: type.value === nft.type, disabled: type.disabled }"
@@ -140,7 +146,7 @@
       <div class="create-form-item seices">
         <div class="title flex flex-align-center">
           <span class="flex1">{{ $t('isserices') }}</span>
-          <ElPopover
+          <!-- <ElPopover
             placement="top-start"
             style="word-wrap: break-word; word-break: break-all"
             :width="200"
@@ -151,7 +157,7 @@
             <template #reference>
               <a>{{ $t('whatserices') }}</a>
             </template>
-          </ElPopover>
+          </ElPopover> -->
         </div>
         <div class="cont">
           <div class="input-item flex flex-align-center" @click="openSeriesModal">
