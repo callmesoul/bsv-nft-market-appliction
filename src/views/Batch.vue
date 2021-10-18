@@ -11,23 +11,68 @@
 
   <div class="batch-create container">
     <!-- 选择系列 -->
-    <div class="select-series">
-      <div class="input-item flex flex-align-center" @click="isShowSeriesModal = true">
-        <div class="select-warp flex flex-align-center">
-          <div class="key flex1">{{ $t('chooseserices') }}</div>
-          <div class="value">
-            <span v-if="selectedSeries.length > 0">{{ selectedSeries[0] }}</span>
-            <span v-else class="placeholder">{{ $t('choose') }}</span>
-            <i class="el-icon-arrow-right"></i>
+    <div class="section-header flex flex-align-center">
+      <div class="select-series flex1 screen-item">
+        <div class="input-item flex flex-align-center">
+          <div class="select-warp flex flex-align-center">
+            <div class="key flex1">{{ $t('chooseserices') }}</div>
+            <div class="value" @click="isShowSeriesModal = true">
+              <span v-if="selectedSeries.length > 0">{{ selectedSeries[0] }}</span>
+              <span v-else class="placeholder">{{ $t('choose') }}</span>
+              <i class="el-icon-arrow-right"></i>
+            </div>
+            <ChooseSeriesModal
+              :isShowSeriesModal="isShowSeriesModal"
+              :selectedSeries="selectedSeries"
+              @confirm="onSeriesConfirm"
+              ref="root"
+            />
           </div>
-          <ChooseSeriesModal :isShowSeriesModal.sync="isShowSeriesModal" />
+        </div>
+      </div>
+      <div class="screen-item flex1">
+        <div
+          class="input-item flex flex-align-center"
+          @click="isSameClassify ? (isShowClassifyModal = true) : (isShowClassifyModal = false)"
+        >
+          <div class="select-warp flex flex-align-center">
+            <div class="key flex1 flex flex-align-center" @click.stop="onChangeSameClassify">
+              <span class="title">{{ $t('sameClassify') }}:</span>
+              <ElSwitch v-model="isSameClassify" />
+            </div>
+            <div class="value">
+              <span v-if="classify.length > 0">
+                <template v-for="(_item, index) in classify" :key="_item">
+                  {{ $t(_item) }}<template v-if="index !== classify.length - 1">,</template>
+                </template>
+              </span>
+              <span v-else class="placeholder">{{ $t('choose') }}</span>
+              <i class="el-icon-arrow-right"></i>
+            </div>
+            <PickerModel
+              name="classify"
+              listKey="classify"
+              :title="$t('choosetype')"
+              :multiple="true"
+              disabled="disabled"
+              :visible="isShowClassifyModal"
+              @confirm="onSetAllClassify"
+              :list="classList"
+              :selecteds="classify"
+            />
+          </div>
         </div>
       </div>
     </div>
+
     <!-- 批量铸造列表 -->
     <div class="batch-create-list">
-      <div class="batch-create-item" v-for="(item, index) in list" :key="index">
-        <div class="close" @click="removeItem(index)"><img src="@/assets/images/close.svg" /></div>
+      <div
+        class="batch-create-item"
+        v-for="(item, index) in list"
+        :key="index"
+        :id="'batchItem' + index"
+      >
         <div class="cover upload-warp">
           <div class="upload">
             <div class="add flex flex-align-center flex-pack-center">
@@ -56,26 +101,56 @@
             </div>
           </div>
         </div>
-        <div class="orginFile">
+        <div class="orginFile input-item">
           <input
             type="file"
             :placeholder="$t('nftoriginal')"
             :data-index="index"
             @change="originalFileInputChage"
           />
+          <div class="val" v-if="item.originalFile">{{ item.originalFile.raw?.name }}</div>
+          <div class="placeholder" v-else>{{ $t('nftoriginal') }}</div>
         </div>
-        <div class="name">
-          <input type="text" v-model="item.name" />
+        <div class="name input-item">
+          <input type="text" v-model="item.name" :placeholder="$t('nameplac')" />
         </div>
-        <div class="intro">
-          <textarea v-model="item.intro"></textarea>
+        <div class="intro input-item">
+          <textarea v-model="item.intro" :placeholder="$t('drscplac')"></textarea>
         </div>
-        <div class="index">
-          <input type="number" v-model="item.index" :placeholder="$t('indexNumber')" />
+        <div
+          class="orginFile input-item"
+          @click="isSameClassify ? '' : (item.isShowClassifyModal = true)"
+        >
+          <div class="val" v-if="item.classify.length > 0">
+            <template v-for="(_item, index) in item.classify" :key="_item">
+              {{ $t(_item) }}<template v-if="index !== item.classify.length - 1">,</template>
+            </template>
+          </div>
+          <div class="placeholder" v-else>{{ $t('choosetype') }}</div>
+          <PickerModel
+            name="classify"
+            listKey="classify"
+            :title="$t('choosetype')"
+            :multiple="true"
+            disabled="disabled"
+            :visible="item.isShowClassifyModal"
+            @confirm="item.isShowClassifyModal = false"
+            :list="classList"
+            :selecteds="item.classify"
+          />
         </div>
+        <div class="index input-item">
+          <input
+            type="number"
+            :readOnly="true"
+            :disabled="true"
+            v-model="item.index"
+            :placeholder="$t('indexNumber')"
+          />
+        </div>
+        <div class="btn btn-block" @click="removeItem(index)">{{ $t('delete') }}</div>
       </div>
       <div class="batch-create-item">
-        <div class="close"><img src="@/assets/images/close.svg" /></div>
         <div class="cover upload-warp">
           <div class="upload">
             <div class="add flex flex-align-center flex-pack-center">
@@ -100,6 +175,7 @@
         <div class="index">
           <input type="number" :placeholder="$t('indexNumber')" />
         </div>
+        <div class="btn btn-block">{{ $t('delete') }}</div>
         <div class="add flex flex-align-center flex-pack-center" @click="addItem">
           +
         </div>
@@ -111,14 +187,17 @@
 </template>
 
 <script setup lang="ts">
-import { CreateSerice, GetSeries, NftApiCode } from '@/api'
+import { CreateNft, GetSeries, NftApiCode } from '@/api'
 import { useStore } from '@/store'
-import { ElLoading, ElMessage, ElIcon, ElMessageBox } from 'element-plus'
+import { ElLoading, ElMessage, ElIcon, ElMessageBox, ElSwitch } from 'element-plus'
 import { reactive, ref } from 'vue-demi'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import ChooseSeriesModal from '@/components/ChooseSeriesModal/ChooseSeriesModal.vue'
 import { tranfromImgFile } from '@/utils/util'
+import { nftTypes, classifyList, canCreateCardClassifyListMetaids } from '@/config'
+import PickerModel from '@/components/PickerModal/PickerModel.vue'
+
 const list: {
   cover: null | MetaFile
   originalFile: null | MetaFile
@@ -126,29 +205,46 @@ const list: {
   intro: string
   index: number
   isCreated: boolean
+  classify: string[]
+  isShowClassifyModal: boolean
+  codehash?: string
+  genesis?: string
+  tokenIndex?: string
 }[] = reactive([
   {
     cover: null,
     originalFile: null,
-    index: 0,
+    index: 1,
     name: '',
     intro: '',
     isCreated: false,
+    classify: [],
+    isShowClassifyModal: false,
   },
 ])
-
+const classList = reactive(classifyList)
+const classify: string[] = reactive([])
+const isSameClassify = ref(false)
+const isShowClassifyModal = ref(false)
 const router = useRouter()
 const store = useStore()
 const isShowSeriesModal = ref(false)
 const series: any[] = reactive([])
 const selectedSeries: string[] = reactive([])
 const i18n = useI18n()
-const serie = reactive({
-  name: '',
-  number: '',
-})
+const root = ref()
 
-const isShowCreateSeriesModal = ref(false)
+function setUserCreatCard() {
+  if (store.state.userInfo) {
+    const index = canCreateCardClassifyListMetaids.findIndex(
+      item => item === store.state.userInfo?.metaId
+    )
+    if (index !== -1) {
+      const cardIndex = classList.findIndex(item => item.classify === 'card')
+      classList[cardIndex].disabled = false
+    }
+  }
+}
 
 async function getSeries() {
   const res = await GetSeries({ page: 1, pageSize: 99 })
@@ -158,70 +254,16 @@ async function getSeries() {
   }
 }
 
-//  创建系列
-async function createSerie() {
-  if (serie.name === '') {
-    ElMessage.error(i18n.t('createSeriesNamePlar'))
-    return
-  }
-  if (!serie.number) {
-    ElMessage.error(i18n.t('createSeriesNumberPlar'))
-    return
-  }
-  const index = series.findIndex(item => item.name === serie.name)
-  if (index !== -1) {
-    ElMessage.error(i18n.t('havedSameNameSeries'))
-    return
-  }
-  const loading = ElLoading.service({
-    lock: true,
-    text: 'Loading',
-    spinner: 'el-icon-loading',
-    background: 'rgba(0, 0, 0, 0.7)',
-    customClass: 'full-loading',
-  })
-
-  const response = await store.state.sdk?.genesisNFT({
-    seriesName: serie.name,
-    nftTotal: serie.number,
-  })
-  if (response && response.code === 200) {
-    const res = await CreateSerice({
-      name: serie.name,
-      count: parseInt(serie.number),
-      codeHash: response.data.codehash,
-      genesis: response.data.genesisId,
-      genesisTxId: response.data.genesisTxid,
-      sensibleId: response.data.sensibleId,
-    })
-    if (res.code === NftApiCode.success) {
-      ElMessage.success(i18n.t('createdSuccess'))
-      series.push({
-        series: serie.name,
-        maxNumber: serie.number,
-        currentNumber: 0,
-        codeHash: response.data.codehash,
-        genesis: response.data.genesisId,
-        genesisTxId: response.data.genesisTxid,
-        sensibleId: response.data.sensibleId,
-      })
-      serie.name = ''
-      serie.number = ''
-      isShowCreateSeriesModal.value = false
-    }
-  }
-  loading.close()
-}
-getSeries()
-
 function addItem() {
   list.push({
     cover: null,
     originalFile: null,
     name: '',
     intro: '',
-    index: 0,
+    index: selectedSeries.length > 0 ? list[list.length - 1].index + 1 : 1,
     isCreated: false,
+    classify: isSameClassify.value ? JSON.parse(JSON.stringify(classify)) : [],
+    isShowClassifyModal: false,
   })
 }
 
@@ -258,12 +300,58 @@ function removeItem(index: number) {
   list.splice(index, 1)
 }
 
+function onChangeSameClassify() {
+  if (isSameClassify.value) {
+    list.map(item => {
+      item.classify = JSON.parse(JSON.stringify(classify))
+      item.isShowClassifyModal = false
+    })
+  }
+}
+
+function onSetAllClassify() {
+  isShowClassifyModal.value = false
+  list.map(item => {
+    item.classify = JSON.parse(JSON.stringify(classify))
+    item.isShowClassifyModal = false
+  })
+}
+
+function onSeriesConfirm() {
+  isShowSeriesModal.value = false
+  if (selectedSeries.length > 0) {
+    const item: SeriesItem = root.value.series.find(
+      (item: any) => item.series === selectedSeries[0]
+    )
+    if (item) {
+      for (let i = 0; i < list.length; i++) {
+        list[i].index = item.currentNumber + 1 + i
+      }
+    }
+  } else {
+    for (let i = 0; i < list.length; i++) {
+      list[i].index = 1
+    }
+  }
+}
+
 async function startBacth() {
   if (list.length <= 0) return
   const loading = ElLoading.service()
-  const checkOnlyTasks = []
-  const tasks = []
-  const tasksParams: any[] = []
+
+  let currentSeriesItem: SeriesItem | undefined = undefined
+  // 检查是否超出 系列数量
+  if (selectedSeries.length > 0) {
+    const currentSeriesItem: SeriesItem = root.value.series.find(
+      (item: any) => item.series === selectedSeries[0]
+    )
+    if (currentSeriesItem && currentSeriesItem.maxNumber <= list[list.length - 1].index) {
+      ElMessage.error(i18n.t('overSeriesNum'))
+      loading.close()
+      return
+    }
+  }
+
   let isReady = true
   const paramsList: any[] = []
   for (let i = 0; i < list.length; i++) {
@@ -301,7 +389,7 @@ async function startBacth() {
       nftissuerName: store.state.userInfo!.name,
       content: {
         nftType: '1',
-        classifyList: JSON.stringify(['art']),
+        classifyList: JSON.stringify(list[i].classify),
         originalFileTxid: {
           fileType: list[i].originalFile!.data_type,
           fileName: list[i].originalFile!.name,
@@ -309,10 +397,10 @@ async function startBacth() {
         },
         contentTxId: '',
       },
-      //   codeHash: seriesIndex !== -1 ? series[seriesIndex].codeHash : undefined,
-      //   genesis: seriesIndex !== -1 ? series[seriesIndex].genesis : undefined,
-      //   genesisTxId: seriesIndex !== -1 ? series[seriesIndex].genesisTxId : undefined,
-      //   sensibleId: seriesIndex !== -1 ? series[seriesIndex].sensibleId : undefined,
+      codeHash: currentSeriesItem ? currentSeriesItem.codeHash : undefined,
+      genesis: currentSeriesItem ? currentSeriesItem.genesis : undefined,
+      genesisTxId: currentSeriesItem ? currentSeriesItem.genesisTxId : undefined,
+      sensibleId: currentSeriesItem ? currentSeriesItem.sensibleId : undefined,
     })
 
     // checkOnlyTasks.push(
@@ -345,13 +433,62 @@ async function startBacth() {
       closeOnClickModal: false,
     }).then(async () => {
       for (let i = 0; i < paramsList.length; i++) {
-        const res = await store.state.sdk?.createNFT({
-          ...paramsList[i],
-        })
+        const res = await store.state.sdk
+          ?.createNFT({
+            ...paramsList[i],
+          })
+          .catch(() => {
+            ElMessage.error(i18n.t('onLineFail'))
+            return
+          })
+        if (res && typeof res !== 'number') {
+          // 上报 更新 系列信息
+          const response = await CreateNft({
+            nftName: paramsList[i].nftname,
+            intro: paramsList[i].nftdesc,
+            type: paramsList[i].content.nftType,
+            seriesName: selectedSeries[0],
+            tx: res.txId,
+            classify: paramsList[i].content.classifyList,
+            fileUrl: 'test',
+            coverUrl: 'test',
+            tokenId: res.codehash + res.genesisId + res.tokenIndex,
+            nftId: res.txId,
+            codeHash: res.codehash,
+            genesis: res.genesisId,
+            genesisTxId: res.genesisTxid,
+            tokenIndex: res.tokenIndex,
+          })
+          if (response.code === NftApiCode.success) {
+            if (parseInt(res.tokenIndex) === list[i].index - 1) {
+              ElMessage.success(`${list[i].index}: ${i18n.t('castingsuccess')}`)
+            }
+          } else {
+            list[i].codehash = res.codehash
+            list[i].genesis = res.genesisId
+            list[i].tokenIndex = res.tokenIndex
+            ElMessage.error(i18n.t('reportFail'))
+            break
+          }
+        } else {
+          ElMessage.error(i18n.t('onLineFail'))
+          break
+        }
       }
       loading.close()
     })
   }
+}
+
+if (store.state.userInfo) {
+  setUserCreatCard()
+} else {
+  store.watch(
+    state => state.userInfo,
+    () => {
+      setUserCreatCard()
+    }
+  )
 }
 </script>
 

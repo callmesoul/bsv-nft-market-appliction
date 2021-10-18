@@ -28,6 +28,10 @@ declare interface SeriesItem {
   currentNumber: number
   maxNumber: number
   series: string
+  codeHash: string
+  genesis: string
+  genesisTxId: string
+  sensibleId: string
 }
 declare interface GetSeriestData extends apiResponse {
   data: SeriesItem[]

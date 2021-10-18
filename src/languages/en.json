@@ -213,5 +213,9 @@
   "SellNft": "Listed NFT",
   "batchCreate": "Batch casting",
   "batchCreateDrsc": "Here you can cast NFTs in batches, instead of casting them one by one.",
-  "startBatchCreate": "Start batch casting"
+  "startBatchCreate": "Start batch casting",
+  "sameClassify": "Unified classification",
+  "overSeriesNum": "The number of series has been exceeded",
+  "onLineFail": "Failed to upload data",
+  "reportFail": "Report data error"
 }

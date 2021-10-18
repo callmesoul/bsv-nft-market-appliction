@@ -4,7 +4,7 @@
     listKey="series"
     :title="$t('chooseserices')"
     :visible="isShowSeriesModal"
-    @confirm="isShowSeriesModal = false"
+    @confirm="emit('confirm')"
     :list="series"
     :selecteds="selectedSeries"
   >
@@ -36,25 +36,35 @@
 </template>
 
 <script setup lang="ts">
-import { CreateSerice, NftApiCode } from '@/api'
+import { CreateSerice, GetSeries, NftApiCode } from '@/api'
 import PickerModel from '@/components/PickerModal/PickerModel.vue'
 import { useStore } from '@/store'
 import { ElLoading, ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
+const emit = defineEmits(['confirm'])
 const props = defineProps<{
   isShowSeriesModal: boolean
+  selectedSeries: string[]
 }>()
+
 const store = useStore()
 const series: any[] = reactive([])
-const selectedSeries: string[] = reactive([])
 const i18n = useI18n()
 const serie = reactive({
   name: '',
   number: '',
 })
 const isShowCreateSeriesModal = ref(false)
+
+async function getSeries() {
+  const res = await GetSeries({ page: 1, pageSize: 99 })
+  if (res.code === NftApiCode.success) {
+    series.length = 0
+    series.push(...res.data)
+  }
+}
 
 //  创建系列
 async function createSerie() {
@@ -71,6 +81,7 @@ async function createSerie() {
     ElMessage.error(i18n.t('havedSameNameSeries'))
     return
   }
+  debugger
   const loading = ElLoading.service({
     lock: true,
     text: 'Loading',
@@ -110,6 +121,21 @@ async function createSerie() {
   }
   loading.close()
 }
+
+if (store.state.userInfo) {
+  getSeries()
+} else {
+  store.watch(
+    state => state.userInfo,
+    () => {
+      getSeries()
+    }
+  )
+}
+
+defineExpose({
+  series,
+})
 </script>
 
 <style lang="scss" scoped src="./ChooseSeriesModal.scss"></style>
