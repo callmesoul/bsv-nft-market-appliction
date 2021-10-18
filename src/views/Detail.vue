@@ -498,42 +498,93 @@
                 </div>
               </div>
 
-              <div class v-else-if="tabIndex === 1">{{ $t('stayTuned') }}</div>
               <!-- 拥有记录 -->
-              <!-- <div class="haved-record" v-else-if="tabIndex === 1">
+              <div class="haved-record" v-else-if="tabIndex === 1">
                 <div class="tr th flex flex-align-center">
                   <span class="td flex1">{{ $t('owner') }}</span>
                   <span class="td flex1">{{ $t('role') }}</span>
                   <span class="td flex1">{{ $t('time') }}</span>
                   <span class="td flex1">{{ $t('price') }}</span>
                 </div>
+
+                <!-- 铸造者 -->
+                <!-- <div class="tr flex flex-align-center" v-if="ownerRecord.val && records.length > 1">
+                  <span class="td flex1 user flex flex-align-center">
+                    <img
+                      :src="$filters.avatar(ownerRecord.val.metaId)"
+                      :alt="ownerRecord.val.name"
+                    />
+                    <span class="name">{{ ownerRecord.val.name }}</span>
+                  </span>
+                  <span class="td role flex1 flex flex-align-center">
+                    <img src="@/assets/images/icon_casting.svg" />
+                    {{ $t('owner') }}
+                  </span>
+                  <span class="td time flex1">{{
+                    $filters.dateTimeFormat(ownerRecord.val.timestamp, 'YYYY-MM-DD HH:mm')
+                  }}</span>
+                  <span class="td price flex1"
+                    >{{
+                      ownerRecord.val.satoshisPrice
+                        ? new Decimal(ownerRecord.val.satoshisPrice).div(10 ** 8).toString()
+                        : '--'
+                    }}
+                    BSV</span
+                  >
+                </div> -->
+
+                <!-- 历史拥有者 -->
                 <div
                   class="tr flex flex-align-center"
                   v-for="(record, index) in records"
-                  :key="record.ownerTime"
+                  :key="record.timestamp"
                 >
                   <span class="td flex1 user flex flex-align-center">
-                    <img :src="$filters.avatar(record.metaId)" :alt="record.username" />
-                    <span class="name">{{ record.username }}</span>
+                    <img :src="$filters.avatar(record.metaId)" :alt="record.name" />
+                    <span class="name">{{ record.name }}</span>
                   </span>
                   <span class="td role flex1 flex flex-align-center">
                     <img src="@/assets/images/icon_casting.svg" v-if="index === 0" />
-                    {{
-                      index === 0
-                        ? $t('creater')
-                        : index === records.length - 1
-                        ? $t('haveder')
-                        : $t('histsoryowner')
-                    }}
+                    {{ index === 0 ? $t('haveder') : $t('histsoryowner') }}
                   </span>
-                  <span class="td time flex1">{{ $filters.dateTimeFormat(record.ownerTime) }}</span>
+                  <span class="td time flex1">{{
+                    $filters.dateTimeFormat(record.timestamp, 'YYYY-MM-DD HH:mm')
+                  }}</span>
                   <span class="td price flex1"
                     >{{
-                      record.amount ? new Decimal(record.amount).div(10 ** 8).toString() : '--'
-                    }}BSV</span
+                      record.satoshisPrice
+                        ? new Decimal(record.satoshisPrice).div(10 ** 8).toString()
+                        : '--'
+                    }}
+                    BSV</span
                   >
                 </div>
-              </div>-->
+
+                <LoadMore
+                  :pagination="ownerHistoryPagination"
+                  @getMore="getMoreRecords"
+                  v-if="records.length > ownerHistoryPagination.pageSize"
+                />
+
+                <!-- 铸造者 -->
+                <div class="tr flex flex-align-center" v-if="issueRecord.val">
+                  <span class="td flex1 user flex flex-align-center">
+                    <img
+                      :src="$filters.avatar(issueRecord.val.metaId)"
+                      :alt="issueRecord.val.name"
+                    />
+                    <span class="name">{{ issueRecord.val.name }}</span>
+                  </span>
+                  <span class="td role flex1 flex flex-align-center">
+                    <img src="@/assets/images/icon_casting.svg" />
+                    {{ $t('creater') }}
+                  </span>
+                  <span class="td time flex1">{{
+                    $filters.dateTimeFormat(issueRecord.val.timestamp, 'YYYY-MM-DD HH:mm')
+                  }}</span>
+                  <span class="td price flex1">-- BSV</span>
+                </div>
+              </div>
 
               <!-- 历史出价 -->
               <div class="historical-bid" v-if="tabIndex === 2">
@@ -697,6 +748,7 @@ import {
   GetNftAuctionHistorys,
   GetNftAuctions,
   GetNftDetail,
+  GetNftHolderList,
   GetNftIssue,
   GetNftIssueyTxId,
   GetNFTOwnerAddress,
@@ -710,7 +762,7 @@ import {
 // @ts-ignore
 import dayjs from 'dayjs'
 import { useStore } from '@/store'
-import { nftTypes } from '@/config'
+import { nftTypes, pagination } from '@/config'
 import { checkSdkStatus } from '@/utils/util'
 import Decimal from 'decimal.js-light'
 import { router } from '@/router'
@@ -719,6 +771,7 @@ import NFTDetail from '@/utils/nftDetail'
 import { metafileUrl } from '@/utils/util'
 import Buy from '@/utils/buy'
 import VueCountdown from '@chenfengyuan/vue-countdown'
+import LoadMore from '@/components/LoadMore/LoadMore.vue'
 
 const i18n = useI18n()
 const route = useRoute()
@@ -737,6 +790,10 @@ let balance = ref(0) // 用户余额
 const getBalanceLoading = ref(true)
 const minActionPrice = ref(0) // 最小叫价
 const auctionRecords = reactive<GetNftAuctionHistorysResItem[]>([]) // 最小叫价
+
+const ownerHistoryPagination = reactive({
+  ...pagination,
+})
 
 // @ts-ignore
 const nft: { val: NftItemDetail } = reactive({
@@ -844,7 +901,13 @@ function getDetail() {
 //   }
 // })
 
-const records: TransactionRecordItem[] = reactive([])
+const records: GetNftHolderListResItem[] = reactive([])
+const ownerRecord: { val: GetNftHolderListResItem | null } = reactive({
+  val: null,
+})
+const issueRecord: { val: GetNftHolderListResItem | null } = reactive({
+  val: null,
+})
 
 function getRecord() {
   return new Promise<void>(async resolve => {
@@ -1170,5 +1233,40 @@ async function getNftAuctionHistorys() {
     auctionRecords.push(...res.data)
   }
 }
+
+//  获取拥有记录
+async function getNftHolderList(isCover = false) {
+  return new Promise(async resolve => {
+    const res = await GetNftHolderList({
+      genesis: typeof route.params.genesisId === 'string' ? route.params.genesisId : '',
+      codehash: typeof route.params.codehash === 'string' ? route.params.codehash : '',
+      tokenIndex: typeof route.params.tokenIndex === 'string' ? route.params.tokenIndex : '',
+      page: ownerHistoryPagination.page.toString(),
+      pageSize: ownerHistoryPagination.pageSize.toString(),
+    })
+    if (res && res.code === NftApiCode.success) {
+      if (isCover) {
+        records.length = 0
+      }
+      records.push(...res.data.results.items.holderList)
+      ownerRecord.val = res.data.results.items.owner
+      issueRecord.val = res.data.results.items.issuer
+      const totalPages = Math.ceil(res.data.total / ownerHistoryPagination.pageSize)
+      if (totalPages <= ownerHistoryPagination.page) {
+        ownerHistoryPagination.nothing = true
+      }
+    }
+  })
+}
+
+function getMoreRecords() {
+  ownerHistoryPagination.loading = true
+  ownerHistoryPagination.page++
+  getNftHolderList().then(() => {
+    ownerHistoryPagination.loading = false
+  })
+}
+
+getNftHolderList()
 </script>
 <style lang="scss" scoped src="./Detail.scss"></style>
