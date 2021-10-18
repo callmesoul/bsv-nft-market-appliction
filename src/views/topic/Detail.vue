@@ -54,7 +54,7 @@
             <img :src="metafileUrl(metabot.nftIcon)" :alt="metabot.nftName" />
           </div> -->
           <div class="cover">
-            <ElImage :lazy="true" :src="metafileUrl(metabot.nftIcon)"></ElImage>
+            <ElImage :lazy="true" :src="metafileUrl(metabot.nftIcon)" fit="contain"></ElImage>
             <VueCountdown
               class="countdown"
               :time="metabot.auctionDeadTime ? metabot.auctionDeadTime - new Date().getTime() : 0"

@@ -313,6 +313,22 @@ export const GetMyNftOnShowBuySuccessList = (params: {
   return apiHttp.post(`/aggregation/v2/app/nftOnShow/getMyNftOnShowBuySuccessList`, params)
 }
 
+export const GetNftHolderList = (params: {
+  codehash: string
+  genesis: string
+  tokenIndex: string
+  page: string
+  pageSize: string
+}): Promise<GetNftHolderListRes> => {
+  const { codehash, genesis, tokenIndex, ..._params } = params
+  return apiHttp.get(
+    `/aggregation/v2/app/nftOnShow/getNftHolderList/${codehash}/${genesis}/${tokenIndex}`,
+    {
+      params: _params,
+    }
+  )
+}
+
 export const CreateNftAuction = (params: {
   codehash: string
   genesis: string

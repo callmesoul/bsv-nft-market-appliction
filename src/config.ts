@@ -1,6 +1,9 @@
 import i18n from '@/utils/i18n'
 import yadiannaBanner from '@/assets/images/banner_yadianna.jpg'
 import metabotBanner from '@/assets/images/banner_metabot.jpg'
+import metaIdCardBanner from '@/assets/images/banner_metaid.png'
+import yadiannaBanner2 from '@/assets/images/banner_yadianna2.png'
+import metabot2 from '@/assets/images/metabot2.png'
 
 export const nftTypes = [
   { name: i18n.global.t('image'), value: '1', disabled: false, key: 'image' },
@@ -70,12 +73,36 @@ export const certedMetaIds = [
 
 export const topics: Topic[] = [
   {
+    cover: metabot2,
+    name: '第2代MetaBot合成狂潮启动！',
+    createrMetaId: '974e2977d5c9446f7f48fd82c9ea51f82749b9ef7c00d26b73bc450d167d5f31',
+    createrName: 'ShowPayTeam',
+    time: '2021-10-18',
+    key: 'MetaBotV2',
+  },
+  // {
+  //   cover: yadiannaBanner2,
+  //   name: '雅典娜第二季特别版',
+  //   createrMetaId: 'fc0a92af9977f4b3bf82492508c18ab28f666922eb8ee52dcefd5b7f2a690f83',
+  //   createrName: '雅典娜第二季特别版',
+  //   time: '2021-10-08',
+  //   key: 'Athena',
+  // },
+  {
     cover: yadiannaBanner,
     name: 'Bitcoin SV Athena Astronaut 雅典娜',
     createrMetaId: 'fc0a92af9977f4b3bf82492508c18ab28f666922eb8ee52dcefd5b7f2a690f83',
     createrName: '₿itcoin A Studio',
-    time: '2021-10-08',
+    time: '2021-10-18',
     key: 'Athena',
+  },
+  {
+    cover: metaIdCardBanner,
+    name: 'MetaID创世纪念卡',
+    createrMetaId: '3c03f6b8783fa672bb34953519110944dab1d8a23711c7df4f1dd9e16e5b823c',
+    createrName: 'OpenMetaNetFoundation',
+    time: '2021-09-28',
+    key: 'MetaIdCommemorativeCard',
   },
   {
     cover: metabotBanner,

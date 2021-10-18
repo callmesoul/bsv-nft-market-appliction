@@ -278,6 +278,35 @@ declare interface GetMetaBotListRes extends apiResponse {
     }
   }
 }
+declare interface GetNftHolderListRes extends apiResponse {
+  data: {
+    total: number
+    results: {
+      items: {
+        holderList: GetNftHolderListResItem[]
+        issuer: GetNftHolderListResItem
+        owner: GetNftHolderListResItem
+      }
+    }
+  }
+}
+declare interface GetNftHolderListResItem extends apiResponse {
+  avatarTxId: string
+  avatarType: string
+  codehash: string
+  genesis: string
+  issuerMetaId: string
+  issuerMetaTxId: string
+  memo: string
+  metaId: string
+  name: string
+  nftHash: string
+  protocol: string
+  satoshisPrice: string
+  timestamp: 1634203995079
+  tokenIndex: string
+  txId: string
+}
 declare interface GetMyNftOnShowSellSuccessListRes extends apiResponse {
   data: {
     total: number
