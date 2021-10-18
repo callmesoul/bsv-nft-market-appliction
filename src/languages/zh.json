@@ -244,5 +244,6 @@
   "certSystemIntroCont3": "NOS上的ShowPay认证是ShowPay作为NOS的商业运营方对平台内容尽量少侵权问题而做的手段之一，是一个平台性质的认证不是MetaId性质的认证。而且这个认证更多是针对艺术类和实物类NFT，以后的功能性NFT大部分无需认证。这个认证不代表ShowPay对该账号或作品价值的认可，用户须自行承担投资风险。",
   "music": "音乐",
   "allmenuIntro": "这是一个日新月异的数字艺术平台",
-  "knowMore": "了解更多"
+  "knowMore": "了解更多",
+  "noPaid": "无出价"
 }

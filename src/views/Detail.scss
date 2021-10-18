@@ -329,8 +329,11 @@
           }
         }
 
-        .time,
-        .price {}
+        .time {}
+
+        .price {
+          text-align: right !important;
+        }
       }
 
       .historical-bid {

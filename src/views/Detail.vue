@@ -504,7 +504,7 @@
                   <span class="td flex1">{{ $t('owner') }}</span>
                   <span class="td flex1">{{ $t('role') }}</span>
                   <span class="td flex1">{{ $t('time') }}</span>
-                  <span class="td flex1">{{ $t('price') }}</span>
+                  <span class="td  price flex1">{{ $t('price') }}</span>
                 </div>
 
                 <!-- 铸造者 -->
@@ -544,7 +544,6 @@
                     <span class="name">{{ record.name }}</span>
                   </span>
                   <span class="td role flex1 flex flex-align-center">
-                    <img src="@/assets/images/icon_casting.svg" v-if="index === 0" />
                     {{ index === 0 ? $t('haveder') : $t('histsoryowner') }}
                   </span>
                   <span class="td time flex1">{{
@@ -553,11 +552,10 @@
                   <span class="td price flex1"
                     >{{
                       record.satoshisPrice
-                        ? new Decimal(record.satoshisPrice).div(10 ** 8).toString()
-                        : '--'
+                        ? new Decimal(record.satoshisPrice).div(10 ** 8).toString() + 'BSV'
+                        : $t('noPaid')
                     }}
-                    BSV</span
-                  >
+                  </span>
                 </div>
 
                 <LoadMore
@@ -582,7 +580,7 @@
                   <span class="td time flex1">{{
                     $filters.dateTimeFormat(issueRecord.val.timestamp, 'YYYY-MM-DD HH:mm')
                   }}</span>
-                  <span class="td price flex1">-- BSV</span>
+                  <span class="td price flex1">{{ $t('noPaid') }}</span>
                 </div>
               </div>
 
