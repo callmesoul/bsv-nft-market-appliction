@@ -576,7 +576,10 @@
 
                 <!-- 铸造者 -->
                 <div class="tr flex flex-align-center" v-if="issueRecord.val">
-                  <span class="td flex1 user flex flex-align-center">
+                  <span
+                    class="td flex1 user flex flex-align-center"
+                    @click="ToUser(issueRecord.val ? issueRecord.val.metaId : '')"
+                  >
                     <img
                       :src="$filters.avatar(issueRecord.val.metaId)"
                       :alt="issueRecord.val.name"
