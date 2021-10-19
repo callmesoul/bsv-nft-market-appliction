@@ -259,7 +259,7 @@ import { computed, reactive, ref } from 'vue-demi'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import ChooseSeriesModal from '@/components/ChooseSeriesModal/ChooseSeriesModal.vue'
-import { tranfromImgFile } from '@/utils/util'
+import { checkSdkStatus, tranfromImgFile } from '@/utils/util'
 import { classifyList, canCreateCardClassifyListMetaids } from '@/config'
 import PickerModel from '@/components/PickerModal/PickerModel.vue'
 import InnerPageHeader from '@/components/InnerPageHeader/InnerPageHeader.vue'
@@ -400,7 +400,9 @@ function onChangeSameClassify() {
   }
 }
 
-function onSetAllClassify() {
+async function onSetAllClassify() {
+  // 檢查sdk狀態
+  await checkSdkStatus()
   isShowClassifyModal.value = false
   list.map(item => {
     item.classify = JSON.parse(JSON.stringify(classify))
@@ -409,7 +411,9 @@ function onSetAllClassify() {
 }
 
 // 确认选择系列
-function onSeriesConfirm() {
+async function onSeriesConfirm() {
+  // 檢查sdk狀態
+  await checkSdkStatus()
   isShowSeriesModal.value = false
   if (selectedSeries.length > 0) {
     const item: SeriesItem = root.value.series.find(
@@ -429,6 +433,9 @@ function onSeriesConfirm() {
 
 // 开始批量铸造
 async function startBacth() {
+  // 檢查sdk狀態
+  await checkSdkStatus()
+
   if (list.length <= 0) return
   const loading = ElLoading.service()
 
