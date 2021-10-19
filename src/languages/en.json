@@ -217,5 +217,6 @@
   "sameClassify": "Unified classification",
   "overSeriesNum": "The number of series has been exceeded",
   "onLineFail": "Failed to upload data",
-  "reportFail": "Report data error"
+  "reportFail": "Report data error",
+  "lookDetail": "Check The Details"
 }

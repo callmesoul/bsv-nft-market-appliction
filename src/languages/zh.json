@@ -221,5 +221,6 @@
   "sameClassify": "统一分类",
   "overSeriesNum": "已超出系列的数量",
   "reportFail": "上报数据错误",
-  "onLineFail": "数据上链失败"
+  "onLineFail": "数据上链失败",
+  "lookDetail": "查看详情"
 }

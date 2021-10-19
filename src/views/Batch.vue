@@ -84,7 +84,9 @@
                   :preview-src-list="[item.cover.base64Data]"
                 />
                 <!-- <img class="cover" :src="coverFile.base64Data"  /> -->
-                <a class="close" @click="removeCover(index)">{{ $t('delete') }}</a>
+                <a class="close" @click="removeCover(index)" v-if="!item.genesis">{{
+                  $t('delete')
+                }}</a>
               </template>
               <template v-else>
                 <div>
@@ -107,19 +109,33 @@
             :placeholder="$t('nftoriginal')"
             :data-index="index"
             @change="originalFileInputChage"
+            v-if="!item.genesis"
           />
           <div class="val" v-if="item.originalFile">{{ item.originalFile.raw?.name }}</div>
           <div class="placeholder" v-else>{{ $t('nftoriginal') }}</div>
         </div>
         <div class="name input-item">
-          <input type="text" v-model="item.name" :placeholder="$t('nameplac')" />
+          <input
+            type="text"
+            :readOnly="item.genesis"
+            v-model="item.name"
+            :placeholder="$t('nameplac')"
+          />
         </div>
         <div class="intro input-item">
-          <textarea v-model="item.intro" :placeholder="$t('drscplac')"></textarea>
+          <textarea
+            v-model="item.intro"
+            :readOnly="item.genesis"
+            :placeholder="$t('drscplac')"
+          ></textarea>
         </div>
         <div
           class="orginFile input-item"
-          @click="isSameClassify ? '' : (item.isShowClassifyModal = true)"
+          @click="
+            isSameClassify || item.genesis
+              ? (item.isShowClassifyModal = false)
+              : (item.isShowClassifyModal = true)
+          "
         >
           <div class="val" v-if="item.classify.length > 0">
             <template v-for="(_item, index) in item.classify" :key="_item">
@@ -148,7 +164,23 @@
             :placeholder="$t('indexNumber')"
           />
         </div>
-        <div class="btn btn-block" @click="removeItem(index)">{{ $t('delete') }}</div>
+        <div class="btn btn-block btn-default" @click="removeItem(index)" v-if="!item.genesis">
+          {{ $t('delete') }}
+        </div>
+        <router-link
+          :to="{
+            name: 'detail',
+            params: {
+              genesisId: item.genesis,
+              codehash: item.codehash,
+              tokenIndex: item.tokenIndex,
+            },
+          }"
+          class="btn btn-block"
+          v-else
+        >
+          {{ $t('lookDetail') }}
+        </router-link>
       </div>
       <div class="batch-create-item">
         <div class="cover upload-warp">
@@ -159,23 +191,29 @@
                   <img class="icon" src="@/assets/images/img_upload.svg" />
                   <div class="label">{{ $t('uploadcover') }}</div>
                 </div>
+                <input type="file" accept="image/*" />
               </template>
             </div>
           </div>
         </div>
-        <div class="orginFile">
-          <input type="file" :placeholder="$t('nftoriginal')" />
+        <div class="orginFile input-item">
+          <div class="placeholder">{{ $t('nftoriginal') }}</div>
         </div>
-        <div class="name">
-          <input type="text" />
+        <div class="name input-item">
+          <input type="text" :placeholder="$t('nameplac')" />
         </div>
-        <div class="intro">
-          <textarea></textarea>
+        <div class="intro input-item">
+          <textarea :placeholder="$t('drscplac')"></textarea>
         </div>
-        <div class="index">
-          <input type="number" :placeholder="$t('indexNumber')" />
+        <div class="orginFile input-item">
+          <div class="placeholder">{{ $t('choosetype') }}</div>
         </div>
-        <div class="btn btn-block">{{ $t('delete') }}</div>
+        <div class="index input-item">
+          <input type="number" :readOnly="true" :disabled="true" />
+        </div>
+        <div class="btn btn-block btn-default">
+          {{ $t('delete') }}
+        </div>
         <div class="add flex flex-align-center flex-pack-center" @click="addItem">
           +
         </div>
