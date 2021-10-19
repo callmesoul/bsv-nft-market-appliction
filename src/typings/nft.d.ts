@@ -69,4 +69,5 @@ declare interface Topic {
   createrName: string
   time: string
   key: string
+  coverEn?: string
 }

@@ -80,14 +80,14 @@ export const topics: Topic[] = [
     time: '2021-10-18',
     key: 'MetaBotV2',
   },
-  // {
-  //   cover: yadiannaBanner2,
-  //   name: '雅典娜第二季特别版',
-  //   createrMetaId: 'fc0a92af9977f4b3bf82492508c18ab28f666922eb8ee52dcefd5b7f2a690f83',
-  //   createrName: '雅典娜第二季特别版',
-  //   time: '2021-10-08',
-  //   key: 'Athena',
-  // },
+  {
+    cover: yadiannaBanner2,
+    name: '雅典娜第二季特别版',
+    createrMetaId: '69f5a1cfa00ae301cc911978861b0e8c0dadf42486f64aabe3ffef7c94cf9490',
+    createrName: '₿itcoin ₿ Studio',
+    time: '2021-10-08',
+    key: 'AthenaV2',
+  },
   {
     cover: yadiannaBanner,
     name: 'Bitcoin SV Athena Astronaut 雅典娜',
