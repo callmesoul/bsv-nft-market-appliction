@@ -387,7 +387,17 @@ function removeCover(index: number) {
 
 // 删除项
 function removeItem(index: number) {
-  list.splice(index, 1)
+  if (index === list.length - 1 || selectedSeries.length <= 0) list.splice(index, 1)
+  else {
+    list.splice(index, 1)
+    if (selectedSeries.length > 0) {
+      const startNum =
+        root.value.series.find((item: any) => item.series === selectedSeries[0]).currentNumber + 1
+      for (let i = 0; i < list.length; i++) {
+        list[i].index = startNum + i
+      }
+    }
+  }
 }
 
 // 更改统一的分类
