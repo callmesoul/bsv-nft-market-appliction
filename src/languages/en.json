@@ -222,5 +222,6 @@
   "batchCreateTips": "In batch casting, please do not do other operations, please wait patiently",
   "batchCreatNum": "The batch casting quantity",
   "beSuccess": "succeeded",
-  "tokenIndexNotMatch": "The serial number does not match, please check before casting"
+  "tokenIndexNotMatch": "The serial number does not match, please check before casting",
+  "resetBatchCreate": "Reset batch casting"
 }

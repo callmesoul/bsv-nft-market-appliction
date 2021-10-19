@@ -228,5 +228,6 @@
   "batchCreatNum": "本次批量铸造数量",
   "beSuccess": "已成功",
   "indivual": "个",
-  "tokenIndexNotMatch": "序号不匹配，请检查后再铸造"
+  "tokenIndexNotMatch": "序号不匹配，请检查后再铸造",
+  "resetBatchCreate": "重新设置批量铸造"
 }

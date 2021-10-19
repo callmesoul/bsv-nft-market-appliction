@@ -178,7 +178,8 @@
           {{ $t('lookDetail') }}
         </router-link>
       </div>
-      <div class="batch-create-item">
+      <!-- 添加 -->
+      <div class="batch-create-item" v-if="!isCreated">
         <div class="cover upload-warp">
           <div class="upload">
             <div class="add flex flex-align-center flex-pack-center">
@@ -216,7 +217,10 @@
       </div>
     </div>
 
-    <div class="btn btn-block" @click="startBacth">{{ $t('startBatchCreate') }}</div>
+    <div class="btn btn-block" @click="resetBacth" v-if="isCreated">
+      {{ $t('resetBatchCreate') }}
+    </div>
+    <div class="btn btn-block" @click="startBacth" v-else>{{ $t('startBatchCreate') }}</div>
   </div>
 
   <ElDialog
@@ -296,6 +300,7 @@ const selectedSeries: string[] = reactive([])
 const i18n = useI18n()
 const root = ref()
 const isShowResult = ref(false)
+const isCreated = ref(false)
 
 const successNum = computed(() => {
   let num = 0
@@ -409,9 +414,7 @@ async function startBacth() {
   let currentSeriesItem: SeriesItem | undefined = undefined
   // 检查是否超出 系列数量
   if (selectedSeries.length > 0) {
-    const currentSeriesItem: SeriesItem = root.value.series.find(
-      (item: any) => item.series === selectedSeries[0]
-    )
+    currentSeriesItem = root.value.series.find((item: any) => item.series === selectedSeries[0])
     if (currentSeriesItem && currentSeriesItem.maxNumber <= list[list.length - 1].index) {
       ElMessage.error(i18n.t('overSeriesNum'))
       loading.close()
@@ -419,22 +422,26 @@ async function startBacth() {
     }
   }
 
+  debugger
   let isReady = true
   const paramsList: any[] = []
   for (let i = 0; i < list.length; i++) {
     if (!list[i].cover) {
       ElMessage.error(`${i + 1}: ${i18n.t('uploadcover')}`)
       isReady = false
+      loading.close()
       break
     }
     if (!list[i].originalFile) {
       ElMessage.error(`${i + 1}: ${i18n.t('uploadTips')}`)
       isReady = false
+      loading.close()
       break
     }
     if (list[i].name === '') {
       ElMessage.error(`${i + 1}: ${i18n.t('nameplac')}`)
       isReady = false
+      loading.close()
       break
     }
     if (list[i].intro === '') {
@@ -493,13 +500,13 @@ async function startBacth() {
   }
 
   const userBalanceRes = await store.state.sdk?.getBalance()
-  debugger
   if (userBalanceRes && userBalanceRes.code === 200 && userBalanceRes.data.satoshis > amount) {
     ElMessageBox.confirm(`${i18n.t('useAmountTips')}: ${amount} SATS`, i18n.t('niceWarning'), {
       confirmButtonText: i18n.t('confirm'),
       cancelButtonText: i18n.t('cancel'),
       closeOnClickModal: false,
     }).then(async () => {
+      isCreated.value = true
       loading.close()
       isShowResult.value = true
       for (let i = 0; i < paramsList.length; i++) {
@@ -568,6 +575,11 @@ async function startBacth() {
     )
     return
   }
+}
+
+function resetBacth() {
+  list.length = 0
+  isCreated.value = false
 }
 
 if (store.state.userInfo) {
