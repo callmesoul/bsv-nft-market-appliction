@@ -240,5 +240,6 @@
   "certSystemIntroCont3": "The ShowPay certification on NOS is one of the methods that ShowPay, as the commercial operator of NOS, does to minimize the infringement of platform content. It is a platform-based certification, not a MetaId-based certification. \nMoreover, this certification is more for artistic and physical NFTs, and most of the future functional NFTs do not require certification. \nThis certification does not represent ShowPay's recognition of the value of the account or the work, and the user must bear the investment risk by himself.",
   "music": "music",
   "allmenuIntro": "This is an ever-changing digital art platform",
-  "noPaid": "No bid"
+  "noPaid": "No bid",
+  "beCertedSeries": "Certified series"
 }

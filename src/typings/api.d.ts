@@ -427,6 +427,8 @@ declare interface GetNftIssueyTxIdResItem {
   nftWebsite: string
   nftOwnerAvatarType: string
   nftIssueAvatarType: string
+  nftCertificationType: number
+  nftGenesisCertificationType: number
 }
 declare interface GetNftIssueyTxIdRes extends apiResponse {
   data: {
@@ -495,4 +497,7 @@ declare interface NFTApiGetNFTDetailResDataItem {
   nftSellState: number
   nftOwnerAvatarType: string
   nftIssueAvatarType: string
+  nftGenesisCertificationType: number
+  nftCertificationType: number
+  nftGenesisCertificationName: string
 }

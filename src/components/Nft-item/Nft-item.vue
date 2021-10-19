@@ -37,7 +37,12 @@
             <img
               class="cert-icon"
               src="@/assets/images/icon_cer.svg"
-              v-if="certedMetaIds.find(_item => _item === item.metaId)"
+              v-if="item.nftCertificationType"
+            />
+            <img
+              class="cert-icon"
+              src="@/assets/images/icon_cer_nft.png"
+              v-if="item.nftGenesisCertificationType"
             />
           </div>
         </div>
@@ -102,7 +107,6 @@ import NftOffSale from '@/utils/offSale'
 import dayjs from 'dayjs'
 import { metafileUrl } from '@/utils/util'
 import NFTDetail from '@/utils/nftDetail'
-import { certedMetaIds } from '@/config'
 
 const coverDefaultImg = 'this.src="/state/cover-default.jpg"' //默认图地址
 

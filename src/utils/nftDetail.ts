@@ -53,7 +53,10 @@ export default function NFTDetail(genesis: string, codehash: string, tokenIndex:
           issueMetaTxId: item.nftIssueMetaTxId,
           sellState: item.nftSellState,
           ownerAvatarType: item.nftOwnerAvatarType,
-          issueUserAvatarType: item.nftIssueAvatarType
+          issueUserAvatarType: item.nftIssueAvatarType,
+          nftGenesisCertificationType: item.nftGenesisCertificationType,
+          nftCertificationType: item.nftCertificationType,
+          nftGenesisCertificationName: item.nftGenesisCertificationName,
         }
         resolve(nft)
       } else {
