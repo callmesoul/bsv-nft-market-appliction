@@ -140,7 +140,7 @@
               v-if="nft.val.nftGenesisCertificationType"
             >
               <img src="@/assets/images/icon_cer_nft.png" />
-              {{ $t('beCertedSeries') }}：{{ nft.val.nftGenesisCertificationName }}
+              {{ $t('beCertedSeries') }}：{{ $t(nft.val.nftGenesisCertificationName) }}
             </div>
             <div class="creater-msg">
               <!-- 铸造者 -->
