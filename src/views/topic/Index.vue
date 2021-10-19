@@ -15,7 +15,12 @@
       :key="index"
       @click="toDetail(topic.key)"
     >
-      <img class="cover" :src="topic.cover" />
+      <img
+        class="cover"
+        :src="topic.coverEn ? topic.coverEn : topic.cover"
+        v-if="i18n.locale.value === 'en'"
+      />
+      <img class="cover" :src="topic.cover" v-else />
       <div class="title">{{ topic.name }}</div>
       <div class="msg flex flex-align-center">
         <div class="creater flex1 flex flex-align-center">
@@ -32,9 +37,11 @@ import InnerPageHeader from '@/components/InnerPageHeader/InnerPageHeader.vue'
 import { ref } from 'vue-demi'
 import { useRouter } from 'vue-router'
 import { topics } from '@/config'
+import { useI18n } from 'vue-i18n'
 
 const keyword = ref('')
 const router = useRouter()
+const i18n = useI18n()
 function search() {}
 
 function toDetail(key: string) {
