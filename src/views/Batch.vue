@@ -81,6 +81,7 @@
                   fit="cover"
                   :src="item.cover.base64Data"
                   :preview-src-list="[item.cover.base64Data]"
+                  :append-to-body="true"
                 />
               </template>
               <template v-else>
@@ -150,7 +151,7 @@
             :selecteds="item.classify"
           />
         </div>
-        <div class="index input-item">
+        <div class="index input-item" v-if="selectedSeries.length > 0">
           <input
             type="number"
             :readOnly="true"
@@ -204,7 +205,7 @@
         <div class="orginFile input-item">
           <div class="placeholder">{{ $t('choosetype') }}</div>
         </div>
-        <div class="index input-item">
+        <div class="index input-item" v-if="selectedSeries.length > 0">
           <input type="number" :readOnly="true" :disabled="true" />
         </div>
         <div class="btn btn-block btn-default">
