@@ -83,10 +83,6 @@
                   :src="item.cover.base64Data"
                   :preview-src-list="[item.cover.base64Data]"
                 />
-                <!-- <img class="cover" :src="coverFile.base64Data"  /> -->
-                <a class="close" @click="removeCover(index)" v-if="!item.genesis">{{
-                  $t('delete')
-                }}</a>
               </template>
               <template v-else>
                 <div>
@@ -222,13 +218,41 @@
 
     <div class="btn btn-block" @click="startBacth">{{ $t('startBatchCreate') }}</div>
   </div>
+
+  <ElDialog
+    v-model="isShowResult"
+    :title="$t('batchCreateIniting')"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    :show-close="false"
+  >
+    <div class="result">
+      <div class="batch-create-tips">{{ $t('batchCreateTips') }}</div>
+      <div class="result-msg">
+        <div class="result-num">
+          {{ $t('batchCreatNum') }}:<span>{{ list.length }}</span> {{ $t('indivual') }},
+          {{ $t('beSuccess') }}:<span>{{ successNum }}</span>
+          {{ $t('indivual') }}
+        </div>
+        <ElProgress :percentage="(successNum / list.length) * 100" :stroke-width="30"></ElProgress>
+      </div>
+    </div>
+  </ElDialog>
 </template>
 
 <script setup lang="ts">
 import { CreateNft, GetSeries, NftApiCode } from '@/api'
 import { useStore } from '@/store'
-import { ElLoading, ElMessage, ElIcon, ElMessageBox, ElSwitch } from 'element-plus'
-import { reactive, ref } from 'vue-demi'
+import {
+  ElLoading,
+  ElMessage,
+  ElIcon,
+  ElMessageBox,
+  ElSwitch,
+  ElDialog,
+  ElProgress,
+} from 'element-plus'
+import { computed, reactive, ref } from 'vue-demi'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import ChooseSeriesModal from '@/components/ChooseSeriesModal/ChooseSeriesModal.vue'
@@ -271,6 +295,19 @@ const series: any[] = reactive([])
 const selectedSeries: string[] = reactive([])
 const i18n = useI18n()
 const root = ref()
+const isShowResult = ref(false)
+
+const successNum = computed(() => {
+  let num = 0
+  for (let i = 0; i < list.length; i++) {
+    if (list[i].genesis && list[i].codehash && list[i].tokenIndex) {
+      num = num + 1
+    } else {
+      break
+    }
+  }
+  return num
+})
 
 function setUserCreatCard() {
   if (store.state.userInfo) {
@@ -281,14 +318,6 @@ function setUserCreatCard() {
       const cardIndex = classList.findIndex(item => item.classify === 'card')
       classList[cardIndex].disabled = false
     }
-  }
-}
-
-async function getSeries() {
-  const res = await GetSeries({ page: 1, pageSize: 99 })
-  if (res.code === NftApiCode.success) {
-    series.length = 0
-    series.push(...res.data)
   }
 }
 
@@ -464,12 +493,15 @@ async function startBacth() {
   }
 
   const userBalanceRes = await store.state.sdk?.getBalance()
+  debugger
   if (userBalanceRes && userBalanceRes.code === 200 && userBalanceRes.data.satoshis > amount) {
     ElMessageBox.confirm(`${i18n.t('useAmountTips')}: ${amount} SATS`, i18n.t('niceWarning'), {
       confirmButtonText: i18n.t('confirm'),
       cancelButtonText: i18n.t('cancel'),
       closeOnClickModal: false,
     }).then(async () => {
+      loading.close()
+      isShowResult.value = true
       for (let i = 0; i < paramsList.length; i++) {
         const res = await store.state.sdk
           ?.createNFT({
@@ -498,13 +530,20 @@ async function startBacth() {
             tokenIndex: res.tokenIndex,
           })
           if (response.code === NftApiCode.success) {
-            if (parseInt(res.tokenIndex) === list[i].index - 1) {
-              ElMessage.success(`${list[i].index}: ${i18n.t('castingsuccess')}`)
-            }
-          } else {
             list[i].codehash = res.codehash
             list[i].genesis = res.genesisId
             list[i].tokenIndex = res.tokenIndex
+            if (parseInt(res.tokenIndex) === list[i].index - 1) {
+              ElMessage.success(
+                `${selectedSeries.length > 0 ? list[i].index : list[i].name}: ${i18n.t(
+                  'castingsuccess'
+                )}`
+              )
+            } else {
+              ElMessage.error(i18n.t('tokenIndexNotMatch'))
+              break
+            }
+          } else {
             ElMessage.error(i18n.t('reportFail'))
             break
           }
@@ -513,8 +552,21 @@ async function startBacth() {
           break
         }
       }
-      loading.close()
+      isShowResult.value = false
     })
+  } else {
+    loading.close()
+    ElMessageBox.alert(
+      `
+        <p>${i18n.t('useAmountTips')}: ${amount} SATS</p>
+        <p>${i18n.t('insufficientBalance')}</p>
+      `,
+      {
+        confirmButtonText: i18n.t('confirm'),
+        dangerouslyUseHTMLString: true,
+      }
+    )
+    return
   }
 }
 

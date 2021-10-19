@@ -218,5 +218,9 @@
   "overSeriesNum": "The number of series has been exceeded",
   "onLineFail": "Failed to upload data",
   "reportFail": "Report data error",
-  "lookDetail": "Check The Details"
+  "lookDetail": "Check The Details",
+  "batchCreateTips": "In batch casting, please do not do other operations, please wait patiently",
+  "batchCreatNum": "The batch casting quantity",
+  "beSuccess": "succeeded",
+  "tokenIndexNotMatch": "The serial number does not match, please check before casting"
 }

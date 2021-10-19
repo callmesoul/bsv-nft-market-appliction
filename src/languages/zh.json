@@ -222,5 +222,11 @@
   "overSeriesNum": "已超出系列的数量",
   "reportFail": "上报数据错误",
   "onLineFail": "数据上链失败",
-  "lookDetail": "查看详情"
+  "lookDetail": "查看详情",
+  "batchCreateIniting": "正在批量铸造中",
+  "batchCreateTips": "正在批量铸造中，请勿做其他操作，请耐心等待",
+  "batchCreatNum": "本次批量铸造数量",
+  "beSuccess": "已成功",
+  "indivual": "个",
+  "tokenIndexNotMatch": "序号不匹配，请检查后再铸造"
 }

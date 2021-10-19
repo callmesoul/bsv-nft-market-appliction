@@ -324,3 +324,25 @@
         margin-top: 20px;
     }
 }
+
+.result {
+    .batch-create-tips {
+        font-weight: bold;
+    }
+
+    .result-msg {
+        .result-num {
+            margin-top: 10px;
+
+            span {
+                font-size: 32px;
+                margin: 0 5px;
+                font-weight: bold;
+            }
+        }
+
+        .el-progress {
+            margin-top: 30px;
+        }
+    }
+}
