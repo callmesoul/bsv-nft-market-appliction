@@ -16,7 +16,10 @@
         <div class="input-item flex flex-align-center">
           <div class="select-warp flex flex-align-center">
             <div class="key flex1">{{ $t('chooseserices') }}</div>
-            <div class="value" @click="isShowSeriesModal = true">
+            <div
+              class="value"
+              @click="isCreated ? (isShowSeriesModal = false) : (isShowSeriesModal = true)"
+            >
               <span v-if="selectedSeries.length > 0">{{ selectedSeries[0] }}</span>
               <span v-else class="placeholder">{{ $t('choose') }}</span>
               <i class="el-icon-arrow-right"></i>
@@ -245,23 +248,15 @@
 </template>
 
 <script setup lang="ts">
-import { CreateNft, GetSeries, NftApiCode } from '@/api'
+import { CreateNft, NftApiCode } from '@/api'
 import { useStore } from '@/store'
-import {
-  ElLoading,
-  ElMessage,
-  ElIcon,
-  ElMessageBox,
-  ElSwitch,
-  ElDialog,
-  ElProgress,
-} from 'element-plus'
+import { ElLoading, ElMessage, ElMessageBox, ElSwitch, ElDialog, ElProgress } from 'element-plus'
 import { computed, reactive, ref } from 'vue-demi'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import ChooseSeriesModal from '@/components/ChooseSeriesModal/ChooseSeriesModal.vue'
 import { tranfromImgFile } from '@/utils/util'
-import { nftTypes, classifyList, canCreateCardClassifyListMetaids } from '@/config'
+import { classifyList, canCreateCardClassifyListMetaids } from '@/config'
 import PickerModel from '@/components/PickerModal/PickerModel.vue'
 
 const list: {
@@ -295,13 +290,13 @@ const isShowClassifyModal = ref(false)
 const router = useRouter()
 const store = useStore()
 const isShowSeriesModal = ref(false)
-const series: any[] = reactive([])
 const selectedSeries: string[] = reactive([])
 const i18n = useI18n()
 const root = ref()
 const isShowResult = ref(false)
 const isCreated = ref(false)
 
+// 成功的数量
 const successNum = computed(() => {
   let num = 0
   for (let i = 0; i < list.length; i++) {
@@ -314,6 +309,7 @@ const successNum = computed(() => {
   return num
 })
 
+// 设置用户可选的分类
 function setUserCreatCard() {
   if (store.state.userInfo) {
     const index = canCreateCardClassifyListMetaids.findIndex(
@@ -326,6 +322,7 @@ function setUserCreatCard() {
   }
 }
 
+// 添加项
 function addItem() {
   list.push({
     cover: null,
@@ -339,6 +336,7 @@ function addItem() {
   })
 }
 
+// 更改封面
 async function coverFileInputChage(e: any) {
   const index = parseInt(e.currentTarget.dataset.index)
   const input = e.target as HTMLInputElement
@@ -351,8 +349,8 @@ async function coverFileInputChage(e: any) {
   }
 }
 
+// 更改源文件
 async function originalFileInputChage(e: any) {
-  debugger
   const index = parseInt(e.currentTarget.dataset.index)
   const input = e.target as HTMLInputElement
   let files = input.files
@@ -364,14 +362,17 @@ async function originalFileInputChage(e: any) {
   }
 }
 
+// 删除封面
 function removeCover(index: number) {
   list[index].cover = null
 }
 
+// 删除项
 function removeItem(index: number) {
   list.splice(index, 1)
 }
 
+// 更改统一的分类
 function onChangeSameClassify() {
   if (isSameClassify.value) {
     list.map(item => {
@@ -389,6 +390,7 @@ function onSetAllClassify() {
   })
 }
 
+// 确认选择系列
 function onSeriesConfirm() {
   isShowSeriesModal.value = false
   if (selectedSeries.length > 0) {
@@ -407,6 +409,7 @@ function onSeriesConfirm() {
   }
 }
 
+// 开始批量铸造
 async function startBacth() {
   if (list.length <= 0) return
   const loading = ElLoading.service()
@@ -422,7 +425,6 @@ async function startBacth() {
     }
   }
 
-  debugger
   let isReady = true
   const paramsList: any[] = []
   for (let i = 0; i < list.length; i++) {
@@ -447,6 +449,7 @@ async function startBacth() {
     if (list[i].intro === '') {
       ElMessage.error(`${i + 1}: ${i18n.t('drscplac')}`)
       isReady = false
+      loading.close()
       break
     }
 
@@ -510,53 +513,60 @@ async function startBacth() {
       loading.close()
       isShowResult.value = true
       for (let i = 0; i < paramsList.length; i++) {
-        const res = await store.state.sdk
-          ?.createNFT({
-            ...paramsList[i],
-          })
-          .catch(() => {
-            ElMessage.error(i18n.t('onLineFail'))
-            return
-          })
-        if (res && typeof res !== 'number') {
-          // 上报 更新 系列信息
-          const response = await CreateNft({
-            nftName: paramsList[i].nftname,
-            intro: paramsList[i].nftdesc,
-            type: paramsList[i].content.nftType,
-            seriesName: selectedSeries[0],
-            tx: res.txId,
-            classify: paramsList[i].content.classifyList,
-            fileUrl: 'test',
-            coverUrl: 'test',
-            tokenId: res.codehash + res.genesisId + res.tokenIndex,
-            nftId: res.txId,
-            codeHash: res.codehash,
-            genesis: res.genesisId,
-            genesisTxId: res.genesisTxid,
-            tokenIndex: res.tokenIndex,
-          })
-          if (response.code === NftApiCode.success) {
-            list[i].codehash = res.codehash
-            list[i].genesis = res.genesisId
-            list[i].tokenIndex = res.tokenIndex
-            if (parseInt(res.tokenIndex) === list[i].index - 1) {
-              ElMessage.success(
-                `${selectedSeries.length > 0 ? list[i].index : list[i].name}: ${i18n.t(
-                  'castingsuccess'
-                )}`
-              )
+        try {
+          const res = await store.state.sdk
+            ?.createNFT({
+              ...paramsList[i],
+            })
+            .catch(() => {
+              ElMessage.error(i18n.t('onLineFail'))
+              return
+            })
+          if (res && typeof res !== 'number') {
+            // 上报 更新 系列信息
+            const response = await CreateNft({
+              nftName: paramsList[i].nftname,
+              intro: paramsList[i].nftdesc,
+              type: paramsList[i].content.nftType,
+              seriesName: selectedSeries[0],
+              tx: res.txId,
+              classify: paramsList[i].content.classifyList,
+              fileUrl: 'test',
+              coverUrl: 'test',
+              tokenId: res.codehash + res.genesisId + res.tokenIndex,
+              nftId: res.txId,
+              codeHash: res.codehash,
+              genesis: res.genesisId,
+              genesisTxId: res.genesisTxid,
+              tokenIndex: res.tokenIndex,
+            })
+            if (response.code === NftApiCode.success) {
+              list[i].codehash = res.codehash
+              list[i].genesis = res.genesisId
+              list[i].tokenIndex = res.tokenIndex
+              if (parseInt(res.tokenIndex) === list[i].index - 1) {
+                ElMessage.success(
+                  `${selectedSeries.length > 0 ? list[i].index : list[i].name}: ${i18n.t(
+                    'castingsuccess'
+                  )}`
+                )
+                await store.state.sdk
+                  ?.checkNftTxIdStatus(res.sendMoneyTx)
+                  .catch(() => ElMessage.error(i18n.t('networkTimeout')))
+              } else {
+                ElMessage.error(i18n.t('tokenIndexNotMatch'))
+                break
+              }
             } else {
-              ElMessage.error(i18n.t('tokenIndexNotMatch'))
+              ElMessage.error(i18n.t('reportFail'))
               break
             }
           } else {
-            ElMessage.error(i18n.t('reportFail'))
+            ElMessage.error(i18n.t('onLineFail'))
             break
           }
-        } else {
-          ElMessage.error(i18n.t('onLineFail'))
-          break
+        } catch {
+          isShowResult.value = false
         }
       }
       isShowResult.value = false
@@ -577,7 +587,9 @@ async function startBacth() {
   }
 }
 
-function resetBacth() {
+// 初始化
+async function resetBacth() {
+  await root.value.getSeries()
   list.length = 0
   isCreated.value = false
 }

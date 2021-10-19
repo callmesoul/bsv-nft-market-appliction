@@ -58,12 +58,15 @@ const serie = reactive({
 })
 const isShowCreateSeriesModal = ref(false)
 
-async function getSeries() {
-  const res = await GetSeries({ page: 1, pageSize: 99 })
-  if (res.code === NftApiCode.success) {
-    series.length = 0
-    series.push(...res.data)
-  }
+function getSeries() {
+  return new Promise<void>(async resolve => {
+    const res = await GetSeries({ page: 1, pageSize: 99 })
+    if (res.code === NftApiCode.success) {
+      series.length = 0
+      series.push(...res.data)
+    }
+    resolve()
+  })
 }
 
 //  创建系列
@@ -135,6 +138,7 @@ if (store.state.userInfo) {
 
 defineExpose({
   series,
+  getSeries,
 })
 </script>
 

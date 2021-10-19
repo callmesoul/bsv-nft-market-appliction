@@ -229,5 +229,6 @@
   "beSuccess": "已成功",
   "indivual": "个",
   "tokenIndexNotMatch": "序号不匹配，请检查后再铸造",
-  "resetBatchCreate": "重新设置批量铸造"
+  "resetBatchCreate": "重新设置批量铸造",
+  "networkTimeout": "网络超时，请稍后再试"
 }

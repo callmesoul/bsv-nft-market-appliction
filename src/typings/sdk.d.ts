@@ -89,6 +89,7 @@ export interface IssueNFTResData extends MetaIdJsRes {
     tokenId: string
     txId: string
     tokenIndex: string
+    sendMoneyTx: string
     amount?: number
   }
 }

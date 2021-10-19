@@ -223,5 +223,6 @@
   "batchCreatNum": "The batch casting quantity",
   "beSuccess": "succeeded",
   "tokenIndexNotMatch": "The serial number does not match, please check before casting",
-  "resetBatchCreate": "Reset batch casting"
+  "resetBatchCreate": "Reset batch casting",
+  "networkTimeout": "Network timed out, please try again later"
 }

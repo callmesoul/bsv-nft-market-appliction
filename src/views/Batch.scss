@@ -348,3 +348,9 @@
         }
     }
 }
+
+.select-series {
+    :deep(.picker-modal) {
+        margin-top: 60px;
+    }
+}
