@@ -242,5 +242,19 @@
   "allmenuIntro": "This is an ever-changing digital art platform",
   "noPaid": "No bid",
   "beCertedSeries": "Certified series",
-  "MetaBotV2": "2nd-generation MetaBot"
+  "MetaBotV2": "2nd-generation MetaBot",
+  "batchCreate": "Batch casting",
+  "batchCreateDrsc": "Here you can cast NFTs in batches, instead of casting them one by one.",
+  "startBatchCreate": "Start batch casting",
+  "sameClassify": "Unified classification",
+  "overSeriesNum": "The number of series has been exceeded",
+  "onLineFail": "Failed to upload data",
+  "reportFail": "Report data error",
+  "lookDetail": "Check The Details",
+  "batchCreateTips": "In batch casting, please do not do other operations, please wait patiently",
+  "batchCreatNum": "The batch casting quantity",
+  "beSuccess": "succeeded",
+  "tokenIndexNotMatch": "The serial number does not match, please check before casting",
+  "resetBatchCreate": "Reset batch casting",
+  "networkTimeout": "Network timed out, please try again later"
 }

@@ -131,6 +131,12 @@ body {
     border-color: #fff;
   }
 
+  &.btn-error {
+    background: #fc3e05;
+    border-color: #fc3e05;
+    color: #fff;
+  }
+
   &.btn-block {
     display: block;
     width: auto;

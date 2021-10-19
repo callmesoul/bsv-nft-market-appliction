@@ -18,6 +18,7 @@ const TopicIndex = () => import('@/views/topic/Index.vue')
 const TopicDetail = () => import('@/views/topic/Detail.vue')
 const CommonLayout = () => import('@/layouts/CommonLayout.vue')
 const CountryFair = () => import('@/views/CountryFair.vue')
+const Batch = () => import('@/views/Batch.vue')
 import { useStore, Action } from '@/store/index'
 import { ElMessage } from 'element-plus'
 import i18n from '@/utils/i18n'
@@ -66,6 +67,7 @@ export const router = createRouter({
         { path: 'detail/:key', name: 'topicDetail', component: TopicDetail },
       ],
     },
+    { path: '/batch', name: 'batch', component: Batch, meta: { keepAlive: true } },
   ],
   async scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
@@ -126,14 +128,14 @@ router.beforeEach(async (to, from, next) => {
         store.dispatch(Action.initSdk)
       }
 
-      if (to.name === 'create' && store.state.userInfo) {
-        const result = await store.state.sdk?.checkUserCanIssueNft({
-          metaId: store.state.userInfo!.metaId,
-          address: store.state.userInfo!.address,
-          language: i18n.global.locale.value === 'en' ? Langs.EN : Langs.CN,
-        })
-        if (!result) return
-      }
+      // if (to.name === 'create' && store.state.userInfo) {
+      //   const result = await store.state.sdk?.checkUserCanIssueNft({
+      //     metaId: store.state.userInfo!.metaId,
+      //     address: store.state.userInfo!.address,
+      //     language: i18n.global.locale.value === 'en' ? Langs.EN : Langs.CN,
+      //   })
+      //   if (!result) return
+      // }
     } else {
       // 没有token
       const isAuth = to.meta && to.meta.isAuth ? to.meta.isAuth : false
