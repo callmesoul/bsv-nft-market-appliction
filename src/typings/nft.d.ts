@@ -18,6 +18,8 @@ declare interface NftItem {
   ownerAvatarType?: string
   avatarType?: string
   issueUserAvatarType?: string
+  nftCertificationType: number
+  nftGenesisCertificationType: number
 }
 declare interface NftItemDetail {
   ownerAvatarType: string
@@ -60,6 +62,9 @@ declare interface NftItemDetail {
   auctionTime?: number
   auctionStatus?: number
   update_time?: number
+  nftCertificationType: number
+  nftGenesisCertificationType: number
+  nftGenesisCertificationName: string
 }
 
 declare interface Topic {
