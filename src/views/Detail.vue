@@ -159,7 +159,10 @@
               </div>
 
               <!-- 认证信息 -->
-              <CertTemp :metaId="nft.val.foundryMetaId" />
+              <CertTemp
+                :metaId="nft.val.foundryMetaId"
+                :certed="nft.val.nftCertificationType === 1"
+              />
             </div>
 
             <!-- 描述 -->
@@ -546,7 +549,7 @@
                   v-for="(record, index) in records"
                   :key="record.timestamp"
                 >
-                  <span class="td flex1 user flex flex-align-center">
+                  <span class="td flex1 user flex flex-align-center" @click="ToUser(record.metaId)">
                     <img :src="$filters.avatar(record.metaId)" :alt="record.name" />
                     <span class="name">{{ record.name }}</span>
                   </span>
@@ -768,7 +771,7 @@ import {
 import dayjs from 'dayjs'
 import { useStore } from '@/store'
 import { nftTypes, pagination } from '@/config'
-import { checkSdkStatus } from '@/utils/util'
+import { checkSdkStatus, ToUser } from '@/utils/util'
 import Decimal from 'decimal.js-light'
 import { router } from '@/router'
 import NftOffSale from '@/utils/offSale'
