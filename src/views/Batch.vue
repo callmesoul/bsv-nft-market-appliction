@@ -545,69 +545,75 @@ async function startBacth() {
       confirmButtonText: i18n.t('confirm'),
       cancelButtonText: i18n.t('cancel'),
       closeOnClickModal: false,
-    }).then(async () => {
-      isCreated.value = true
-      loading.close()
-      isShowResult.value = true
-      for (let i = 0; i < paramsList.length; i++) {
-        try {
-          const res = await store.state.sdk
-            ?.createNFT({
-              ...paramsList[i],
-            })
-            .catch(() => {
-              ElMessage.error(i18n.t('onLineFail'))
-              return
-            })
-          if (res && typeof res !== 'number') {
-            // 上报 更新 系列信息
-            const response = await CreateNft({
-              nftName: paramsList[i].nftname,
-              intro: paramsList[i].nftdesc,
-              type: paramsList[i].content.nftType,
-              seriesName: selectedSeries[0],
-              tx: res.txId,
-              classify: paramsList[i].content.classifyList,
-              fileUrl: 'test',
-              coverUrl: 'test',
-              tokenId: res.codehash + res.genesisId + res.tokenIndex,
-              nftId: res.txId,
-              codeHash: res.codehash,
-              genesis: res.genesisId,
-              genesisTxId: res.genesisTxid,
-              tokenIndex: res.tokenIndex,
-            })
-            if (response.code === NftApiCode.success) {
-              list[i].codehash = res.codehash
-              list[i].genesis = res.genesisId
-              list[i].tokenIndex = res.tokenIndex
-              if (parseInt(res.tokenIndex) === list[i].index - 1) {
-                ElMessage.success(
-                  `${selectedSeries.length > 0 ? list[i].index : list[i].name}: ${i18n.t(
-                    'castingsuccess'
-                  )}`
-                )
-                await store.state.sdk
-                  ?.checkNftTxIdStatus(res.sendMoneyTx)
-                  .catch(() => ElMessage.error(i18n.t('networkTimeout')))
+    }).then(
+      async () => {
+        isCreated.value = true
+        loading.close()
+        isShowResult.value = true
+        for (let i = 0; i < paramsList.length; i++) {
+          try {
+            const res = await store.state.sdk
+              ?.createNFT({
+                ...paramsList[i],
+              })
+              .catch(() => {
+                ElMessage.error(i18n.t('onLineFail'))
+                return
+              })
+            if (res && typeof res !== 'number') {
+              // 上报 更新 系列信息
+              const response = await CreateNft({
+                nftName: paramsList[i].nftname,
+                intro: paramsList[i].nftdesc,
+                type: paramsList[i].content.nftType,
+                seriesName: selectedSeries[0],
+                tx: res.txId,
+                classify: paramsList[i].content.classifyList,
+                fileUrl: 'test',
+                coverUrl: 'test',
+                tokenId: res.codehash + res.genesisId + res.tokenIndex,
+                nftId: res.txId,
+                codeHash: res.codehash,
+                genesis: res.genesisId,
+                genesisTxId: res.genesisTxid,
+                tokenIndex: res.tokenIndex,
+              })
+              if (response.code === NftApiCode.success) {
+                list[i].codehash = res.codehash
+                list[i].genesis = res.genesisId
+                list[i].tokenIndex = res.tokenIndex
+                if (parseInt(res.tokenIndex) === list[i].index - 1) {
+                  ElMessage.success(
+                    `${selectedSeries.length > 0 ? list[i].index : list[i].name}: ${i18n.t(
+                      'castingsuccess'
+                    )}`
+                  )
+                  await store.state.sdk
+                    ?.checkNftTxIdStatus(res.sendMoneyTx)
+                    .catch(() => ElMessage.error(i18n.t('networkTimeout')))
+                } else {
+                  ElMessage.error(i18n.t('tokenIndexNotMatch'))
+                  break
+                }
               } else {
-                ElMessage.error(i18n.t('tokenIndexNotMatch'))
+                ElMessage.error(i18n.t('reportFail'))
                 break
               }
             } else {
-              ElMessage.error(i18n.t('reportFail'))
+              ElMessage.error(i18n.t('onLineFail'))
               break
             }
-          } else {
-            ElMessage.error(i18n.t('onLineFail'))
-            break
+          } catch {
+            isShowResult.value = false
           }
-        } catch {
-          isShowResult.value = false
         }
+        isShowResult.value = false
+      },
+      () => {
+        isShowResult.value = false
+        loading.close()
       }
-      isShowResult.value = false
-    })
+    )
   } else {
     loading.close()
     ElMessageBox.alert(
