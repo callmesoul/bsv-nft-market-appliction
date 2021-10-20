@@ -83,6 +83,7 @@
                   :preview-src-list="[item.cover.base64Data]"
                   :append-to-body="true"
                 />
+                <a class="close" @click="removeCover(index)">{{ $t('delete') }}</a>
               </template>
               <template v-else>
                 <div>
