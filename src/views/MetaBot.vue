@@ -711,7 +711,6 @@ async function buy(metabot: GetMetaBotListResItem) {
 }
 
 function nftNotCanBuy(res: any) {
-  debugger
   if (
     (res.code === 204 &&
       res.data &&

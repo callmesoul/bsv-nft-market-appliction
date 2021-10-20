@@ -42,13 +42,13 @@ export default ({ mode }) => {
       port: 443,
       https: true,
       open: false,
+      // 本地调试， 需先把接口的baseurl 设置为 '', 然后target指向对应 ip
       // proxy: {
-      //   '/api/showMANDB': {
-      //     target: env.VITE_WalletApi,
+      //   '/api': {
+      //     target: 'http://192.168.168.184:8012',
       //     changeOrigin: true,
-      //     rewrite: (path) => path.replace(/^\/api/, '')
       //   },
-      // }
+      // },
     },
     build: {
       target: 'es2015',

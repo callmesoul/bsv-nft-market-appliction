@@ -236,7 +236,7 @@ import {
   Effect,
 } from 'element-plus'
 
-import { checkSdkStatus, tranfromImgFile } from '@/utils/util'
+import { checkSdkStatus, checkUserCanIssueNft, tranfromImgFile } from '@/utils/util'
 import { ref, reactive } from '@vue/reactivity'
 import { useI18n } from 'vue-i18n'
 import {
@@ -595,11 +595,7 @@ async function createNft() {
   // 檢查sdk狀態
   await checkSdkStatus()
 
-  const result = await store.state.sdk?.checkUserCanIssueNft({
-    metaId: store.state.userInfo!.metaId,
-    address: store.state.userInfo!.address,
-    language: i18n.locale.value === 'en' ? Langs.EN : Langs.CN,
-  })
+  const result = await checkUserCanIssueNft()
   if (!result) return
 
   // nft 类型
@@ -710,7 +706,6 @@ async function createNft() {
         const res = await store.state.sdk?.createNFT(params).catch(() => {
           loading.close()
         })
-        debugger
         if (res && typeof res !== 'number') {
           /* ElMessage.success(i18n.t('castingsuccess'))
         router.replace({ name: 'createSuccess', 

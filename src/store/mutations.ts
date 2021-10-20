@@ -1,5 +1,6 @@
+import { Login } from '@/api'
 import { MutationTree } from 'vuex'
-import { State} from './state'
+import { State } from './state'
 
 export enum Mutation {
   INCREMENT = 'INCREMENT',
@@ -7,6 +8,7 @@ export enum Mutation {
   SETUSERINFO = 'SETUSERINFO',
   SETUSERINFOLOADING = 'SETUSERINFOLOADING',
   LOGOUT = 'LOGOUT',
+  NFTLOGIN = 'NFTLOGIN',
 }
 
 export type Mutations<S = State> = {
@@ -15,6 +17,7 @@ export type Mutations<S = State> = {
   [Mutation.SETUSERINFO](state: S, payload: UserInfo): void
   [Mutation.SETUSERINFOLOADING](state: S, payload: boolean): void
   [Mutation.LOGOUT](state: S): void
+  [Mutation.NFTLOGIN](state: S): void
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -37,5 +40,22 @@ export const mutations: MutationTree<State> & Mutations = {
     state.token = null
     state.userInfo = null
     state.sdk = null
+  },
+  async [Mutation.NFTLOGIN](state: State) {
+    const timestamp = new Date().getTime()
+    const message = state.userInfo!.metaId + timestamp.toString()
+    const response = await state.sdk!.signMessage({
+      message,
+    })
+    const res = await Login({
+      metaId: state.userInfo!.metaId,
+      xpub: state.userInfo!.xpub,
+      msg: response.data.result,
+      timestamp,
+      type: state.isApp ? '0' : '2',
+    })
+    if (res.code === 0) {
+      state.nftToken = res.data.token
+    }
   },
 }

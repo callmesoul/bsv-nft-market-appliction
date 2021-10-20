@@ -23,6 +23,7 @@ import { useStore, Action } from '@/store/index'
 import { ElMessage } from 'element-plus'
 import i18n from '@/utils/i18n'
 import { Langs } from './api'
+import { checkUserCanIssueNft } from './utils/util'
 const store = useStore()
 let removeRoute: (() => void) | undefined
 console.log('import.meta.env.PROD', import.meta.env.PROD)
@@ -128,14 +129,10 @@ router.beforeEach(async (to, from, next) => {
         store.dispatch(Action.initSdk)
       }
 
-      // if (to.name === 'create' && store.state.userInfo) {
-      //   const result = await store.state.sdk?.checkUserCanIssueNft({
-      //     metaId: store.state.userInfo!.metaId,
-      //     address: store.state.userInfo!.address,
-      //     language: i18n.global.locale.value === 'en' ? Langs.EN : Langs.CN,
-      //   })
-      //   if (!result) return
-      // }
+      if (to.name === 'create' && store.state.userInfo) {
+        const result = await checkUserCanIssueNft()
+        if (!result) return
+      }
     } else {
       // 没有token
       const isAuth = to.meta && to.meta.isAuth ? to.meta.isAuth : false

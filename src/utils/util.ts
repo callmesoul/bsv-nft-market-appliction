@@ -3,6 +3,7 @@ import { Action, store } from '@/store'
 import { ElMessage } from 'element-plus'
 import i18n from '@/utils/i18n'
 import { router } from '@/router'
+import { GetMyNftEligibility, Langs } from '@/api'
 
 export function tranfromImgFile(file: File) {
   return new Promise<MetaFile>((resolve, reject) => {
@@ -105,6 +106,7 @@ export function setDataStrclassify(data: any) {
   return classify
 }
 
+// 去用户中心
 export function ToUser(metaId: string) {
   if (store.state.userInfo && store.state.userInfo.metaId === metaId) {
     router.push({ name: 'self' })
@@ -116,4 +118,50 @@ export function ToUser(metaId: string) {
       },
     })
   }
+}
+
+// 检查是否可以铸造的逻辑
+export function checkUserCanIssueNft() {
+  return new Promise<boolean>(async resolve => {
+    if (import.meta.env.MODE === 'prod' || import.meta.env.MODE === 'gray') {
+      const result = await store.state.sdk
+        ?.checkUserCanIssueNft({
+          metaId: store.state.userInfo!.metaId,
+          address: store.state.userInfo!.address,
+          language: i18n.global.locale.value === 'en' ? Langs.EN : Langs.CN,
+        })
+        .catch(() => {
+          resolve(false)
+        })
+      if (result) {
+        resolve(true)
+      } else {
+        resolve(false)
+      }
+    } else {
+      resolve(true)
+    }
+  })
+}
+
+export function getMyNftEligibility(IssueMetaId: string) {
+  return new Promise(async resolve => {
+    if (import.meta.env.MODE === 'prod' || import.meta.env.MODE === 'gray') {
+      const res = await GetMyNftEligibility({
+        MetaId: store.state.userInfo!.metaId,
+        lang: i18n.global.locale.value === 'en' ? Langs.EN : Langs.CN,
+        IssueMetaId,
+      }).catch(() => {
+        resolve(false)
+      })
+      if (res?.code === 0) {
+        resolve(true)
+      } else {
+        ElMessage.error(res?.data)
+        resolve(false)
+      }
+    } else {
+      resolve(true)
+    }
+  })
 }
