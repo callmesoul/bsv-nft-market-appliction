@@ -309,6 +309,7 @@ export default class Sdk {
           tokenId: string
           txId: string
           tokenIndex: string
+          sendMoneyTx: string
         }
       | number
     >(async (resolve, reject) => {

@@ -1,5 +1,6 @@
 @import '@/assets/styles/var.scss';
-.picker-modal{
+
+.picker-modal {
     width: 300px;
     background: #fff;
     border-radius: 8px;
@@ -8,48 +9,57 @@
     right: 0;
     top: 0;
     position: absolute;
-    z-index: 2;
+    z-index: 5;
 
-    .picker-modal-header{
+    .picker-modal-header {
         padding: 20px;
-        .title{
+
+        .title {
             font-size: 16px;
             font-weight: 500;
-            span{
+
+            span {
                 color: #909399;
             }
         }
-        a{
+
+        a {
             color: #456FC4;
             font-size: 16px;
             cursor: pointer;
         }
     }
 
-    .picker-model-body{
+    .picker-model-body {
         padding-bottom: 20px;
-        .picker-model-list{
-            .picker-model-item{
+
+        .picker-model-list {
+            .picker-model-item {
                 padding: 10px 20px;
                 cursor: pointer;
-                &:hover{
+
+                &:hover {
                     background: rgba(254, 179, 57, 0.1);
                 }
-                .label{
+
+                .label {
                     font-size: 16px;
                 }
-                .secected,.icon{
+
+                .secected,
+                .icon {
                     width: 20px;
                     height: 20px;
                 }
-                &.disabled{
+
+                &.disabled {
                     // background: #eee;
                     color: #aaa;
                 }
             }
         }
 
-        .null{
+        .null {
             text-align: center;
             margin: 20px 0px;
             font-size: 14px;
