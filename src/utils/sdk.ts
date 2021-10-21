@@ -869,8 +869,10 @@ export default class Sdk {
   // 签名
   signMessage(params: { message: string; path?: string }) {
     return new Promise<SignMessageRes>(resolve => {
+      alert('start signMessage')
       if (!params.path) params.path = '0/0'
       const callback = (res: MetaIdJsRes) => {
+        alert('signMessage callback', res)
         if (typeof res === 'string') {
           res = JSON.parse(res)
         }
@@ -881,6 +883,10 @@ export default class Sdk {
         this.callback(res, resolve)
       }
       if (this.isApp) {
+        // @ts-ignore
+        alert('window.appMetaIdJsV2', JSON.stringify(window.appMetaIdJsV2))
+        // @ts-ignore
+        alert('window.appMetaIdJsV2.signMessage', JSON.stringify(window.appMetaIdJsV2.signMessage))
         const functionName = 'signMessageCallBack'
         // @ts-ignore
         window[functionName] = callback
