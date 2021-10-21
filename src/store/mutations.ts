@@ -55,10 +55,13 @@ export const mutations: MutationTree<State> & Mutations = {
       msg: response.data.result,
       timestamp,
       type: state.isApp ? '0' : '2',
+    }).catch(error => {
+      alert('NFTlogin error')
+      alert(error)
     })
     alert('NFTlogin')
     alert(JSON.stringify(res))
-    if (res.code === 0) {
+    if (res?.code === 0) {
       state.nftToken = res.data.token
     }
   },
