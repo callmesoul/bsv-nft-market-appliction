@@ -885,13 +885,13 @@ export default class Sdk {
       if (this.isApp) {
         // @ts-ignore
         alert('window.appMetaIdJs')
-        alert(JSON.stringify(window.appMetaIdJs))
+        alert(window.appMetaIdJs)
         // @ts-ignore
         alert('window.appMetaIdJsV2')
-        alert(JSON.stringify(window.appMetaIdJsV2))
+        alert(window.appMetaIdJsV2)
         // @ts-ignore
         alert('window.appMetaIdJsV2.signMessage')
-        alert(JSON.stringify(window.appMetaIdJsV2.signMessage))
+        alert(window.appMetaIdJsV2.signMessage)
         const functionName = 'signMessageCallBack'
         // @ts-ignore
         window[functionName] = callback
