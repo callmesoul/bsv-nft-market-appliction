@@ -884,6 +884,9 @@ export default class Sdk {
       }
       if (this.isApp) {
         // @ts-ignore
+        alert('window.appMetaIdJs')
+        alert(JSON.stringify(window.appMetaIdJs))
+        // @ts-ignore
         alert('window.appMetaIdJsV2')
         alert(JSON.stringify(window.appMetaIdJsV2))
         // @ts-ignore
