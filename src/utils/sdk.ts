@@ -873,7 +873,7 @@ export default class Sdk {
       if (!params.path) params.path = '0/0'
       const callback = (res: MetaIdJsRes) => {
         alert('signMessage callback')
-        alert(JSON.stringify(res))
+        alert(res)
         if (typeof res === 'string') {
           res = JSON.parse(res)
         }
