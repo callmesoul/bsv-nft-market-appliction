@@ -872,7 +872,8 @@ export default class Sdk {
       alert('start signMessage')
       if (!params.path) params.path = '0/0'
       const callback = (res: MetaIdJsRes) => {
-        alert('signMessage callback', res)
+        alert('signMessage callback')
+        alert(JSON.stringify(res))
         if (typeof res === 'string') {
           res = JSON.parse(res)
         }
@@ -892,6 +893,8 @@ export default class Sdk {
         // @ts-ignore
         alert('window.appMetaIdJsV2.signMessage')
         alert(window.appMetaIdJsV2.signMessage)
+        alert('window.appMetaIdJsV2.signMessage params')
+        alert(JSON.stringify(params))
         const functionName = 'signMessageCallBack'
         // @ts-ignore
         window[functionName] = callback
