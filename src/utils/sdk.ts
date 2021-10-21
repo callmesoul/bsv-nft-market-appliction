@@ -899,13 +899,13 @@ export default class Sdk {
         // @ts-ignore
         window[functionName] = callback
         if (window.appMetaIdJsV2) {
-          window.appMetaIdJsV2?.signMessage(
+          window.appMetaIdJsV2?.signMessageApp(
             store.state.token!.access_token,
             JSON.stringify(params),
             functionName
           )
         } else {
-          window.appMetaIdJs?.signMessage(
+          window.appMetaIdJs?.signMessageApp(
             store.state.token!.access_token,
             JSON.stringify(params),
             functionName
