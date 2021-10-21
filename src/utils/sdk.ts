@@ -89,6 +89,8 @@ export default class Sdk {
       const params = {
         accessToken: store.state.token ? store.state.token?.access_token : '',
         callback: (res: MetaIdJsRes) => {
+          alert('getUserInfo callback')
+          alert(res)
           this.callback(res, resolve)
         },
       }
