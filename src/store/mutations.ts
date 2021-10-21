@@ -47,6 +47,7 @@ export const mutations: MutationTree<State> & Mutations = {
     const response = await state.sdk!.signMessage({
       message,
     })
+    alert('signMessage response')
     const res = await Login({
       metaId: state.userInfo!.metaId,
       xpub: state.userInfo!.xpub,
