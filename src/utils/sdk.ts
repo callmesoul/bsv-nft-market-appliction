@@ -99,6 +99,8 @@ export default class Sdk {
         const that = this
         // @ts-ignore
         window[functionName] = function(res) {
+          alert('getUserInfo callback')
+          alert(res)
           that.callback(res, resolve)
         }
         if (window.appMetaIdJsV2) {
