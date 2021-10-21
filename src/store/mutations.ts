@@ -54,6 +54,8 @@ export const mutations: MutationTree<State> & Mutations = {
       timestamp,
       type: state.isApp ? '0' : '2',
     })
+    alert('NFTlogin')
+    alert(JSON.stringify(res))
     if (res.code === 0) {
       state.nftToken = res.data.token
     }

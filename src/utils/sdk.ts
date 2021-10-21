@@ -661,7 +661,6 @@ export default class Sdk {
         address,
       }
       if (this.isApp) {
-        alert('没兼容APP')
         const functionName: string = `nftList`
         // @ts-ignore
         window[functionName] = params.callback
@@ -873,11 +872,8 @@ export default class Sdk {
   // 签名
   signMessage(params: { message: string; path?: string }) {
     return new Promise<SignMessageRes>(resolve => {
-      alert('start signMessage')
       if (!params.path) params.path = '0/0'
       const callback = (res: MetaIdJsRes) => {
-        alert('signMessage callback')
-        alert(res)
         if (typeof res === 'string') {
           res = JSON.parse(res)
         }
@@ -889,16 +885,6 @@ export default class Sdk {
       }
       if (this.isApp) {
         // @ts-ignore
-        alert('window.appMetaIdJs')
-        alert(window.appMetaIdJs)
-        // @ts-ignore
-        alert('window.appMetaIdJsV2')
-        alert(window.appMetaIdJsV2)
-        // @ts-ignore
-        alert('window.appMetaIdJsV2.signMessage')
-        alert(window.appMetaIdJsV2.signMessage)
-        alert('window.appMetaIdJsV2.signMessage params')
-        alert(JSON.stringify(params))
         const functionName = 'signMessageCallBack'
         // @ts-ignore
         window[functionName] = callback
