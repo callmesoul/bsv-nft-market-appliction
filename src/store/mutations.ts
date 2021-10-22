@@ -47,22 +47,26 @@ export const mutations: MutationTree<State> & Mutations = {
     const response = await state.sdk!.signMessage({
       message,
     })
-    alert('signMessage response')
-    alert(JSON.stringify(response))
-    const res = await Login({
-      metaId: state.userInfo!.metaId,
-      xpub: state.userInfo!.xpub,
-      msg: response.data.result,
-      timestamp,
-      type: state.isApp ? '0' : '2',
-    }).catch(error => {
+    try {
+      const res = await Login({
+        metaId: state.userInfo!.metaId,
+        xpub: state.userInfo!.xpub,
+        msg: response.data.result,
+        timestamp,
+        type: state.isApp ? '0' : '2',
+      })
+      alert('NFTlogin')
+      alert(JSON.stringify(res))
+      if (res?.code === 0) {
+        state.nftToken = res.data.token
+      }
+    } catch (error) {
       alert('NFTlogin error')
       alert(error)
-    })
-    alert('NFTlogin')
-    alert(JSON.stringify(res))
-    if (res?.code === 0) {
-      state.nftToken = res.data.token
+      if (error && typeof error === 'string') new Error(error)
+      else {
+        error ? new Error(JSON.stringify(error)) : ''
+      }
     }
   },
 }
