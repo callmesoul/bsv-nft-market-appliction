@@ -89,8 +89,6 @@ export default class Sdk {
       const params = {
         accessToken: store.state.token ? store.state.token?.access_token : '',
         callback: (res: MetaIdJsRes) => {
-          alert('getUserInfo callback')
-          alert(res)
           this.callback(res, resolve)
         },
       }
@@ -99,8 +97,6 @@ export default class Sdk {
         const that = this
         // @ts-ignore
         window[functionName] = function(res) {
-          alert('getUserInfo callback')
-          alert(res)
           that.callback(res, resolve)
         }
         if (window.appMetaIdJsV2) {
@@ -874,8 +870,6 @@ export default class Sdk {
     return new Promise<SignMessageRes>(resolve => {
       if (!params.path) params.path = '0/0'
       const callback = (res: MetaIdJsRes) => {
-        alert('signMessage')
-        alert(res)
         if (typeof res === 'string') {
           res = JSON.parse(res)
         }
