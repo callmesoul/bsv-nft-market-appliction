@@ -25,6 +25,7 @@ import {
   SdkGenesisNFTRes,
   SellNFTParams,
   SendMetaDataTxRes,
+  SignMessageRes,
 } from '@/typings/sdk'
 import { rejects } from 'assert/strict'
 import MetaIdJs, { ProtocolOptions } from 'metaidjs'
@@ -364,7 +365,6 @@ export default class Sdk {
             genesisTxId = res.data.genesisTxid
             sensibleId = res.data.sensibleId
           }
-          debugger
           await issueOperate()
         } else {
           reject('createNFT error')
@@ -446,7 +446,6 @@ export default class Sdk {
           )
         }
       } else {
-        debugger
         // @ts-ignore
         this.metaidjs?.genesisNFT(_params)
       }
@@ -490,7 +489,6 @@ export default class Sdk {
           ...params,
         },
         callback: (res: MetaIdJsRes) => {
-          debugger
           console.log('issueNFT res')
           console.log(res)
           // 当报错是token supply is fixed 时， 一直轮询，直到成功或其他报错
@@ -523,7 +521,6 @@ export default class Sdk {
         }
       } else {
         // @ts-ignore
-        debugger
         this.metaidjs?.issueNFT(_params)
       }
     })
@@ -644,7 +641,6 @@ export default class Sdk {
           )
         }
       } else {
-        debugger
         // @ts-ignore
         this.metaidjs?.nftCancel(_params)
       }
@@ -654,7 +650,6 @@ export default class Sdk {
   // nft 列表查询
   nftList(address: string) {
     return new Promise<NFTLIstRes>(resolve => {
-      debugger
       const params = {
         callback: (res: MetaIdJsRes) => {
           this.callback(res, resolve)
@@ -662,7 +657,6 @@ export default class Sdk {
         address,
       }
       if (this.isApp) {
-        alert('没兼容APP')
         const functionName: string = `nftList`
         // @ts-ignore
         window[functionName] = params.callback
@@ -866,7 +860,50 @@ export default class Sdk {
     })
   }
 
+  // 跳转tx详情
   toTxLink(txId: string) {
     window.open(`https://whatsonchain.com/tx/${txId}`)
+  }
+
+  // 签名
+  signMessage(params: { message: string; path?: string }) {
+    return new Promise<SignMessageRes>(resolve => {
+      if (!params.path) params.path = '0/0'
+      const callback = (res: MetaIdJsRes) => {
+        if (typeof res === 'string') {
+          res = JSON.parse(res)
+        }
+        if (res.code === 200) {
+          res.data.publicKey = res.data.pubkey ? res.data.pubkey : res.data.publicKey
+          res.data.result = res.data.result ? res.data.result : res.data.signMsg
+        }
+        this.callback(res, resolve)
+      }
+      if (this.isApp) {
+        // @ts-ignore
+        const functionName = 'signMessageCallBack'
+        // @ts-ignore
+        window[functionName] = callback
+        if (window.appMetaIdJsV2) {
+          window.appMetaIdJsV2?.signMessage(
+            store.state.token!.access_token,
+            JSON.stringify(params),
+            functionName
+          )
+        } else {
+          window.appMetaIdJs?.signMessage(
+            store.state.token!.access_token,
+            JSON.stringify(params),
+            functionName
+          )
+        }
+      } else {
+        //@ts-ignore
+        this.metaidjs.signMessage({
+          data: params,
+          callback,
+        })
+      }
+    })
   }
 }

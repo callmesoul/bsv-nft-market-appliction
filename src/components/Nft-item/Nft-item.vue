@@ -105,7 +105,7 @@ import { Decimal } from 'decimal.js-light'
 import NftOffSale from '@/utils/offSale'
 // @ts-ignore
 import dayjs from 'dayjs'
-import { metafileUrl } from '@/utils/util'
+import { getMyNftEligibility, metafileUrl } from '@/utils/util'
 import NFTDetail from '@/utils/nftDetail'
 
 const coverDefaultImg = 'this.src="/state/cover-default.jpg"' //默认图地址
@@ -155,24 +155,17 @@ function toDetail() {
 }
 
 async function toSale() {
-  const res = await GetMyNftEligibility({
-    MetaId: store.state.userInfo!.metaId,
-    IssueMetaId: props.item.metaId,
-    lang: i18n.locale.value === 'en' ? Langs.EN : Langs.CN,
-  })
-  if (res.code === 0) {
-    if (props.item?.tokenId) {
-      router.push({
-        name: 'sale',
-        params: {
-          tokenIndex: props.item.tokenIndex,
-          genesisId: props.item.genesis,
-          codehash: props.item.codehash,
-        },
-      })
-    }
-  } else {
-    ElMessage.error(res.data)
+  const result = await getMyNftEligibility(props.item.metaId)
+  if (!result) return
+  if (props.item?.tokenId) {
+    router.push({
+      name: 'sale',
+      params: {
+        tokenIndex: props.item.tokenIndex,
+        genesisId: props.item.genesis,
+        codehash: props.item.codehash,
+      },
+    })
   }
 }
 

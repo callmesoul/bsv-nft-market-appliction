@@ -9,6 +9,7 @@ export enum NftApiCode {
 }
 const apiHttp = new HttpRequest(env.VITE_WalletApi).request
 const nftHttp = new HttpRequest(env.VITE_NftApi).request
+// const nftHttp = new HttpRequest('').request
 const auctionHttp = new HttpRequest(env.VITE_ShowBotApi).request
 // const auctionHttp = new HttpRequest('http://192.168.168.118').request
 export const GetToken = (params: object) => {
@@ -167,6 +168,16 @@ export const RemoveDeadlineTime = (params: {
   deadlineTime: number
 }): Promise<apiResponse> => {
   return nftHttp.post(`/api/v2/productTransaction/removeShelvesTime`, params)
+}
+
+export const Login = (params: {
+  metaId: string
+  xpub: string
+  msg: string
+  timestamp: number
+  type: string
+}): Promise<apiResponse> => {
+  return nftHttp.post(`/api/v2/user/login`, params)
 }
 
 export const GetNftIssue = (params: {

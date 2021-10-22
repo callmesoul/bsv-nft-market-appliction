@@ -1,4 +1,4 @@
-import Sdk from "@/utils/sdk"
+import Sdk from '@/utils/sdk'
 export interface State {
   debug: boolean
   version: string
@@ -8,17 +8,19 @@ export interface State {
   userInfo: null | UserInfo
   userInfoLoading: boolean
   sdk: null | Sdk
-  sdkInitIng: boolean,
-  isApp: boolean,
+  sdkInitIng: boolean
+  isApp: boolean
   pagination: Pagination
+  nftToken: null | string
 }
 
-
-
 // @ts-ignore
-const appMetaIdJs: null | MetaIdJs = window?.appMetaIdJsV2 ? window?.appMetaIdJsV2 : window?.appMetaIdJs ? window?.appMetaIdJs : null
+const appMetaIdJs: null | MetaIdJs = window?.appMetaIdJsV2
+  ? window?.appMetaIdJsV2
+  : window?.appMetaIdJs
+  ? window?.appMetaIdJs
+  : null
 if (appMetaIdJs) {
-  
 }
 
 const versionString = import.meta.env.MODE === 'development' ? _APP_VERSION + '-dev' : _APP_VERSION
@@ -37,12 +39,13 @@ export const state: State = {
   // @ts-ignore
   isApp: window?.appMetaIdJsV2 || window?.appMetaIdJs ? true : false,
   // @ts-ignore
-  sdk: window.appMetaIdJsV2 || window?.appMetaIdJs  ? new Sdk() : null,
+  sdk: window.appMetaIdJsV2 || window?.appMetaIdJs ? new Sdk() : null,
   // 分页参数
   pagination: {
     page: 1,
     pageSize: 12,
     loading: false,
-    nothing: false
-  }
+    nothing: false,
+  },
+  nftToken: null,
 }

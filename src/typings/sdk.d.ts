@@ -72,6 +72,27 @@ export interface CreateNftFunParams extends NftFunParams {
   data: CreateNftParams
 }
 
+export interface SignMessageRes extends MetaIdJsRes {
+  data: {
+    publicKey: string
+    result: string
+  }
+}
+
+export interface SendMetaDataTxRes extends MetaIdJsRes {
+  data: {
+    txId: string
+    // checkOnly = true
+    usedAmount?: number
+    usedAmountCent?: number
+    nodeAddress?: string
+  }
+}
+
+export interface CreateNftFunParams extends NftFunParams {
+  data: CreateNftParams
+}
+
 export enum SdkCallBackCodes {
   success = 200,
 }
