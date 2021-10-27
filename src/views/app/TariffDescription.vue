@@ -17,7 +17,7 @@
 
     <div class="tariff-description-section">
       <div class="tariff-description-title">{{ $t('tariffDescription2title') }}</div>
-      <div class="type">{{ $t('platformFee') }}：<span>10,000 sat</span></div>
+      <div class="type">{{ $t('tariffDescription2name') }}：<span>10,000 Satoshi</span></div>
       <div class="drsc">
         <div class="drsc-title">{{ $t('illustrate') }}:</div>
         <div class="drsc-cont">
@@ -27,8 +27,8 @@
     </div>
 
     <div class="tariff-description-section">
-      <div class="tariff-description-title">{{ $t('offsale') }}</div>
-      <div class="type">{{ $t('platformFee') }}：<span>10,000 sat</span></div>
+      <div class="tariff-description-title">{{ $t('tariffDescription3title') }}</div>
+      <div class="type">{{ $t('tariffDescription3name') }}：<span>10,000 Satoshi</span></div>
       <div class="drsc">
         <div class="drsc-title">{{ $t('illustrate') }}:</div>
         <div class="drsc-cont">
@@ -38,8 +38,8 @@
     </div>
 
     <div class="tariff-description-section">
-      <div class="tariff-description-title">{{ $t('Casting') }}</div>
-      <div class="type">{{ $t('platformFee') }}：<span>10,000 sat</span></div>
+      <div class="tariff-description-title">{{ $t('tariffDescription4title') }}</div>
+      <div class="type">{{ $t('tariffDescription4name') }}：<span>10,000 Satoshi</span></div>
       <div class="drsc">
         <div class="drsc-title">{{ $t('illustrate') }}:</div>
         <div class="drsc-cont">
