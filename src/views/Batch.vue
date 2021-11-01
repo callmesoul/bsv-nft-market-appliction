@@ -643,7 +643,17 @@ if (store.state.userInfo) {
   store.watch(
     state => state.userInfo,
     () => {
-      setUserCreatCard()
+      if (store.state.userInfo) setUserCreatCard()
+    }
+  )
+}
+
+if (!store.state.nftToken) {
+  store.watch(
+    state => state.nftToken,
+    () => {
+      debugger
+      if (store.state.nftToken) root.value.getSeries()
     }
   )
 }

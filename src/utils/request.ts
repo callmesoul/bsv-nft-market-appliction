@@ -9,7 +9,7 @@ export default class HttpRequest {
     })
     this.request.interceptors.request.use(
       async config => {
-        const index = config.url?.indexOf('/api/v2/')
+        const index = config.baseURL?.indexOf('nftonshow')
         if (index !== -1) {
           config.headers['token'] = `${store.state.nftToken}`
           config.headers['type'] = store.state.isApp ? '0' : '2'
