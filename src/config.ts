@@ -33,6 +33,9 @@ export const canCreateCardClassifyListMetaids = [
   'aaf66589caf185d6840a51cd47a91cb2fbf831c0eb6a4c32ab31f3e3b3fa5bc2',
   'baac7625edf7a3dcc28385917a6fc9a72798ffd3657da8bc22ce59fdeb3b35e0',
 ]
+export const canCreateRightsClassifyListMetaids = [
+  '1734f4732ddd1ec2a94f55a85c1b7a3051c7000bbc2e4d4eaaca7ae698b25c28',
+]
 export const classifyList: Classify[] = [
   { classify: 'rights', disabled: true },
   { classify: 'art' },
@@ -41,6 +44,10 @@ export const classifyList: Classify[] = [
   { classify: 'avatar', disabled: true },
   {
     classify: 'card',
+    disabled: true,
+  },
+  {
+    classify: 'article',
     disabled: true,
   },
   // { classify: 'alias', disabled: true },
@@ -52,6 +59,10 @@ export const countryFairClassifyList: Classify[] = [
   { classify: 'art' },
   { classify: 'music' },
   { classify: 'game' },
+  {
+    classify: 'article',
+    disabled: true,
+  },
 ]
 
 export const pagination: Pagination = {

@@ -262,7 +262,11 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import ChooseSeriesModal from '@/components/ChooseSeriesModal/ChooseSeriesModal.vue'
 import { checkSdkStatus, tranfromImgFile } from '@/utils/util'
-import { classifyList, canCreateCardClassifyListMetaids } from '@/config'
+import {
+  classifyList,
+  canCreateCardClassifyListMetaids,
+  canCreateRightsClassifyListMetaids,
+} from '@/config'
 import PickerModel from '@/components/PickerModal/PickerModel.vue'
 import InnerPageHeader from '@/components/InnerPageHeader/InnerPageHeader.vue'
 
@@ -325,6 +329,13 @@ function setUserCreatCard() {
     if (index !== -1) {
       const cardIndex = classList.findIndex(item => item.classify === 'card')
       classList[cardIndex].disabled = false
+    }
+    const _index = canCreateRightsClassifyListMetaids.findIndex(
+      item => item === store.state.userInfo?.metaId
+    )
+    if (_index !== -1) {
+      const rightsIndex = classList.findIndex(item => item.classify === 'rights')
+      classList[rightsIndex].disabled = false
     }
   }
 }
