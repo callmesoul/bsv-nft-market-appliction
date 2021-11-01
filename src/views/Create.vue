@@ -254,7 +254,12 @@ import {
 import { useStore } from '@/store'
 import { router } from '@/router'
 import PickerModel from '@/components/PickerModal/PickerModel.vue'
-import { nftTypes, classifyList, canCreateCardClassifyListMetaids } from '@/config'
+import {
+  nftTypes,
+  classifyList,
+  canCreateCardClassifyListMetaids,
+  canCreateRightsClassifyListMetaids,
+} from '@/config'
 import { computed } from '@vue/runtime-core'
 
 const classList = reactive(classifyList)
@@ -270,6 +275,13 @@ function setUserCreatCard() {
     if (index !== -1) {
       const cardIndex = classList.findIndex(item => item.classify === 'card')
       classList[cardIndex].disabled = false
+    }
+    const _index = canCreateRightsClassifyListMetaids.findIndex(
+      item => item === store.state.userInfo?.metaId
+    )
+    if (_index !== -1) {
+      const rightsIndex = classList.findIndex(item => item.classify === 'rights')
+      classList[rightsIndex].disabled = false
     }
   }
 }
