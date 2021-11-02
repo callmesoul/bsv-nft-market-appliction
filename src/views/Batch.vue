@@ -221,7 +221,7 @@
     <div class="btn btn-block" @click="resetBacth" v-if="isCreated">
       {{ $t('resetBatchCreate') }}
     </div>
-    <div class="btn btn-block" @click="startBacth" v-else>{{ $t('startBatchCreate') }}</div>
+    <div class="btn btn-block" @click="startBacth" v-else>{{isBreak ? $t('continue') : $t('startBatchCreate') }}</div>
   </div>
 
   <ElDialog
@@ -305,8 +305,9 @@ const selectedSeries: string[] = reactive([])
 const i18n = useI18n()
 const root = ref()
 const isShowResult = ref(false)
+const isBreak = ref(false)
 const isCreated = ref(false)
-
+const currentIndex = ref(null)
 // 成功的数量
 const successNum = computed(() => {
   let num = 0
@@ -458,7 +459,6 @@ async function onSeriesConfirm() {
 async function startBacth() {
   // 檢查sdk狀態
   await checkSdkStatus()
-
   if (list.length <= 0) return
   const loading = ElLoading.service()
 
@@ -475,7 +475,11 @@ async function startBacth() {
 
   let isReady = true
   const paramsList: any[] = []
-  for (let i = 0; i < list.length; i++) {
+  let i = 0
+  if (currentIndex.value) {
+    i = currentIndex.value
+  }
+  for (; i < list.length; i++) {
     if (!list[i].cover) {
       ElMessage.error(`${i + 1}: ${i18n.t('uploadcover')}`)
       isReady = false
@@ -540,7 +544,10 @@ async function startBacth() {
   if (!isReady) return
   //   checkOnly
   let amount = 0
-  for (let i = 0; i < paramsList.length; i++) {
+  if (currentIndex.value) {
+    i = currentIndex.value
+  }
+  for (; i < paramsList.length; i++) {
     const res = await store.state.sdk?.createNFT({
       checkOnly: true,
       ...paramsList[i],
@@ -561,13 +568,18 @@ async function startBacth() {
         isCreated.value = true
         loading.close()
         isShowResult.value = true
-        for (let i = 0; i < paramsList.length; i++) {
+        if (currentIndex.value) {
+          i = currentIndex.value
+        }
+        for (; i < paramsList.length; i++) {
+          currentIndex.value = i
           try {
             const res = await store.state.sdk
               ?.createNFT({
                 ...paramsList[i],
               })
               .catch(() => {
+                isBreak.value = true
                 ElMessage.error(i18n.t('onLineFail'))
                 return
               })
@@ -603,22 +615,27 @@ async function startBacth() {
                     ?.checkNftTxIdStatus(res.sendMoneyTx)
                     .catch(() => ElMessage.error(i18n.t('networkTimeout')))
                 } else {
+                  isBreak.value = true
                   ElMessage.error(i18n.t('tokenIndexNotMatch'))
                   break
                 }
               } else {
+                isBreak.value = true
                 ElMessage.error(i18n.t('reportFail'))
                 break
               }
             } else {
+              isBreak.value = true
               ElMessage.error(i18n.t('onLineFail'))
               break
             }
           } catch {
+            isBreak.value = true
             isShowResult.value = false
           }
         }
         isShowResult.value = false
+        isBreak.value = false
       },
       () => {
         isShowResult.value = false
