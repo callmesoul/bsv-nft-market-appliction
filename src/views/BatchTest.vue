@@ -218,10 +218,10 @@
       </div>
     </div>
 
-    <div class="btn btn-block" @click="resetBacth" v-if="isCreated">
+    <div class="btn btn-block" @click="resetBacth" >
       {{ $t('resetBatchCreate') }}
     </div>
-    <div class="btn btn-block" @click="startBacth" v-else>
+    <div class="btn btn-block" @click="startBacth">
       {{ isBreak ? $t('continue') : $t('startBatchCreate') }}
     </div>
   </div>
@@ -483,7 +483,7 @@ async function startBacth() {
     i = currentIndex.value
   } else {
     for (let i = 1; i < createCount.value; i++) {
-      list.push({ ...list[0], index: i + 1 })
+      list.push({ ...list[0], index: i + list[0].index })
     }
   }
   debugger
