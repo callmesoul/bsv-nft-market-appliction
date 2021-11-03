@@ -221,7 +221,9 @@
     <div class="btn btn-block" @click="resetBacth" v-if="isCreated">
       {{ $t('resetBatchCreate') }}
     </div>
-    <div class="btn btn-block" @click="startBacth" v-else>{{isBreak ? $t('continue') : $t('startBatchCreate') }}</div>
+    <div class="btn btn-block" @click="startBacth" v-else>
+      {{ isBreak ? $t('continue') : $t('startBatchCreate') }}
+    </div>
   </div>
 
   <ElDialog
@@ -546,6 +548,8 @@ async function startBacth() {
   let amount = 0
   if (currentIndex.value) {
     i = currentIndex.value
+  } else {
+    i = 0
   }
   for (; i < paramsList.length; i++) {
     const res = await store.state.sdk?.createNFT({
@@ -570,6 +574,8 @@ async function startBacth() {
         isShowResult.value = true
         if (currentIndex.value) {
           i = currentIndex.value
+        } else {
+          i = 0
         }
         for (; i < paramsList.length; i++) {
           currentIndex.value = i
