@@ -466,7 +466,7 @@ async function startBacth() {
   // 检查是否超出 系列数量
   if (selectedSeries.length > 0) {
     currentSeriesItem = root.value.series.find((item: any) => item.series === selectedSeries[0])
-    if (currentSeriesItem && currentSeriesItem.maxNumber <= list[list.length - 1].index) {
+    if (currentSeriesItem && currentSeriesItem.maxNumber < list[list.length - 1].index) {
       ElMessage.error(i18n.t('overSeriesNum'))
       loading.close()
       return
