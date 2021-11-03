@@ -212,8 +212,8 @@
         <div class="btn btn-block btn-default">
           {{ $t('delete') }}
         </div>
-        <div class="add flex flex-align-center flex-pack-center" @click="addItem">
-          +
+        <div class="add flex flex-align-center flex-pack-center">
+          <input v-model="createCount" />
         </div>
       </div>
     </div>
@@ -309,6 +309,7 @@ const root = ref()
 const isShowResult = ref(false)
 const isBreak = ref(false)
 const isCreated = ref(false)
+const createCount = ref(1)
 const currentIndex = ref(null)
 // 成功的数量
 const successNum = computed(() => {
@@ -468,7 +469,7 @@ async function startBacth() {
   // 检查是否超出 系列数量
   if (selectedSeries.length > 0) {
     currentSeriesItem = root.value.series.find((item: any) => item.series === selectedSeries[0])
-    if (currentSeriesItem && currentSeriesItem.maxNumber < list[list.length - 1].index) {
+    if (currentSeriesItem && currentSeriesItem.maxNumber < createCount.value) {
       ElMessage.error(i18n.t('overSeriesNum'))
       loading.close()
       return
@@ -480,7 +481,12 @@ async function startBacth() {
   let i = 0
   if (currentIndex.value) {
     i = currentIndex.value
+  } else {
+    for (let i = 1; i < createCount.value; i++) {
+      list.push({ ...list[0], index: i + 1 })
+    }
   }
+  debugger
   for (; i < list.length; i++) {
     if (!list[i].cover) {
       ElMessage.error(`${i + 1}: ${i18n.t('uploadcover')}`)
@@ -693,4 +699,4 @@ if (!store.state.nftToken) {
 }
 </script>
 
-<style lang="scss" scoped src="./Batch.scss"></style>
+<style lang="scss" scoped src="./BatchTest.scss"></style>
