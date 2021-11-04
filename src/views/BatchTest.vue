@@ -593,7 +593,6 @@ async function startBacth() {
           list[i].codehash = res.codehash
           list[i].genesis = res.genesisId
           list[i].tokenIndex = res.tokenIndex
-          if (parseInt(res.tokenIndex) === list[i].index - 1) {
             ElMessage.success(
               `${selectedSeries.length > 0 ? list[i].index : list[i].name}: ${i18n.t(
                 'castingsuccess'
@@ -602,12 +601,6 @@ async function startBacth() {
             await store.state.sdk
               ?.checkNftTxIdStatus(res.sendMoneyTx)
               .catch(() => ElMessage.error(i18n.t('networkTimeout')))
-          } else {
-            isBreak.value = true
-            isShowResult.value = false
-            ElMessage.error(i18n.t('tokenIndexNotMatch'))
-            return
-          }
         } else {
           isBreak.value = true
           isShowResult.value = false
