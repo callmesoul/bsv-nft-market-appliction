@@ -288,7 +288,7 @@
           {{ $t('beSuccess') }}:<span>{{ successNum }}</span>
           {{ $t('indivual') }}
         </div>
-        <ElProgress :percentage="(successNum / list.length) * 100" :stroke-width="30"></ElProgress>
+        <ElProgress :percentage="Math.ceil((successNum / list.length) * 100)" :stroke-width="30"></ElProgress>
       </div>
     </div>
   </ElDialog>
@@ -629,12 +629,17 @@ async function startBacth() {
   } else {
     i = 0
   }
-  const res = await store.state.sdk?.createNFT({
-    checkOnly: true,
-    ...paramsList[i],
-  })
-  if (typeof res === 'number') {
-    amount += res
+  try {
+    const res = await store.state.sdk?.createNFT({
+      checkOnly: true,
+      ...paramsList[i],
+    })
+    if (typeof res === 'number') {
+      amount += res
+    }
+  } catch (err) {
+    loading.close()
+    return
   }
   amount *= paramsList.length - i
   const userBalanceRes = await store.state.sdk?.getBalance()
