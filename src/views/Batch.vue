@@ -66,7 +66,7 @@
     </div>
 
     <!-- 相同内容选择 -->
-    <div class="batch-same-warp batch-create-list">
+    <!-- <div class="batch-same-warp batch-create-list">
       <div class="batch-create-item">
         <div class="cover upload-warp">
           <div class="upload">
@@ -103,7 +103,7 @@
           +
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- 批量铸造列表 -->
     <div class="batch-create-list">
@@ -263,9 +263,9 @@
         <div class="btn btn-block flex1" @click="resetBacth">
           {{ $t('resetBatchCreate') }}
         </div>
-        <div class="btn btn-block flex1" @click="resetBacth">
+        <!-- <div class="btn btn-block flex1" @click="resetBacth">
           {{ $t('continueBatchCreate') }}
-        </div>
+        </div> -->
       </div>
     </template>
     <div class="btn btn-block" @click="startBacth" v-else>
