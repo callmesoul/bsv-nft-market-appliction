@@ -218,7 +218,7 @@
       </div>
     </div>
 
-    <div class="btn btn-block" @click="resetBacth" >
+    <div class="btn btn-block" @click="resetBacth">
       {{ $t('resetBatchCreate') }}
     </div>
     <div class="btn btn-block" @click="startBacth">
@@ -479,14 +479,15 @@ async function startBacth() {
   let isReady = true
   const paramsList: any[] = []
   let i = 0
-  if (currentIndex.value) {
+  if (currentIndex.value !== null) {
     i = currentIndex.value
-  } else {
+  }
+  if (!isBreak.value) {
     for (let i = 1; i < createCount.value; i++) {
       list.push({ ...list[0], index: i + list[0].index })
     }
   }
-  debugger
+
   for (; i < list.length; i++) {
     if (!list[i].cover) {
       ElMessage.error(`${i + 1}: ${i18n.t('uploadcover')}`)
@@ -549,18 +550,18 @@ async function startBacth() {
 
     // tasks.push(store.state.sdk?.createNFT(params))
   }
+
   if (!isReady) return
   //   checkOnly
   isCreated.value = true
   loading.close()
   isShowResult.value = true
-  if (currentIndex.value) {
+  if (currentIndex.value !== null) {
     i = currentIndex.value
   } else {
     i = 0
   }
   for (; i < paramsList.length; i++) {
-    currentIndex.value = i
     try {
       const res = await store.state.sdk
         ?.createNFT({
@@ -604,26 +605,32 @@ async function startBacth() {
               .catch(() => ElMessage.error(i18n.t('networkTimeout')))
           } else {
             isBreak.value = true
+            isShowResult.value = false
             ElMessage.error(i18n.t('tokenIndexNotMatch'))
-            break
+            return
           }
         } else {
           isBreak.value = true
+          isShowResult.value = false
           ElMessage.error(i18n.t('reportFail'))
-          break
+          return
         }
       } else {
         isBreak.value = true
+        isShowResult.value = false
         ElMessage.error(i18n.t('onLineFail'))
-        break
+        return
       }
     } catch {
       isBreak.value = true
       isShowResult.value = false
+      return
     }
+    currentIndex.value = i + 1
   }
-  isShowResult.value = false
   isBreak.value = false
+  currentIndex.value = null
+  isShowResult.value = false
 }
 
 // 初始化

@@ -532,6 +532,7 @@ function sleepTime() {
 
 // 开始批量铸造
 async function startBacth() {
+  isBreak.value = false
   // 檢查sdk狀態
   await checkSdkStatus()
   if (list.length <= 0) return
@@ -622,21 +623,19 @@ async function startBacth() {
   if (!isReady) return
   //   checkOnly
   let amount = 0
-  if (currentIndex.value) {
+  if (currentIndex.value !== null) {
     i = currentIndex.value
   } else {
     i = 0
   }
-  for (; i < paramsList.length; i++) {
-    const res = await store.state.sdk?.createNFT({
-      checkOnly: true,
-      ...paramsList[i],
-    })
-    if (typeof res === 'number') {
-      amount += res
-    }
+  const res = await store.state.sdk?.createNFT({
+    checkOnly: true,
+    ...paramsList[i],
+  })
+  if (typeof res === 'number') {
+    amount += res
   }
-
+  amount *= paramsList.length - i
   const userBalanceRes = await store.state.sdk?.getBalance()
   if (userBalanceRes && userBalanceRes.code === 200 && userBalanceRes.data.satoshis > amount) {
     ElMessageBox.confirm(`${i18n.t('useAmountTips')}: ${amount} SATS`, i18n.t('niceWarning'), {
@@ -648,13 +647,12 @@ async function startBacth() {
         isCreated.value = true
         loading.close()
         isShowResult.value = true
-        if (currentIndex.value) {
+        if (currentIndex.value !== null) {
           i = currentIndex.value
         } else {
           i = 0
         }
         for (; i < paramsList.length; i++) {
-          currentIndex.value = i
           try {
             const { id, ...currentParams } = paramsList[i]
             const res = await store.state.sdk
@@ -702,26 +700,32 @@ async function startBacth() {
                   // await sleepTime()
                 } else {
                   isBreak.value = true
+                  isShowResult.value = false
                   ElMessage.error(i18n.t('tokenIndexNotMatch'))
-                  break
+                  return
                 }
               } else {
                 isBreak.value = true
+                isShowResult.value = false
                 ElMessage.error(i18n.t('reportFail'))
-                break
+                return
               }
             } else {
               isBreak.value = true
+              isShowResult.value = false
               ElMessage.error(i18n.t('onLineFail'))
-              break
+              return
             }
           } catch {
             isBreak.value = true
             isShowResult.value = false
+            return
           }
+          currentIndex.value = i + 1
         }
-        isShowResult.value = false
         isBreak.value = false
+        currentIndex.value = null
+        isShowResult.value = false
       },
       () => {
         isShowResult.value = false
