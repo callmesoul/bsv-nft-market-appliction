@@ -359,6 +359,7 @@ const isShowResult = ref(false)
 const isBreak = ref(false)
 const isCreated = ref(false)
 const currentIndex = ref(null)
+const paramsList: any[] = []
 // 成功的数量
 const successNum = computed(() => {
   let num = 0
@@ -550,75 +551,75 @@ async function startBacth() {
   }
 
   let isReady = true
-  const paramsList: any[] = []
   let i = 0
   if (currentIndex.value) {
     i = currentIndex.value
   }
-  for (; i < list.length; i++) {
-    if (!list[i].cover) {
-      ElMessage.error(`${i + 1}: ${i18n.t('uploadcover')}`)
-      isReady = false
-      loading.close()
-      break
-    }
-    if (!list[i].originalFile) {
-      ElMessage.error(`${i + 1}: ${i18n.t('uploadTips')}`)
-      isReady = false
-      loading.close()
-      break
-    }
-    if (list[i].name === '') {
-      ElMessage.error(`${i + 1}: ${i18n.t('nameplac')}`)
-      isReady = false
-      loading.close()
-      break
-    }
-    if (list[i].intro === '') {
-      ElMessage.error(`${i + 1}: ${i18n.t('drscplac')}`)
-      isReady = false
-      loading.close()
-      break
-    }
+  if (!isBreak.value) {
+    for (; i < list.length; i++) {
+      if (!list[i].cover) {
+        ElMessage.error(`${i + 1}: ${i18n.t('uploadcover')}`)
+        isReady = false
+        loading.close()
+        break
+      }
+      if (!list[i].originalFile) {
+        ElMessage.error(`${i + 1}: ${i18n.t('uploadTips')}`)
+        isReady = false
+        loading.close()
+        break
+      }
+      if (list[i].name === '') {
+        ElMessage.error(`${i + 1}: ${i18n.t('nameplac')}`)
+        isReady = false
+        loading.close()
+        break
+      }
+      if (list[i].intro === '') {
+        ElMessage.error(`${i + 1}: ${i18n.t('drscplac')}`)
+        isReady = false
+        loading.close()
+        break
+      }
 
-    if (!list[i].genesis && !list[i].codehash && !list[i].tokenIndex) {
-      paramsList.push({
-        id: list[i].id,
-        receiverAddress: store.state.userInfo!.address, //  创建者接收地址
-        nftname: list[i].name,
-        nftdesc: list[i].intro,
-        nfticon: {
-          fileType: list[i].cover!.data_type,
-          fileName: list[i].cover!.name,
-          data: list[i].cover!.hexData,
-        },
-        nftwebsite: '',
-        nftissuerName: store.state.userInfo!.name,
-        content: {
-          nftType: '1',
-          classifyList: JSON.stringify(list[i].classify),
-          originalFileTxid: {
-            fileType: list[i].originalFile!.data_type,
-            fileName: list[i].originalFile!.name,
-            data: list[i].originalFile!.hexData,
+      if (!list[i].genesis && !list[i].codehash && !list[i].tokenIndex) {
+        paramsList.push({
+          id: list[i].id,
+          receiverAddress: store.state.userInfo!.address, //  创建者接收地址
+          nftname: list[i].name,
+          nftdesc: list[i].intro,
+          nfticon: {
+            fileType: list[i].cover!.data_type,
+            fileName: list[i].cover!.name,
+            data: list[i].cover!.hexData,
           },
-          contentTxId: '',
-        },
-        codeHash: currentSeriesItem ? currentSeriesItem.codeHash : undefined,
-        genesis: currentSeriesItem ? currentSeriesItem.genesis : undefined,
-        genesisTxId: currentSeriesItem ? currentSeriesItem.genesisTxId : undefined,
-        sensibleId: currentSeriesItem ? currentSeriesItem.sensibleId : undefined,
-      })
+          nftwebsite: '',
+          nftissuerName: store.state.userInfo!.name,
+          content: {
+            nftType: '1',
+            classifyList: JSON.stringify(list[i].classify),
+            originalFileTxid: {
+              fileType: list[i].originalFile!.data_type,
+              fileName: list[i].originalFile!.name,
+              data: list[i].originalFile!.hexData,
+            },
+            contentTxId: '',
+          },
+          codeHash: currentSeriesItem ? currentSeriesItem.codeHash : undefined,
+          genesis: currentSeriesItem ? currentSeriesItem.genesis : undefined,
+          genesisTxId: currentSeriesItem ? currentSeriesItem.genesisTxId : undefined,
+          sensibleId: currentSeriesItem ? currentSeriesItem.sensibleId : undefined,
+        })
+
+        // checkOnlyTasks.push(
+        //   store.state.sdk?.createNFT({
+        //     checkOnly: true,
+        //     ...params,
+        //   })
+        // )
+      }
+      // tasks.push(store.state.sdk?.createNFT(params))
     }
-
-    // checkOnlyTasks.push(
-    //   store.state.sdk?.createNFT({
-    //     checkOnly: true,
-    //     ...params,
-    //   })
-    // )
-
-    // tasks.push(store.state.sdk?.createNFT(params))
   }
   if (!isReady) return
   //   checkOnly
@@ -723,6 +724,7 @@ async function startBacth() {
           }
           currentIndex.value = i + 1
         }
+        paramsList.length = 0
         isBreak.value = false
         currentIndex.value = null
         isShowResult.value = false
