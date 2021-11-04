@@ -547,7 +547,7 @@ async function startBacth() {
   if (!isReady) return
   //   checkOnly
   let amount = 0
-  if (currentIndex.value) {
+  if (currentIndex.value !== null) {
     i = currentIndex.value
   } else {
     i = 0
@@ -571,13 +571,12 @@ async function startBacth() {
         isCreated.value = true
         loading.close()
         isShowResult.value = true
-        if (currentIndex.value) {
+        if (currentIndex.value !== null) {
           i = currentIndex.value
         } else {
           i = 0
         }
         for (; i < paramsList.length; i++) {
-          currentIndex.value = i
           try {
             const res = await store.state.sdk
               ?.createNFT({
@@ -621,24 +620,30 @@ async function startBacth() {
                     .catch(() => ElMessage.error(i18n.t('networkTimeout')))
                 } else {
                   isBreak.value = true
+                  isShowResult.value = false
                   ElMessage.error(i18n.t('tokenIndexNotMatch'))
-                  break
+                  return
                 }
               } else {
                 isBreak.value = true
+                isShowResult.value = false
                 ElMessage.error(i18n.t('reportFail'))
-                break
+                return
               }
             } else {
               isBreak.value = true
+              isShowResult.value = false
               ElMessage.error(i18n.t('onLineFail'))
-              break
+              return
             }
           } catch {
             isBreak.value = true
             isShowResult.value = false
+            return
           }
+          currentIndex.value = i + 1
         }
+        currentIndex.value = null
         isShowResult.value = false
       },
       () => {
