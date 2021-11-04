@@ -70,7 +70,7 @@ export const router = createRouter({
       ],
     },
     { path: '/batch', name: 'batch', component: Batch, meta: { keepAlive: true } },
-    { path: '/batchtest', name: 'batchtest', component: BatchTest, meta: { keepAlive: true } },
+    // { path: '/batchtest', name: 'batchtest', component: BatchTest, meta: { keepAlive: true } },
   ],
   async scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
