@@ -218,7 +218,7 @@
       </div>
     </div>
 
-    <div class="btn btn-block" @click="resetBacth" >
+    <div class="btn btn-block" @click="resetBacth">
       {{ $t('resetBatchCreate') }}
     </div>
     <div class="btn btn-block" @click="startBacth">
@@ -460,7 +460,6 @@ async function onSeriesConfirm() {
 
 // 开始批量铸造
 async function startBacth() {
-  isBreak.value = false
   // 檢查sdk狀態
   await checkSdkStatus()
   if (list.length <= 0) return
@@ -482,12 +481,13 @@ async function startBacth() {
   let i = 0
   if (currentIndex.value !== null) {
     i = currentIndex.value
-  } else {
+  }
+  if (!isBreak.value) {
     for (let i = 1; i < createCount.value; i++) {
       list.push({ ...list[0], index: i + list[0].index })
     }
   }
-  debugger
+
   for (; i < list.length; i++) {
     if (!list[i].cover) {
       ElMessage.error(`${i + 1}: ${i18n.t('uploadcover')}`)
@@ -550,6 +550,7 @@ async function startBacth() {
 
     // tasks.push(store.state.sdk?.createNFT(params))
   }
+
   if (!isReady) return
   //   checkOnly
   isCreated.value = true
@@ -627,6 +628,7 @@ async function startBacth() {
     }
     currentIndex.value = i + 1
   }
+  isBreak.value = false
   currentIndex.value = null
   isShowResult.value = false
 }

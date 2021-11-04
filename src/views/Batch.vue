@@ -643,6 +643,7 @@ async function startBacth() {
           }
           currentIndex.value = i + 1
         }
+        isBreak.value = false
         currentIndex.value = null
         isShowResult.value = false
       },
