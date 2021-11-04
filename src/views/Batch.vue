@@ -218,10 +218,10 @@
       </div>
     </div>
 
-    <div class="btn btn-block" @click="resetBacth" v-if="isCreated">
+    <div class="btn btn-block" @click="resetBacth">
       {{ $t('resetBatchCreate') }}
     </div>
-    <div class="btn btn-block" @click="startBacth" v-else>
+    <div class="btn btn-block" @click="startBacth">
       {{ isBreak ? $t('continue') : $t('startBatchCreate') }}
     </div>
   </div>
