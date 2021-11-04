@@ -552,16 +552,14 @@ async function startBacth() {
   } else {
     i = 0
   }
-  for (; i < paramsList.length; i++) {
-    const res = await store.state.sdk?.createNFT({
-      checkOnly: true,
-      ...paramsList[i],
-    })
-    if (typeof res === 'number') {
-      amount += res
-    }
+  const res = await store.state.sdk?.createNFT({
+    checkOnly: true,
+    ...paramsList[i],
+  })
+  if (typeof res === 'number') {
+    amount += res
   }
-
+  amount *= paramsList.length - i
   const userBalanceRes = await store.state.sdk?.getBalance()
   if (userBalanceRes && userBalanceRes.code === 200 && userBalanceRes.data.satoshis > amount) {
     ElMessageBox.confirm(`${i18n.t('useAmountTips')}: ${amount} SATS`, i18n.t('niceWarning'), {
