@@ -459,6 +459,7 @@ async function onSeriesConfirm() {
 
 // 开始批量铸造
 async function startBacth() {
+  isBreak.value = false
   // 檢查sdk狀態
   await checkSdkStatus()
   if (list.length <= 0) return
@@ -641,7 +642,6 @@ async function startBacth() {
           }
         }
         isShowResult.value = false
-        isBreak.value = false
       },
       () => {
         isShowResult.value = false
