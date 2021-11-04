@@ -29,6 +29,7 @@
           </div>
         </div>
       </div>
+
       <div class="screen-item flex1">
         <div
           class="input-item flex flex-align-center"
@@ -60,6 +61,46 @@
               :selecteds="classify"
             />
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 相同内容选择 -->
+    <div class="batch-same-warp batch-create-list">
+      <div class="batch-create-item">
+        <div class="cover upload-warp">
+          <div class="upload">
+            <div class="add flex flex-align-center flex-pack-center">
+              <template>
+                <div>
+                  <img class="icon" src="@/assets/images/img_upload.svg" />
+                  <div class="label">{{ $t('uploadcover') }}</div>
+                </div>
+                <input type="file" accept="image/*" @change="changeAllCover" />
+              </template>
+            </div>
+          </div>
+        </div>
+        <div class="orginFile input-item">
+          <div class="placeholder">{{ $t('nftoriginal') }}</div>
+        </div>
+        <div class="name input-item">
+          <input type="text" :placeholder="$t('nameplac')" />
+        </div>
+        <div class="intro input-item">
+          <textarea :placeholder="$t('drscplac')"></textarea>
+        </div>
+        <div class="orginFile input-item">
+          <div class="placeholder">{{ $t('choosetype') }}</div>
+        </div>
+        <div class="index input-item" v-if="selectedSeries.length > 0">
+          <input type="number" :readOnly="true" :disabled="true" />
+        </div>
+        <div class="btn btn-block btn-default">
+          {{ $t('delete') }}
+        </div>
+        <div class="add flex flex-align-center flex-pack-center" @click="addItem">
+          +
         </div>
       </div>
     </div>
@@ -217,10 +258,16 @@
         </div>
       </div>
     </div>
-
-    <div class="btn btn-block" @click="resetBacth" v-if="isCreated">
-      {{ $t('resetBatchCreate') }}
-    </div>
+    <template v-if="isCreated">
+      <div class="flex flex-align-center">
+        <div class="btn btn-block flex1" @click="resetBacth">
+          {{ $t('resetBatchCreate') }}
+        </div>
+        <div class="btn btn-block flex1" @click="resetBacth">
+          {{ $t('continueBatchCreate') }}
+        </div>
+      </div>
+    </template>
     <div class="btn btn-block" @click="startBacth" v-else>
       {{ isBreak ? $t('continue') : $t('startBatchCreate') }}
     </div>
@@ -273,6 +320,7 @@ import PickerModel from '@/components/PickerModal/PickerModel.vue'
 import InnerPageHeader from '@/components/InnerPageHeader/InnerPageHeader.vue'
 
 const list: {
+  id: string
   cover: null | MetaFile
   originalFile: null | MetaFile
   name: string
@@ -286,6 +334,7 @@ const list: {
   tokenIndex?: string
 }[] = reactive([
   {
+    id: new Date().getTime().toString(),
     cover: null,
     originalFile: null,
     index: 1,
@@ -323,6 +372,9 @@ const successNum = computed(() => {
   return num
 })
 
+// 相同的属性
+const allCover: { val: null | MetaFile } = reactive({ val: null })
+const originalFile: null | MetaFile = null
 // 设置用户可选的分类
 function setUserCreatCard() {
   if (store.state.userInfo) {
@@ -359,6 +411,7 @@ function addItem() {
     }
   }
   list.push({
+    id: new Date().getTime().toString(),
     cover: null,
     originalFile: null,
     name: '',
@@ -379,6 +432,18 @@ async function coverFileInputChage(e: any) {
     const res = await tranfromImgFile(files[0])
     if (res) {
       list[index].cover = res
+    }
+  }
+}
+// 更改全部封面
+async function changeAllCover(e: any) {
+  const index = parseInt(e.currentTarget.dataset.index)
+  const input = e.target as HTMLInputElement
+  let files = input.files
+  if (files) {
+    const res = await tranfromImgFile(files[0])
+    if (res) {
+      allCover.val = res
     }
   }
 }
@@ -457,6 +522,14 @@ async function onSeriesConfirm() {
   }
 }
 
+function sleepTime() {
+  return new Promise<void>(resolve => {
+    setTimeout(() => {
+      resolve()
+    }, 3000)
+  })
+}
+
 // 开始批量铸造
 async function startBacth() {
   // 檢查sdk狀態
@@ -507,32 +580,35 @@ async function startBacth() {
       break
     }
 
-    paramsList.push({
-      receiverAddress: store.state.userInfo!.address, //  创建者接收地址
-      nftname: list[i].name,
-      nftdesc: list[i].intro,
-      nfticon: {
-        fileType: list[i].cover!.data_type,
-        fileName: list[i].cover!.name,
-        data: list[i].cover!.hexData,
-      },
-      nftwebsite: '',
-      nftissuerName: store.state.userInfo!.name,
-      content: {
-        nftType: '1',
-        classifyList: JSON.stringify(list[i].classify),
-        originalFileTxid: {
-          fileType: list[i].originalFile!.data_type,
-          fileName: list[i].originalFile!.name,
-          data: list[i].originalFile!.hexData,
+    if (!list[i].genesis && !list[i].codehash && !list[i].tokenIndex) {
+      paramsList.push({
+        id: list[i].id,
+        receiverAddress: store.state.userInfo!.address, //  创建者接收地址
+        nftname: list[i].name,
+        nftdesc: list[i].intro,
+        nfticon: {
+          fileType: list[i].cover!.data_type,
+          fileName: list[i].cover!.name,
+          data: list[i].cover!.hexData,
         },
-        contentTxId: '',
-      },
-      codeHash: currentSeriesItem ? currentSeriesItem.codeHash : undefined,
-      genesis: currentSeriesItem ? currentSeriesItem.genesis : undefined,
-      genesisTxId: currentSeriesItem ? currentSeriesItem.genesisTxId : undefined,
-      sensibleId: currentSeriesItem ? currentSeriesItem.sensibleId : undefined,
-    })
+        nftwebsite: '',
+        nftissuerName: store.state.userInfo!.name,
+        content: {
+          nftType: '1',
+          classifyList: JSON.stringify(list[i].classify),
+          originalFileTxid: {
+            fileType: list[i].originalFile!.data_type,
+            fileName: list[i].originalFile!.name,
+            data: list[i].originalFile!.hexData,
+          },
+          contentTxId: '',
+        },
+        codeHash: currentSeriesItem ? currentSeriesItem.codeHash : undefined,
+        genesis: currentSeriesItem ? currentSeriesItem.genesis : undefined,
+        genesisTxId: currentSeriesItem ? currentSeriesItem.genesisTxId : undefined,
+        sensibleId: currentSeriesItem ? currentSeriesItem.sensibleId : undefined,
+      })
+    }
 
     // checkOnlyTasks.push(
     //   store.state.sdk?.createNFT({
@@ -580,9 +656,10 @@ async function startBacth() {
         for (; i < paramsList.length; i++) {
           currentIndex.value = i
           try {
+            const { id, ...currentParams } = paramsList[i]
             const res = await store.state.sdk
               ?.createNFT({
-                ...paramsList[i],
+                ...currentParams,
               })
               .catch(() => {
                 isBreak.value = true
@@ -608,10 +685,11 @@ async function startBacth() {
                 tokenIndex: res.tokenIndex,
               })
               if (response.code === NftApiCode.success) {
-                list[i].codehash = res.codehash
-                list[i].genesis = res.genesisId
-                list[i].tokenIndex = res.tokenIndex
-                if (parseInt(res.tokenIndex) === list[i].index - 1) {
+                const index = list.findIndex(item => item.id === id)
+                list[index].codehash = res.codehash
+                list[index].genesis = res.genesisId
+                list[index].tokenIndex = res.tokenIndex
+                if (parseInt(res.tokenIndex) === list[index].index - 1) {
                   ElMessage.success(
                     `${selectedSeries.length > 0 ? list[i].index : list[i].name}: ${i18n.t(
                       'castingsuccess'
@@ -620,6 +698,8 @@ async function startBacth() {
                   await store.state.sdk
                     ?.checkNftTxIdStatus(res.sendMoneyTx)
                     .catch(() => ElMessage.error(i18n.t('networkTimeout')))
+                  /* 间隔一段时间 提高批量铸造稳定性 */
+                  // await sleepTime()
                 } else {
                   isBreak.value = true
                   ElMessage.error(i18n.t('tokenIndexNotMatch'))
