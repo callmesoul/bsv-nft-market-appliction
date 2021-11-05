@@ -10,7 +10,7 @@ export default class HttpRequest {
     this.request.interceptors.request.use(
       async config => {
         const index = config.baseURL?.indexOf('nftonshow')
-        if (index !== -1) {
+        if (index !== -1 && config.baseURL.indexOf('showbot') === -1) {
           config.headers['token'] = `${store.state.nftToken}`
           config.headers['type'] = store.state.isApp ? '0' : '2'
           config.headers['metaId'] = store.state.userInfo?.metaId
