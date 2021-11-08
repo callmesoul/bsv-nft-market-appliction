@@ -317,6 +317,17 @@
         .tr {
           padding: 20px 0;
           text-align: left;
+          position: relative;
+
+          .tobe {
+            position: absolute;
+            width: 8px;
+            height: 13px;
+            left: 0;
+            top: 0;
+            margin-left: 7px;
+            margin-top: -5px;
+          }
         }
 
         .td {
@@ -351,6 +362,15 @@
 
         .price {
           text-align: right !important;
+        }
+
+        .link {
+          margin-left: 10px;
+
+          img {
+            width: 18px;
+            height: 18px;
+          }
         }
       }
 

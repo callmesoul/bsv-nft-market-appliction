@@ -45,7 +45,7 @@
         </div>
         <div class="country-fair-tips-item">
           {{ $t('countryFairTipsContent6') }}
-          <router-link :to="{ name: 'certSystemIntro' }">{{
+          <router-link :to="{ name: 'certification' }">{{
             $t('countryFairTipsContent7')
           }}</router-link
           >{{ $t('countryFairTipsContent8') }}

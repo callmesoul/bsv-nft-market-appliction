@@ -281,5 +281,9 @@
   "certSystemIntroCont16": "4. A selfie with a piece of paper with your MetaID ",
   "certSystemIntroCont17": "5. Any other supplementary materials (such as academic certificates, real estate certificates, bank cards, etc.)",
   "certSystemIntroCont18": "6. Package all the materials and sent them to the official Telegram account (#showpayadmin) for review.",
-  "continueBatchCreate": "Keep casting the rest"
+  "continueBatchCreate": "Keep casting the rest",
+  "nosSlogan": "The next generation of NFT wave broke out here.",
+  "market": "market",
+  "nosMarket": "NOS Market",
+  "aboutNOS": "About NOS"
 }

@@ -1,19 +1,29 @@
-footer{
+footer {
     padding: 40px;
     background: #1A1E26;
-    .logo{
+
+    .logo {
         color: #fff;
     }
-    .cro, .bottom{
+
+    .slogan {
+        color: #909399;
+    }
+
+    .cro,
+    .bottom {
         color: #909399;
         font-size: 14px;
     }
-    .cro{
+
+    .cro {
         margin-top: 20px;
     }
-    .bottom{
+
+    .bottom {
         margin-top: 5px;
-        .copyright{
+
+        .copyright {
             font-size: 14px;
         }
     }
