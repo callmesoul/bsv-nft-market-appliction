@@ -361,6 +361,7 @@
                 new Decimal(nft.val.amount)
                   .mul(0.05)
                   .div(10 ** 8)
+                  .mul(store.state.userDiscount)
                   .toString()
               }}
               BSV
