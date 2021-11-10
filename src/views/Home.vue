@@ -97,7 +97,7 @@
                 {{ $t('nftModuleDrsc8') }}
               </div>
               <div>
-                {{ $t('nftModuleDrsc9') }}<a>{{ $t('nftModuleDrsc10') }}</a>
+                {{ $t('nftModuleDrsc9') }}<a @click="comeSoon">{{ $t('nftModuleDrsc10') }}</a>
               </div>
             </div>
           </div>
@@ -161,6 +161,8 @@ import SetHomeDatas from '@/utils/homeSetData'
 import NftList from '@/components/NftList/NftList.vue'
 import { classifyList } from '@/config'
 import { router } from '@/router'
+import { useI18n } from 'vue-i18n'
+import { ElMessage } from 'element-plus'
 
 const store = useStore()
 let recommendNfts = reactive<NftItem[]>([])
@@ -171,6 +173,7 @@ const pagination = reactive({
 })
 const keyword = ref('')
 const classify = ref('all')
+const i18n = useI18n()
 let apiType = 'GetAllOnSellNftList'
 
 // 骨架屏
@@ -275,6 +278,10 @@ function toPage(link: string) {
 
 function toWallet() {
   window.open(import.meta.env.VITE_AuthUrl)
+}
+
+function comeSoon() {
+  ElMessage.info(i18n.t('stayTuned'))
 }
 
 getRecommendNftList()
