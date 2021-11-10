@@ -10,10 +10,12 @@
         <div class="cont flex1">
           <div class="name">像素鸟游戏 股权卡</div>
           <div class="cont-list">
-            <div class="cont-item">
+            <div class="cont-item flex flex-align-center">
               <span class="key">项目方：</span>
-              <span class="value">
-                <NftUserAvatar bg="gray" class="avatar" metaId="" hasmask="" :disabled="true" />
+              <span class="value flex flex-align-center">
+                <div class="avatar-warp">
+                  <NftUserAvatar bg="gray" class="avatar" metaId="" hasmask="" :disabled="true" />
+                </div>
                 大头鸟娱乐
                 <img class="cert-icon" src="@/assets/images/icon_cer_nft.png" />
               </span>
@@ -22,11 +24,11 @@
               <span class="key">NFT数量：</span>
               <span class="value">100乐</span>
             </div>
-            <div class="status">
-              <span class="key">状态</span>
-              <span class="value"><span class="dot"></span>正常</span>
-            </div>
           </div>
+        </div>
+        <div class="status">
+          <span class="key">状态</span>
+          <span class="value"><span class="dot"></span>正常</span>
         </div>
       </div>
       <div class="right-item-data flex flex-align-center">
