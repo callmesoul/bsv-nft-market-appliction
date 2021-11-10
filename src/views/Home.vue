@@ -176,7 +176,6 @@ const keyword = ref('')
 const classify = ref('all')
 const i18n = useI18n()
 let apiType = 'GetAllOnSellNftList'
-const i18n = useI18n()
 
 // 骨架屏
 const isShowRecommendSkeleton = ref(true)
