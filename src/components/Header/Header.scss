@@ -54,6 +54,20 @@ header {
       &:last-child {
         margin-right: 0;
       }
+
+      &.tools {
+        img {
+          transform: rotate(180deg);
+          margin-left: 4px;
+          width: 10px;
+          height: 6px;
+
+          &.active {
+            transform: rotate(0);
+            transition: all 0.5s;
+          }
+        }
+      }
     }
   }
 
