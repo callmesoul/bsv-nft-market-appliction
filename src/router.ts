@@ -20,6 +20,7 @@ const CommonLayout = () => import('@/layouts/CommonLayout.vue')
 const CountryFair = () => import('@/views/CountryFair.vue')
 const Batch = () => import('@/views/Batch.vue')
 const BatchTest = () => import('@/views/BatchTest.vue')
+const Right = () => import('@/views/Right.vue')
 import { useStore, Action } from '@/store/index'
 import { ElMessage } from 'element-plus'
 import i18n from '@/utils/i18n'
@@ -71,6 +72,7 @@ export const router = createRouter({
     },
     { path: '/batch', name: 'batch', component: Batch, meta: { keepAlive: true } },
     { path: '/batchtest', name: 'batchtest', component: BatchTest, meta: { keepAlive: true } },
+    { path: '/right', name: 'right', component: Right },
   ],
   async scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {

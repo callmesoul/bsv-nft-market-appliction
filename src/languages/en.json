@@ -308,5 +308,9 @@
   "conactUs": "contact us",
   "nftTools": "NFT Tools",
   "rightsList": "List of NFT rights",
-  "rightsListTips": "Public data on NFT equity"
+  "rightsListTips": "Public data on NFT equity",
+  "historicalTotalDividend": "Historical total dividend",
+  "estimatedDividendIncome": "Estimated dividend income",
+  "dividendCycle": "Dividend cycle",
+  "lastDividend": "Last dividend"
 }

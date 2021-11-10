@@ -314,5 +314,10 @@
   "conactUs": "联系我们",
   "nftTools": "NFT工具集",
   "rightsList": "NFT权益一览",
-  "rightsListTips": "NFT权益的公开数据"
+  "rightsListTips": "NFT权益的公开数据",
+  "historicalTotalDividend": "历史总分红",
+  "estimatedDividendIncome": "预计分红收益",
+  "dividendCycle": "分红周期",
+  "lastDividendTime": "上次分红时间",
+  "lastDividend": "上次分红"
 }
