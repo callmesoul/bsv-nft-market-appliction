@@ -1,13 +1,13 @@
 <template>
   <!-- banner -->
   <div class="banner container">
-    <a @click="toPage('/topic/detail/AthenaV2')"
+    <!-- <a @click="toPage('/topic/detail/AthenaV2')"
       ><img src="@/assets/images/banner_yadianna2.png" alt="雅典娜"
+    /></a> -->
+    <a v-if="i18n.locale.value === 'zh'"
+      ><img src="@/assets/images/banner_discount_zh.jpg" alt="Metabot"
     /></a>
-    <!-- <a @click="toMetabot" v-if="i18n.locale.value === 'zh'"
-      ><img src="@/assets/images/nos-banner2.png" alt="Metabot"
-    /></a>
-    <a @click="toMetabot" v-else><img src="@/assets/images/nos-banner-en2.png" alt="Metabot" /></a> -->
+    <a v-else><img src="@/assets/images/banner_discount_en.jpg" alt="Metabot"/></a>
   </div>
 
   <div class="home">
