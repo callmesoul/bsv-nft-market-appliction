@@ -1,13 +1,13 @@
 <template>
   <!-- banner -->
   <div class="banner container">
-    <a @click="toPage('/topic/detail/AthenaV2')"
+    <!-- <a @click="toPage('/topic/detail/AthenaV2')"
       ><img src="@/assets/images/banner_yadianna2.png" alt="雅典娜"
+    /></a> -->
+    <a v-if="i18n.locale.value === 'zh'"
+      ><img src="@/assets/images/banner_discount_zh.jpg" alt="Metabot"
     /></a>
-    <!-- <a @click="toMetabot" v-if="i18n.locale.value === 'zh'"
-      ><img src="@/assets/images/nos-banner2.png" alt="Metabot"
-    /></a>
-    <a @click="toMetabot" v-else><img src="@/assets/images/nos-banner-en2.png" alt="Metabot" /></a> -->
+    <a v-else><img src="@/assets/images/banner_discount_en.jpg" alt="Metabot"/></a>
   </div>
 
   <div class="home">
@@ -83,6 +83,7 @@ import NftList from '@/components/NftList/NftList.vue'
 import { classifyList } from '@/config'
 import { router } from '@/router'
 import { ElPopover } from 'element-plus'
+import { useI18n } from 'vue-i18n'
 
 const store = useStore()
 let recommendNfts = reactive<NftItem[]>([])
@@ -93,6 +94,7 @@ const pagination = reactive({
 const keyword = ref('')
 const classify = ref('all')
 let apiType = 'GetAllOnSellNftList'
+const i18n = useI18n()
 
 // 骨架屏
 const isShowRecommendSkeleton = ref(true)
