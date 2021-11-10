@@ -319,6 +319,11 @@ declare interface GetMyNftOnShowSellSuccessListRes extends apiResponse {
     }
   }
 }
+declare interface GetUserDiscountRes extends apiResponse {
+  data: {
+    nosRate: string
+  }
+}
 
 declare interface GetMyNftOnShowSellSuccessListResItem {
   nftBalance: number

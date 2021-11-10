@@ -1,6 +1,7 @@
 import HttpRequest from '@/utils/request'
 // @ts-ignore
 import qs from 'qs'
+import { Platform } from './utils/sdk'
 
 const env = import.meta.env
 
@@ -416,4 +417,13 @@ export const GetTxRaw = (txid: string): Promise<GetMetaBotListRes> => {
         reject(error)
       })
   })
+}
+
+export const GetUserDiscount = (params: {
+  metaId: string
+  zeroAddress: string
+}): Promise<GetUserDiscountRes> => {
+  return apiHttp.get(
+    `/aggregation/v2/app/nftOnShow/getMyNosCommissionRate/${params.metaId}/${params.zeroAddress}/1`
+  )
 }

@@ -39,12 +39,13 @@ import { Decimal } from 'decimal.js-light'
 import { Langs } from '@/api'
 import { fail } from 'assert'
 import axios from 'axios'
+import { state } from '@/store/state'
 
 const metaIdTag = import.meta.env.VITE_MetaIdTag
 
 const doubleTimeOut = 4000 // 防止双花 定时器时间
 
-const enum Platform {
+export const enum Platform {
   'Web' = 0,
   'Android' = 1,
   'Ios' = 2,
@@ -536,7 +537,9 @@ export default class Sdk {
           payTo: [
             {
               address: import.meta.env.VITE_AppAddress,
-              amount: Math.ceil(new Decimal(amount * 0.05).toNumber()),
+              amount: Math.ceil(
+                new Decimal(amount * 0.05).mul(store.state.userDiscount).toNumber()
+              ),
             },
           ],
         },

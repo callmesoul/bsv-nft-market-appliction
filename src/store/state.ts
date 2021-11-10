@@ -12,6 +12,7 @@ export interface State {
   isApp: boolean
   pagination: Pagination
   nftToken: null | string
+  userDiscount: number
 }
 
 // @ts-ignore
@@ -48,4 +49,5 @@ export const state: State = {
     nothing: false,
   },
   nftToken: null,
+  userDiscount: 1,
 }
