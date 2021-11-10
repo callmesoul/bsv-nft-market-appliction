@@ -361,6 +361,7 @@
                 new Decimal(nft.val.amount)
                   .mul(0.05)
                   .div(10 ** 8)
+                  .mul(store.state.userDiscount)
                   .toString()
               }}
               BSV
@@ -549,6 +550,7 @@
                   v-for="(record, index) in records"
                   :key="record.timestamp"
                 >
+                  <img class="tobe" src="@/assets/images/list_icon_ins.svg" v-if="index !== 0" />
                   <span class="td flex1 user flex flex-align-center" @click="ToUser(record.metaId)">
                     <img :src="$filters.avatar(record.metaId)" :alt="record.name" />
                     <span class="name">{{ record.name }}</span>
@@ -566,6 +568,9 @@
                         : $t('noPaid')
                     }}
                   </span>
+                  <a class="link" @click="store.state.sdk?.toTxLink(record.txId)"
+                    ><img src="@/assets/images/list_icon_link.svg "
+                  /></a>
                 </div>
 
                 <LoadMore
@@ -576,6 +581,11 @@
 
                 <!-- 铸造者 -->
                 <div class="tr flex flex-align-center" v-if="issueRecord.val">
+                  <img
+                    class="tobe"
+                    src="@/assets/images/list_icon_ins.svg"
+                    v-if="records.length > 0"
+                  />
                   <span
                     class="td flex1 user flex flex-align-center"
                     @click="ToUser(issueRecord.val ? issueRecord.val.metaId : '')"
@@ -594,6 +604,9 @@
                     $filters.dateTimeFormat(issueRecord.val.timestamp, 'YYYY-MM-DD HH:mm')
                   }}</span>
                   <span class="td price flex1">{{ $t('noPaid') }}</span>
+                  <a class="link" @click="store.state.sdk?.toTxLink(issueRecord.val.txId)"
+                    ><img src="@/assets/images/list_icon_link.svg "
+                  /></a>
                 </div>
               </div>
 
@@ -736,8 +749,6 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import CertTemp from '@/components/Cert/Cert.vue'
-import NftUserAvatar from '@/components/NftUserAvatar/NftUserAvatar.vue'
 import { useI18n } from 'vue-i18n'
 import { toClipboard } from '@soerenmartius/vue3-clipboard'
 import {

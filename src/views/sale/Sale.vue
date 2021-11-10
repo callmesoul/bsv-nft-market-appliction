@@ -526,7 +526,8 @@ async function confirmSale() {
 
 const setDisabledDate = (time: string) => {
   const now = new Date().getTime() + 1000 * 60 * 30
-  return new Date(time).getTime() < now
+  const max = now + 30 * 24 * 60 * 60 * 1000
+  return new Date(time).getTime() < now || new Date(time).getTime() > max
 }
 const setAuctionDisabledDate = (time: string) => {
   const now = new Date().getTime()

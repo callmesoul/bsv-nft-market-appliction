@@ -2,7 +2,7 @@ import { ActionTree, ActionContext } from 'vuex'
 
 import { State } from './state'
 import { Mutations, Mutation } from './mutations'
-import { GetToken } from '@/api'
+import { GetToken, GetUserDiscount } from '@/api'
 import Sdk from '@/utils/sdk'
 import { store } from '.'
 
@@ -12,6 +12,7 @@ export enum Action {
   getUserInfo = 'getUserInfo',
   refreshToken = 'refreshToken',
   checkToken = 'checkToken',
+  setUserDiscount = 'setUserDiscount',
 }
 
 type AugmentedActionContext = {
@@ -27,6 +28,7 @@ export interface Actions {
   [Action.getUserInfo]({ state, commit, dispatch }: AugmentedActionContext): void
   [Action.refreshToken]({ state, commit, dispatch }: AugmentedActionContext): void
   [Action.checkToken]({ state, commit, dispatch }: AugmentedActionContext): void
+  [Action.setUserDiscount]({ state, commit, dispatch }: AugmentedActionContext): void
 }
 
 export const actions: ActionTree<State, State> & Actions = {
@@ -65,6 +67,7 @@ export const actions: ActionTree<State, State> & Actions = {
         })
       }
       commit(Mutation.NFTLOGIN)
+      dispatch(Action.setUserDiscount)
     } else {
       state.sdkInitIng = false
       state.userInfoLoading = false
@@ -117,6 +120,17 @@ export const actions: ActionTree<State, State> & Actions = {
         }
       } else {
         resolve(null)
+      }
+    })
+  },
+  [Action.setUserDiscount]({ state, commit, dispatch }) {
+    return new Promise<string | null>(async resolve => {
+      const res = await GetUserDiscount({
+        metaId: state.userInfo?.metaId,
+        zeroAddress: state.userInfo?.address,
+      })
+      if (res.code === 0) {
+        state.userDiscount = parseFloat(res.data.nosRate)
       }
     })
   },

@@ -12,10 +12,10 @@
     </div>
     <nav class="flex flex-align-center flex-pack-center">
       <router-link to="/">{{ $t('home') }}</router-link>
-      <router-link to="/topic" class="flex flex-align-center">
+      <router-link to="/collection" class="flex flex-align-center">
         {{ $t('topic') }}
       </router-link>
-      <router-link to="/countryFair">{{ $t('countryFair') }}</router-link>
+      <router-link to="/market">{{ $t('countryFair') }}</router-link>
       <router-link
         to="/create"
         v-if="!store.state.isApp || (store.state.isApp && mode !== 'prod')"
@@ -49,13 +49,13 @@
           <el-dropdown-menu>
             <el-dropdown-item @click="toSelf">{{ $t('mynft') }}</el-dropdown-item>
             <el-dropdown-item @click="toWallet">{{ $t('mywallet') }}</el-dropdown-item>
-            <el-dropdown-item @click="toPage('tariffDescription')">
+            <el-dropdown-item @click="toPage('fees')">
               {{ $t('tariffDescription ') }}
             </el-dropdown-item>
             <el-dropdown-item @click="toPage('termsOfUse')">
               {{ $t('termsOfUse') }}
             </el-dropdown-item>
-            <el-dropdown-item @click="toPage('certSystemIntro')">
+            <el-dropdown-item @click="toPage('certification')">
               {{ $t('certSystemIntro') }}
             </el-dropdown-item>
             <el-dropdown-item @click="logout">{{ $t('logout') }}</el-dropdown-item>
@@ -82,10 +82,10 @@
   <el-drawer modal-class="menu-drawer" v-model="isShowDrawer" direction="ttb">
     <nav class="mobile-nav-modal">
       <router-link to="/" @click.stop="isShowDrawer = false">{{ $t('home') }}</router-link>
-      <router-link to="/topic" @click.stop="isShowDrawer = false">
+      <router-link to="/collection" @click.stop="isShowDrawer = false">
         {{ $t('topic') }}
       </router-link>
-      <router-link to="/countryFair" @click.stop="isShowDrawer = false">{{
+      <router-link to="/market" @click.stop="isShowDrawer = false">{{
         $t('countryFair')
       }}</router-link>
       <router-link

@@ -45,6 +45,85 @@
       </NftSkeleton>
     </div>
 
+    <!-- nft 模块 -->
+    <div class="nft-muodle">
+      <div class="container">
+        <div class="title">{{ $t('nftModuleTitle') }}</div>
+        <div class="nft-module-list flex flex-align-center">
+          <!-- 铸造您的NFT -->
+          <div class="nft-module-item flex1">
+            <div class="icon">
+              <img src="@/assets/images/img_1.svg" />
+            </div>
+            <div class="name">{{ $t('nftModuleName1') }}</div>
+            <div class="drsc">
+              <div>
+                {{ $t('nftModuleDrsc1')
+                }}<router-link :to="{ name: 'create' }">{{ $t('Casting') }}</router-link>
+              </div>
+              <div>
+                {{ $t('and')
+                }}<router-link :to="{ name: 'self' }">{{ $t('nftModuleDrsc3') }}</router-link
+                >{{ $t('nftModuleDrsc2') }}
+              </div>
+            </div>
+          </div>
+
+          <!-- 购买您喜欢的NFT -->
+          <div class="nft-module-item flex1">
+            <div class="icon">
+              <img src="@/assets/images/img_2.svg" />
+            </div>
+            <div class="name">{{ $t('nftModuleName2') }}</div>
+            <div class="drsc">
+              <div>
+                {{ $t('nftModuleDrsc4') }}
+              </div>
+              <div>
+                {{ $t('nftModuleDrsc5') }}<a @click="toWallet">{{ $t('nftModuleDrsc6') }}</a
+                >{{ $t('nftModuleDrsc7') }}
+              </div>
+            </div>
+          </div>
+
+          <!-- NOS的优势 -->
+          <div class="nft-module-item flex1">
+            <div class="icon">
+              <img src="@/assets/images/img_3.svg" />
+            </div>
+            <div class="name">{{ $t('nftModuleName3') }}</div>
+            <div class="drsc">
+              <div>
+                {{ $t('nftModuleDrsc8') }}
+              </div>
+              <div>
+                {{ $t('nftModuleDrsc9') }}<a @click="comeSoon">{{ $t('nftModuleDrsc10') }}</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- NOS使用规范 -->
+          <div class="nft-module-item flex1">
+            <div class="icon">
+              <img src="@/assets/images/img_4.svg" />
+            </div>
+            <div class="name">{{ $t('nftModuleName4') }}</div>
+            <div class="drsc">
+              <div>
+                {{ $t('nftModuleDrsc11') }}
+              </div>
+              <div>
+                {{ $t('nftModuleDrsc12')
+                }}<router-link :to="{ name: 'termsOfUse' }">{{
+                  $t('nftModuleDrsc13')
+                }}</router-link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- 所有类别 -->
     <div class="section container">
       <div class="section-header">
@@ -84,15 +163,18 @@ import { classifyList } from '@/config'
 import { router } from '@/router'
 import { ElPopover } from 'element-plus'
 import { useI18n } from 'vue-i18n'
+import { ElMessage } from 'element-plus'
 
 const store = useStore()
 let recommendNfts = reactive<NftItem[]>([])
 let Nfts = reactive<NftItem[]>([])
 const pagination = reactive({
   ...store.state.pagination,
+  pageSize: 24,
 })
 const keyword = ref('')
 const classify = ref('all')
+const i18n = useI18n()
 let apiType = 'GetAllOnSellNftList'
 const i18n = useI18n()
 
@@ -194,6 +276,14 @@ function toPage(link: string) {
   } else {
     router.push(link)
   }
+}
+
+function toWallet() {
+  window.open(import.meta.env.VITE_AuthUrl)
+}
+
+function comeSoon() {
+  ElMessage.info(i18n.t('stayTuned'))
 }
 
 getRecommendNftList()
