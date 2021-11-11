@@ -312,5 +312,9 @@
   "historicalTotalDividend": "Historical total dividend",
   "estimatedDividendIncome": "Estimated dividend income",
   "dividendCycle": "Dividend cycle",
-  "lastDividend": "Last dividend"
+  "lastDividend": "Last dividend",
+  "status": "state",
+  "normoal": "normal",
+  "nftCount": "NFT quantity",
+  "projecter": "Project party"
 }

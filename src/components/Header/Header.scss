@@ -38,6 +38,10 @@ header {
     top: 0;
     text-align: center;
 
+    :deep(.el-dropdown) {
+      color: #303133;
+    }
+
     a {
       cursor: pointer;
       font-family: 'SF Pro';

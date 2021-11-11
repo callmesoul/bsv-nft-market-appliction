@@ -319,5 +319,9 @@
   "estimatedDividendIncome": "预计分红收益",
   "dividendCycle": "分红周期",
   "lastDividendTime": "上次分红时间",
-  "lastDividend": "上次分红"
+  "lastDividend": "上次分红",
+  "status": "状态",
+  "normoal": "正常",
+  "nftCount": "NFT数量",
+  "projecter": "项目方"
 }

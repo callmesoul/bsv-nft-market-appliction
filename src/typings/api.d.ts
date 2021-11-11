@@ -324,6 +324,16 @@ declare interface GetUserDiscountRes extends apiResponse {
     nosRate: string
   }
 }
+declare interface GetRightDetailRes extends apiResponse {
+  data: RightItem
+}
+declare interface RightItem {
+  address: string
+  projectName: string
+  teamSide: string
+  nftQuantity: number
+  dividendCycle: string
+}
 
 declare interface GetMyNftOnShowSellSuccessListResItem {
   nftBalance: number

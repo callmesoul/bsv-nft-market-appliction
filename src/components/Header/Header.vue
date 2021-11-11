@@ -30,7 +30,7 @@
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item @click="toPage('create')">{{ $t('createnft') }}</el-dropdown-item>
-            <el-dropdown-item @click="toWallet">{{ $t('rightsList') }}</el-dropdown-item>
+            <el-dropdown-item @click="toPage('right')">{{ $t('rightsList') }}</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </ElDropdown>
