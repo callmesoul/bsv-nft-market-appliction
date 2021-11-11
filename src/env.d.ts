@@ -17,4 +17,5 @@ interface ImportMetaEnv {
   VITE_CreateNeedMc: string
   VITE_AppAddress: string
   VITE_ShowBotApi: string
+  VITE_ToolApi: string
 }
