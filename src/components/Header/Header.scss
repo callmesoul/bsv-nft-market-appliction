@@ -38,6 +38,10 @@ header {
     top: 0;
     text-align: center;
 
+    :deep(.el-dropdown) {
+      color: #303133;
+    }
+
     a {
       cursor: pointer;
       font-family: 'SF Pro';
@@ -53,6 +57,20 @@ header {
 
       &:last-child {
         margin-right: 0;
+      }
+
+      &.tools {
+        img {
+          transform: rotate(180deg);
+          margin-left: 4px;
+          width: 10px;
+          height: 6px;
+
+          &.active {
+            transform: rotate(0);
+            transition: all 0.5s;
+          }
+        }
       }
     }
   }

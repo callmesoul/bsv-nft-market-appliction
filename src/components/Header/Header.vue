@@ -21,6 +21,19 @@
         v-if="!store.state.isApp || (store.state.isApp && mode !== 'prod')"
         >{{ $t('createnft') }}</router-link
       >
+      <!-- 工具集 -->
+      <ElDropdown trigger="click" @visible-change="onToolsVisibleChange">
+        <a class="tools flex flex-align-center"
+          >{{ $t('nftTools') }}
+          <img :class="{ active: isShowToolsDropdown }" src="@/assets/images/nav_icon_ins.svg"
+        /></a>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item @click="toPage('create')">{{ $t('createnft') }}</el-dropdown-item>
+            <el-dropdown-item @click="toPage('right')">{{ $t('rightsList') }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </ElDropdown>
     </nav>
     <div class="operate flex flex-align-center">
       <!-- 登录按钮 -->
@@ -94,6 +107,9 @@
         v-if="!store.state.isApp || (store.state.isApp && mode !== 'prod')"
         >{{ $t('createnft') }}</router-link
       >
+      <router-link :to="{ name: 'right' }" @click.stop="isShowDrawer = false">{{
+        $t('rightsList')
+      }}</router-link>
     </nav>
   </el-drawer>
 </template>
@@ -113,6 +129,7 @@ const route = useRoute()
 const router = useRouter()
 const isShowDrawer = ref(false)
 const mode = import.meta.env.MODE
+const isShowToolsDropdown = ref(false)
 
 // 跳转授权
 function auth() {
@@ -146,6 +163,10 @@ function toWallet() {
 
 function toPage(name: string) {
   router.push({ name })
+}
+
+function onToolsVisibleChange(value: boolean) {
+  isShowToolsDropdown.value = value
 }
 </script>
 
