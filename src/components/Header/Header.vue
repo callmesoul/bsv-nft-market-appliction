@@ -107,6 +107,9 @@
         v-if="!store.state.isApp || (store.state.isApp && mode !== 'prod')"
         >{{ $t('createnft') }}</router-link
       >
+      <router-link :to="{ name: 'right' }" @click.stop="isShowDrawer = false">{{
+        $t('rightsList')
+      }}</router-link>
     </nav>
   </el-drawer>
 </template>
