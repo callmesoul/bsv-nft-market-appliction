@@ -327,12 +327,26 @@ declare interface GetUserDiscountRes extends apiResponse {
 declare interface GetRightDetailRes extends apiResponse {
   data: RightItem
 }
+
+declare interface GetRightListRes extends apiResponse {
+  data: RightItem[]
+}
 declare interface RightItem {
+  metaid: string
   address: string
+  genesis: string
+  codehash: string
   projectName: string
-  teamSide: string
+  prject_team: string
   nftQuantity: number
+  cover: string
   dividendCycle: string
+  totalDividend: string
+  lastDividend: number
+  lastDividendDate: number
+  nftCertificationType: number
+  nftGenesisCertificationType: number
+  status: number
 }
 
 declare interface GetMyNftOnShowSellSuccessListResItem {

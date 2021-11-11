@@ -5,7 +5,7 @@
     <div class="right-item" v-for="(right, index) in rights" :key="index">
       <div class="right-item-msg flex">
         <div class="cover">
-          <img />
+          <img :src="metafileUrl(right.cover)" />
         </div>
         <div class="cont flex1">
           <div class="name">{{ right.projectName }}</div>
@@ -14,10 +14,25 @@
               <span class="key">{{ $t('projecter') }}：</span>
               <span class="value flex flex-align-center">
                 <div class="avatar-warp">
-                  <NftUserAvatar bg="gray" class="avatar" metaId="" hasmask="" :disabled="true" />
+                  <NftUserAvatar
+                    bg="gray"
+                    class="avatar"
+                    :metaId="right.metaid"
+                    :hasmask="false"
+                    :disabled="true"
+                  />
                 </div>
-                {{ right.teamSide }}
-                <img class="cert-icon" src="@/assets/images/icon_cer_nft.png" />
+                {{ right.prject_team }}
+                <img
+                  class="cert-icon"
+                  src="@/assets/images/icon_cer.svg"
+                  v-if="right.nftCertificationType"
+                />
+                <img
+                  class="cert-icon"
+                  src="@/assets/images/icon_cer_nft.png"
+                  v-if="right.nftGenesisCertificationType"
+                />
               </span>
             </div>
             <div class="cont-item">
@@ -29,22 +44,29 @@
         <div class="status flex flex-align-center">
           <span class="key">{{ $t('status') }}:</span>
           <span class="value flex flex-align-center"
-            ><span class="dot"></span>{{ $t('normoal') }}</span
+            ><span class="dot" :class="{ active: right.status }"></span>
+            {{ right.status ? $t('normoal') : $t('unStar') }}</span
           >
         </div>
       </div>
       <div class="right-item-data flex flex-align-center">
         <div class="data-item flex1">
           <div class="name">{{ $t('historicalTotalDividend') }}</div>
-          <div class="value">4,125.88 BSV</div>
+          <div class="value">
+            {{ right.totalDividend ? $filters.bsv(right.totalDividend) : '--' }} BSV
+          </div>
         </div>
         <div class="data-item flex1">
           <div class="name">{{ $t('lastDividend') }}</div>
-          <div class="value">4,125.88 BSV</div>
+          <div class="value">
+            {{ right.lastDividend ? $filters.bsv(right.lastDividend) : '--' }} BSV
+          </div>
         </div>
         <div class="data-item flex1">
           <div class="name">{{ $t('lastDividendTime') }}</div>
-          <div class="value">11-05 14:34</div>
+          <div class="value">
+            {{ right.lastDividendDate ? $filters.dateTimeFormat(right.lastDividendDate) : '--' }}
+          </div>
         </div>
         <div class="data-item flex1">
           <div class="name">{{ $t('dividendCycle') }}</div>
@@ -60,10 +82,11 @@
 </template>
 
 <script setup lang="ts">
-import { GetRightDetail } from '@/api'
+import { GetRightDetail, GetRightList } from '@/api'
 import InnerPageHeader from '@/components/InnerPageHeader/InnerPageHeader.vue'
 import NftUserAvatar from '@/components/NftUserAvatar/NftUserAvatar.vue'
 import { reactive } from 'vue-demi'
+import { metafileUrl } from '@/utils/util'
 const rights: RightItem[] = reactive([])
 function getRightDetail(params: { genesis: string; codehash: string }) {
   return new Promise(async resolve => {
@@ -74,10 +97,18 @@ function getRightDetail(params: { genesis: string; codehash: string }) {
   })
 }
 
-getRightDetail({
-  genesis: 'c5e90fab956d4698bf0703a1be69dfba6fbe6934',
-  codehash: '0d0fc08db6e27dc0263b594d6b203f55fb5282e2',
-})
+function getRightList() {
+  return new Promise<void>(async resolve => {
+    const res = await GetRightList()
+    if (res && res.code === 0) {
+      rights.length = 0
+      rights.push(...res.data)
+    }
+    resolve()
+  })
+}
+
+getRightList()
 </script>
 
 <style lang="scss" scoped src="./Right.scss"></style>

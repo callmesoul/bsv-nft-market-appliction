@@ -447,3 +447,7 @@ export const GetRightDetail = (params: {
 }): Promise<GetRightDetailRes> => {
   return rightHttp.get(`/api/v1/equity/dividend/project/${params.genesis}/${params.codehash}`)
 }
+
+export const GetRightList = (): Promise<GetRightListRes> => {
+  return rightHttp.get(`/api/v1/equity/dividend/project`)
+}
