@@ -9,6 +9,7 @@ export enum NftApiCode {
   success = 0,
 }
 const apiHttp = new HttpRequest(env.VITE_WalletApi).request
+const rightHttp = new HttpRequest(`${env.VITE_WalletApi}/equity`).request
 const nftHttp = new HttpRequest(env.VITE_NftApi).request
 // const nftHttp = new HttpRequest('').request
 const auctionHttp = new HttpRequest(env.VITE_ShowBotApi).request
@@ -426,4 +427,27 @@ export const GetUserDiscount = (params: {
   return apiHttp.get(
     `/aggregation/v2/app/nftOnShow/getMyNosCommissionRate/${params.metaId}/${params.zeroAddress}/1`
   )
+}
+
+/* 权益 api */
+export const CreateRight = (params: {
+  projectName: string
+  teamSide: string
+  nftQuantity: number
+  dividendCycle: string
+  genesis: string
+  codehash: string
+}) => {
+  return rightHttp.post('/api/v1/equity/dividend/project/address', params)
+}
+
+export const GetRightDetail = (params: {
+  genesis: string
+  codehash: string
+}): Promise<GetRightDetailRes> => {
+  return rightHttp.get(`/api/v1/equity/dividend/project/${params.genesis}/${params.codehash}`)
+}
+
+export const GetRightList = (): Promise<GetRightListRes> => {
+  return rightHttp.get(`/api/v1/equity/dividend/project`)
 }
