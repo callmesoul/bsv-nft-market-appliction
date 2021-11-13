@@ -9,7 +9,7 @@ export enum NftApiCode {
   success = 0,
 }
 const apiHttp = new HttpRequest(env.VITE_WalletApi).request
-const rightHttp = new HttpRequest(`${env.VITE_WalletApi}/equity`).request
+const rightHttp = new HttpRequest(env.VITE_ToolApi).request
 const nftHttp = new HttpRequest(env.VITE_NftApi).request
 // const nftHttp = new HttpRequest('').request
 const auctionHttp = new HttpRequest(env.VITE_ShowBotApi).request
