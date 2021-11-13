@@ -130,7 +130,6 @@ import {
   ElSkeletonItem,
 } from 'element-plus'
 import { setDataStrclassify, metafileUrl } from '@/utils/util'
-import NftUserAvatar from '@/components/NftUserAvatar/NftUserAvatar.vue'
 import CertTemp from '@/components/Cert/Cert.vue'
 import Decimal from 'decimal.js-light'
 import dayjs from 'dayjs'

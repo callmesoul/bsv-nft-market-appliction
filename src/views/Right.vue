@@ -14,7 +14,7 @@
               <span class="key">{{ $t('projecter') }}：</span>
               <span class="value flex flex-align-center">
                 <div class="avatar-warp">
-                  <NftUserAvatar
+                  <UserAvatar
                     bg="gray"
                     class="avatar"
                     :metaId="right.metaid"
@@ -84,7 +84,6 @@
 <script setup lang="ts">
 import { GetRightDetail, GetRightList } from '@/api'
 import InnerPageHeader from '@/components/InnerPageHeader/InnerPageHeader.vue'
-import NftUserAvatar from '@/components/NftUserAvatar/NftUserAvatar.vue'
 import { reactive } from 'vue-demi'
 import { metafileUrl } from '@/utils/util'
 const rights: RightItem[] = reactive([])

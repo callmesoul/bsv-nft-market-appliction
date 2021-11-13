@@ -49,7 +49,7 @@
       <!-- 登录用户 -->
       <ElDropdown trigger="click" v-else>
         <div class="user-info flex flex-align-center">
-          <NftUserAvatar
+          <UserAvatar
             bg="gray"
             class="avatar"
             :metaId="store.state.userInfo?.showId"
@@ -120,7 +120,6 @@ import { ref } from 'vue'
 import { useStore, Mutation } from '@/store/index'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import NftUserAvatar from '@/components/NftUserAvatar/NftUserAvatar.vue'
 
 const i18n = useI18n()
 const env = import.meta.env

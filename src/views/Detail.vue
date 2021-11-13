@@ -145,7 +145,7 @@
             <div class="creater-msg">
               <!-- 铸造者 -->
               <div class="author flex flex-align-center">
-                <NftUserAvatar
+                <UserAvatar
                   class="avatar"
                   :metaId="nft.val.foundryMetaId"
                   :hasmask="nft.val.issueUserAvatarType === 'nft-metabot'"
@@ -170,7 +170,7 @@
               <div class="title flex flex-align-center">
                 <template v-if="nft.val.putAway">
                   {{ $t('seller') }}
-                  <NftUserAvatar
+                  <UserAvatar
                     :metaId="nft.val.ownerMetaId"
                     :hasmask="nft.val.ownerAvatarType === 'nft-metabot'"
                   />
@@ -441,7 +441,7 @@
                     <div class="key">{{ $t('creater') }}：</div>
                     <div class="value flex1">
                       <div class="author flex flex-align-center">
-                        <NftUserAvatar
+                        <UserAvatar
                           class="avatar"
                           :metaId="nft.val.foundryMetaId"
                           :hasmask="nft.val.issueUserAvatarType === 'nft-metabot'"
@@ -459,7 +459,7 @@
                     <div class="key">{{ $t('haveder') }}：</div>
                     <div class="value flex1">
                       <div class="author flex flex-align-center">
-                        <NftUserAvatar
+                        <UserAvatar
                           class="avatar"
                           :metaId="nft.val.ownerMetaId"
                           :hasmask="nft.val.ownerAvatarType === 'nft-metabot'"
@@ -619,7 +619,7 @@
                 >
                   <!-- 用户信息 -->
                   <div class="author flex1 flex flex-align-center">
-                    <NftUserAvatar
+                    <UserAvatar
                       class="avatar"
                       :metaId="item.buyer_metaId"
                       :hasmask="item?.avatarType === 'nft-metabot'"
@@ -650,7 +650,7 @@
                 <div class="historical-bid-item flex flex-align-center">
                   <!-- 用户信息 -->
                   <div class="author flex1 flex flex-align-center">
-                    <NftUserAvatar
+                    <UserAvatar
                       class="avatar"
                       :metaId="nft.val.foundryMetaId"
                       :hasmask="nft.val.issueUserAvatarType === 'nft-metabot'"

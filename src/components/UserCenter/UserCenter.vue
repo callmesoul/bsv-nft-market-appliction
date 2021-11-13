@@ -24,7 +24,7 @@
           <div class="user-msg-warp flex flex-align-center flex-pack-center">
             <div class="flex-box">
               <div class="avatar">
-                <NftUserAvatar :metaId="user.metaId" :hasmask="false" />
+                <UserAvatar :metaId="user.metaId" :hasmask="false" />
               </div>
               <div class="name">{{ user.name }}</div>
               <div class="metaid flex flex-align-center">
@@ -145,7 +145,6 @@ import {
   ElSkeletonItem,
 } from 'element-plus'
 import { metafileUrl } from '@/utils/util'
-import NftUserAvatar from '@/components/NftUserAvatar/NftUserAvatar.vue'
 import CertTemp from '@/components/Cert/Cert.vue'
 import Decimal from 'decimal.js-light'
 import dayjs from 'dayjs'

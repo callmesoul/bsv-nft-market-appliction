@@ -76,7 +76,7 @@
             <div class="name">{{ metabot.nftName }}</div>
             <div class="user-list">
               <div class="user-item flex flex-align-center">
-                <NftUserAvatar
+                <UserAvatar
                   class="avatar"
                   :metaId="metabot.nftIssueMetaId"
                   :hasmask="metabot.nftIssueAvatarType === 'nft-metabot'"
@@ -85,7 +85,7 @@
                 <span class="type">({{ $t('creater') }})</span>
               </div>
               <div class="user-item flex flex-align-center">
-                <NftUserAvatar
+                <UserAvatar
                   class="avatar"
                   :metaId="metabot.nftOwnerMetaId"
                   :hasmask="metabot.nftOwnerAvatarType === 'nft-metabot'"
@@ -165,7 +165,6 @@ import Buy from '@/utils/buy'
 import NFTDetail from '@/utils/nftDetail'
 import VueCountdown from '@chenfengyuan/vue-countdown'
 import { ElImage } from 'element-plus'
-import NftUserAvatar from '@/components/NftUserAvatar/NftUserAvatar.vue'
 import InnerPageHeader from '@/components/InnerPageHeader/InnerPageHeader.vue'
 import { topics } from '@/config'
 import LoadMore from '@/components/LoadMore/LoadMore.vue'
