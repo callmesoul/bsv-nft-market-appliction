@@ -147,6 +147,8 @@ declare interface MyNftSummaryItem {
   nftIssueMetaId: string
   nftOwnerAvatarType: string
   nftIssueAvatarType: string
+  nftGenesisCertificationType: number
+  nftCertificationType: number
   nftDetailItemList?: {
     nftBalance: number
     nftCodehash: string

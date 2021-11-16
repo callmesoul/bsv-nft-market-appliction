@@ -109,48 +109,21 @@
     <div class="batch-create-list">
       <div
         class="batch-create-item"
-        v-for="(item, index) in list"
-        :key="index"
-        :id="'batchItem' + index"
+        v-for="(item, index) in nfts"
+        :key="item.genesis + item.codehash + item.tokenIndex"
       >
         <div class="cover upload-warp">
           <div class="upload">
             <div class="add flex flex-align-center flex-pack-center">
-              <template v-if="item.cover">
-                <ElImage
-                  class="cover"
-                  fit="cover"
-                  :src="item.cover.base64Data"
-                  :preview-src-list="[item.cover.base64Data]"
-                  :append-to-body="true"
-                />
-                <a class="close" @click="removeCover(index)">{{ $t('delete') }}</a>
-              </template>
-              <template v-else>
-                <div>
-                  <img class="icon" src="@/assets/images/img_upload.svg" />
-                  <div class="label">{{ $t('uploadcover') }}</div>
-                </div>
-                <input
-                  type="file"
-                  accept="image/*"
-                  :data-index="index"
-                  @change="coverFileInputChage"
-                />
-              </template>
+              <ElImage
+                class="cover"
+                fit="cover"
+                :src="$filters.assetsUrl(item.coverUrl)"
+                :preview-src-list="[$filters.assetsUrl(item.coverUrl)]"
+                :append-to-body="true"
+              />
             </div>
           </div>
-        </div>
-        <div class="orginFile input-item">
-          <input
-            type="file"
-            :placeholder="$t('nftoriginal')"
-            :data-index="index"
-            @change="originalFileInputChage"
-            v-if="!item.genesis"
-          />
-          <div class="val" v-if="item.originalFile">{{ item.originalFile.raw?.name }}</div>
-          <div class="placeholder" v-else>{{ $t('nftoriginal') }}</div>
         </div>
         <div class="name input-item">
           <input
@@ -288,14 +261,17 @@
           {{ $t('beSuccess') }}:<span>{{ successNum }}</span>
           {{ $t('indivual') }}
         </div>
-        <ElProgress :percentage="Math.ceil((successNum / list.length) * 100)" :stroke-width="30"></ElProgress>
+        <ElProgress
+          :percentage="Math.ceil((successNum / list.length) * 100)"
+          :stroke-width="30"
+        ></ElProgress>
       </div>
     </div>
   </ElDialog>
 </template>
 
 <script setup lang="ts">
-import { CreateNft, NftApiCode } from '@/api'
+import { CreateNft, GetMyNftSummaryList, NftApiCode } from '@/api'
 import { useStore } from '@/store'
 import {
   ElLoading,
@@ -310,7 +286,7 @@ import { computed, reactive, ref } from 'vue-demi'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import ChooseSeriesModal from '@/components/ChooseSeriesModal/ChooseSeriesModal.vue'
-import { checkSdkStatus, tranfromImgFile } from '@/utils/util'
+import { checkSdkStatus, setDataStrclassify, tranfromImgFile } from '@/utils/util'
 import {
   classifyList,
   canCreateCardClassifyListMetaids,
@@ -360,6 +336,7 @@ const isBreak = ref(false)
 const isCreated = ref(false)
 const currentIndex = ref(null)
 const paramsList: any[] = []
+const nfts: NftItem[] = reactive([])
 // 成功的数量
 const successNum = computed(() => {
   let num = 0
@@ -755,6 +732,75 @@ async function startBacth() {
   }
 }
 
+function getMyNfts(isCover: boolean = false) {
+  return new Promise<void>(async resolve => {
+    const res = await GetMyNftSummaryList({
+      Address: store.state.userInfo.address,
+      Page: '1',
+      PageSize: '999',
+    })
+    if (res && res.code === 0) {
+      if (isCover) {
+        nfts.length = 0
+      }
+      if (res.data.results.items.length > 0) {
+        res.data.results.items.map(item => {
+          const nft =
+            item.nftDetailItemList && item.nftDetailItemList[0]
+              ? item.nftDetailItemList[0]
+              : undefined
+          const count = item.nftMyCount + item.nftMyPendingCount
+          const name =
+            count > 1 && item.nftSeriesName && item.nftSeriesName !== ''
+              ? item.nftSeriesName
+              : item.nftName
+              ? item.nftName
+              : '--'
+          const data:
+            | {
+                nftname: string
+                nftdesc: string
+                nfticon: string
+                nftwebsite: string
+                nftissuerName: string
+                nftType: string
+                classifyList: string
+                originalFileTxid: string
+                contentTxId: string
+              }
+            | undefined = nft && nft.nftDataStr !== '' ? JSON.parse(nft.nftDataStr) : undefined
+          const classify = setDataStrclassify(data)
+          nfts.push({
+            name: name,
+            amount: 0,
+            foundryName: item.nftIssuer,
+            classify: classify,
+            head: '',
+            tokenId: item.nftGenesis + item.nftCodehash + item.nftTokenIndex,
+            coverUrl: item.nftIcon,
+            putAway: item.nftIsReady,
+            metaId: item.nftIssueMetaId,
+            productName: name,
+            deadlineTime: 0,
+            genesis: item.nftGenesis,
+            tokenIndex: nft?.nftTokenIndex ? nft?.nftTokenIndex : '',
+            codehash: item.nftCodehash,
+            total: item.nftTotalSupply,
+            hasCount: count,
+            ownerAvatarType: item.nftOwnerAvatarType,
+            issueUserAvatarType: item.nftIssueAvatarType,
+            nftCertificationType: item.nftCertificationType,
+            nftGenesisCertificationType: item.nftGenesisCertificationType,
+          })
+        })
+      } else {
+        pagination.nothing = true
+      }
+    }
+    resolve()
+  })
+}
+
 // 初始化
 async function resetBacth() {
   await root.value.getSeries()
@@ -763,25 +809,15 @@ async function resetBacth() {
 }
 
 if (store.state.userInfo) {
-  setUserCreatCard()
+  getMyNfts()
 } else {
   store.watch(
     state => state.userInfo,
     () => {
-      if (store.state.userInfo) setUserCreatCard()
-    }
-  )
-}
-
-if (!store.state.nftToken) {
-  store.watch(
-    state => state.nftToken,
-    () => {
-      debugger
-      if (store.state.nftToken) root.value.getSeries()
+      if (store.state.userInfo) getMyNfts()
     }
   )
 }
 </script>
 
-<style lang="scss" scoped src="./Batch.scss"></style>
+<style lang="scss" scoped src="./Create.scss"></style>

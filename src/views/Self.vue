@@ -104,36 +104,16 @@
   </div>
 </template>
 <script setup lang="ts">
-import {
-  GetDeadlineTime,
-  GetMetaIdInfo,
-  GetMyNftOnShowBuySuccessList,
-  GetMyNftOnShowSellSuccessList,
-  GetMyNftSummaryList,
-  GetMyOnSellNftList,
-} from '@/api'
-import NftItem from '@/components/Nft-item/Nft-item.vue'
+import { GetMyNftOnShowBuySuccessList, GetMyNftOnShowSellSuccessList } from '@/api'
 import { useStore } from '@/store'
-import { computed, onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import LoadMore from '@/components/LoadMore/LoadMore.vue'
 import IsNull from '../components/IsNull/IsNull.vue'
-import NftSkeleton from '@/components/NftSkeleton/NftSkeleton.vue'
 import { useI18n } from 'vue-i18n'
-import {
-  ElMessage,
-  ElDropdown,
-  ElDropdownItem,
-  ElDropdownMenu,
-  ElDialog,
-  ElImage,
-  ElSkeleton,
-  ElSkeletonItem,
-} from 'element-plus'
-import { setDataStrclassify, metafileUrl } from '@/utils/util'
-import CertTemp from '@/components/Cert/Cert.vue'
+import { ElMessage, ElDialog, ElImage, ElSkeleton, ElSkeletonItem } from 'element-plus'
+import { metafileUrl } from '@/utils/util'
 import Decimal from 'decimal.js-light'
 import dayjs from 'dayjs'
-import { useRoute, useRouter } from 'vue-router'
 import { router } from '@/router'
 import UserCenter from '@/components/UserCenter/UserCenter.vue'
 
@@ -152,10 +132,7 @@ const isShowRecordModal = ref(false)
 const recordTabIndex = ref(0)
 const isShowRcordSkeleton = ref(true)
 const records: GetMyNftOnShowSellSuccessListResItem[] = reactive([])
-const currentUser: { metaId: string; name: string; address?: string } = reactive({
-  metaId: '',
-  name: '',
-})
+
 const user = reactive({
   name: store.state.userInfo?.name,
   metaId: store.state.userInfo?.metaId,
@@ -168,12 +145,6 @@ function getMoreRecords() {
   getRecordList().then(() => {
     recordPagination.loading = false
   })
-}
-
-function toTxLink() {
-  if (store.state.userInfo) {
-    store.state.sdk?.toTxLink(store.state.userInfo.metaId)
-  }
 }
 
 function changeRecordTab(index: number) {
