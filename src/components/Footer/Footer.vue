@@ -23,7 +23,9 @@
               <router-link :to="{ name: 'market' }">{{ $t('countryFair') }}</router-link>
             </div>
             <div class="footer-secion-item">
-              <router-link :to="{ name: 'create' }">{{ $t('createnft') }}</router-link>
+              <router-link :to="{ name: 'create' }" v-if="!isApp">{{
+                $t('createnft')
+              }}</router-link>
             </div>
           </div>
         </div>
@@ -67,5 +69,7 @@
     </div>
   </footer>
 </template>
-
+<script lang="ts" setup>
+const isApp = window.appMetaIdJsV2 || window.appMetaIdJs ? true : false
+</script>
 <style lang="scss" scoped src="./Footer.scss"></style>
