@@ -79,15 +79,21 @@
       <!-- 分割线 -->
       <span class="line"></span>
 
-      <!-- 语言 -->
-      <a class="lang" @click="setLang">{{ $t(i18n.locale.value === 'en' ? 'zh' : 'en') }}</a>
-      <!-- <ElDropdown trigger="click">
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item v-for="lang in i18n.availableLocales" :key="lang" :disabled="lang === i18n.locale.value" >{{ $t(lang) }}</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-      </ElDropdown>-->
+      <ElDropdown trigger="click">
+        <!-- 语言 -->
+        <a class="lang">{{ $t(i18n.locale.value) }}</a>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item
+              v-for="lang in i18n.availableLocales"
+              :key="lang"
+              :disabled="lang === i18n.locale.value"
+              @click="setLang(lang)"
+              >{{ $t(lang) }}</el-dropdown-item
+            >
+          </el-dropdown-menu>
+        </template>
+      </ElDropdown>
     </div>
   </header>
 
@@ -148,8 +154,8 @@ function logout() {
 }
 
 // 设置语言
-function setLang() {
-  const lang = i18n.locale.value === 'en' ? 'zh' : 'en'
+function setLang(lang: string) {
+  // const lang = i18n.locale.value === 'en' ? 'zh' : 'en'
   i18n.locale.value = lang
   window.localStorage.setItem('lang', lang)
 }
