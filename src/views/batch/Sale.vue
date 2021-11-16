@@ -126,12 +126,7 @@
           </div>
         </div>
         <div class="name input-item">
-          <input
-            type="text"
-            :readOnly="item.genesis"
-            v-model="item.name"
-            :placeholder="$t('nameplac')"
-          />
+          <input type="text" :readOnly="true" v-model="item.name" :placeholder="$t('nameplac')" />
         </div>
         <div class="intro input-item">
           <textarea
@@ -139,32 +134,6 @@
             :readOnly="item.genesis"
             :placeholder="$t('drscplac')"
           ></textarea>
-        </div>
-        <div
-          class="orginFile input-item"
-          @click="
-            isSameClassify || item.genesis
-              ? (item.isShowClassifyModal = false)
-              : (item.isShowClassifyModal = true)
-          "
-        >
-          <div class="val" v-if="item.classify.length > 0">
-            <template v-for="(_item, index) in item.classify" :key="_item">
-              {{ $t(_item) }}<template v-if="index !== item.classify.length - 1">,</template>
-            </template>
-          </div>
-          <div class="placeholder" v-else>{{ $t('choosetype') }}</div>
-          <PickerModel
-            name="classify"
-            listKey="classify"
-            :title="$t('choosetype')"
-            :multiple="true"
-            disabled="disabled"
-            :visible="item.isShowClassifyModal"
-            @confirm="item.isShowClassifyModal = false"
-            :list="classList"
-            :selecteds="item.classify"
-          />
         </div>
         <div class="index input-item" v-if="selectedSeries.length > 0">
           <input
