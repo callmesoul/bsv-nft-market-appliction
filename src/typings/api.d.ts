@@ -147,6 +147,8 @@ declare interface MyNftSummaryItem {
   nftIssueMetaId: string
   nftOwnerAvatarType: string
   nftIssueAvatarType: string
+  nftGenesisCertificationType: number
+  nftCertificationType: number
   nftDetailItemList?: {
     nftBalance: number
     nftCodehash: string
@@ -215,6 +217,7 @@ declare interface GetSeriesNftListResItem {
   nftDataStr: string
   nftIsReady: boolean
   nftOwnerMetaId: string
+  nftSensibleId: string
 }
 
 declare interface GetSeriesNftListRes extends apiResponse {

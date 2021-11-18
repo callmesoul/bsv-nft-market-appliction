@@ -130,7 +130,7 @@ export default class Sdk {
       if (!params.dataType) params.dataType = 'application/json'
       const accessToken = store.state.token ? store.state.token?.access_token : ''
       const callback = (res: MetaIdJsRes) => {
-        this.callback(res, resolve)
+        this.callback(res, resolve, reject)
       }
       const onCancel = (res: MetaIdJsRes) => {
         reject(res)
@@ -426,7 +426,7 @@ export default class Sdk {
           seriesName: params.seriesName,
         },
         callback: (res: SdkGenesisNFTRes) => {
-          this.callback(res, resolve)
+          this.callback(res, resolve, reject)
         },
       }
       if (this.isApp) {
@@ -493,7 +493,7 @@ export default class Sdk {
           console.log('issueNFT res')
           console.log(res)
           // 当报错是token supply is fixed 时， 一直轮询，直到成功或其他报错
-          this.callback(res, resolve)
+          this.callback(res, resolve, reject)
         },
       }
       if (this.isApp) {
@@ -544,7 +544,7 @@ export default class Sdk {
           ],
         },
         callback: (res: MetaIdJsRes) => {
-          this.callback(res, resolve)
+          this.callback(res, resolve, reject)
         },
       }
       if (this.isApp) {
@@ -581,7 +581,7 @@ export default class Sdk {
           payTo: [{ address: import.meta.env.VITE_AppAddress, amount: 10000 }],
         },
         callback: (res: MetaIdJsRes) => {
-          this.callback(res, resolve)
+          this.callback(res, resolve, reject)
         },
       }
       if (this.isApp) {
@@ -619,7 +619,7 @@ export default class Sdk {
           ...params,
         },
         callback: (res: MetaIdJsRes) => {
-          this.callback(res, resolve)
+          this.callback(res, resolve, reject)
         },
         // onCancel: (msg: any) => {
         //   debugger
@@ -755,7 +755,8 @@ export default class Sdk {
   // 统一回调处理
   callback(
     res: MetaIdJsRes,
-    resolve: { (value: MetaIdJsRes | PromiseLike<MetaIdJsRes>): void; (arg0: MetaIdJsRes): void }
+    resolve: { (value: MetaIdJsRes | PromiseLike<MetaIdJsRes>): void; (arg0: MetaIdJsRes): void },
+    reject: { (reason?: any): void; (): void }
   ) {
     if (this.isApp && typeof res === 'string') {
       try {
@@ -778,8 +779,10 @@ export default class Sdk {
       ) {
         ElMessage.error(res.data.message)
       }
+      reject(res)
+    } else {
+      resolve(res)
     }
-    resolve(res)
   }
 
   // 处理附件
@@ -870,7 +873,7 @@ export default class Sdk {
 
   // 签名
   signMessage(params: { message: string; path?: string }) {
-    return new Promise<SignMessageRes>(resolve => {
+    return new Promise<SignMessageRes>((resolve, reject) => {
       if (!params.path) params.path = '0/0'
       const callback = (res: MetaIdJsRes) => {
         if (typeof res === 'string') {
@@ -880,7 +883,7 @@ export default class Sdk {
           res.data.publicKey = res.data.pubkey ? res.data.pubkey : res.data.publicKey
           res.data.result = res.data.result ? res.data.result : res.data.signMsg
         }
-        this.callback(res, resolve)
+        this.callback(res, resolve, reject)
       }
       if (this.isApp) {
         // @ts-ignore

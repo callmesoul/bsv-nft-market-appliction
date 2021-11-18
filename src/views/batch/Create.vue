@@ -288,7 +288,10 @@
           {{ $t('beSuccess') }}:<span>{{ successNum }}</span>
           {{ $t('indivual') }}
         </div>
-        <ElProgress :percentage="Math.ceil((successNum / list.length) * 100)" :stroke-width="30"></ElProgress>
+        <ElProgress
+          :percentage="Math.ceil((successNum / list.length) * 100)"
+          :stroke-width="30"
+        ></ElProgress>
       </div>
     </div>
   </ElDialog>
@@ -784,4 +787,4 @@ if (!store.state.nftToken) {
 }
 </script>
 
-<style lang="scss" scoped src="./Batch.scss"></style>
+<style lang="scss" scoped src="./Create.scss"></style>

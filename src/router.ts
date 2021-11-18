@@ -18,7 +18,8 @@ const TopicIndex = () => import('@/views/topic/Index.vue')
 const TopicDetail = () => import('@/views/topic/Detail.vue')
 const CommonLayout = () => import('@/layouts/CommonLayout.vue')
 const CountryFair = () => import('@/views/CountryFair.vue')
-const Batch = () => import('@/views/Batch.vue')
+const BatchCreate = () => import('@/views/batch/Create.vue')
+const BatchSale = () => import('@/views/batch/Sale.vue')
 const BatchTest = () => import('@/views/BatchTest.vue')
 const Right = () => import('@/views/Right.vue')
 import { useStore, Action } from '@/store/index'
@@ -70,7 +71,15 @@ export const router = createRouter({
         { path: 'detail/:key', name: 'topicDetail', component: TopicDetail },
       ],
     },
-    { path: '/batch', name: 'batch', component: Batch, meta: { keepAlive: true } },
+    {
+      path: '/batch',
+      name: 'batch',
+      component: CommonLayout,
+      children: [
+        { path: 'create', name: 'batchCreate', component: BatchCreate },
+        { path: 'sale', name: 'batchSale', component: BatchSale },
+      ],
+    },
     // { path: '/batchtest', name: 'batchtest', component: BatchTest, meta: { keepAlive: true } },
     { path: '/batchtest', name: 'batchtest', component: BatchTest, meta: { keepAlive: true } },
     { path: '/right', name: 'right', component: Right },

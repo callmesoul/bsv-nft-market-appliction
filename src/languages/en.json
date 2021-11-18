@@ -319,5 +319,15 @@
   "nftCount": "Quantity",
   "projecter": "Initiator",
   "lastDividendTime": "Lastest Return Time",
-  "unStar": "Underway"
+  "unStar": "Underway",
+  "sameSaleDrsc": "Unified introduction",
+  "sameSellTime": "Unified market display time",
+  "startBatchSale": "Start batch listing",
+  "batchSaleIniting": "In batches...",
+  "batchSaleTips": "Being put on the shelves in batches, please do not do other operations, please wait patiently",
+  "isSale": "It has been added to",
+  "unSale": "Not listed",
+  "restart": "Restart",
+  "batchSale": "Bulk shelves",
+  "batchSaleDrsc": "Here you can list NFTs in batches, if the price and time are empty, it is not selected."
 }

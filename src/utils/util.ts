@@ -1,9 +1,10 @@
 import { Buffer } from 'buffer'
 import { Action, store } from '@/store'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import i18n from '@/utils/i18n'
 import { router } from '@/router'
 import { GetMyNftEligibility, Langs } from '@/api'
+import { resolve } from 'path/posix'
 
 export function tranfromImgFile(file: File) {
   return new Promise<MetaFile>((resolve, reject) => {
@@ -162,6 +163,45 @@ export function getMyNftEligibility(IssueMetaId: string) {
       }
     } else {
       resolve(true)
+    }
+  })
+}
+
+export function confirmToSendMetaData(amount: number) {
+  return new Promise<void>(async (resolve, reject) => {
+    const userBalanceRes = await store.state.sdk?.getBalance().catch(() => {
+      ElMessage.error(i18n.global.t('getBalanceFail'))
+      reject()
+    })
+    if (userBalanceRes && userBalanceRes.code === 200 && userBalanceRes.data.satoshis > amount) {
+      ElMessageBox.confirm(
+        `${i18n.global.t('useAmountTips')}: ${amount} SATS`,
+        i18n.global.t('niceWarning'),
+        {
+          confirmButtonText: i18n.global.t('confirm'),
+          cancelButtonText: i18n.global.t('cancel'),
+          closeOnClickModal: false,
+        }
+      ).then(
+        async () => {
+          resolve()
+        },
+        () => {
+          reject()
+        }
+      )
+    } else {
+      ElMessageBox.alert(
+        `
+          <p>${i18n.global.t('useAmountTips')}: ${amount} SATS</p>
+          <p>${i18n.global.t('insufficientBalance')}</p>
+        `,
+        {
+          confirmButtonText: i18n.global.t('confirm'),
+          dangerouslyUseHTMLString: true,
+        }
+      )
+      reject()
     }
   })
 }
