@@ -324,5 +324,17 @@
   "normoal": "正常",
   "nftCount": "NFT数量",
   "projecter": "项目方",
-  "unStar": "未开始"
+  "unStar": "未开始",
+  "sameSaleDrsc": "统一上架介绍",
+  "sameSellTime": "统一市场展示时间",
+  "startBatchSale": "开始批量上架",
+  "batchSaleIniting": "正在批量上架中...",
+  "batchSaleTips": "正在批量上架中，请勿做其他操作，请耐心等待",
+  "batchSaleNum": "本次批量上架数量",
+  "batchSaleDrsc": "在这里你可以批量上架NFT,价格和上架时间为空是不选择状态",
+  "getBalanceFail": "获取余额失败",
+  "isSale": "已上架",
+  "unSale": "未上架",
+  "restart": "重新开始",
+  "batchSale": "批量上架"
 }

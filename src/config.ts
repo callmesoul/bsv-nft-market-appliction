@@ -21,11 +21,11 @@ export interface Unit {
 export const units: Unit[] = [
   {
     unit: UnitName.BSV,
-    sats: Math.pow(10, 8),
+    sats: 0.00000001,
   },
   {
     unit: UnitName.SATS,
-    sats: Math.pow(10, 0),
+    sats: Math.pow(10, 8),
   },
 ]
 

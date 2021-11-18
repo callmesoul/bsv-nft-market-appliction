@@ -217,6 +217,7 @@ declare interface GetSeriesNftListResItem {
   nftDataStr: string
   nftIsReady: boolean
   nftOwnerMetaId: string
+  nftSensibleId: string
 }
 
 declare interface GetSeriesNftListRes extends apiResponse {
