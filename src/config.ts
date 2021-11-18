@@ -35,6 +35,7 @@ export const canCreateCardClassifyListMetaids = [
 ]
 export const canCreateRightsClassifyListMetaids = [
   '1734f4732ddd1ec2a94f55a85c1b7a3051c7000bbc2e4d4eaaca7ae698b25c28',
+  '67740e86c2b0569787600fdd9123eec80756f17934b3de0cd74ccf359af59d80',
 ]
 export const classifyList: Classify[] = [
   { classify: 'rights', disabled: true },
