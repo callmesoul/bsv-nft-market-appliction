@@ -1,9 +1,5 @@
 <template>
-  <InnerPageHeader
-    :title="$t('batchCreate')"
-    :intro="$t('batchSaleDrsc')"
-    :is-show-search="false"
-  />
+  <InnerPageHeader :title="$t('batchSale')" :intro="$t('batchSaleDrsc')" :is-show-search="false" />
 
   <div class="batch-create container">
     <!-- 选择系列 -->
