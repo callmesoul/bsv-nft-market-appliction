@@ -101,12 +101,13 @@
           <input type="text" :readOnly="true" v-model="item.name" :placeholder="$t('nameplac')" />
         </div>
         <div class="name input-item">
-          <input
+          <InputAmount />
+          <!-- <input
             type="text"
             class="price"
             v-model="item.amount"
             :placeholder="$t('priceplac') + '0.00001'"
-          />
+          /> -->
         </div>
         <div class="intro input-item">
           <textarea v-model="item.sellDesc" :placeholder="$t('offSaleIntro')"></textarea>
@@ -201,6 +202,7 @@ import {
 } from '@/config'
 import PickerModel from '@/components/PickerModal/PickerModel.vue'
 import InnerPageHeader from '@/components/InnerPageHeader/InnerPageHeader.vue'
+import InputAmount from '@/components/InputAmount/InputAmount.vue'
 
 const list: {
   id: string
