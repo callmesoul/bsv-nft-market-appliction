@@ -31,6 +31,10 @@
           <el-dropdown-menu>
             <!-- <el-dropdown-item @click="toPage('create')">{{ $t('createnft') }}</el-dropdown-item> -->
             <el-dropdown-item @click="toPage('right')">{{ $t('rightsList') }}</el-dropdown-item>
+            <el-dropdown-item @click="toPage('batchCreate')">{{
+              $t('batchCreate')
+            }}</el-dropdown-item>
+            <el-dropdown-item @click="toPage('batchSale')">{{ $t('batchSale') }}</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </ElDropdown>
@@ -109,6 +113,12 @@
       >
       <router-link :to="{ name: 'right' }" @click.stop="isShowDrawer = false">{{
         $t('rightsList')
+      }}</router-link>
+      <router-link :to="{ name: 'batchCreate' }" @click.stop="isShowDrawer = false">{{
+        $t('batchCreate')
+      }}</router-link>
+      <router-link :to="{ name: 'batchSale' }" @click.stop="isShowDrawer = false">{{
+        $t('batchSale')
       }}</router-link>
     </nav>
   </el-drawer>
