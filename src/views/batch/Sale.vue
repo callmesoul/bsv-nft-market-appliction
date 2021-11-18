@@ -11,55 +11,26 @@
       <div class="select-series flex1 screen-item">
         <div class="input-item flex flex-align-center">
           <div class="select-warp flex flex-align-center">
-            <div class="key flex1">{{ $t('chooseserices') }}</div>
-            <div
-              class="value"
-              @click="isCreated ? (isShowSeriesModal = false) : (isShowSeriesModal = true)"
-            >
-              <span v-if="selectedSeries.length > 0">{{ selectedSeries[0] }}</span>
-              <span v-else class="placeholder">{{ $t('choose') }}</span>
-              <i class="el-icon-arrow-right"></i>
-            </div>
-            <ChooseSeriesModal
-              :isShowSeriesModal="isShowSeriesModal"
-              :selectedSeries="selectedSeries"
-              @confirm="onSeriesConfirm"
-              ref="root"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div class="screen-item flex1">
-        <div
-          class="input-item flex flex-align-center"
-          @click="isSameClassify ? (isShowClassifyModal = true) : (isShowClassifyModal = false)"
-        >
-          <div class="select-warp flex flex-align-center">
             <div class="key flex1 flex flex-align-center" @click.stop="onChangeSameClassify">
-              <span class="title">{{ $t('sameClassify') }}:</span>
-              <ElSwitch v-model="isSameClassify" />
+              <span class="title">{{ $t('series') }}:</span>
             </div>
             <div class="value">
-              <span v-if="classify.length > 0">
-                <template v-for="(_item, index) in classify" :key="_item">
-                  {{ $t(_item) }}<template v-if="index !== classify.length - 1">,</template>
-                </template>
-              </span>
-              <span v-else class="placeholder">{{ $t('choose') }}</span>
-              <i class="el-icon-arrow-right"></i>
+              <ElSelect v-model="currentSeries">
+                <ElOption
+                  key="all"
+                  :label="$t('all') + $t('series') + ' ' + nfts.length + '/' + nfts.length"
+                  value="all"
+                >
+                </ElOption>
+                <ElOption
+                  v-for="item in seriesList"
+                  :key="item.name"
+                  :label="item.name + ' ' + item.hasCount + '/' + item.total"
+                  :value="item.name"
+                >
+                </ElOption>
+              </ElSelect>
             </div>
-            <PickerModel
-              name="classify"
-              listKey="classify"
-              :title="$t('choosetype')"
-              :multiple="true"
-              disabled="disabled"
-              :visible="isShowClassifyModal"
-              @confirm="onSetAllClassify"
-              :list="classList"
-              :selecteds="classify"
-            />
           </div>
         </div>
       </div>
@@ -109,8 +80,9 @@
     <div class="batch-create-list">
       <div
         class="batch-create-item"
-        v-for="(item, index) in nfts"
+        v-for="(item, index) in currentNfts"
         :key="item.genesis + item.codehash + item.tokenIndex"
+        :class="{ disabled: item.amount === '' || item.amount === '0' }"
       >
         <div class="cover upload-warp">
           <div class="upload">
@@ -118,8 +90,8 @@
               <ElImage
                 class="cover"
                 fit="cover"
-                :src="$filters.assetsUrl(item.coverUrl)"
-                :preview-src-list="[$filters.assetsUrl(item.coverUrl)]"
+                :src="$filters.assetsUrl(item.cover)"
+                :preview-src-list="[$filters.assetsUrl(item.cover)]"
                 :append-to-body="true"
               />
             </div>
@@ -128,14 +100,18 @@
         <div class="name input-item">
           <input type="text" :readOnly="true" v-model="item.name" :placeholder="$t('nameplac')" />
         </div>
-        <div class="intro input-item">
-          <textarea
-            v-model="item.intro"
-            :readOnly="item.genesis"
-            :placeholder="$t('drscplac')"
-          ></textarea>
+        <div class="name input-item">
+          <input
+            type="text"
+            class="price"
+            v-model="item.amount"
+            :placeholder="$t('priceplac') + '0.00001'"
+          />
         </div>
-        <div class="index input-item" v-if="selectedSeries.length > 0">
+        <div class="intro input-item">
+          <textarea v-model="item.sellDesc" :placeholder="$t('offSaleIntro')"></textarea>
+        </div>
+        <div class="index input-item">
           <input
             type="number"
             :readOnly="true"
@@ -143,9 +119,6 @@
             v-model="item.index"
             :placeholder="$t('indexNumber')"
           />
-        </div>
-        <div class="btn btn-block btn-default" @click="removeItem(index)" v-if="!item.genesis">
-          {{ $t('delete') }}
         </div>
         <router-link
           :to="{
@@ -157,47 +130,10 @@
             },
           }"
           class="btn btn-block"
-          v-else
+          v-if="item.isSaled"
         >
           {{ $t('lookDetail') }}
         </router-link>
-      </div>
-      <!-- 添加 -->
-      <div class="batch-create-item" v-if="!isCreated">
-        <div class="cover upload-warp">
-          <div class="upload">
-            <div class="add flex flex-align-center flex-pack-center">
-              <template>
-                <div>
-                  <img class="icon" src="@/assets/images/img_upload.svg" />
-                  <div class="label">{{ $t('uploadcover') }}</div>
-                </div>
-                <input type="file" accept="image/*" />
-              </template>
-            </div>
-          </div>
-        </div>
-        <div class="orginFile input-item">
-          <div class="placeholder">{{ $t('nftoriginal') }}</div>
-        </div>
-        <div class="name input-item">
-          <input type="text" :placeholder="$t('nameplac')" />
-        </div>
-        <div class="intro input-item">
-          <textarea :placeholder="$t('drscplac')"></textarea>
-        </div>
-        <div class="orginFile input-item">
-          <div class="placeholder">{{ $t('choosetype') }}</div>
-        </div>
-        <div class="index input-item" v-if="selectedSeries.length > 0">
-          <input type="number" :readOnly="true" :disabled="true" />
-        </div>
-        <div class="btn btn-block btn-default">
-          {{ $t('delete') }}
-        </div>
-        <div class="add flex flex-align-center flex-pack-center" @click="addItem">
-          +
-        </div>
       </div>
     </div>
     <template v-if="isCreated">
@@ -240,7 +176,7 @@
 </template>
 
 <script setup lang="ts">
-import { CreateNft, GetMyNftSummaryList, NftApiCode } from '@/api'
+import { CreateNft, GetMyNftSummaryList, GetSeriesNftList, NftApiCode } from '@/api'
 import { useStore } from '@/store'
 import {
   ElLoading,
@@ -250,6 +186,8 @@ import {
   ElDialog,
   ElProgress,
   ElImage,
+  ElSelect,
+  ElOption,
 } from 'element-plus'
 import { computed, reactive, ref } from 'vue-demi'
 import { useI18n } from 'vue-i18n'
@@ -290,14 +228,8 @@ const list: {
     isShowClassifyModal: false,
   },
 ])
-const classList = reactive(classifyList)
-const classify: string[] = reactive([])
-const isSameClassify = ref(false)
-const isShowClassifyModal = ref(false)
 const router = useRouter()
 const store = useStore()
-const isShowSeriesModal = ref(false)
-const selectedSeries: string[] = reactive([])
 const i18n = useI18n()
 const root = ref()
 const isShowResult = ref(false)
@@ -305,7 +237,25 @@ const isBreak = ref(false)
 const isCreated = ref(false)
 const currentIndex = ref(null)
 const paramsList: any[] = []
-const nfts: NftItem[] = reactive([])
+const nfts: {
+  codehash: string
+  genesis: string
+  name: string
+  cover: string
+  tokenIndex: string
+  amount: string
+  isSaled: boolean
+  sellDesc: string
+}[] = reactive([])
+const seriesList: {
+  name: string
+  hasCount: number
+  total: number
+  genesis: string
+  codehash: string
+}[] = reactive([])
+
+const currentSeries = ref('all')
 // 成功的数量
 const successNum = computed(() => {
   let num = 0
@@ -319,155 +269,14 @@ const successNum = computed(() => {
   return num
 })
 
-// 相同的属性
-const allCover: { val: null | MetaFile } = reactive({ val: null })
-const originalFile: null | MetaFile = null
-// 设置用户可选的分类
-function setUserCreatCard() {
-  if (store.state.userInfo) {
-    const index = canCreateCardClassifyListMetaids.findIndex(
-      item => item === store.state.userInfo?.metaId
-    )
-    if (index !== -1) {
-      const cardIndex = classList.findIndex(item => item.classify === 'card')
-      classList[cardIndex].disabled = false
-    }
-    const _index = canCreateRightsClassifyListMetaids.findIndex(
-      item => item === store.state.userInfo?.metaId
-    )
-    if (_index !== -1) {
-      const rightsIndex = classList.findIndex(item => item.classify === 'rights')
-      classList[rightsIndex].disabled = false
-    }
+const currentNfts = computed(() => {
+  let list = nfts
+  if (currentSeries.value !== 'all') {
+    const series = seriesList.find(item => item.name === currentSeries.value)
+    list = list.filter(item => item.codehash === series.codehash && item.genesis === series.genesis)
   }
-}
-
-// 添加项
-function addItem() {
-  let index = 1
-  if (selectedSeries.length > 0) {
-    if (list.length > 0) {
-      index = list[list.length - 1].index + 1
-    } else {
-      const seriesIndex = root.value.series.findIndex(
-        (item: any) => item.series === selectedSeries[0]
-      )
-      if (seriesIndex !== -1) {
-        index = root.value.series[seriesIndex].currentNumber + 1
-      }
-    }
-  }
-  list.push({
-    id: new Date().getTime().toString(),
-    cover: null,
-    originalFile: null,
-    name: '',
-    intro: '',
-    isCreated: false,
-    classify: isSameClassify.value ? JSON.parse(JSON.stringify(classify)) : [],
-    isShowClassifyModal: false,
-    index,
-  })
-}
-
-// 更改封面
-async function coverFileInputChage(e: any) {
-  const index = parseInt(e.currentTarget.dataset.index)
-  const input = e.target as HTMLInputElement
-  let files = input.files
-  if (files) {
-    const res = await tranfromImgFile(files[0])
-    if (res) {
-      list[index].cover = res
-    }
-  }
-}
-// 更改全部封面
-async function changeAllCover(e: any) {
-  const index = parseInt(e.currentTarget.dataset.index)
-  const input = e.target as HTMLInputElement
-  let files = input.files
-  if (files) {
-    const res = await tranfromImgFile(files[0])
-    if (res) {
-      allCover.val = res
-    }
-  }
-}
-
-// 更改源文件
-async function originalFileInputChage(e: any) {
-  const index = parseInt(e.currentTarget.dataset.index)
-  const input = e.target as HTMLInputElement
-  let files = input.files
-  if (files) {
-    const res = await tranfromImgFile(files[0])
-    if (res) {
-      list[index].originalFile = res
-    }
-  }
-}
-
-// 删除封面
-function removeCover(index: number) {
-  list[index].cover = null
-}
-
-// 删除项
-function removeItem(index: number) {
-  if (index === list.length - 1 || selectedSeries.length <= 0) list.splice(index, 1)
-  else {
-    list.splice(index, 1)
-    if (selectedSeries.length > 0) {
-      const startNum =
-        root.value.series.find((item: any) => item.series === selectedSeries[0]).currentNumber + 1
-      for (let i = 0; i < list.length; i++) {
-        list[i].index = startNum + i
-      }
-    }
-  }
-}
-
-// 更改统一的分类
-function onChangeSameClassify() {
-  if (isSameClassify.value) {
-    list.map(item => {
-      item.classify = JSON.parse(JSON.stringify(classify))
-      item.isShowClassifyModal = false
-    })
-  }
-}
-
-async function onSetAllClassify() {
-  // 檢查sdk狀態
-  await checkSdkStatus()
-  isShowClassifyModal.value = false
-  list.map(item => {
-    item.classify = JSON.parse(JSON.stringify(classify))
-    item.isShowClassifyModal = false
-  })
-}
-
-// 确认选择系列
-async function onSeriesConfirm() {
-  // 檢查sdk狀態
-  await checkSdkStatus()
-  isShowSeriesModal.value = false
-  if (selectedSeries.length > 0) {
-    const item: SeriesItem = root.value.series.find(
-      (item: any) => item.series === selectedSeries[0]
-    )
-    if (item) {
-      for (let i = 0; i < list.length; i++) {
-        list[i].index = item.currentNumber + 1 + i
-      }
-    }
-  } else {
-    for (let i = 0; i < list.length; i++) {
-      list[i].index = 1
-    }
-  }
-}
+  return list
+})
 
 function sleepTime() {
   return new Promise<void>(resolve => {
@@ -713,57 +522,50 @@ function getMyNfts(isCover: boolean = false) {
         nfts.length = 0
       }
       if (res.data.results.items.length > 0) {
-        res.data.results.items.map(item => {
-          const nft =
-            item.nftDetailItemList && item.nftDetailItemList[0]
-              ? item.nftDetailItemList[0]
-              : undefined
-          const count = item.nftMyCount + item.nftMyPendingCount
-          const name =
-            count > 1 && item.nftSeriesName && item.nftSeriesName !== ''
-              ? item.nftSeriesName
-              : item.nftName
-              ? item.nftName
-              : '--'
-          const data:
-            | {
-                nftname: string
-                nftdesc: string
-                nfticon: string
-                nftwebsite: string
-                nftissuerName: string
-                nftType: string
-                classifyList: string
-                originalFileTxid: string
-                contentTxId: string
-              }
-            | undefined = nft && nft.nftDataStr !== '' ? JSON.parse(nft.nftDataStr) : undefined
-          const classify = setDataStrclassify(data)
-          nfts.push({
-            name: name,
-            amount: 0,
-            foundryName: item.nftIssuer,
-            classify: classify,
-            head: '',
-            tokenId: item.nftGenesis + item.nftCodehash + item.nftTokenIndex,
-            coverUrl: item.nftIcon,
-            putAway: item.nftIsReady,
-            metaId: item.nftIssueMetaId,
-            productName: name,
-            deadlineTime: 0,
-            genesis: item.nftGenesis,
-            tokenIndex: nft?.nftTokenIndex ? nft?.nftTokenIndex : '',
-            codehash: item.nftCodehash,
-            total: item.nftTotalSupply,
-            hasCount: count,
-            ownerAvatarType: item.nftOwnerAvatarType,
-            issueUserAvatarType: item.nftIssueAvatarType,
-            nftCertificationType: item.nftCertificationType,
-            nftGenesisCertificationType: item.nftGenesisCertificationType,
-          })
+        res.data.results.items.map(async item => {
+          if (item.nftMyCount === 1) {
+            const nft = item.nftDetailItemList[0]
+            nfts.push({
+              name: nft.nftName,
+              amount: '',
+              codehash: nft.nftCodehash,
+              genesis: nft.nftGenesis,
+              tokenIndex: nft.nftTokenIndex,
+              cover: nft.nftIcon,
+              isSaled: false,
+              sellDesc: '',
+            })
+          } else if (item.nftMyCount > 1) {
+            seriesList.push({
+              codehash: item.nftCodehash,
+              genesis: item.nftGenesis,
+              name: item.nftSeriesName ? item.nftSeriesName : '--',
+              hasCount: item.nftMyCount,
+              total: item.nftTotalSupply,
+            })
+            const response = await GetSeriesNftList({
+              Page: '1',
+              PageSize: '999',
+              Address: store.state.userInfo!.address,
+              codehash: item.nftCodehash,
+              genesis: item.nftGenesis,
+            })
+            if (response.code === 0) {
+              response.data.results.items.map(_item => {
+                nfts.push({
+                  name: _item.nftName,
+                  amount: '',
+                  codehash: _item.nftCodehash,
+                  genesis: _item.nftGenesis,
+                  tokenIndex: _item.nftTokenIndex,
+                  cover: _item.nftIcon,
+                  isSaled: false,
+                  sellDesc: '',
+                })
+              })
+            }
+          }
         })
-      } else {
-        pagination.nothing = true
       }
     }
     resolve()
@@ -789,4 +591,4 @@ if (store.state.userInfo) {
 }
 </script>
 
-<style lang="scss" scoped src="./Create.scss"></style>
+<style lang="scss" scoped src="./Sale.scss"></style>

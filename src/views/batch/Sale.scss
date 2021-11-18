@@ -1,0 +1,23 @@
+@import './Create.scss';
+
+.batch-create {
+
+    .batch-create-list {
+
+        .batch-create-item {
+
+            &.disabled {
+                background: #eee;
+
+                input,
+                textarea {
+                    background: #eee;
+                }
+
+                .price {
+                    background: #fff;
+                }
+            }
+        }
+    }
+}
