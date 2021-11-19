@@ -1,5 +1,11 @@
 <template>
-  <InnerPageHeader :title="$t('batchSale')" :intro="$t('batchSaleDrsc')" :is-show-search="false" />
+  <InnerPageHeader :title="$t('batchSale')" :is-show-search="false">
+    <template #intro>
+      <div class="batch-sale-drsc">
+        {{ $t('batchSaleDrsc') }},<a>{{ $t('batchSaleDrsc2') }}</a>
+      </div>
+    </template>
+  </InnerPageHeader>
 
   <div class="batch-create container">
     <!-- 选择系列 -->
@@ -35,7 +41,7 @@
         <div class="input-item flex flex-align-center">
           <div class="select-warp flex flex-align-center">
             <div class="key flex1 flex flex-align-center">
-              <span class="title">{{ $t('sameClassify') }}:</span>
+              <span class="title">{{ $t('sameAmount') }}:</span>
               <ElSwitch v-model="isSameAmount" :disabled="isBatchSaled" />
             </div>
             <div class="value">
@@ -53,23 +59,20 @@
       </div>
     </div>
 
-    <div class="flex">
+    <div class="flex section-bottm">
       <div class="same-sale-drsc flex1 flex">
         <span class="name">{{ $t('sameSaleDrsc') }}:</span>
         <ElSwitch v-model="isSameSaleDrsc" :disabled="isBatchSaled" />
         <div class="textarea flex1" v-if="isSameSaleDrsc">
-          <textarea class="flex1" v-model="allSaleDrsc" :disabled="isBatchSaled"></textarea>
-          <div class="confirm">
-            <a
-              class="btn btn-primary"
-              :class="{ 'btn-gray': isBatchSaled }"
-              @click="onChangeSameSaleDrsc"
-              >{{ $t('confirm') }}</a
-            >
-          </div>
+          <textarea
+            class="flex1"
+            v-model="allSaleDrsc"
+            :disabled="isBatchSaled"
+            @change="onChangeSameSaleDrsc"
+          ></textarea>
         </div>
       </div>
-      <div class="same-sale-drsc flex1 flex">
+      <div class="same-sale-drsc flex1 flex sellTime">
         <span class="name">{{ $t('sameSellTime') }}:</span>
         <ElSwitch v-model="isSameTime" :disabled="isBatchSaled" />
         <div class="flex1 ml10">
@@ -153,13 +156,13 @@
           </div>
         </div>
         <div class="name input-item">
-          <input type="text" :readOnly="true" v-model="item.name" :placeholder="$t('nameplac')" />
+          <input type="text" class="disabled" :readOnly="true" v-model="item.name" placeholder="" />
         </div>
         <div class="name input-item">
           <InputAmount
             :amount="item.amount"
             :unit-name="item.unit"
-            :disable="isSameAmount && isBatchSaled"
+            :disable="isSameAmount || isBatchSaled"
             @changeUnit="val => (item.unit = val)"
             :placeholder="$t('price')"
             @change="value => (item.amount = value.amount)"
@@ -181,10 +184,10 @@
         <div class="index input-item">
           <ElDatePicker
             class="el-datetime flex1"
-            :disabled="isSameTime && isBatchSaled"
+            :disabled="isSameTime || isBatchSaled"
             v-model="item.sellTime"
             :editable="false"
-            :clearable="false"
+            :clearable="true"
             :disabledDate="setDisabledDate"
             type="datetime"
             :placeholder="$t('timeplac')"
@@ -593,17 +596,29 @@ function onChangeSameSaleDrsc() {
   })
 }
 
+const loading = ElLoading.service()
+
+function getDatas() {
+  if (store.getters.isCerted) {
+    getMyNfts().then(() => loading.close())
+  } else {
+    ElMessage.error(i18n.t('unAuth'))
+    loading.close()
+    router.push({ name: 'home' })
+  }
+}
+
 /* checkSdkStatus().then(() => {
   
 }) */
-const loading = ElLoading.service()
+
 if (store.state.userInfo) {
-  getMyNfts().then(() => loading.close())
+  getDatas()
 } else {
   store.watch(
     state => state.userInfo,
     () => {
-      if (store.state.userInfo) getMyNfts().then(() => loading.close())
+      if (store.state.userInfo) getDatas()
     }
   )
 }

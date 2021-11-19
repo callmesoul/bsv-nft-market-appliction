@@ -13,6 +13,7 @@ export interface State {
   pagination: Pagination
   nftToken: null | string
   userDiscount: number
+  isCertedMetaIds: string[]
 }
 
 // @ts-ignore
@@ -50,4 +51,5 @@ export const state: State = {
   },
   nftToken: null,
   userDiscount: 1,
+  isCertedMetaIds: [],
 }

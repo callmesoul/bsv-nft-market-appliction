@@ -76,12 +76,26 @@ export const router = createRouter({
       name: 'batch',
       component: CommonLayout,
       children: [
-        { path: 'create', name: 'batchCreate', component: BatchCreate },
-        { path: 'sale', name: 'batchSale', component: BatchSale },
+        {
+          path: 'create',
+          name: 'batchCreate',
+          component: BatchCreate,
+          meta: { keepAlive: true, isAuth: true },
+        },
+        {
+          path: 'sale',
+          name: 'batchSale',
+          component: BatchSale,
+          meta: { keepAlive: true, isAuth: true },
+        },
+        {
+          path: 'test',
+          name: 'batchTest',
+          component: BatchTest,
+          meta: { keepAlive: true, isAuth: true },
+        },
       ],
     },
-    // { path: '/batchtest', name: 'batchtest', component: BatchTest, meta: { keepAlive: true } },
-    { path: '/batchtest', name: 'batchtest', component: BatchTest, meta: { keepAlive: true } },
     { path: '/right', name: 'right', component: Right },
   ],
   async scrollBehavior(to, from, savedPosition) {

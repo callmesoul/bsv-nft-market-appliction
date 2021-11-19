@@ -48,6 +48,8 @@ export const actions: ActionTree<State, State> & Actions = {
       onLoaded: () => {
         state.sdkInitIng = false
         dispatch(Action.getUserInfo)
+        // 获取已认证的metaid 列表
+        commit(Mutation.SETCERTMETAIDLIST)
       },
       onError: () => {
         commit(Mutation.LOGOUT)
@@ -66,6 +68,7 @@ export const actions: ActionTree<State, State> & Actions = {
           access_token: res.appAccessToken,
         })
       }
+      // 中心化登陆
       commit(Mutation.NFTLOGIN)
       dispatch(Action.setUserDiscount)
     } else {

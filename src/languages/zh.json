@@ -331,10 +331,13 @@
   "batchSaleIniting": "正在批量上架中...",
   "batchSaleTips": "正在批量上架中，请勿做其他操作，请耐心等待",
   "batchSaleNum": "本次批量上架数量",
-  "batchSaleDrsc": "在这里你可以批量上架NFT,价格和上架时间为空是不选择状态",
+  "batchSaleDrsc": "在这里你可以批量上架NFT",
   "getBalanceFail": "获取余额失败",
   "isSale": "已上架",
   "unSale": "未上架",
   "restart": "重新开始",
-  "batchSale": "批量上架"
+  "batchSale": "批量上架",
+  "batchSaleDrsc2": "不填写价格或上架时间的NFT不会被上架",
+  "sameAmount": "统一价格",
+  "unAuth": "您没有权限访问，详情咨询客服人员"
 }

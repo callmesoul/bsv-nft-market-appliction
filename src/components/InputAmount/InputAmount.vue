@@ -5,6 +5,7 @@
         v-model="currentAmount"
         :placeholder="placeholder"
         type="number"
+        :class="{ disabled: disable }"
         :readonly="disable"
         @change="amountChange"
       />

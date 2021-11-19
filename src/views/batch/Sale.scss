@@ -1,5 +1,12 @@
 @import './Create.scss';
 
+
+.batch-sale-drsc {
+    a {
+        color: #456FC4;
+    }
+}
+
 .batch-create {
     .input-item {
         :deep(.el-datetime) {
@@ -21,18 +28,23 @@
     .batch-create-list {
 
         .batch-create-item {
+            background: #eee;
+
+            input,
+            textarea {
+                border-radius: 0;
+
+                &.disabled {
+                    background: #f5f7fa;
+                    cursor: not-allowed;
+                }
+            }
+
+
+
 
             &.un-selected {
-                background: #eee;
-
-                input,
-                textarea {
-                    background: #eee;
-                }
-
-                .price {
-                    background: #fff;
-                }
+                background: #bfc2cc;
             }
         }
     }
@@ -72,10 +84,23 @@
             width: 100%;
             max-width: 100%;
             min-width: 100%;
+            min-height: 150px;
         }
 
         .confirm {
             text-align: right;
         }
     }
+}
+
+
+@media only screen and (max-width: 750px) {
+    .section-bottm {
+        flex-direction: column;
+
+        // .sellTime {
+    //     flex-direction: column;
+    // }
+    }
+
 }
