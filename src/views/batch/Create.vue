@@ -765,13 +765,25 @@ async function resetBacth() {
   isCreated.value = false
 }
 
+const loading = ElLoading.service()
+function getDatas() {
+  if (store.getters.isCerted) {
+    setUserCreatCard()
+    loading.close()
+  } else {
+    ElMessage.error(i18n.t('unAuth'))
+    loading.close()
+    router.push({ name: 'home' })
+  }
+}
+
 if (store.state.userInfo) {
-  setUserCreatCard()
+  getDatas()
 } else {
   store.watch(
     state => state.userInfo,
     () => {
-      if (store.state.userInfo) setUserCreatCard()
+      if (store.state.userInfo) getDatas()
     }
   )
 }

@@ -318,6 +318,10 @@ export const GetTopicNftList = (params: {
   return apiHttp.post(`/aggregation/v2/app/nftOnShow/getTopicNftList`, params)
 }
 
+export const GetCertMetaIdList = (): Promise<GetCertMetaIdListRes> => {
+  return apiHttp.get(`/aggregation/v2/app/nftOnShow/getNosCertificationMetaIdList`)
+}
+
 export const GetMyNftOnShowBuySuccessList = (params: {
   MetaId: string
   Page: string

@@ -285,6 +285,9 @@ declare interface GetMetaBotListRes extends apiResponse {
     }
   }
 }
+declare interface GetCertMetaIdListRes extends apiResponse {
+  data: string[]
+}
 declare interface GetNftHolderListRes extends apiResponse {
   data: {
     total: number

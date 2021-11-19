@@ -596,17 +596,29 @@ function onChangeSameSaleDrsc() {
   })
 }
 
+const loading = ElLoading.service()
+
+function getDatas() {
+  if (store.getters.isCerted) {
+    getMyNfts().then(() => loading.close())
+  } else {
+    ElMessage.error(i18n.t('unAuth'))
+    loading.close()
+    router.push({ name: 'home' })
+  }
+}
+
 /* checkSdkStatus().then(() => {
   
 }) */
-const loading = ElLoading.service()
+
 if (store.state.userInfo) {
-  getMyNfts().then(() => loading.close())
+  getDatas()
 } else {
   store.watch(
     state => state.userInfo,
     () => {
-      if (store.state.userInfo) getMyNfts().then(() => loading.close())
+      if (store.state.userInfo) getDatas()
     }
   )
 }

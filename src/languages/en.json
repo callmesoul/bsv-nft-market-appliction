@@ -330,5 +330,6 @@
   "batchSale": "Bulk shelves",
   "batchSaleDrsc": "Here you can list NFT in bulk",
   "batchSaleDrsc2": "NFTs that do not fill in the price or listing time will not be listed",
-  "sameAmount": "Flat price"
+  "sameAmount": "Flat price",
+  "unAuth": "You do not have permission to access, please contact customer service staff for details"
 }
