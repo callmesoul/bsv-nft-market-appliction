@@ -328,5 +328,7 @@
   "unSale": "Not listed",
   "restart": "Restart",
   "batchSale": "Bulk shelves",
-  "batchSaleDrsc": "Here you can list NFTs in batches, if the price and time are empty, it is not selected."
+  "batchSaleDrsc": "Here you can list NFT in bulk",
+  "batchSaleDrsc2": "NFTs that do not fill in the price or listing time will not be listed",
+  "sameAmount": "Flat price"
 }

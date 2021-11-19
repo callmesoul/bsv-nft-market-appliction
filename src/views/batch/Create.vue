@@ -530,7 +530,7 @@ function sleepTime() {
   return new Promise<void>(resolve => {
     setTimeout(() => {
       resolve()
-    }, 3000)
+    }, 5000)
   })
 }
 
@@ -706,7 +706,7 @@ async function startBacth() {
                     ?.checkNftTxIdStatus(res.sendMoneyTx)
                     .catch(() => ElMessage.error(i18n.t('networkTimeout')))
                   /* 间隔一段时间 提高批量铸造稳定性 */
-                  // await sleepTime()
+                  await sleepTime()
                 } else {
                   isBreak.value = true
                   isShowResult.value = false
