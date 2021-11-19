@@ -1,8 +1,8 @@
 <template>
   <!-- banner -->
   <div class="banner container">
-    <a @click="toPage('/collection/detail/AthenaV2')"
-      ><img src="@/assets/images/banner_yadianna2.png" alt="雅典娜"
+    <a @click="toPage('/collection/detail/DatoBird')"
+      ><img src="@/assets/images/bigbird.jpg" alt="雅典娜"
     /></a>
     <!-- <a v-if="i18n.locale.value === 'zh'"
       ><img src="@/assets/images/banner_discount_zh.jpg" alt="Metabot"
