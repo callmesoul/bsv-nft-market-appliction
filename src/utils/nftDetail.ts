@@ -57,6 +57,7 @@ export default function NFTDetail(genesis: string, codehash: string, tokenIndex:
           nftGenesisCertificationType: item.nftGenesisCertificationType,
           nftCertificationType: item.nftCertificationType,
           nftGenesisCertificationName: item.nftGenesisCertificationName,
+          nftWebsite: item.nftWebsite,
         }
         resolve(nft)
       } else {

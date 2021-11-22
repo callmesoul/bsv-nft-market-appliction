@@ -48,8 +48,6 @@ export const actions: ActionTree<State, State> & Actions = {
       onLoaded: () => {
         state.sdkInitIng = false
         dispatch(Action.getUserInfo)
-        // 获取已认证的metaid 列表
-        commit(Mutation.SETCERTMETAIDLIST)
       },
       onError: () => {
         commit(Mutation.LOGOUT)

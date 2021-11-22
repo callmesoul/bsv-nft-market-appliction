@@ -18,9 +18,10 @@ const props = defineProps<{
   metaId?: string
   certed?: boolean
 }>()
-const isCert = computed(
-  () => props.metaId && store.state.isCertedMetaIds.find(item => item === props.metaId)
-)
+const isCert = computed(() => {
+  debugger
+  return props.metaId && store.state.isCertedMetaIds.find(item => item === props.metaId)
+})
 const i18n = useI18n()
 
 function toCert() {

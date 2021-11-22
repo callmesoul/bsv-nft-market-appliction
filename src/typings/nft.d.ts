@@ -65,6 +65,7 @@ declare interface NftItemDetail {
   nftCertificationType: number
   nftGenesisCertificationType: number
   nftGenesisCertificationName: string
+  nftWebsite: string
 }
 
 declare interface Topic {

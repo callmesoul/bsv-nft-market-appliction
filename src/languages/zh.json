@@ -339,5 +339,6 @@
   "batchSale": "批量上架",
   "batchSaleDrsc2": "不填写价格或上架时间的NFT不会被上架",
   "sameAmount": "统一价格",
-  "unAuth": "您没有权限访问，详情咨询客服人员"
+  "unAuth": "您没有权限访问，详情咨询客服人员",
+  "articleUrl": "文章地址"
 }

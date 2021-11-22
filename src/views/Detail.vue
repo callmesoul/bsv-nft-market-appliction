@@ -397,6 +397,21 @@
                       <template v-else>--</template>
                     </div>
                   </div>
+                  <div
+                    class="work-detail-item flex flex-align-center"
+                    v-if="nft.val.classify && nft.val.classify.find(item => item === 'article')"
+                  >
+                    <div class="key">{{ $t('articleUrl') }}：</div>
+                    <div class="value flex1">
+                      <a
+                        :href="nft.val.nftWebsite"
+                        target="_blank"
+                        class="copy"
+                        style="margin-left: 0;"
+                        >{{ $t('look') }}</a
+                      >
+                    </div>
+                  </div>
                   <div class="work-detail-item flex flex-align-baseline">
                     <div class="key">{{ $t('workdrsc') }}：</div>
                     <div class="value flex1">
@@ -794,6 +809,7 @@ import { metafileUrl } from '@/utils/util'
 import Buy from '@/utils/buy'
 import VueCountdown from '@chenfengyuan/vue-countdown'
 import LoadMore from '@/components/LoadMore/LoadMore.vue'
+import CertTemp from '@/components/Cert/Cert.vue'
 
 const i18n = useI18n()
 const route = useRoute()

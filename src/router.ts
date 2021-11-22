@@ -22,7 +22,7 @@ const BatchCreate = () => import('@/views/batch/Create.vue')
 const BatchSale = () => import('@/views/batch/Sale.vue')
 const BatchTest = () => import('@/views/BatchTest.vue')
 const Right = () => import('@/views/Right.vue')
-import { useStore, Action } from '@/store/index'
+import { useStore, Action, Mutation } from '@/store/index'
 import { ElMessage } from 'element-plus'
 import i18n from '@/utils/i18n'
 import { Langs } from './api'
@@ -136,6 +136,11 @@ export const router = createRouter({
 // })
 
 router.beforeEach(async (to, from, next) => {
+  // 获取已认证的metaid 列表
+  if (store.state.isCertedMetaIds.length <= 0) {
+    store.commit(Mutation.SETCERTMETAIDLIST, undefined)
+  }
+
   // app
   const isApp = store.state.isApp
   if (isApp) {

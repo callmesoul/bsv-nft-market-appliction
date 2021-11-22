@@ -327,5 +327,6 @@
   "projecter": "プロジェクトパーティー",
   "rightsListTips": "NFTエクイティに関する公開データ",
   "status": "状態",
-  "unStar": "まだ始まっていません"
+  "unStar": "まだ始まっていません",
+  "articleUrl": "記事のアドレス"
 }
