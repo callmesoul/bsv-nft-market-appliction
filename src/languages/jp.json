@@ -328,5 +328,12 @@
   "rightsListTips": "NFTエクイティに関する公開データ",
   "status": "状態",
   "unStar": "まだ始まっていません",
-  "articleUrl": "記事のアドレス"
+  "articleUrl": "記事のアドレス",
+  "batchSale": "Batch Listing",
+  "batchSaleDrsc": "List your NFT in batches",
+  "batchSaleDrsc2": "NFTs with no prices or listing time will not be listed.",
+  "sameAmount": "Group Price",
+  "sameSaleDrsc": "Group Introduction",
+  "sameSellTime": "Group Display Time",
+  "startBatchSale": "Start Batch Listing"
 }

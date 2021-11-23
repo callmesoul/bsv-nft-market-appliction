@@ -20,7 +20,9 @@
               <ElSelect v-model="currentSeries" :disabled="isBatchSaled">
                 <ElOption
                   key="all"
-                  :label="$t('all') + $t('series') + ' ' + nfts.length + '/' + nfts.length"
+                  :label="
+                    $t('all') + $t('series').toLowerCase() + ' ' + nfts.length + '/' + nfts.length
+                  "
                   value="all"
                 >
                 </ElOption>
