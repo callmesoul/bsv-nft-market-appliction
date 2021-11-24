@@ -49,7 +49,7 @@
     <div class="nft-muodle">
       <div class="container">
         <div class="title">{{ $t('nftModuleTitle') }}</div>
-        <div class="nft-module-list flex flex-align-center">
+        <div class="nft-module-list flex ">
           <!-- 海量应用场景 -->
           <div class="nft-module-item flex1">
             <div class="nft-module-item-warp">
