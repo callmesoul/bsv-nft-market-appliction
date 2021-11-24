@@ -83,6 +83,7 @@ const isShowNftListSkeleton = ref(true)
 const nfts = reactive<NftItem[]>([])
 const pagination = reactive({
   ...initPagination,
+  pageSize: 24,
 })
 let apiType = 'GetAllOnSellNftList'
 

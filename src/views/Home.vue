@@ -50,73 +50,62 @@
       <div class="container">
         <div class="title">{{ $t('nftModuleTitle') }}</div>
         <div class="nft-module-list flex flex-align-center">
-          <!-- 铸造您的NFT -->
+          <!-- 海量应用场景 -->
           <div class="nft-module-item flex1">
-            <div class="icon">
-              <img src="@/assets/images/img_1.svg" />
-            </div>
-            <div class="name">{{ $t('nftModuleName1') }}</div>
-            <div class="drsc">
-              <div>
-                {{ $t('nftModuleDrsc1')
-                }}<router-link :to="{ name: 'create' }">{{ $t('Casting') }}</router-link>
+            <div class="nft-module-item-warp">
+              <div class="icon">
+                <img src="@/assets/images/img_2.svg" />
               </div>
-              <div>
-                {{ $t('and')
-                }}<router-link :to="{ name: 'self' }">{{ $t('nftModuleDrsc3') }}</router-link
-                >{{ $t('nftModuleDrsc2') }}
+              <div class="name">{{ $t('nftModuleName1') }}</div>
+              <div class="drsc">
+                <div>
+                  {{ $t('nftModuleDrsc1') }}
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- 购买您喜欢的NFT -->
+          <!-- 极低的铸造费用 -->
           <div class="nft-module-item flex1">
-            <div class="icon">
-              <img src="@/assets/images/img_2.svg" />
-            </div>
-            <div class="name">{{ $t('nftModuleName2') }}</div>
-            <div class="drsc">
-              <div>
-                {{ $t('nftModuleDrsc4') }}
+            <div class="nft-module-item-warp">
+              <div class="icon">
+                <img src="@/assets/images/img_1.svg" />
               </div>
-              <div>
-                {{ $t('nftModuleDrsc5') }}<a @click="toWallet">{{ $t('nftModuleDrsc6') }}</a
-                >{{ $t('nftModuleDrsc7') }}
+              <div class="name">{{ $t('nftModuleName2') }}</div>
+              <div class="drsc">
+                <div>
+                  {{ $t('nftModuleDrsc2') }}
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- NOS的优势 -->
+          <!-- 覆盖全网用户 -->
           <div class="nft-module-item flex1">
-            <div class="icon">
-              <img src="@/assets/images/img_3.svg" />
-            </div>
-            <div class="name">{{ $t('nftModuleName3') }}</div>
-            <div class="drsc">
-              <div>
-                {{ $t('nftModuleDrsc8') }}
+            <div class="nft-module-item-warp">
+              <div class="icon">
+                <img src="@/assets/images/img_4.svg" />
               </div>
-              <div>
-                {{ $t('nftModuleDrsc9') }}<a @click="comeSoon">{{ $t('nftModuleDrsc10') }}</a>
+              <div class="name">{{ $t('nftModuleName3') }}</div>
+              <div class="drsc">
+                <div>
+                  {{ $t('nftModuleDrsc3') }}
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- NOS使用规范 -->
+          <!-- 创作者认证 -->
           <div class="nft-module-item flex1">
-            <div class="icon">
-              <img src="@/assets/images/img_4.svg" />
-            </div>
-            <div class="name">{{ $t('nftModuleName4') }}</div>
-            <div class="drsc">
-              <div>
-                {{ $t('nftModuleDrsc11') }}
+            <div class="nft-module-item-warp">
+              <div class="icon">
+                <img src="@/assets/images/img_3.svg" />
               </div>
-              <div>
-                {{ $t('nftModuleDrsc12')
-                }}<router-link :to="{ name: 'termsOfUse' }">{{
-                  $t('nftModuleDrsc13')
-                }}</router-link>
+              <div class="name">{{ $t('nftModuleName4') }}</div>
+              <div class="drsc">
+                <div>
+                  {{ $t('nftModuleDrsc4') }}
+                </div>
               </div>
             </div>
           </div>

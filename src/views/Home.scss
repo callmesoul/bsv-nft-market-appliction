@@ -52,6 +52,12 @@
     .nft-module-item {
       text-align: center;
 
+      .nft-module-item-warp {
+        width: 160px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
       .icon {
         img {
           width: 80px;
