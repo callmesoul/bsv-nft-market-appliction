@@ -178,7 +178,7 @@ const keyword = ref('')
 const metaBots: GetMetaBotListResItem[] = reactive([])
 const pagination = reactive({
   ...store.state.pagination,
-  pageSize: 400,
+  pageSize: 100,
 })
 const topic: { val: Topic } = reactive({
   val: {
