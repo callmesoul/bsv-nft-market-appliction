@@ -5,6 +5,7 @@ import metaIdCardBanner from '@/assets/images/banner_metaid.png'
 import yadiannaBanner2 from '@/assets/images/banner_yadianna2.png'
 import metabot2 from '@/assets/images/metabot2.png'
 import bigbird from '@/assets/images/bigbird.jpg'
+import metaelf from '@/assets/images/metaelf_cn.png'
 
 export const nftTypes = [
   { name: i18n.global.t('image'), value: '1', disabled: false, key: 'image' },
@@ -87,6 +88,14 @@ export const certedMetaIds = [
 ]
 
 export const topics: Topic[] = [
+  {
+    cover: metaelf,
+    name: 'MetaElf Land NFT Profit Rights',
+    createrMetaId: '67740e86c2b0569787600fdd9123eec80756f17934b3de0cd74ccf359af59d80',
+    createrName: 'MetaSoft ',
+    time: '2021-11-26',
+    key: 'MetaElfLandRightCard',
+  },
   {
     cover: bigbird,
     name: '大头鸟',
