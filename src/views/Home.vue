@@ -4,10 +4,12 @@
     <!-- <a @click="toPage('/collection/detail/DatoBird')"
       ><img src="@/assets/images/bigbird.jpg" alt="雅典娜"
     /></a> -->
-    <a v-if="i18n.locale.value === 'zh'"
+    <a href="/collection/detail/MetaElfLandRightCard" v-if="i18n.locale.value === 'zh'"
       ><img src="@/assets/images/metaelf_cn.png" alt="metaelf"
     /></a>
-    <a v-else><img src="@/assets/images/metaelf_en.png" alt="metaelf"/></a>
+    <a v-else href="/collection/detail/MetaElfLandRightCard"
+      ><img src="@/assets/images/metaelf_en.png" alt="metaelf"
+    /></a>
   </div>
 
   <div class="home">
