@@ -40,6 +40,8 @@ export const canCreateRightsClassifyListMetaids = [
   '67740e86c2b0569787600fdd9123eec80756f17934b3de0cd74ccf359af59d80',
   '9bb6bf6aab238912d16018b4ba0cdea4b49ac50c0c319ca7b42dc2649bf76c4c',
   'b89840e798b334e4f2d5279b6a325b411125e927f2dba16af4208d827ede8e11',
+  'fc0a92af9977f4b3bf82492508c18ab28f666922eb8ee52dcefd5b7f2a690f83',
+  'f4bf10cf16f64137bb3aa0974adc32c9ded0ed2796c6c5e0cca0559f70c02ae8',
 ]
 export const classifyList: Classify[] = [
   { classify: 'rights', disabled: true },
