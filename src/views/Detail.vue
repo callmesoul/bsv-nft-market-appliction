@@ -397,21 +397,6 @@
                       <template v-else>--</template>
                     </div>
                   </div>
-                  <div
-                    class="work-detail-item flex flex-align-center"
-                    v-if="nft.val.classify && nft.val.classify.find(item => item === 'article')"
-                  >
-                    <div class="key">{{ $t('articleUrl') }}：</div>
-                    <div class="value flex1">
-                      <a
-                        :href="nft.val.nftWebsite"
-                        target="_blank"
-                        class="copy"
-                        style="margin-left: 0;"
-                        >{{ $t('look') }}</a
-                      >
-                    </div>
-                  </div>
                   <div class="work-detail-item flex flex-align-baseline">
                     <div class="key">{{ $t('workdrsc') }}：</div>
                     <div class="value flex1">
@@ -501,8 +486,8 @@
                   <div class="work-detail-item flex flex-align-center" v-if="nft.val.type === '3'">
                     <div class="key">{{ $t('histroyrevenue') }}：</div>
                     <div class="value flex1">
-                      {{ nft.val.revenue }} BSV
-                      <a @click="toLink">{{ $t('workdetaillink') }}</a>
+                      {{ nft.val.revenue ? nft.val.revenue : 0 }} BSV
+                      <a :href="nft.val.nftWebsite" target="_blank">{{ $t('workdetaillink') }}</a>
                     </div>
                   </div>
                   <!-- 作品链接 -->
