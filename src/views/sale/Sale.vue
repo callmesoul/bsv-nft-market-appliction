@@ -195,10 +195,7 @@
                   <input
                     v-model="saleAmount"
                     :placeholder="
-                      tabIndex === 0
-                        ? $t('priceplac') +
-                          new Decimal(Math.pow(10, 8)).div(units[unitIndex].sats).mul(0.00001)
-                        : $t('setABuyItPrice')
+                      tabIndex === 0 ? $t('priceplac') + minPrice : $t('setABuyItPrice')
                     "
                     @change="saleAmountChange"
                     type="number"
@@ -280,6 +277,7 @@ import NFTDetail from '@/utils/nftDetail'
 // @ts-ignore
 import dayjs from 'dayjs'
 import { getMyNftEligibility } from '@/utils/util'
+import { computed } from 'vue'
 
 const i18n = useI18n()
 const route = useRoute()
@@ -291,6 +289,16 @@ const auctionPrice = ref('')
 const minGapPrice = ref('') // 最少加价
 const auctionTime = ref('') // 拍卖时间
 const mode = import.meta.env.MODE
+
+const minPrice = computed(() => {
+  let min = 0.000001
+  if (units[unitIndex.value].unit === UnitName.BSV) {
+    min = 0.000001
+  } else {
+    min = 1000
+  }
+  return min
+})
 
 // @ts-ignore
 const nft: { val: NftItemDetail } = reactive({
