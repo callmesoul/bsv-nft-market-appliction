@@ -67,13 +67,3 @@ declare interface NftItemDetail {
   nftGenesisCertificationName: string
   nftWebsite: string
 }
-
-declare interface Topic {
-  cover: string
-  name: string
-  createrMetaId: string
-  createrName: string
-  time: string
-  key: string
-  coverEn?: string
-}

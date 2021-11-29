@@ -136,9 +136,9 @@ export const router = createRouter({
 // })
 
 router.beforeEach(async (to, from, next) => {
-  // 获取已认证的metaid 列表
-  if (store.state.isCertedMetaIds.length <= 0) {
-    store.commit(Mutation.SETCERTMETAIDLIST, undefined)
+  // 获取系统配置信息
+  if (!store.state.isSetedSystemConfig) {
+    await store.dispatch(Action.setSystemConfig)
   }
 
   // app

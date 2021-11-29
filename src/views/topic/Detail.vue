@@ -1,15 +1,21 @@
 <template>
-  <InnerPageHeader :title="topic.val.name" :isShowSearch="false" />
+  <InnerPageHeader :title="topic.val?.name" :isShowSearch="false" />
 
   <!-- banner -->
   <div class="banner container">
-    <a><img :src="topic.val.cover" alt="Metabot"/></a>
-    <!-- <a @click="toMetabot" v-if="i18n.locale.value === 'zh'"
-      ><img src="@/assets/images/cn-banner-metabot.png" alt="Metabot"
-    /></a>
-    <a @click="toMetabot" v-else
-      ><img src="@/assets/images/cn-banner-metabot.png" alt="Metabot"
-    /></a> -->
+    <a>
+      <img
+        v-if="topic.val"
+        :src="
+          topic.val[
+            'coverPicUrl' +
+              i18n.locale.value.slice(0, 1).toLocaleUpperCase() +
+              i18n.locale.value.slice(1, i18n.locale.value.length)
+          ]
+        "
+        alt="Metabot"
+      />
+    </a>
   </div>
 
   <el-skeleton
@@ -166,7 +172,7 @@ import NFTDetail from '@/utils/nftDetail'
 import VueCountdown from '@chenfengyuan/vue-countdown'
 import { ElImage } from 'element-plus'
 import InnerPageHeader from '@/components/InnerPageHeader/InnerPageHeader.vue'
-import { topics } from '@/config'
+
 import LoadMore from '@/components/LoadMore/LoadMore.vue'
 
 const store = useStore()
@@ -180,22 +186,12 @@ const pagination = reactive({
   ...store.state.pagination,
   pageSize: 100,
 })
-const topic: { val: Topic } = reactive({
-  val: {
-    cover: '',
-    name: '',
-    createrMetaId: '',
-    createrName: '',
-    time: '',
-    key: '',
-  },
-})
 
 const countdown = ref(0)
 const isShowCountdown = ref(true)
-const isAuction = computed(() => sections[sectionIndex.value].name === '#001-015')
 const now = new Date().getTime()
 const sectionIndex = ref(0)
+const topic: { val: null | Topic } = reactive({ val: null })
 
 function onCountdownEnd() {
   setTimeout(() => {
@@ -394,7 +390,7 @@ function nftNotCanBuy(res: any) {
 
 onMounted(() => {
   if (route.params.key) {
-    const topicItem = topics.find(item => item.key === route.params.key)
+    const topicItem = store.state.topics.find(item => item.key === route.params.key)
     if (topicItem) {
       topic.val = topicItem
     }

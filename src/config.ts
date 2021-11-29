@@ -89,7 +89,7 @@ export const certedMetaIds = [
   'baac7625edf7a3dcc28385917a6fc9a72798ffd3657da8bc22ce59fdeb3b35e0',
 ]
 
-export const topics: Topic[] = [
+/* export const topics: Topic[] = [
   {
     cover: metaelf,
     name: 'MetaElf Land NFT Profit Rights',
@@ -146,4 +146,4 @@ export const topics: Topic[] = [
     time: '2021-09-08',
     key: 'MetaBot',
   },
-]
+] */

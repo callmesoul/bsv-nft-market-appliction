@@ -11,22 +11,26 @@
     <div
       :to="{ name: 'topicDetail' }"
       class="topic-item"
-      v-for="(topic, index) in topics"
-      :key="index"
+      v-for="topic in store.state.topics"
+      :key="topic.key"
       @click="toDetail(topic.key)"
     >
       <img
         class="cover"
-        :src="topic.coverEn ? topic.coverEn : topic.cover"
-        v-if="i18n.locale.value === 'en'"
+        :src="
+          topic[
+            'coverPicUrl' +
+              i18n.locale.value.slice(0, 1).toLocaleUpperCase() +
+              i18n.locale.value.slice(1, i18n.locale.value.length)
+          ]
+        "
       />
-      <img class="cover" :src="topic.cover" v-else />
       <div class="title">{{ topic.name }}</div>
       <div class="msg flex flex-align-center">
         <div class="creater flex1 flex flex-align-center">
-          {{ $t('eventParty') }}:<UserAvatar :metaId="topic.createrMetaId" />{{ topic.createrName }}
+          {{ $t('eventParty') }}:<UserAvatar :metaId="topic.createMetaId" />{{ topic.createName }}
         </div>
-        <div class="time">{{ topic.time }}</div>
+        <div class="time">{{ $filters.dateTimeFormat(topic.timestamp, 'YYYY-MM-DD') }}</div>
       </div>
     </div>
   </div>
@@ -36,12 +40,14 @@
 import InnerPageHeader from '@/components/InnerPageHeader/InnerPageHeader.vue'
 import { ref } from 'vue-demi'
 import { useRouter } from 'vue-router'
-import { topics } from '@/config'
 import { useI18n } from 'vue-i18n'
+import { useStore } from '@/store'
 
 const keyword = ref('')
 const router = useRouter()
 const i18n = useI18n()
+const store = useStore()
+
 function search() {}
 
 function toDetail(key: string) {
