@@ -138,7 +138,7 @@ export const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   // 获取系统配置信息
   if (!store.state.isSetedSystemConfig) {
-    // await store.dispatch(Action.setSystemConfig)
+    await store.dispatch(Action.setSystemConfig)
   }
 
   // app

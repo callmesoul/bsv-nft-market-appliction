@@ -20,7 +20,7 @@
         :src="
           topic[
             'coverPicUrl' +
-              +i18n.locale.value.slice(0, 1).toLocaleUpperCase() +
+              i18n.locale.value.slice(0, 1).toLocaleUpperCase() +
               i18n.locale.value.slice(1, i18n.locale.value.length)
           ]
         "
@@ -30,7 +30,7 @@
         <div class="creater flex1 flex flex-align-center">
           {{ $t('eventParty') }}:<UserAvatar :metaId="topic.createMetaId" />{{ topic.createName }}
         </div>
-        <div class="time">{{ topic.timestamp }}</div>
+        <div class="time">{{ $filters.dateTimeFormat(topic.timestamp, 'YYYY-MM-DD') }}</div>
       </div>
     </div>
   </div>

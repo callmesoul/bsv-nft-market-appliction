@@ -1,4 +1,4 @@
-import { GetCertMetaIdList, Login } from '@/api'
+import { Login } from '@/api'
 import { MutationTree } from 'vuex'
 import { State } from './state'
 
@@ -9,7 +9,6 @@ export enum Mutation {
   SETUSERINFOLOADING = 'SETUSERINFOLOADING',
   LOGOUT = 'LOGOUT',
   NFTLOGIN = 'NFTLOGIN',
-  SETCERTMETAIDLIST = 'SETCERTMETAIDLIST',
 }
 
 export type Mutations<S = State> = {
@@ -19,7 +18,6 @@ export type Mutations<S = State> = {
   [Mutation.SETUSERINFOLOADING](state: S, payload: boolean): void
   [Mutation.LOGOUT](state: S): void
   [Mutation.NFTLOGIN](state: S): void
-  [Mutation.SETCERTMETAIDLIST](state: S): void
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -65,12 +63,6 @@ export const mutations: MutationTree<State> & Mutations = {
       else {
         error ? new Error(JSON.stringify(error)) : ''
       }
-    }
-  },
-  async [Mutation.SETCERTMETAIDLIST](state: State) {
-    const res = await GetCertMetaIdList()
-    if (res.code === 0) {
-      state.isCertedMetaIds = res.data
     }
   },
 }
