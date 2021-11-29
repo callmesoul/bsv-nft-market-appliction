@@ -30,7 +30,7 @@
           :src="metafileUrl(props.coverUrl)"
           :alt="props.name"
           fit="cover"
-          :preview-src-list="[metafileUrl(props.coverUrl)]"
+          :preview-src-list="[metafileUrl(props.coverUrl, 800)]"
         >
         </el-image>
         <div class="cont flex1 flex flex-v">

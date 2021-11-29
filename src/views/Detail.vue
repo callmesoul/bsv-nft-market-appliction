@@ -126,8 +126,8 @@
             class="cover flex flex-align-center flex-pack-center"
             fit="contain"
             :alt="nft.val.nftName"
-            :src="metafileUrl(nft.val.coverUrl)"
-            :preview-src-list="[metafileUrl(nft.val.coverUrl)]"
+            :src="metafileUrl(nft.val.coverUrl, 470)"
+            :preview-src-list="[metafileUrl(nft.val.coverUrl, 800)]"
           ></ElImage>
 
           <div class="cont flex1 flex flex-v">

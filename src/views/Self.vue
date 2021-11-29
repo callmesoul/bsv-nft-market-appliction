@@ -53,7 +53,7 @@
                 class="cover"
                 :src="metafileUrl(record.nftIcon)"
                 :lazy="true"
-                :preview-src-list="[]"
+                :preview-src-list="[metafileUrl(record.nftIcon, 800)]"
                 fit="contain"
               />
               <div class="cont flex1 flex flex-v flex-pack-justify">

@@ -86,11 +86,13 @@ export function checkSdkStatus() {
   })
 }
 
-export function metafileUrl(metafile: string) {
+export function metafileUrl(metafile: string, width: number = 235) {
   if (typeof metafile !== 'string') return ''
   metafile = metafile.replace('metafile://', '')
   if (metafile === '') return ''
-  return `${import.meta.env.VITE_ShowMan}/metafile/${metafile}`
+  return `${
+    import.meta.env.VITE_ShowMan
+  }/metafile/${metafile}?x-oss-process=image/auto-orient,1/resize,m_lfit,w_${width}/quality,q_80`
 }
 
 export function checkTxIdStatus(txId: string) {
