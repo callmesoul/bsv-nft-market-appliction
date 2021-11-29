@@ -1,15 +1,26 @@
 <template>
   <!-- banner -->
   <div class="banner container">
-    <!-- <a @click="toPage('/collection/detail/DatoBird')"
-      ><img src="@/assets/images/bigbird.jpg" alt="雅典娜"
-    /></a> -->
-    <a href="/collection/detail/MetaElfLandRightCard" v-if="i18n.locale.value === 'zh'"
-      ><img src="@/assets/images/metaelf_cn.png" alt="metaelf"
-    /></a>
-    <a v-else href="/collection/detail/MetaElfLandRightCard"
-      ><img src="@/assets/images/metaelf_en.png" alt="metaelf"
-    /></a>
+    <Swiper
+      :modules="[Navigation, Pagination, Scrollbar, A11y, Autoplay]"
+      :pagination="{ clickable: true }"
+      :autoplay="true"
+    >
+      <SwiperSlide v-for="banner in store.state.banners">
+        <a :href="banner.url">
+          <!-- @ts-ignore -->
+          <img
+            :src="
+              banner[
+                'picUrl' +
+                  i18n.locale.value.slice(0, 1).toLocaleUpperCase() +
+                  i18n.locale.value.slice(1, i18n.locale.value.length)
+              ]
+            "
+            alt="metaelf"
+        /></a>
+      </SwiperSlide>
+    </Swiper>
   </div>
 
   <div class="home">
@@ -154,7 +165,13 @@ import { classifyList } from '@/config'
 import { router } from '@/router'
 import { ElPopover } from 'element-plus'
 import { useI18n } from 'vue-i18n'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElCarousel, ElCarouselItem } from 'element-plus'
+import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import 'swiper/css/scrollbar'
 
 const store = useStore()
 let recommendNfts = reactive<NftItem[]>([])

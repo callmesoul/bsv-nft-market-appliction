@@ -4,6 +4,7 @@ declare interface apiResponse {
   count: number
   data: any
 }
+
 declare interface TransactionRecordItem {
   headUrl: string
   username: string
@@ -330,6 +331,7 @@ declare interface GetUserDiscountRes extends apiResponse {
     nosRate: string
   }
 }
+
 declare interface GetRightDetailRes extends apiResponse {
   data: RightItem
 }
@@ -539,4 +541,52 @@ declare interface NFTApiGetNFTDetailResDataItem {
   nftGenesisCertificationType: number
   nftCertificationType: number
   nftGenesisCertificationName: string
+}
+
+declare interface BroadApiRes {
+  code: number
+  data: {
+    total: number
+    result: any
+  }
+}
+
+declare interface GetBannersRes {
+  code: number
+  data: {
+    total: number
+    result: Banner[]
+  }
+}
+
+declare interface Banner {
+  picUrlEn: string
+  picUrlJp: string
+  picUrlZh: string
+  sort: number
+  tag: string
+  url: string
+}
+declare interface getTopicsRes {
+  code: number
+  data: {
+    total: number
+    result: Topic[]
+  }
+}
+
+declare interface Topic {
+  CreateAvatarTxId: string
+  CreateAvatarType: string
+  coverPicUrlEn: string
+  coverPicUrlJp: string
+  coverPicUrlZh: string
+  createMetaId: string
+  createName: string
+  key: string
+  name: string
+  sort: number
+  tag: string
+  timestamp: number
+  url: number
 }

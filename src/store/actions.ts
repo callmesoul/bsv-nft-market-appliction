@@ -2,7 +2,7 @@ import { ActionTree, ActionContext } from 'vuex'
 
 import { State } from './state'
 import { Mutations, Mutation } from './mutations'
-import { GetToken, GetUserDiscount } from '@/api'
+import { GetBanners, GetCertMetaIdList, GetToken, getTopics, GetUserDiscount } from '@/api'
 import Sdk from '@/utils/sdk'
 import { store } from '.'
 
@@ -13,6 +13,7 @@ export enum Action {
   refreshToken = 'refreshToken',
   checkToken = 'checkToken',
   setUserDiscount = 'setUserDiscount',
+  setSystemConfig = 'setSystemConfig',
 }
 
 type AugmentedActionContext = {
@@ -29,6 +30,8 @@ export interface Actions {
   [Action.refreshToken]({ state, commit, dispatch }: AugmentedActionContext): void
   [Action.checkToken]({ state, commit, dispatch }: AugmentedActionContext): void
   [Action.setUserDiscount]({ state, commit, dispatch }: AugmentedActionContext): void
+  [Action.setUserDiscount]({ state, commit, dispatch }: AugmentedActionContext): void
+  [Action.setSystemConfig]({ state, commit, dispatch }: AugmentedActionContext): void
 }
 
 export const actions: ActionTree<State, State> & Actions = {
@@ -133,6 +136,28 @@ export const actions: ActionTree<State, State> & Actions = {
       if (res.code === 0) {
         state.userDiscount = parseFloat(res.data.nosRate)
       }
+    })
+  },
+  [Action.setSystemConfig]({ state, commit, dispatch }) {
+    return new Promise<void>(async resolve => {
+      state.isSetedSystemConfig = true
+      const result = await Promise.all([GetCertMetaIdList(), GetBanners(), getTopics()]).catch(
+        () => {
+          state.isSetedSystemConfig = false
+        }
+      )
+      if (result) {
+        if (result[0].code === 0) {
+          state.isCertedMetaIds = result[0].data
+        }
+        if (result[1].code === 0) {
+          state.banners = result[1].data.result
+        }
+        if (result[2].code === 0) {
+          state.topics = result[2].data.result
+        }
+      }
+      resolve()
     })
   },
 }

@@ -455,3 +455,11 @@ export const GetRightDetail = (params: {
 export const GetRightList = (): Promise<GetRightListRes> => {
   return rightHttp.get(`/api/v1/equity/dividend/project`)
 }
+
+export const GetBanners = (): Promise<GetBannersRes> => {
+  return apiHttp.get(`/broad/v1/nos/topic/getNosBannerList`)
+}
+
+export const getTopics = (): Promise<getTopicsRes> => {
+  return apiHttp.get(`/broad/v1/nos/topic/getNosTopicInfoList`)
+}

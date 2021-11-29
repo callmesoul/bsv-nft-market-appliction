@@ -1,4 +1,6 @@
 import Sdk from '@/utils/sdk'
+import metaelf from '@/assets/images/metaelf_cn.png'
+
 export interface State {
   debug: boolean
   version: string
@@ -14,6 +16,9 @@ export interface State {
   nftToken: null | string
   userDiscount: number
   isCertedMetaIds: string[]
+  isSetedSystemConfig: boolean
+  banners: Banner[]
+  topics: Topic[]
 }
 
 // @ts-ignore
@@ -52,4 +57,7 @@ export const state: State = {
   nftToken: null,
   userDiscount: 1,
   isCertedMetaIds: [],
+  isSetedSystemConfig: false,
+  banners: [],
+  topics: [],
 }

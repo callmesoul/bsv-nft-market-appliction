@@ -166,7 +166,7 @@ import NFTDetail from '@/utils/nftDetail'
 import VueCountdown from '@chenfengyuan/vue-countdown'
 import { ElImage } from 'element-plus'
 import InnerPageHeader from '@/components/InnerPageHeader/InnerPageHeader.vue'
-import { topics } from '@/config'
+
 import LoadMore from '@/components/LoadMore/LoadMore.vue'
 
 const store = useStore()
