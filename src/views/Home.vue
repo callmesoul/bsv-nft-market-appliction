@@ -7,7 +7,14 @@
       :autoplay="true"
     >
       <SwiperSlide v-for="banner in store.state.banners">
-        <a :href="banner.url">
+        <a
+          :href="banner.url"
+          :target="
+            banner.url.indexOf('http://') !== -1 || banner.url.indexOf('https://') !== -1
+              ? '_blank'
+              : '_self'
+          "
+        >
           <!-- @ts-ignore -->
           <img
             :src="
