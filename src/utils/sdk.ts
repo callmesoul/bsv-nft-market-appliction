@@ -327,10 +327,10 @@ export default class Sdk {
         let amount = 0
         const issueOperate = async () => {
           let signersRaw: any[] = []
-          const getSignRaw = await this.preFetchSignRaw({ genesisTxid: genesisTxId })
-          if (getSignRaw.code === 200) {
-            signersRaw = getSignRaw.data.signersRaw
-          }
+          // const getSignRaw = await this.preFetchSignRaw({ genesisTxid: genesisTxId })
+          // if (getSignRaw.code === 200) {
+          //   signersRaw = getSignRaw.data.signersRaw
+          // }
           if (!params.checkOnly) {
             await this.checkNftTxIdStatus(genesisTxId!).catch(() => reject('createNFT error'))
           }
@@ -555,10 +555,10 @@ export default class Sdk {
     return new Promise<NftBuyResData>(async (resolve, reject) => {
       try {
         let signersRaw: any[] = []
-        const getSignRaw = await this.preFetchSignRaw({ genesisTxid: params.genesisTxid })
-        if (getSignRaw.code === 200) {
-          signersRaw = getSignRaw.data.signersRaw
-        }
+        // const getSignRaw = await this.preFetchSignRaw({ genesisTxid: params.genesisTxid })
+        // if (getSignRaw.code === 200) {
+        //   signersRaw = getSignRaw.data.signersRaw
+        // }
         const { amount, ...data } = params
         const _params = {
           data: {
@@ -610,10 +610,10 @@ export default class Sdk {
   nftSell(params: NftSellParams) {
     return new Promise<NftSellResData>(async (resolve, reject) => {
       let signersRaw: any[] = []
-      const getSignRaw = await this.preFetchSignRaw({ genesisTxid: params.genesisTxid })
-      if (getSignRaw.code === 200) {
-        signersRaw = getSignRaw.data.signersRaw
-      }
+      // const getSignRaw = await this.preFetchSignRaw({ genesisTxid: params.genesisTxid })
+      // if (getSignRaw.code === 200) {
+      //   signersRaw = getSignRaw.data.signersRaw
+      // }
       const _params = {
         data: {
           ...params,
@@ -654,10 +654,10 @@ export default class Sdk {
   nftCancel(params: NftCancelParams) {
     return new Promise<NFTCancelResData>(async (resolve, reject) => {
       let signersRaw: any[] = []
-      const getSignRaw = await this.preFetchSignRaw({ genesisTxid: params.genesisTxid })
-      if (getSignRaw.code === 200) {
-        signersRaw = getSignRaw.data.signersRaw
-      }
+      // const getSignRaw = await this.preFetchSignRaw({ genesisTxid: params.genesisTxid })
+      // if (getSignRaw.code === 200) {
+      //   signersRaw = getSignRaw.data.signersRaw
+      // }
       const _params = {
         data: {
           outputIndex: 0,
