@@ -154,9 +154,9 @@ router.beforeEach(async (to, from, next) => {
     if (token) {
       const now = new Date().getTime()
       // token 过期先刷新token, 没过期直接用
-      if (now >= token.expires_time!) {
-        await store.dispatch(Action.refreshToken)
-      }
+      // if (now >= token.expires_time!) {
+      //   await store.dispatch(Action.refreshToken)
+      // }
       // 有token 没有初始化sdk 就去初始化sdk
       if (!store.state.sdk && !store.state.sdkInitIng) {
         store.dispatch(Action.initSdk)

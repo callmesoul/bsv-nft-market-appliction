@@ -5,7 +5,6 @@ import { Mutations, Mutation } from './mutations'
 import { GetBanners, GetCertMetaIdList, GetToken, getTopics, GetUserDiscount } from '@/api'
 import Sdk from '@/utils/sdk'
 import { store } from '.'
-import { rejects } from 'assert'
 
 export enum Action {
   initApp = 'initApp',
@@ -40,6 +39,9 @@ export const actions: ActionTree<State, State> & Actions = {
     console.log('app inited!')
   },
   [Action.initSdk]({ state, commit, dispatch }) {
+    const initSdkTimeOut = setTimeout(() => {
+      commit(Mutation.LOGOUT)
+    }, 12000)
     state.sdkInitIng = true
     state.userInfoLoading = true
     state.sdk = new Sdk({
@@ -50,14 +52,13 @@ export const actions: ActionTree<State, State> & Actions = {
         clientSecret: import.meta.env.VITE_AppSecret,
       },
       onLoaded: () => {
+        clearTimeout(initSdkTimeOut)
         state.sdkInitIng = false
         dispatch(Action.getUserInfo)
       },
       onError: () => {
+        clearTimeout(initSdkTimeOut)
         commit(Mutation.LOGOUT)
-        state.sdkInitIng = false
-        state.userInfoLoading = false
-        state.sdk = null
       },
     })
   },
@@ -93,7 +94,9 @@ export const actions: ActionTree<State, State> & Actions = {
   [Action.refreshToken]({ state, commit, dispatch }) {
     return new Promise<void>(async (resolve, reject) => {
       if (state.token) {
+        debugger
         const res = await refreshToken(state.token!.refresh_token!).catch(() => {
+          debugger
           reject('refresh_token fail')
         })
         if (res) {

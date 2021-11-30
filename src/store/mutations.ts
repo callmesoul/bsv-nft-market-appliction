@@ -40,6 +40,8 @@ export const mutations: MutationTree<State> & Mutations = {
     state.token = null
     state.userInfo = null
     state.sdk = null
+    state.sdkInitIng = false
+    state.userInfoLoading = false
   },
   async [Mutation.NFTLOGIN](state: State) {
     const timestamp = new Date().getTime()
