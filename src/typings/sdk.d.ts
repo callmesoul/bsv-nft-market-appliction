@@ -185,6 +185,7 @@ export interface NftBuyParams {
   genesisTxid: string
   sensibleId: string
   amount: number
+  signersRaw?: any[]
   checkOnly?: boolean
 }
 
@@ -215,6 +216,7 @@ export interface NftSellParams {
   genesisTxid: string
   sensibleId: string
   sellDesc: string
+  signersRaw?: any[]
   checkOnly?: boolean
 }
 
@@ -234,6 +236,7 @@ export interface NftCancelParams {
   tokenIndex: string
   sellContractTxId: string
   sellTxId: string
+  signersRaw?: any[]
   checkOnly?: boolean
 }
 export interface CancelSellNFTParams extends NftCancelParams {
@@ -261,6 +264,7 @@ export interface NFTIssueParams {
   nftwebsite: string
   nftissuerName: string
   content: NFTIssueData
+  signersRaw?: any[]
   checkOnly?: boolean
 }
 
