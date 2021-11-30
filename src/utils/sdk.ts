@@ -86,11 +86,11 @@ export default class Sdk {
   }
 
   getUserInfo() {
-    return new Promise<MetaIdJsRes>(resolve => {
+    return new Promise<MetaIdJsRes>((resolve, reject) => {
       const params = {
         accessToken: store.state.token ? store.state.token?.access_token : '',
         callback: (res: MetaIdJsRes) => {
-          this.callback(res, resolve)
+          this.callback(res, resolve, reject)
         },
       }
       if (this.isApp) {

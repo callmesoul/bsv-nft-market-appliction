@@ -5,6 +5,7 @@ import { Mutations, Mutation } from './mutations'
 import { GetBanners, GetCertMetaIdList, GetToken, getTopics, GetUserDiscount } from '@/api'
 import Sdk from '@/utils/sdk'
 import { store } from '.'
+import { rejects } from 'assert'
 
 export enum Action {
   initApp = 'initApp',
@@ -61,7 +62,12 @@ export const actions: ActionTree<State, State> & Actions = {
     })
   },
   async [Action.getUserInfo]({ state, commit, dispatch }) {
-    const res = await state.sdk?.getUserInfo()
+    const res = await state.sdk?.getUserInfo().catch(() => {
+      state.sdkInitIng = false
+      state.userInfoLoading = false
+      commit(Mutation.LOGOUT)
+    })
+    debugger
     if (res && res.code === 200) {
       commit(Mutation.SETUSERINFO, res.data)
       if (state.isApp && res.appAccessToken) {
