@@ -11,6 +11,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.MetaIdJs = void 0;
 var popup_1 = require("./popup");
 var postmessage_client_1 = require("./postmessage-client");
 var generateRandomId = function () {
@@ -174,7 +175,9 @@ var MetaIdJs = /** @class */ (function () {
             "nftSell",
             "genesisNFT",
             "issueNFT",
-            "nftList",
+            "transferFT",
+            "sendTxAuto",
+            "preFetchSignRaw"
         ];
         var _loop_1 = function (item) {
             this_1[item] = function (params) {
