@@ -412,15 +412,6 @@
                       }}</a>
                     </div>
                   </div>
-                  <div class="work-detail-item flex flex-align-center">
-                    <div class="key">{{ $t('workclass') }}：</div>
-                    <div class="value flex1">
-                      <template v-if="nft.val.classify && nft.val.classify.length > 0">
-                        <span v-for="item in nft.val.classify" :key="item">{{ $t(item) }}</span>
-                      </template>
-                      <template v-else>--</template>
-                    </div>
-                  </div>
                   <div class="work-detail-item flex flex-align-baseline">
                     <div class="key">{{ $t('workdrsc') }}：</div>
                     <div class="value flex1">
