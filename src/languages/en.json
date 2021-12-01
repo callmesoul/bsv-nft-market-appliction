@@ -324,5 +324,6 @@
   "batchSaleDrsc2": "NFTs with no prices or listing time will not be listed.",
   "sameAmount": "Group Price",
   "unAuth": "You do not have permission to access, please contact customer service staff for details",
-  "articleUrl": "Article address"
+  "articleUrl": "Article address",
+  "tokenIndx": "Serial number"
 }

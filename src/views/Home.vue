@@ -81,6 +81,9 @@
         :isShowSkeleton="isShowNftListSkeleton"
         :classify="classify"
         :classifyList="classifyList"
+        :sorts="sorts"
+        :sortValue="sortValue"
+        @changeSort="changeSort"
         @search="search"
         @changeClassify="changeClassify"
         @getMore="getMore"
@@ -115,6 +118,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
+import { OrderType, SortType } from '@/enum'
 
 const store = useStore()
 let recommendNfts = reactive<NftItem[]>([])
@@ -127,6 +131,36 @@ const keyword = ref('')
 const classify = ref('all')
 const i18n = useI18n()
 let apiType = 'GetAllOnSellNftList'
+
+const sorts: NFTListSortItem[] = reactive([
+  {
+    name: i18n.t('time'),
+    nameKey: 'time',
+    value: SortType.Time,
+    orderType: OrderType.DESC,
+  },
+  {
+    name: i18n.t('price'),
+    nameKey: 'price',
+    value: SortType.Price,
+    orderType: OrderType.DESC,
+  },
+])
+const sortValue = ref(SortType.Time)
+
+function changeSort(value: SortType) {
+  if (sortValue.value === value) {
+    const index = sorts.findIndex(item => item.value === value)
+    sorts[index].orderType =
+      sorts[index].orderType === OrderType.ASC ? OrderType.DESC : OrderType.ASC
+  } else {
+    sortValue.value = value
+  }
+  pagination.page = 1
+  pagination.loading = false
+  pagination.nothing = false
+  getNftList(true)
+}
 
 // 骨架屏
 const isShowRecommendSkeleton = ref(true)
@@ -145,6 +179,8 @@ async function getNftList(isCover: boolean = false) {
     classify: apiType === 'GetNftOnShowListByClassify' ? classify.value : undefined,
     SearchWord: apiType === 'GetNftOnShowListBySearch' ? keyword.value : undefined,
     CertificationType: CertificationType.isCert,
+    orderType: sorts.find(item => item.value === sortValue.value)?.orderType,
+    sortType: sortValue.value,
   })
   if (res.code === NftApiCode.success) {
     if (isCover) Nfts.length = 0

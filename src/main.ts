@@ -1,5 +1,6 @@
 // import 'amfe-flexible/index.js' // 自适应插件
 // import './rem'
+import 'vite-plugin-svg-icons/register'
 import { createApp } from 'vue'
 import App from './App.vue'
 import 'normalize.css/normalize.css'
@@ -11,6 +12,7 @@ import ElementPlus from 'element-plus'
 import * as filters from '@/utils/filters'
 import i18n from '@/utils/i18n'
 import UserAvatar from '@/components/NftUserAvatar/NftUserAvatar.vue'
+import svgIcon from '@/components/SvgIcon/SvgIcon.vue' // 全局svg图标组件
 
 // ElementLocale.i18n(i18n.global.t)
 
@@ -23,6 +25,7 @@ app.config.globalProperties.$filters = {
 
 // 全局组件
 app.component('UserAvatar', UserAvatar)
+app.component('SvgIcon', svgIcon)
 
 app
   .use(router)

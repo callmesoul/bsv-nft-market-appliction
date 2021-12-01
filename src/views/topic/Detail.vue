@@ -18,6 +18,10 @@
     </a>
   </div>
 
+  <div class="container sortWarp flex flex-pack-end">
+    <Sort :sorts="sorts" :sortValue="sortValue" @changeSort="changeSort" />
+  </div>
+
   <el-skeleton
     class="meta-bot-list container"
     :loading="isShowSkeleton"
@@ -172,8 +176,9 @@ import NFTDetail from '@/utils/nftDetail'
 import VueCountdown from '@chenfengyuan/vue-countdown'
 import { ElImage } from 'element-plus'
 import InnerPageHeader from '@/components/InnerPageHeader/InnerPageHeader.vue'
-
 import LoadMore from '@/components/LoadMore/LoadMore.vue'
+import Sort from '@/components/Sort/Sort.vue'
+import { OrderType, SortType } from '@/enum'
 
 const store = useStore()
 const router = useRouter()
@@ -192,6 +197,42 @@ const isShowCountdown = ref(true)
 const now = new Date().getTime()
 const sectionIndex = ref(0)
 const topic: { val: null | Topic } = reactive({ val: null })
+
+const sorts: NFTListSortItem[] = reactive([
+  {
+    name: i18n.t('time'),
+    nameKey: 'time',
+    value: SortType.Time,
+    orderType: OrderType.DESC,
+  },
+  {
+    name: i18n.t('price'),
+    nameKey: 'price',
+    value: SortType.Price,
+    orderType: OrderType.DESC,
+  },
+  {
+    name: i18n.t('tokenIndx'),
+    nameKey: 'tokenIndx',
+    value: SortType.Index,
+    orderType: OrderType.DESC,
+  },
+])
+const sortValue = ref(SortType.Time)
+
+function changeSort(value: SortType) {
+  if (sortValue.value === value) {
+    const index = sorts.findIndex(item => item.value === value)
+    sorts[index].orderType =
+      sorts[index].orderType === OrderType.ASC ? OrderType.DESC : OrderType.ASC
+  } else {
+    sortValue.value = value
+  }
+  pagination.page = 1
+  pagination.loading = false
+  pagination.nothing = false
+  getDatas(true)
+}
 
 function onCountdownEnd() {
   setTimeout(() => {
@@ -214,26 +255,6 @@ function transformSlotProps(props: any) {
   return formattedProps
 }
 
-function search(_keyword: string) {
-  keyword.value = _keyword
-  isShowSkeleton.value = true
-  pagination.page = 1
-  pagination.loading = false
-  pagination.nothing = false
-  debugger
-  if (keyword.value === '') {
-    sectionIndex.value = 0
-    getDatas(true)
-  } else {
-    sectionIndex.value = -1
-    getSearchDatas(true)
-  }
-}
-
-function toMetabot() {
-  window.open('https://www.metabot.world')
-}
-
 function toDetail(metabot: GetMetaBotListResItem) {
   router.push({
     name: 'detail',
@@ -251,6 +272,8 @@ function getDatas(isCover = false) {
       Page: pagination.page.toString(),
       PageSize: pagination.pageSize.toString(),
       TopicType: typeof route.params.key === 'string' ? route.params.key : '',
+      orderType: sorts.find(item => item.value === sortValue.value)?.orderType,
+      sortType: sortValue.value,
     })
     if (res.code === 0) {
       if (isCover) {

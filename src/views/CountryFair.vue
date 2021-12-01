@@ -23,6 +23,9 @@
       @search="search"
       @changeClassify="changeClassify"
       @get-more="getMore"
+      :sorts="sorts"
+      :sortValue="sortValue"
+      @changeSort="changeSort"
     />
   </div>
 
@@ -75,6 +78,8 @@ import {
 } from '@/api'
 import SetHomeDatas from '@/utils/homeSetData'
 import { ElDialog } from 'element-plus'
+import { OrderType, SortType } from '@/enum'
+import { useI18n } from 'vue-i18n'
 
 const classify = ref('all')
 const keyword = ref('')
@@ -86,6 +91,37 @@ const pagination = reactive({
   pageSize: 24,
 })
 let apiType = 'GetAllOnSellNftList'
+const i18n = useI18n()
+
+const sorts: NFTListSortItem[] = reactive([
+  {
+    name: i18n.t('time'),
+    nameKey: 'time',
+    value: SortType.Time,
+    orderType: OrderType.DESC,
+  },
+  {
+    name: i18n.t('price'),
+    nameKey: 'price',
+    value: SortType.Price,
+    orderType: OrderType.DESC,
+  },
+])
+const sortValue = ref(SortType.Time)
+
+function changeSort(value: SortType) {
+  if (sortValue.value === value) {
+    const index = sorts.findIndex(item => item.value === value)
+    sorts[index].orderType =
+      sorts[index].orderType === OrderType.ASC ? OrderType.DESC : OrderType.ASC
+  } else {
+    sortValue.value = value
+  }
+  pagination.page = 1
+  pagination.loading = false
+  pagination.nothing = false
+  getNftList(true)
+}
 
 // 更改分类
 function changeClassify(classifyName: string) {
@@ -126,6 +162,8 @@ async function getNftList(isCover: boolean = false) {
     classify: apiType === 'GetNftOnShowListByClassify' ? classify.value : undefined,
     SearchWord: apiType === 'GetNftOnShowListBySearch' ? keyword.value : undefined,
     CertificationType: CertificationType.unCert,
+    orderType: sorts.find(item => item.value === sortValue.value)?.orderType,
+    sortType: sortValue.value,
   })
   if (res.code === NftApiCode.success) {
     if (isCover) nfts.length = 0

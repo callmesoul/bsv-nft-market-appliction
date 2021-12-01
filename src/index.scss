@@ -44,6 +44,8 @@ body {
 }
 
 .tags {
+  margin-right: 15px;
+
   a {
     display: inline-block;
     padding: 8px 16px;
@@ -53,6 +55,7 @@ body {
     cursor: pointer;
     background: #ffffff;
     line-height: normal;
+    margin: 5px;
 
     &.active {
       background: $mainColor;

@@ -6,6 +6,7 @@ import styleImport from 'vite-plugin-style-import'
 import vueI18n from '@intlify/vite-plugin-vue-i18n'
 import { svgBuilder } from './svgBuilder'
 import ElementPlus from 'unplugin-element-plus/vite'
+import viteSvgIcons from 'vite-plugin-svg-icons'
 
 export default ({ mode }) => {
   console.log('mode')
@@ -27,6 +28,11 @@ export default ({ mode }) => {
         include: path.resolve(__dirname, './src/languages/**'),
       }),
       svgBuilder('./src/assets/svg/'),
+      viteSvgIcons({
+        // 配置路劲在你的src里的svg存放文件
+        iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
+        symbolId: 'icon-[dir]-[name]',
+      }),
     ],
     resolve: {
       alias: {

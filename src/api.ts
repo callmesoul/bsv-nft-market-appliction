@@ -1,6 +1,7 @@
 import HttpRequest from '@/utils/request'
 // @ts-ignore
 import qs from 'qs'
+import { OrderType, SortType } from './enum'
 import { Platform } from './utils/sdk'
 
 const env = import.meta.env
@@ -223,6 +224,8 @@ export const GetAllOnSellNftList = (params: {
 export const GetNftOnShowListByClassify = (params: {
   PageSize: string
   Page: string
+  orderType: OrderType
+  sortType: SortType
   classify: string
   CertificationType: CertificationType
 }): Promise<GetMyOnSellNftListRes> => {
@@ -232,6 +235,8 @@ export const GetNftOnShowListByClassify = (params: {
 export const GetNftOnShowListBySearch = (params: {
   PageSize: string
   Page: string
+  orderType: OrderType
+  sortType: SortType
   SearchWord: string
   CertificationType: CertificationType
 }): Promise<GetMyOnSellNftListRes> => {
@@ -314,6 +319,8 @@ export const GetTopicNftList = (params: {
   TopicType: string
   Page: string
   PageSize: string
+  orderType: OrderType
+  sortType: SortType
 }): Promise<GetMetaBotListRes> => {
   return apiHttp.post(`/aggregation/v2/app/nftOnShow/getTopicNftList`, params)
 }

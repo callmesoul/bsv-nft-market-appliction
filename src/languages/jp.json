@@ -326,5 +326,6 @@
   "sameAmount": "Group Price",
   "sameSaleDrsc": "Group Introduction",
   "sameSellTime": "Group Display Time",
-  "startBatchSale": "Start Batch Listing"
+  "startBatchSale": "Start Batch Listing",
+  "tokenIndx": "Serial number"
 }
