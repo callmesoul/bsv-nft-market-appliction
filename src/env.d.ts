@@ -18,4 +18,5 @@ interface ImportMetaEnv {
   VITE_AppAddress: string
   VITE_ShowBotApi: string
   VITE_ToolApi: string
+  VITE_AggregationBaseUrl: string
 }
