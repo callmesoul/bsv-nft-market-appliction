@@ -276,7 +276,7 @@ import { UnitName, units } from '@/config'
 import NFTDetail from '@/utils/nftDetail'
 // @ts-ignore
 import dayjs from 'dayjs'
-import { getMyNftEligibility } from '@/utils/util'
+import { confirmToSendMetaData, getMyNftEligibility } from '@/utils/util'
 import { computed } from 'vue'
 
 const i18n = useI18n()
@@ -350,96 +350,52 @@ async function confirmSale() {
       background: 'rgba(0, 0, 0, 0.7)',
       customClass: 'full-loading',
     })
-    const stasPrice =
-      units[unitIndex.value].unit === 'BSV'
-        ? new Decimal(saleAmount.value).mul(Math.pow(10, 8)).toNumber()
-        : new Decimal(saleAmount.value).toNumber()
-    const params = {
-      codehash: nft.val!.codeHash,
-      genesis: nft.val!.genesis,
-      tokenIndex: nft.val!.tokenIndex,
-      satoshisPrice: stasPrice,
-      genesisTxid: nft.val!.genesisTxId,
-      sensibleId: nft.val.sensibleId,
-      sellDesc: saleIntro.value,
-    }
-    const useAmountRes = await store.state.sdk
-      ?.nftSell({ checkOnly: true, ...params })
-      .catch(() => {
-        loading.close()
-      })
-    if (useAmountRes && useAmountRes.code === 200) {
-      const useAmount = useAmountRes.data.amount!
-      const userBalanceRes = await store.state.sdk?.getBalance()
-      if (userBalanceRes?.code === 200) {
-        if (userBalanceRes.data.satoshis > useAmount) {
-          // 余额足够
-          ElMessageBox.confirm(
-            `${i18n.t('useAmountTips')}: ${useAmount} SATS`,
-            i18n.t('niceWarning'),
-            {
-              confirmButtonText: i18n.t('confirm'),
-              cancelButtonText: i18n.t('cancel'),
-              closeOnClickModal: false,
-            }
-          )
-            .then(async () => {
-              // 确认支付
-              const res = await store.state.sdk?.nftSell(params).catch(() => {
-                loading.close()
-              })
-              if (res?.code === 200) {
-                // 检查txId状态，确认上链后再跳转，防止上链延迟，跳转后拿不到数据
-                // await store.state.sdk?.checkNftTxIdStatus(res.data.sellTxId)
-                // await store.state.sdk?.checkNftTxIdStatus(res.data.txid)
-                // ElMessage.success(i18n.t('saleSuccess'))
-                // router.back()
 
-                // 上报时间
-                const response = await SetDeadlineTime({
-                  genesis: nft.val.genesis,
-                  codeHash: nft.val.codeHash,
-                  tokenIndex: nft.val.tokenIndex,
-                  deadlineTime: new Date(saleTime.value).getTime(),
-                }).catch(res => alert('SetDeadlineTime response fail' + JSON.stringify(res)))
-                if (response && response.code === NftApiCode.success) {
-                  // 检查txId状态，确认上链后再跳转，防止上链延迟，跳转后拿不到数据
-                  await store.state.sdk?.checkNftTxIdStatus(res.data.sellTxId)
-                  await store.state.sdk?.checkNftTxIdStatus(res.data.txid)
-                  ElMessage.success(i18n.t('saleSuccess'))
-                  router.back()
-                }
-
-                // sell协议上完 要上报服务器
-                // const response = await SaleNft({
-                //   sellValidTime: new Date(saleTime.value).getTime(),
-                //   amount: stasPrice,
-                //   tokenId: nft.val!.tokenId,
-                //   sellTxId: res.data.sellTxId,
-                // })
-                // if (response.code === NftApiCode.success) {
-                //   ElMessage.success(i18n.t('saleSuccess'))
-                //   router.back()
-                // }
-              }
-              loading.close()
-            })
-            .catch(() => loading.close())
-        } else {
-          loading.close()
-          ElMessageBox.alert(
-            `
-          <p>${i18n.t('useAmountTips')}: ${useAmount} SATS</p>
-          <p>${i18n.t('insufficientBalance')}</p>
-        `,
-            {
-              confirmButtonText: i18n.t('confirm'),
-              dangerouslyUseHTMLString: true,
-            }
-          )
-          return
-        }
+    try {
+      const stasPrice =
+        units[unitIndex.value].unit === 'BSV'
+          ? new Decimal(saleAmount.value).mul(Math.pow(10, 8)).toNumber()
+          : new Decimal(saleAmount.value).toNumber()
+      const params = {
+        codehash: nft.val!.codeHash,
+        genesis: nft.val!.genesis,
+        tokenIndex: nft.val!.tokenIndex,
+        satoshisPrice: stasPrice,
+        genesisTxid: nft.val!.genesisTxId,
+        sensibleId: nft.val.sensibleId,
+        sellDesc: saleIntro.value,
       }
+      const useAmountRes = await store.state.sdk
+        ?.nftSell({ checkOnly: true, ...params })
+        .catch(() => {
+          loading.close()
+        })
+      if (useAmountRes && useAmountRes.code === 200) {
+        const useAmount = useAmountRes.data.amount!
+        confirmToSendMetaData(useAmount).then(async () => {
+          const res = await store.state.sdk?.nftSell(params)
+          if (res?.code === 200) {
+            // 上报时间
+            await SetDeadlineTime({
+              genesis: nft.val.genesis,
+              codeHash: nft.val.codeHash,
+              tokenIndex: nft.val.tokenIndex,
+              deadlineTime: new Date(saleTime.value).getTime(),
+            }).catch(() => {
+              console.log('上报时间错误')
+            })
+            // 检查txId状态，确认上链后再跳转，防止上链延迟，跳转后拿不到数据
+            await store.state.sdk?.checkNftTxIdStatus(res.data.sellTxId)
+            await store.state.sdk?.checkNftTxIdStatus(res.data.txid)
+            loading.close()
+            ElMessage.success(i18n.t('saleSuccess'))
+            router.back()
+          }
+        })
+      }
+    } catch (error) {
+      new Error(JSON.stringify(error))
+      if (loading) loading.close()
     }
   } else if (tabIndex.value === 1) {
     // 拍卖

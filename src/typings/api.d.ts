@@ -590,3 +590,10 @@ declare interface Topic {
   timestamp: number
   url: number
 }
+
+declare interface NFTListSortItem {
+  name: string
+  nameKey: string
+  value: number
+  orderType: number
+}

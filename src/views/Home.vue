@@ -65,73 +65,8 @@
       </NftSkeleton>
     </div>
 
-    <!-- nft 模块 -->
-    <div class="nft-muodle">
-      <div class="container">
-        <div class="title">{{ $t('nftModuleTitle') }}</div>
-        <div class="nft-module-list flex ">
-          <!-- 海量应用场景 -->
-          <div class="nft-module-item flex1">
-            <div class="nft-module-item-warp">
-              <div class="icon">
-                <img src="@/assets/images/img_2.svg" />
-              </div>
-              <div class="name">{{ $t('nftModuleName1') }}</div>
-              <div class="drsc">
-                <div>
-                  {{ $t('nftModuleDrsc1') }}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 极低的铸造费用 -->
-          <div class="nft-module-item flex1">
-            <div class="nft-module-item-warp">
-              <div class="icon">
-                <img src="@/assets/images/img_1.svg" />
-              </div>
-              <div class="name">{{ $t('nftModuleName2') }}</div>
-              <div class="drsc">
-                <div>
-                  {{ $t('nftModuleDrsc2') }}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 覆盖全网用户 -->
-          <div class="nft-module-item flex1">
-            <div class="nft-module-item-warp">
-              <div class="icon">
-                <img src="@/assets/images/img_4.svg" />
-              </div>
-              <div class="name">{{ $t('nftModuleName3') }}</div>
-              <div class="drsc">
-                <div>
-                  {{ $t('nftModuleDrsc3') }}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 创作者认证 -->
-          <div class="nft-module-item flex1">
-            <div class="nft-module-item-warp">
-              <div class="icon">
-                <img src="@/assets/images/img_3.svg" />
-              </div>
-              <div class="name">{{ $t('nftModuleName4') }}</div>
-              <div class="drsc">
-                <div>
-                  {{ $t('nftModuleDrsc4') }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- nft 介绍模块 -->
+    <HomeNFTIntro />
 
     <!-- 所有类别 -->
     <div class="section container">
@@ -146,6 +81,9 @@
         :isShowSkeleton="isShowNftListSkeleton"
         :classify="classify"
         :classifyList="classifyList"
+        :sorts="sorts"
+        :sortValue="sortValue"
+        @changeSort="changeSort"
         @search="search"
         @changeClassify="changeClassify"
         @getMore="getMore"
@@ -163,6 +101,7 @@ import {
   NftApiCode,
 } from '@/api'
 import NftItem from '@/components/Nft-item/Nft-item.vue'
+import HomeNFTIntro from '@/template/HomeNFTIntro/HomeNFTIntro.vue'
 import NftSkeleton from '@/components/NftSkeleton/NftSkeleton.vue'
 import { useStore } from '@/store'
 import { reactive, ref } from 'vue'
@@ -179,6 +118,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
+import { OrderType, SortType } from '@/enum'
 
 const store = useStore()
 let recommendNfts = reactive<NftItem[]>([])
@@ -191,6 +131,36 @@ const keyword = ref('')
 const classify = ref('all')
 const i18n = useI18n()
 let apiType = 'GetAllOnSellNftList'
+
+const sorts: NFTListSortItem[] = reactive([
+  {
+    name: i18n.t('time'),
+    nameKey: 'time',
+    value: SortType.Time,
+    orderType: OrderType.DESC,
+  },
+  {
+    name: i18n.t('price'),
+    nameKey: 'price',
+    value: SortType.Price,
+    orderType: OrderType.DESC,
+  },
+])
+const sortValue = ref(SortType.Time)
+
+function changeSort(value: SortType) {
+  if (sortValue.value === value) {
+    const index = sorts.findIndex(item => item.value === value)
+    sorts[index].orderType =
+      sorts[index].orderType === OrderType.ASC ? OrderType.DESC : OrderType.ASC
+  } else {
+    sortValue.value = value
+  }
+  pagination.page = 1
+  pagination.loading = false
+  pagination.nothing = false
+  getNftList(true)
+}
 
 // 骨架屏
 const isShowRecommendSkeleton = ref(true)
@@ -209,6 +179,8 @@ async function getNftList(isCover: boolean = false) {
     classify: apiType === 'GetNftOnShowListByClassify' ? classify.value : undefined,
     SearchWord: apiType === 'GetNftOnShowListBySearch' ? keyword.value : undefined,
     CertificationType: CertificationType.isCert,
+    orderType: sorts.find(item => item.value === sortValue.value)?.orderType,
+    sortType: sortValue.value,
   })
   if (res.code === NftApiCode.success) {
     if (isCover) Nfts.length = 0

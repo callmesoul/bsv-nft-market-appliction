@@ -1,3 +1,5 @@
+@import '@/assets/styles/var.scss';
+
 @media only screen and (max-width: 500px) {
     .section-screen {
         flex-direction: column-reverse;
@@ -14,4 +16,14 @@
             }
         }
     }
+
+    .screen-rigth {
+        flex-direction: row-reverse;
+
+        .sort-warp {
+            margin-left: 10px;
+        }
+    }
 }
+
+
