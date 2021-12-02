@@ -184,14 +184,13 @@ export function confirmToSendMetaData(amount: number) {
           cancelButtonText: i18n.global.t('cancel'),
           closeOnClickModal: false,
         }
-      ).then(
-        async () => {
-          resolve()
-        },
-        () => {
-          reject()
-        }
       )
+        .then(async () => {
+          resolve()
+        })
+        .catch(() => {
+          reject()
+        })
     } else {
       ElMessageBox.alert(
         `

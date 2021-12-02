@@ -246,15 +246,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import {
-  CreateNftAuction,
-  GetMyNftEligibility,
-  GetNftDetail,
-  Langs,
-  NftApiCode,
-  SaleNft,
-  SetDeadlineTime,
-} from '@/api'
+import { CreateNftAuction, SetDeadlineTime } from '@/api'
 import { reactive, ref } from '@vue/reactivity'
 import { useRoute, useRouter } from 'vue-router'
 import {
@@ -264,7 +256,6 @@ import {
   ElMessage,
   ElDatePicker,
   ElLoading,
-  ElMessageBox,
   ElSkeleton,
   ElSkeletonItem,
 } from 'element-plus'
@@ -275,7 +266,6 @@ import NftMsgCard from '@/components/NftMsgCard/NftMsgCard.vue'
 import { UnitName, units } from '@/config'
 import NFTDetail from '@/utils/nftDetail'
 // @ts-ignore
-import dayjs from 'dayjs'
 import { confirmToSendMetaData, getMyNftEligibility } from '@/utils/util'
 import { computed } from 'vue'
 
@@ -365,33 +355,33 @@ async function confirmSale() {
         sensibleId: nft.val.sensibleId,
         sellDesc: saleIntro.value,
       }
-      const useAmountRes = await store.state.sdk
-        ?.nftSell({ checkOnly: true, ...params })
-        .catch(() => {
-          loading.close()
-        })
+      const useAmountRes = await store.state.sdk?.nftSell({ checkOnly: true, ...params })
       if (useAmountRes && useAmountRes.code === 200) {
         const useAmount = useAmountRes.data.amount!
-        confirmToSendMetaData(useAmount).then(async () => {
-          const res = await store.state.sdk?.nftSell(params)
-          if (res?.code === 200) {
-            // 上报时间
-            await SetDeadlineTime({
-              genesis: nft.val.genesis,
-              codeHash: nft.val.codeHash,
-              tokenIndex: nft.val.tokenIndex,
-              deadlineTime: new Date(saleTime.value).getTime(),
-            }).catch(() => {
-              console.log('上报时间错误')
-            })
-            // 检查txId状态，确认上链后再跳转，防止上链延迟，跳转后拿不到数据
-            await store.state.sdk?.checkNftTxIdStatus(res.data.sellTxId)
-            await store.state.sdk?.checkNftTxIdStatus(res.data.txid)
-            loading.close()
-            ElMessage.success(i18n.t('saleSuccess'))
-            router.back()
-          }
-        })
+        confirmToSendMetaData(useAmount)
+          .then(async () => {
+            const res = await store.state.sdk?.nftSell(params)
+            if (res?.code === 200) {
+              // 上报时间
+              await SetDeadlineTime({
+                genesis: nft.val.genesis,
+                codeHash: nft.val.codeHash,
+                tokenIndex: nft.val.tokenIndex,
+                deadlineTime: new Date(saleTime.value).getTime(),
+              }).catch(() => {
+                console.log('上报时间错误')
+              })
+              // 检查txId状态，确认上链后再跳转，防止上链延迟，跳转后拿不到数据
+              await store.state.sdk?.checkNftTxIdStatus(res.data.sellTxId)
+              await store.state.sdk?.checkNftTxIdStatus(res.data.txid)
+              loading.close()
+              ElMessage.success(i18n.t('saleSuccess'))
+              router.back()
+            }
+          })
+          .catch(() => {
+            if (loading) loading.close()
+          })
       }
     } catch (error) {
       new Error(JSON.stringify(error))

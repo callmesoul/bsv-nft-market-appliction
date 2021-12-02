@@ -284,20 +284,8 @@ import {
 import { computed, reactive, ref } from 'vue-demi'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import ChooseSeriesModal from '@/components/ChooseSeriesModal/ChooseSeriesModal.vue'
-import {
-  checkSdkStatus,
-  confirmToSendMetaData,
-  setDataStrclassify,
-  tranfromImgFile,
-} from '@/utils/util'
-import {
-  classifyList,
-  canCreateCardClassifyListMetaids,
-  canCreateRightsClassifyListMetaids,
-  UnitName,
-} from '@/config'
-import PickerModel from '@/components/PickerModal/PickerModel.vue'
+import { checkSdkStatus, confirmToSendMetaData } from '@/utils/util'
+import { UnitName } from '@/config'
 import InnerPageHeader from '@/components/InnerPageHeader/InnerPageHeader.vue'
 import InputAmount from '@/components/InputAmount/InputAmount.vue'
 import Decimal from 'decimal.js-light'
@@ -305,12 +293,7 @@ import Decimal from 'decimal.js-light'
 const router = useRouter()
 const store = useStore()
 const i18n = useI18n()
-const root = ref()
 const isShowResult = ref(false)
-const isBreak = ref(false)
-const isCreated = ref(false)
-const currentIndex = ref(null)
-const paramsList: any[] = []
 const nfts: {
   codehash: string
   genesis: string

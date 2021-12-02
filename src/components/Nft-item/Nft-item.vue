@@ -115,7 +115,6 @@ const router = useRouter()
 const route = useRoute()
 const i18n = useI18n()
 const now = new Date().getTime()
-const appVersion = store.state.version // not reactive!
 const day = computed(() => {
   if (now > props.item.deadlineTime!) return 0
   console.log(dayjs(now).diff(dayjs(props.item.deadlineTime!), 'day'))
