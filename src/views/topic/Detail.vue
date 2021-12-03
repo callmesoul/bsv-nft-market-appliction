@@ -195,7 +195,10 @@
                 :class="{
                   'btn-gray': metabot.nftSellState !== 0 || !metabot.nftIsReady,
                   'line-through': metabot.nftSellState !== 0 || !metabot.nftIsReady,
-                  'btn-change': metabot.nftIssueMetaId === metabot.nftOwnerMetaId,
+                  'btn-change':
+                    metabot.nftSellState === 0 &&
+                    metabot.nftIssueMetaId === metabot.nftOwnerMetaId &&
+                    metabot.nftIsReady,
                 }"
                 @click.stop="buy(metabot)"
               >
@@ -215,7 +218,10 @@
                 :class="{
                   'btn-gray': metabot.nftSellState !== 0 || !metabot.nftIsReady,
                   'line-through': metabot.nftSellState !== 0 || !metabot.nftIsReady,
-                  'btn-change': metabot.nftIssueMetaId === metabot.nftOwnerMetaId,
+                  'btn-change':
+                    metabot.nftSellState === 0 &&
+                    metabot.nftIssueMetaId === metabot.nftOwnerMetaId &&
+                    metabot.nftIsReady,
                 }"
                 @click.stop="buy(metabot)"
               >
@@ -306,7 +312,7 @@ const sorts: NFTListSortItem[] = reactive([
 ])
 const sortValue = ref(SortType.Index)
 
-const sectionLength = ref(10)
+const sectionLength = ref(0)
 
 const lineChart = reactive({
   type: 'line',
@@ -431,7 +437,8 @@ function getDatas() {
       metaBots.push(...res.data.results.items)
 
       if (res.data.total.toString().length >= 3) {
-        sectionLength.value = parseInt(res.data.total.toString().slice(0, 1))
+        const count = parseInt(res.data.total.toString().slice(0, 1))
+        sectionLength.value = res.data.total === count * 100 ? count : count + 1
       } else {
         sectionLength.value = 1
       }

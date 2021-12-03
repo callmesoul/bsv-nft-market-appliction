@@ -164,7 +164,14 @@ export default class Sdk {
         ;(window as any).handleNotEnoughMoney = (res: MetaIdJsRes) => {
           reject()
         }
-        this.metaidjs?.sendMetaDataTx(_params)
+        this.metaidjs?.sendMetaDataTx({
+          appId: [
+            'NFTOnShow',
+            import.meta.env.MODE === 'prod' ? 'https://www.nftonshow.com' : 'XXXX',
+            'web',
+          ],
+          ..._params,
+        })
       }
     })
   }
