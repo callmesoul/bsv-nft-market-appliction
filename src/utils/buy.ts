@@ -3,7 +3,6 @@ import Decimal from 'decimal.js-light'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import i18n from './i18n'
 import { checkSdkStatus } from './util'
-import { h } from 'vue'
 
 export default async function buy(nft: NftItemDetail) {
   return new Promise<void>(async (resolve, reject) => {

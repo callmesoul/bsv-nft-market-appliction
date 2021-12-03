@@ -389,6 +389,10 @@ async function buy(metabot: GetMetaBotListResItem) {
       .catch(res => {
         loading.close()
         if (res) nftNotCanBuy(res)
+        else {
+          metabot.nftSellState = 1
+          ElMessage.error(i18n.t('nftNotCanBuy'))
+        }
       })
   }
 }
