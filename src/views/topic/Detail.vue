@@ -160,15 +160,9 @@ import { ref, reactive, onMounted, computed } from 'vue'
 import { useStore } from '@/store'
 import IsNull from '@/components/IsNull/IsNull.vue'
 import { useRoute, useRouter } from 'vue-router'
-import {
-  GetMetaBotList,
-  GetMetaBotListBySearch,
-  GetNftAuctions,
-  GetTopicNftList,
-  NFTApiGetNFTDetail,
-} from '@/api'
-import { ElLoading, ElMessage, ElMessageBox, ElSkeleton, ElSkeletonItem } from 'element-plus'
-import { checkSdkStatus, metafileUrl } from '@/utils/util'
+import { GetMetaBotListBySearch, GetTopicNftList } from '@/api'
+import { ElLoading, ElMessage, ElSkeleton, ElSkeletonItem } from 'element-plus'
+import { metafileUrl } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 import Decimal from 'decimal.js-light'
 import Buy from '@/utils/buy'
@@ -192,19 +186,12 @@ const pagination = reactive({
   pageSize: 100,
 })
 
-const countdown = ref(0)
 const isShowCountdown = ref(true)
 const now = new Date().getTime()
 const sectionIndex = ref(0)
 const topic: { val: null | Topic } = reactive({ val: null })
 
 const sorts: NFTListSortItem[] = reactive([
-  {
-    name: i18n.t('time'),
-    nameKey: 'time',
-    value: SortType.Time,
-    orderType: OrderType.DESC,
-  },
   {
     name: i18n.t('price'),
     nameKey: 'price',
@@ -218,7 +205,7 @@ const sorts: NFTListSortItem[] = reactive([
     orderType: OrderType.DESC,
   },
 ])
-const sortValue = ref(SortType.Time)
+const sortValue = ref(SortType.Index)
 
 function changeSort(value: SortType) {
   if (sortValue.value === value) {
@@ -398,7 +385,6 @@ async function buy(metabot: GetMetaBotListResItem) {
 }
 
 function nftNotCanBuy(res: any) {
-  debugger
   if (
     (res.code === 204 &&
       res.data &&
@@ -427,12 +413,6 @@ onMounted(() => {
   pagination.nothing = false
   getDatas(true)
 })
-
-// setInterval(() => {
-//   countdown.value = 10 * 1000
-// }, 2000)
-
-// isShowSkeleton.value = false
 </script>
 
 <style lang="scss" scoped src="./Detail.scss"></style>

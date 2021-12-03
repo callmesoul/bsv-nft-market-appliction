@@ -25,14 +25,14 @@
     </template>
     <template #default>
       <div class="nft-msg-card flex">
-        <el-image
+        <ElImage
           class="cover"
           :src="metafileUrl(props.coverUrl)"
           :alt="props.name"
           fit="cover"
           :preview-src-list="[metafileUrl(props.coverUrl, 800)]"
         >
-        </el-image>
+        </ElImage>
         <div class="cont flex1 flex flex-v">
           <div class="flex1">
             <div class="name">{{ props.name }}</div>
@@ -57,8 +57,7 @@
   </ElSkeleton>
 </template>
 <script lang="ts" setup>
-import { ElSkeleton, ElSkeletonItem } from 'element-plus'
-import { computed } from 'vue'
+import { ElSkeleton, ElSkeletonItem, ElImage } from 'element-plus'
 import CertTemp from '@/components/Cert/Cert.vue'
 import { metafileUrl } from '@/utils/util'
 

@@ -754,21 +754,14 @@ import {
 import { useRoute } from 'vue-router'
 // @ts-ignore
 import {
-  BuyNft,
   CheckUserCanAuction,
   GetMyNftEligibility,
-  GetMySelledNfts,
   GetNftAuctionHistorys,
   GetNftAuctions,
-  GetNftDetail,
   GetNftHolderList,
-  GetNftIssue,
-  GetNftIssueyTxId,
-  GetNFTOwnerAddress,
   GetTxRaw,
   Langs,
   NftApiCode,
-  NFTApiGetNFTDetail,
   SubmitBid,
   TransactionRecord,
 } from '@/api'
