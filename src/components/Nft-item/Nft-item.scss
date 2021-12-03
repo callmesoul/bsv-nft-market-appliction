@@ -15,6 +15,12 @@
     border-radius: 6px;
     overflow: hidden;
 
+    :deep(.cover-image) {
+      .el-image__inner {
+        margin: 0 auto;
+      }
+    }
+
     .cover-image,
     svg {
       position: absolute;
