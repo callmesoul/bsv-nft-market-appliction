@@ -68,7 +68,12 @@ export const router = createRouter({
       redirect: '/collection/index',
       children: [
         { path: 'index', name: 'topicIndex', component: TopicIndex },
-        { path: 'detail/:key', name: 'topicDetail', component: TopicDetail },
+        {
+          path: 'detail/:key',
+          name: 'topicDetail',
+          component: TopicDetail,
+          meta: { keepAlive: true },
+        },
       ],
     },
     {

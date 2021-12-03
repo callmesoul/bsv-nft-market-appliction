@@ -1,7 +1,7 @@
 <template>
   <InnerPageHeader :title="topic.val?.name" :isShowSearch="false" />
 
-  <div
+  <!-- <div
     class="series-intro container flex flex-align-center"
     v-if="route.params.key === 'WebotRightCard'"
   >
@@ -53,25 +53,25 @@
         </div>
         <div class="series-data-item flex1 flex flex-align-center flex-pack-center">
           <div>
-            <div class="value green">65.47%</div>
-            <div class="key flex flex-align-center">
-              <ElPopover :width="400" trigger="click" :placement="'bottom-end'" class="chart-warp">
-                <template #reference>
-                  <div class="flex flex-align-center">
+            <ElPopover :width="400" trigger="click" :placement="'bottom-end'" class="chart-warp">
+              <template #reference>
+                <div>
+                  <div class="value green">65.47%</div>
+                  <div class="key flex flex-align-center">
                     {{ $t('increase') }} <SvgIcon name="trend" />
                   </div>
-                </template>
-                <Vue3ChartJs v-bind="{ ...lineChart }" />
-              </ElPopover>
-            </div>
+                </div>
+              </template>
+              <Vue3ChartJs v-bind="{ ...lineChart }" />
+            </ElPopover>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- banner -->
-  <div class="banner container" v-else>
+  <div class="banner container">
     <a>
       <img
         v-if="topic.val"
@@ -99,10 +99,10 @@
   </div>
 
   <div class="container sortWarp flex flex flex-align-center flex-pack-end">
-    <div class="switch-warp flex flex-align-center">
+    <!-- <div class="switch-warp flex flex-align-center">
       <span class="lable">{{ $t('isOnlyShowPutAway') }}</span>
       <ElSwitch v-model="isOnlyShowPutAway" active-color="#feb338" @change="getDatas" />
-    </div>
+    </div> -->
     <Sort :sorts="sorts" :sortValue="sortValue" @changeSort="changeSort" />
   </div>
 
@@ -195,7 +195,7 @@
                 :class="{
                   'btn-gray': metabot.nftSellState !== 0 || !metabot.nftIsReady,
                   'line-through': metabot.nftSellState !== 0 || !metabot.nftIsReady,
-                  'btn-change': metabot.nftSellState === 4,
+                  'btn-change': metabot.nftIssueMetaId !== metabot.nftOwnerMetaId,
                 }"
                 @click.stop="buy(metabot)"
               >
@@ -234,11 +234,6 @@
   </ElSkeleton>
 
   <div class="page-footer">
-    <LoadMore
-      :pagination="pagination"
-      @getMore="getMore"
-      v-if="metaBots.length > 0 && !isShowSkeleton"
-    />
     <IsNull v-if="metaBots.length <= 0 && !isShowSkeleton" />
   </div>
 </template>
@@ -270,6 +265,7 @@ import Sort from '@/components/Sort/Sort.vue'
 import { OrderType, SortType } from '@/enum'
 import UserMsg from '@/components/UserMsg/UserMsg.vue'
 import SvgIcon from '@/components/SvgIcon/SvgIcon.vue'
+// @ts-ignore
 import Vue3ChartJs from '@j-t-mcc/vue3-chartjs'
 import zoomPlugin from 'chartjs-plugin-zoom'
 import dataLabels from 'chartjs-plugin-datalabels'
@@ -354,23 +350,23 @@ lineChart.data.datasets.push(
     label: i18n.t('averageTransactionPrice'),
     data: [65, 59, 80, 81, 56, 55, 40],
     fill: false,
-    borderColor: '#41B883',
-    backgroundColor: '#41B883',
-  },
-  {
-    label: i18n.t('totalTurnover'),
-    data: [65, 59, 20, 90, 66, 15, 40],
-    fill: false,
     borderColor: '#feb338',
     backgroundColor: '#feb338',
-  },
-  {
-    label: i18n.t('numberOfTransactions'),
-    data: [65, 59, 80, 81, 56, 55, 90],
-    fill: false,
-    borderColor: 'blue',
-    backgroundColor: 'blue',
   }
+  // {
+  //   label: i18n.t('totalTurnover'),
+  //   data: [65, 59, 20, 90, 66, 15, 40],
+  //   fill: false,
+  //   borderColor: '#feb338',
+  //   backgroundColor: '#feb338',
+  // },
+  // {
+  //   label: i18n.t('numberOfTransactions'),
+  //   data: [65, 59, 80, 81, 56, 55, 90],
+  //   fill: false,
+  //   borderColor: 'blue',
+  //   backgroundColor: 'blue',
+  // }
 )
 function changeSort(value: SortType) {
   isShowSkeleton.value = true
