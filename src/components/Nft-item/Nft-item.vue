@@ -1,12 +1,18 @@
 <template>
   <a @click="toDetail()" class="nft-item" :key="item?.tokenId">
     <div class="cover">
-      <img
+      <ElImage
+        class="cover-image"
+        :lazy="true"
+        :src="metafileUrl(item.coverUrl)"
+        fit="contain"
+      ></ElImage>
+      <!-- <img
         class="cover-image"
         :src="metafileUrl(item?.coverUrl)"
         :alt="item?.name"
         :onerror="coverDefaultImg"
-      />
+      /> -->
       <span v-if="item.classify && item.classify.length > 0">{{ $t(item.classify[0]) }}</span>
     </div>
     <div class="cont">

@@ -23,7 +23,8 @@ export default function NftOffSale(nft: NftItemDetail, loading?: any) {
         ...params,
       })
       if (useAmountRes?.code === 200) {
-        confirmToSendMetaData(useAmountRes.data.amount).then(async () => {
+        const result = await confirmToSendMetaData(useAmountRes.data.amount)
+        if (result) {
           // 确认支付
           const res = await store.state.sdk?.nftCancel(params)
           if (res?.code === 200) {
@@ -39,7 +40,7 @@ export default function NftOffSale(nft: NftItemDetail, loading?: any) {
             ElMessage.success(i18n.global.t('offsale') + i18n.global.t('success'))
             resolve()
           }
-        })
+        }
       }
     } catch (error) {
       if (loading) loading.close()

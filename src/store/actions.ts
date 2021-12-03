@@ -68,7 +68,6 @@ export const actions: ActionTree<State, State> & Actions = {
       state.userInfoLoading = false
       commit(Mutation.LOGOUT)
     })
-    debugger
     if (res && res.code === 200) {
       commit(Mutation.SETUSERINFO, res.data)
       if (state.isApp && res.appAccessToken) {

@@ -358,30 +358,27 @@ async function confirmSale() {
       const useAmountRes = await store.state.sdk?.nftSell({ checkOnly: true, ...params })
       if (useAmountRes && useAmountRes.code === 200) {
         const useAmount = useAmountRes.data.amount!
-        confirmToSendMetaData(useAmount)
-          .then(async () => {
-            const res = await store.state.sdk?.nftSell(params)
-            if (res?.code === 200) {
-              // 上报时间
-              await SetDeadlineTime({
-                genesis: nft.val.genesis,
-                codeHash: nft.val.codeHash,
-                tokenIndex: nft.val.tokenIndex,
-                deadlineTime: new Date(saleTime.value).getTime(),
-              }).catch(() => {
-                console.log('上报时间错误')
-              })
-              // 检查txId状态，确认上链后再跳转，防止上链延迟，跳转后拿不到数据
-              await store.state.sdk?.checkNftTxIdStatus(res.data.sellTxId)
-              await store.state.sdk?.checkNftTxIdStatus(res.data.txid)
-              loading.close()
-              ElMessage.success(i18n.t('saleSuccess'))
-              router.back()
-            }
-          })
-          .catch(() => {
-            if (loading) loading.close()
-          })
+        const result = await confirmToSendMetaData(useAmount)
+        if (result) {
+          const res = await store.state.sdk?.nftSell(params)
+          if (res?.code === 200) {
+            // 上报时间
+            await SetDeadlineTime({
+              genesis: nft.val.genesis,
+              codeHash: nft.val.codeHash,
+              tokenIndex: nft.val.tokenIndex,
+              deadlineTime: new Date(saleTime.value).getTime(),
+            }).catch(() => {
+              console.log('上报时间错误')
+            })
+            // 检查txId状态，确认上链后再跳转，防止上链延迟，跳转后拿不到数据
+            await store.state.sdk?.checkNftTxIdStatus(res.data.sellTxId)
+            await store.state.sdk?.checkNftTxIdStatus(res.data.txid)
+            loading.close()
+            ElMessage.success(i18n.t('saleSuccess'))
+            router.back()
+          }
+        }
       }
     } catch (error) {
       new Error(JSON.stringify(error))

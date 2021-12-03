@@ -411,53 +411,49 @@ async function startBacth() {
 
   // 确认费用，后支付上链
   try {
-    confirmToSendMetaData(usedAmount)
-      .then(async () => {
-        isBatchSaled.value = true
-        // 初始化成功数量
-        successNum.value = 0
-        // 弹出进度框
-        isShowResult.value = true
-        // 开始上链任务
-        for (let i = 0; i < tasks.length; i++) {
-          try {
-            const { sellTime, ...params } = tasks[i]
-            const res = await store.state.sdk?.nftSell({ ...params })
-            if (res && res.code === 200) {
-              // 上报时间
-              const response = await SetDeadlineTime({
-                genesis: params.genesis,
-                codeHash: params.codehash,
-                tokenIndex: params.tokenIndex,
-                deadlineTime: sellTime,
-              })
-              if (response && response.code === NftApiCode.success) {
-                // 检查txId状态，确认上链后再跳转，防止上链延迟，跳转后拿不到数据
-                await store.state.sdk?.checkNftTxIdStatus(res.data.sellTxId)
-                await store.state.sdk?.checkNftTxIdStatus(res.data.txid)
-                const nftItem = currentNfts.value.find(
-                  item =>
-                    item.genesis === params.genesis &&
-                    item.codehash === params.codehash &&
-                    item.tokenIndex === params.tokenIndex
-                )
-                nftItem.isSaled = true
-                successNum.value = successNum.value + 1
-                // 延时增加稳定性
-                await sleepTime()
-              }
+    const result = await confirmToSendMetaData(usedAmount)
+    if (result) {
+      isBatchSaled.value = true
+      // 初始化成功数量
+      successNum.value = 0
+      // 弹出进度框
+      isShowResult.value = true
+      // 开始上链任务
+      for (let i = 0; i < tasks.length; i++) {
+        try {
+          const { sellTime, ...params } = tasks[i]
+          const res = await store.state.sdk?.nftSell({ ...params })
+          if (res && res.code === 200) {
+            // 上报时间
+            const response = await SetDeadlineTime({
+              genesis: params.genesis,
+              codeHash: params.codehash,
+              tokenIndex: params.tokenIndex,
+              deadlineTime: sellTime,
+            })
+            if (response && response.code === NftApiCode.success) {
+              // 检查txId状态，确认上链后再跳转，防止上链延迟，跳转后拿不到数据
+              await store.state.sdk?.checkNftTxIdStatus(res.data.sellTxId)
+              await store.state.sdk?.checkNftTxIdStatus(res.data.txid)
+              const nftItem = currentNfts.value.find(
+                item =>
+                  item.genesis === params.genesis &&
+                  item.codehash === params.codehash &&
+                  item.tokenIndex === params.tokenIndex
+              )
+              nftItem.isSaled = true
+              successNum.value = successNum.value + 1
+              // 延时增加稳定性
+              await sleepTime()
             }
-          } catch (error) {
-            break
           }
+        } catch (error) {
+          break
         }
-        loading.close()
-        isShowResult.value = false
-      })
-      .catch(() => {
-        loading.close()
-        isShowResult.value = false
-      })
+      }
+      loading.close()
+      isShowResult.value = false
+    }
   } catch {
     loading.close()
     isShowResult.value = false

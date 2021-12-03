@@ -225,32 +225,16 @@
   </ElDialog>
 </template>
 <script setup lang="ts">
+import { ElDialog, ElImage, ElMessage, ElLoading } from 'element-plus'
 import {
-  ElDialog,
-  ElImage,
-  ElMessage,
-  ElLoading,
-  ElTooltip,
-  ElPopover,
-  ElMessageBox,
-  Effect,
-} from 'element-plus'
-
-import { checkSdkStatus, checkUserCanIssueNft, tranfromImgFile } from '@/utils/util'
+  checkSdkStatus,
+  checkUserCanIssueNft,
+  confirmToSendMetaData,
+  tranfromImgFile,
+} from '@/utils/util'
 import { ref, reactive } from '@vue/reactivity'
 import { useI18n } from 'vue-i18n'
-import {
-  CreateNft,
-  CreateSerice,
-  GetClassies,
-  GetMyNftSummaryList,
-  GetSeries,
-  GetTxData,
-  GetTxStatus,
-  Langs,
-  NftApiCode,
-  Upload,
-} from '@/api'
+import { GetSeries, GetTxData, NftApiCode } from '@/api'
 import { useStore } from '@/store'
 import { router } from '@/router'
 import PickerModel from '@/components/PickerModal/PickerModel.vue'
@@ -260,7 +244,6 @@ import {
   canCreateCardClassifyListMetaids,
   canCreateRightsClassifyListMetaids,
 } from '@/config'
-import { computed } from '@vue/runtime-core'
 
 const classList = reactive(classifyList)
 const _nftTypes = reactive(nftTypes)
@@ -297,26 +280,6 @@ if (store.state.userInfo) {
   )
 }
 
-//分类
-// const classifies = reactive([])
-// async function getClassifies() {
-//   const res = await GetClassies()
-//   if (res.code === NftApiCode.success) {
-//     const disabledClassify = ['纪念卡', '别名', '头像', '权益']
-//     classifies.length = 0
-//     for (let i = 0; i < disabledClassify.length; i++) {
-//       const index = res.data.findIndex((_item) => _item.classify === disabledClassify[i])
-//       if (index !== -1) {
-//         res.data[index].disabled = true
-//       }
-//     }
-//     // @ts-ignore
-//     classifies.push(...res.data)
-//   }
-// }
-
-// getClassifies()
-
 const nft = reactive({
   nftName: '',
   type: '1',
@@ -334,8 +297,6 @@ const createTypeIndex = ref(0)
 function changeCreateType() {
   createTypeIndex.value = createTypeIndex.value === 0 ? 1 : 0
 }
-
-const dialogVisible = false
 
 let originalFile: MetaFile = reactive({
   base64Data: '',
@@ -403,27 +364,6 @@ function openClassifyModal() {
   isShowClassifyModal.value = true
   isShowSeriesModal.value = false
 }
-// async function getSeries() {
-//   const res = await GetMyNftSummaryList({ Page: '1', PageSize: '99', Address: store.state.userInfo!.address })
-//   if (res.code === 0) {
-//     if (res.data.results.items.length > 0) {
-//       res.data.results.items.map(item => {
-//         if (item.nftSeriesName && item.nftSeriesName !== '') {
-//           series.push({
-//             series: item.nftSeriesName && item.nftSeriesName !== '' ? item.nftSeriesName : item.nftName,
-//             maxNumber: item.nftTotalSupply,
-//             currentNumber: item.nftMyPendingCount,
-//             codeHash: item.nftCodehash,
-//             genesis:  item.nftGenesis,
-//             genesisTxId: item.genesisTxId,
-//             sensibleId:  item.nftSensibleId
-//           })
-//         }
-//       })
-//     }
-//     debugger
-//   }
-// }
 
 async function getSeries() {
   const res = await GetSeries({ page: 1, pageSize: 99 })
@@ -487,7 +427,6 @@ async function createSerie() {
   }
   loading.close()
 }
-getSeries()
 
 function removeCover() {
   coverFile.name = ''
@@ -661,63 +600,47 @@ async function createNft() {
     background: 'rgba(0, 0, 0, 0.7)',
     customClass: 'full-loading',
   })
+  try {
+    let seriesIndex = -1
+    if (selectedSeries[0]) {
+      seriesIndex = series.findIndex(item => item.series === selectedSeries[0])
+    }
 
-  let seriesIndex = -1
-  if (selectedSeries[0]) {
-    seriesIndex = series.findIndex(item => item.series === selectedSeries[0])
-  }
-
-  const params = {
-    receiverAddress: store.state.userInfo!.address, //  创建者接收地址
-    nftname: nft.nftName,
-    nftdesc: nft.intro,
-    nfticon: {
-      fileType: coverFile.data_type,
-      fileName: coverFile.name,
-      data: coverFile.hexData,
-    },
-    nftwebsite: '',
-    nftissuerName: store.state.userInfo!.name,
-    content: {
-      nftType: nft.type,
-      classifyList: JSON.stringify(nft.classify),
-      originalFileTxid: {
-        fileType: originalFile.data_type,
-        fileName: originalFile.name,
-        data: originalFile.hexData,
+    const params = {
+      receiverAddress: store.state.userInfo!.address, //  创建者接收地址
+      nftname: nft.nftName,
+      nftdesc: nft.intro,
+      nfticon: {
+        fileType: coverFile.data_type,
+        fileName: coverFile.name,
+        data: coverFile.hexData,
       },
-      contentTxId: nft.tx,
-    },
-    codeHash: seriesIndex !== -1 ? series[seriesIndex].codeHash : undefined,
-    genesis: seriesIndex !== -1 ? series[seriesIndex].genesis : undefined,
-    genesisTxId: seriesIndex !== -1 ? series[seriesIndex].genesisTxId : undefined,
-    sensibleId: seriesIndex !== -1 ? series[seriesIndex].sensibleId : undefined,
-  }
-  const useAmount = await await store.state.sdk
-    ?.createNFT({
+      nftwebsite: '',
+      nftissuerName: store.state.userInfo!.name,
+      content: {
+        nftType: nft.type,
+        classifyList: JSON.stringify(nft.classify),
+        originalFileTxid: {
+          fileType: originalFile.data_type,
+          fileName: originalFile.name,
+          data: originalFile.hexData,
+        },
+        contentTxId: nft.tx,
+      },
+      codeHash: seriesIndex !== -1 ? series[seriesIndex].codeHash : undefined,
+      genesis: seriesIndex !== -1 ? series[seriesIndex].genesis : undefined,
+      genesisTxId: seriesIndex !== -1 ? series[seriesIndex].genesisTxId : undefined,
+      sensibleId: seriesIndex !== -1 ? series[seriesIndex].sensibleId : undefined,
+    }
+    const useAmount = await await store.state.sdk?.createNFT({
       checkOnly: true,
       ...params,
     })
-    .catch(() => {
-      loading.close()
-    })
-  const userBalanceRes = await store.state.sdk?.getBalance()
-  if (
-    userBalanceRes &&
-    userBalanceRes.code === 200 &&
-    typeof useAmount === 'number' &&
-    userBalanceRes.data.satoshis > useAmount
-  ) {
-    ElMessageBox.confirm(`${i18n.t('useAmountTips')}: ${useAmount} SATS`, i18n.t('niceWarning'), {
-      confirmButtonText: i18n.t('confirm'),
-      cancelButtonText: i18n.t('cancel'),
-      closeOnClickModal: false,
-    })
-      .then(async () => {
+    if (typeof useAmount === 'number') {
+      const result = await confirmToSendMetaData(useAmount)
+      if (result) {
         // 余额足够且确认支付
-        const res = await store.state.sdk?.createNFT(params).catch(() => {
-          loading.close()
-        })
+        const res = await store.state.sdk?.createNFT(params)
         if (res && typeof res !== 'number') {
           /* ElMessage.success(i18n.t('castingsuccess'))
         router.replace({ name: 'createSuccess', 
@@ -755,6 +678,7 @@ async function createNft() {
           }
           const response = await CreateNft(params)
           if (response.code === NftApiCode.success) {
+            if (loading) loading.close()
             ElMessage.success(i18n.t('castingsuccess'))
             router.replace({
               name: 'nftSuccess',
@@ -770,27 +694,26 @@ async function createNft() {
             })
           }
         }
-        if (loading) {
-          loading.close()
-        }
-      })
-      .catch(() => loading.close())
-  } else {
-    loading.close()
-    if (typeof useAmount === 'number') {
-      ElMessageBox.alert(
-        `
-        <p>${i18n.t('useAmountTips')}: ${useAmount} SATS</p>
-        <p>${i18n.t('insufficientBalance')}</p>
-      `,
-        {
-          confirmButtonText: i18n.t('confirm'),
-          dangerouslyUseHTMLString: true,
-        }
-      )
+      }
     }
-    return
+  } catch (error) {
+    if (loading) loading.close()
+    new Error(JSON.stringify(error))
   }
+}
+
+if (store.state.nftToken) {
+  getSeries()
+} else {
+  const watchNftToken = store.watch(
+    state => state.nftToken,
+    nftToken => {
+      if (nftToken) {
+        watchNftToken()
+        getSeries()
+      }
+    }
+  )
 }
 </script>
 <style lang="scss" scoped src="./Create.scss"></style>

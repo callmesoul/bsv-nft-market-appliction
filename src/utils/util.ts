@@ -170,7 +170,7 @@ export function getMyNftEligibility(IssueMetaId: string) {
 }
 
 export function confirmToSendMetaData(amount: number) {
-  return new Promise<void>(async (resolve, reject) => {
+  return new Promise<boolean>(async (resolve, reject) => {
     const userBalanceRes = await store.state.sdk?.getBalance().catch(() => {
       ElMessage.error(i18n.global.t('getBalanceFail'))
       reject()
@@ -186,7 +186,7 @@ export function confirmToSendMetaData(amount: number) {
         }
       )
         .then(async () => {
-          resolve()
+          resolve(true)
         })
         .catch(() => {
           reject()

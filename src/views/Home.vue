@@ -1,6 +1,6 @@
 <template>
   <!-- banner -->
-  <div class="banner container">
+  <div class="banner container" v-if="store.state.banners.length > 0">
     <Swiper
       :autoHeight="true"
       :modules="[Navigation, Pagination, Scrollbar, A11y, Autoplay]"

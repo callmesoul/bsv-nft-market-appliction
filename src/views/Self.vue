@@ -161,28 +161,6 @@ function openRecordModal() {
   getRecordList(true)
 }
 
-onMounted(() => {
-  if (store.state.token) {
-    // 还没拿到用户信息的时候要等待拿用户信息完再调接口
-    if (store.state.userInfo) {
-      root.value.getMyNfts()
-    } else {
-      store.watch(
-        state => state.userInfo,
-        () => {
-          ;(user.name = store.state.userInfo?.name),
-            (user.metaId = store.state.userInfo?.metaId),
-            (user.address = store.state.userInfo?.address),
-            root.value.getMyNfts()
-        }
-      )
-    }
-  } else {
-    ElMessage.warning(i18n.t('toLoginTip'))
-    router.replace('/')
-  }
-})
-
 async function getRecordList(isCover: boolean = false) {
   return new Promise<void>(async resolve => {
     let res
@@ -211,6 +189,29 @@ async function getRecordList(isCover: boolean = false) {
     resolve()
   })
 }
-onMounted(() => {})
+
+onMounted(() => {
+  if (store.state.token) {
+    // 还没拿到用户信息的时候要等待拿用户信息完再调接口
+    if (store.state.userInfo) {
+      root.value.getMyNfts()
+    } else {
+      store.watch(
+        state => state.userInfo,
+        userInfo => {
+          if (userInfo) {
+            ;(user.name = store.state.userInfo?.name),
+              (user.metaId = store.state.userInfo?.metaId),
+              (user.address = store.state.userInfo?.address),
+              root.value.getMyNfts()
+          }
+        }
+      )
+    }
+  } else {
+    ElMessage.warning(i18n.t('toLoginTip'))
+    router.replace('/')
+  }
+})
 </script>
 <style lang="scss" scoped src="./Self.scss"></style>
