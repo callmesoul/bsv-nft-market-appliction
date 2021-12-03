@@ -195,7 +195,7 @@
                 :class="{
                   'btn-gray': metabot.nftSellState !== 0 || !metabot.nftIsReady,
                   'line-through': metabot.nftSellState !== 0 || !metabot.nftIsReady,
-                  'btn-change': metabot.nftIssueMetaId !== metabot.nftOwnerMetaId,
+                  'btn-change': metabot.nftIssueMetaId === metabot.nftOwnerMetaId,
                 }"
                 @click.stop="buy(metabot)"
               >
@@ -215,7 +215,7 @@
                 :class="{
                   'btn-gray': metabot.nftSellState !== 0 || !metabot.nftIsReady,
                   'line-through': metabot.nftSellState !== 0 || !metabot.nftIsReady,
-                  'btn-change': metabot.nftSellState === 4,
+                  'btn-change': metabot.nftIssueMetaId === metabot.nftOwnerMetaId,
                 }"
                 @click.stop="buy(metabot)"
               >

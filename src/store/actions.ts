@@ -35,13 +35,11 @@ export interface Actions {
 }
 
 export const actions: ActionTree<State, State> & Actions = {
-  [Action.initApp]({ state, commit, dispatch }) {
-    console.log('app inited!')
-  },
+  [Action.initApp]({ state, commit, dispatch }) {},
   [Action.initSdk]({ state, commit, dispatch }) {
     const initSdkTimeOut = setTimeout(() => {
       commit(Mutation.LOGOUT)
-    }, 12000)
+    }, 60000)
     state.sdkInitIng = true
     state.userInfoLoading = true
     state.sdk = new Sdk({
