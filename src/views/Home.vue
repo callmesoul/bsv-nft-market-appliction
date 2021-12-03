@@ -2,9 +2,11 @@
   <!-- banner -->
   <div class="banner container">
     <Swiper
+      :autoHeight="true"
       :modules="[Navigation, Pagination, Scrollbar, A11y, Autoplay]"
       :pagination="{ clickable: true }"
       :autoplay="true"
+      :loop="true"
     >
       <SwiperSlide v-for="banner in store.state.banners">
         <a
