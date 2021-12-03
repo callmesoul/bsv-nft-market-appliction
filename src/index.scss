@@ -134,11 +134,19 @@ body {
     border-color: #fff;
   }
 
+  &.btn-change {
+    background: #FFCE80;
+    border-color: #FFCE80;
+    color: #fff;
+  }
+
   &.btn-error {
     background: #fc3e05;
     border-color: #fc3e05;
     color: #fff;
   }
+
+
 
   &.btn-block {
     display: block;

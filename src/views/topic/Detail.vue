@@ -1,8 +1,77 @@
 <template>
   <InnerPageHeader :title="topic.val?.name" :isShowSearch="false" />
 
+  <div
+    class="series-intro container flex flex-align-center"
+    v-if="route.params.key === 'WebotRightCard'"
+  >
+    <div class="series-author flex1">
+      <UserMsg
+        :width="48"
+        name="aaron67"
+        metaId="b89840e798b334e4f2d5279b6a325b411125e927f2dba16af4208d827ede8e11"
+      />
+      <div class="author-intro">
+        aaron67，Webot开发者。
+      </div>
+    </div>
+    <div class="series-msg flex2">
+      <div class="series-base flex">
+        <img
+          class="cover"
+          src="https://showman.showpay.io/metafile/a3f7a2ac4b0341276087aba3bcdbc511358023768d09c96b494abe044d8caaba?x-oss-process=image/auto-orient,1/resize,m_lfit,w_235/quality,q_80"
+        />
+        <div class="cont flex1">
+          <div class="name">Webot2022</div>
+          <div class="drsc">
+            Webot 2022 Revenue Share NFT，总数500张，对应 Webot 2022 年全年 0.2% 的收入占比。<a
+              href="https://webot.sv/"
+              target="_blank"
+              >官网</a
+            >
+          </div>
+        </div>
+      </div>
+      <div class="series-data flex flex-align-center">
+        <div class="series-data-item flex1 flex flex-align-center flex-pack-center">
+          <div>
+            <div class="value">500</div>
+            <div class="key">NFT {{ $t('issueNumber') }}</div>
+          </div>
+        </div>
+        <div class="series-data-item flex1 flex flex-align-center flex-pack-center">
+          <div>
+            <div class="value">0.38 BSV</div>
+            <div class="key">{{ $t('floorPrice') }}</div>
+          </div>
+        </div>
+        <div class="series-data-item flex1 flex flex-align-center flex-pack-center">
+          <div>
+            <div class="value">24.88 BSV</div>
+            <div class="key">{{ $t('highestTransactionPrice') }}</div>
+          </div>
+        </div>
+        <div class="series-data-item flex1 flex flex-align-center flex-pack-center">
+          <div>
+            <div class="value green">65.47%</div>
+            <div class="key flex flex-align-center">
+              <ElPopover :width="400" trigger="click" :placement="'bottom-end'" class="chart-warp">
+                <template #reference>
+                  <div class="flex flex-align-center">
+                    {{ $t('increase') }} <SvgIcon name="trend" />
+                  </div>
+                </template>
+                <Vue3ChartJs v-bind="{ ...lineChart }" />
+              </ElPopover>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- banner -->
-  <div class="banner container">
+  <div class="banner container" v-else>
     <a>
       <img
         v-if="topic.val"
@@ -18,11 +87,26 @@
     </a>
   </div>
 
-  <div class="container sortWarp flex flex-pack-end">
+  <div class="metabot-tags container">
+    <a
+      class="metabot-tag"
+      :class="{ active: pagination.page === index + 1 }"
+      v-for="(section, index) in Array.from({ length: sectionLength })"
+      :key="index"
+      @click="getMore(index + 1)"
+      >{{ `${index * 100 + 1} - ${index * 100 + 100}` }}</a
+    >
+  </div>
+
+  <div class="container sortWarp flex flex flex-align-center flex-pack-end">
+    <div class="switch-warp flex flex-align-center">
+      <span class="lable">{{ $t('isOnlyShowPutAway') }}</span>
+      <ElSwitch v-model="isOnlyShowPutAway" active-color="#feb338" @change="getDatas" />
+    </div>
     <Sort :sorts="sorts" :sortValue="sortValue" @changeSort="changeSort" />
   </div>
 
-  <el-skeleton
+  <ElSkeleton
     class="meta-bot-list container"
     :loading="isShowSkeleton"
     animated
@@ -31,19 +115,19 @@
     <template #template>
       <div class="meta-bot-item">
         <div class="cover">
-          <el-skeleton-item variant="image" class="el-skeleton-item-image" />
+          <ElSkeletonItem variant="image" class="el-skeleton-item-image" />
         </div>
         <div class="cont">
           <div class="name"><el-skeleton-item variant="text" style="width: 30%" /></div>
           <div class="user-list">
             <div class="user-item flex flex-align-center">
-              <el-skeleton-item variant="text" style="width: 60%" />
+              <ElSkeletonItem variant="text" style="width: 60%" />
             </div>
             <div class="user-item flex flex-align-center">
-              <el-skeleton-item variant="text" style="width: 60%" />
+              <ElSkeletonItem variant="text" style="width: 60%" />
             </div>
           </div>
-          <el-skeleton-item
+          <ElSkeletonItem
             class="btn btn-block btn-gray"
             variant="button"
             style="width: 100%; box-sizing: border-box; border: none"
@@ -83,7 +167,7 @@
             </VueCountdown>
           </div>
           <div class="cont">
-            <div class="name">{{ metabot.nftName }}</div>
+            <div class="name" :title="metabot.nftName">{{ metabot.nftName }}</div>
             <div class="user-list">
               <div class="user-item flex flex-align-center">
                 <UserAvatar
@@ -107,10 +191,11 @@
             <!-- nftSellState !== 3 上架出售/ 已被下架/已被购买 -->
             <template v-if="metabot.nftSellState !== 3 && metabot.nftIsReady">
               <div
-                class="btn btn-block"
+                class="btn btn-block "
                 :class="{
                   'btn-gray': metabot.nftSellState !== 0 || !metabot.nftIsReady,
                   'line-through': metabot.nftSellState !== 0 || !metabot.nftIsReady,
+                  'btn-change': metabot.nftSellState === 4,
                 }"
                 @click.stop="buy(metabot)"
               >
@@ -121,14 +206,16 @@
               v-else-if="
                 metabot.nftSellState === 2 ||
                   metabot.nftSellState === 1 ||
-                  metabot.nftSellState === 0
+                  metabot.nftSellState === 0 ||
+                  metabot.nftSellState === 4
               "
             >
               <div
-                class="btn btn-block "
+                class="btn btn-block"
                 :class="{
                   'btn-gray': metabot.nftSellState !== 0 || !metabot.nftIsReady,
                   'line-through': metabot.nftSellState !== 0 || !metabot.nftIsReady,
+                  'btn-change': metabot.nftSellState === 4,
                 }"
                 @click.stop="buy(metabot)"
               >
@@ -144,7 +231,7 @@
         </a>
       </div>
     </template>
-  </el-skeleton>
+  </ElSkeleton>
 
   <div class="page-footer">
     <LoadMore
@@ -156,12 +243,20 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted, computed, h } from 'vue'
 import { useStore } from '@/store'
 import IsNull from '@/components/IsNull/IsNull.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { GetMetaBotListBySearch, GetTopicNftList } from '@/api'
-import { ElLoading, ElMessage, ElSkeleton, ElSkeletonItem } from 'element-plus'
+import {
+  ElLoading,
+  ElMessage,
+  ElSkeleton,
+  ElSkeletonItem,
+  ElPopover,
+  ElMessageBox,
+  ElSwitch,
+} from 'element-plus'
 import { metafileUrl } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 import Decimal from 'decimal.js-light'
@@ -173,6 +268,13 @@ import InnerPageHeader from '@/components/InnerPageHeader/InnerPageHeader.vue'
 import LoadMore from '@/components/LoadMore/LoadMore.vue'
 import Sort from '@/components/Sort/Sort.vue'
 import { OrderType, SortType } from '@/enum'
+import UserMsg from '@/components/UserMsg/UserMsg.vue'
+import SvgIcon from '@/components/SvgIcon/SvgIcon.vue'
+import Vue3ChartJs from '@j-t-mcc/vue3-chartjs'
+import zoomPlugin from 'chartjs-plugin-zoom'
+import dataLabels from 'chartjs-plugin-datalabels'
+
+Vue3ChartJs.registerGlobalPlugins([zoomPlugin])
 
 const store = useStore()
 const router = useRouter()
@@ -185,6 +287,7 @@ const pagination = reactive({
   ...store.state.pagination,
   pageSize: 100,
 })
+const isOnlyShowPutAway = ref(false)
 
 const isShowCountdown = ref(true)
 const now = new Date().getTime()
@@ -202,12 +305,75 @@ const sorts: NFTListSortItem[] = reactive([
     name: i18n.t('tokenIndx'),
     nameKey: 'tokenIndx',
     value: SortType.Index,
-    orderType: OrderType.DESC,
+    orderType: OrderType.ASC,
   },
 ])
 const sortValue = ref(SortType.Index)
 
+const sectionLength = ref(10)
+
+const lineChart = reactive({
+  type: 'line',
+  // locally registered and available for this chart
+  plugins: [dataLabels],
+  data: {
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    datasets: [],
+  },
+  options: {
+    plugins: {
+      zoom: {
+        zoom: {
+          wheel: {
+            enabled: true,
+          },
+          pinch: {
+            enabled: true,
+          },
+          mode: 'y',
+        },
+      },
+      datalabels: {
+        backgroundColor: function(context) {
+          return context.dataset.backgroundColor
+        },
+        borderRadius: 4,
+        color: 'white',
+        font: {
+          weight: 'bold',
+        },
+        formatter: Math.round,
+        padding: 6,
+      },
+    },
+  },
+})
+
+lineChart.data.datasets.push(
+  {
+    label: i18n.t('averageTransactionPrice'),
+    data: [65, 59, 80, 81, 56, 55, 40],
+    fill: false,
+    borderColor: '#41B883',
+    backgroundColor: '#41B883',
+  },
+  {
+    label: i18n.t('totalTurnover'),
+    data: [65, 59, 20, 90, 66, 15, 40],
+    fill: false,
+    borderColor: '#feb338',
+    backgroundColor: '#feb338',
+  },
+  {
+    label: i18n.t('numberOfTransactions'),
+    data: [65, 59, 80, 81, 56, 55, 90],
+    fill: false,
+    borderColor: 'blue',
+    backgroundColor: 'blue',
+  }
+)
 function changeSort(value: SortType) {
+  isShowSkeleton.value = true
   if (sortValue.value === value) {
     const index = sorts.findIndex(item => item.value === value)
     sorts[index].orderType =
@@ -218,7 +384,7 @@ function changeSort(value: SortType) {
   pagination.page = 1
   pagination.loading = false
   pagination.nothing = false
-  getDatas(true)
+  getDatas()
 }
 
 function onCountdownEnd() {
@@ -229,7 +395,7 @@ function onCountdownEnd() {
     keyword.value = ''
     sectionIndex.value = 0
     isShowCountdown.value = false
-    getDatas(true)
+    getDatas()
   }, 3000)
 }
 
@@ -253,26 +419,32 @@ function toDetail(metabot: GetMetaBotListResItem) {
   })
 }
 
-function getDatas(isCover = false) {
+function getDatas() {
   return new Promise<void>(async resolve => {
+    isShowSkeleton.value = true
     const res = await GetTopicNftList({
       Page: pagination.page.toString(),
       PageSize: pagination.pageSize.toString(),
       TopicType: typeof route.params.key === 'string' ? route.params.key : '',
       orderType: sorts.find(item => item.value === sortValue.value)?.orderType,
       sortType: sortValue.value,
+      sellType: isOnlyShowPutAway.value ? '1' : undefined,
     })
     if (res.code === 0) {
-      if (isCover) {
-        metaBots.length = 0
-      }
+      metaBots.length = 0
       metaBots.push(...res.data.results.items)
-      isShowSkeleton.value = false
-      const totalPages = Math.ceil(res.data.total / pagination.pageSize)
-      if (totalPages <= pagination.page) {
-        pagination.nothing = true
+
+      if (res.data.total.toString().length >= 3) {
+        sectionLength.value = parseInt(res.data.total.toString().slice(0, 1))
+      } else {
+        sectionLength.value = 1
       }
+      // const totalPages = Math.ceil(res.data.total / pagination.pageSize)
+      // if (totalPages <= pagination.page) {
+      //   pagination.nothing = true
+      // }
     }
+    isShowSkeleton.value = false
     resolve()
   })
 }
@@ -299,19 +471,12 @@ function getSearchDatas(isCover = false) {
   })
 }
 
-function getMore() {
-  if (pagination.loading || pagination.nothing) return
-  pagination.page++
+function getMore(page: number) {
+  pagination.page = page
   pagination.loading = true
-  if (keyword.value === '') {
-    getDatas().then(() => {
-      pagination.loading = false
-    })
-  } else {
-    getSearchDatas().then(() => {
-      pagination.loading = false
-    })
-  }
+  getDatas().then(() => {
+    pagination.loading = false
+  })
 }
 
 function changeSectionIndex(index: number) {
@@ -322,7 +487,7 @@ function changeSectionIndex(index: number) {
   pagination.loading = false
   pagination.nothing = false
   keyword.value = ''
-  getDatas(true)
+  getDatas()
 }
 
 // 购买
@@ -374,12 +539,13 @@ async function buy(metabot: GetMetaBotListResItem) {
         })
       })
       .catch(res => {
-        loading.close()
-        if (res) nftNotCanBuy(res)
-        else {
-          metabot.nftSellState = 1
-          ElMessage.error(i18n.t('nftNotCanBuy'))
-        }
+        ElMessageBox.alert(i18n.t('nftNotCanBuy'), i18n.t('fail'), {
+          confirmButtonText: i18n.t('confirm'),
+          callback: () => {
+            loading.close()
+            getDatas()
+          },
+        })
       })
   }
 }
@@ -397,7 +563,7 @@ function nftNotCanBuy(res: any) {
     pagination.loading = false
     pagination.nothing = false
     isShowSkeleton.value = true
-    getDatas(true)
+    getDatas()
   }
 }
 
@@ -411,7 +577,7 @@ onMounted(() => {
   pagination.page = 1
   pagination.loading = false
   pagination.nothing = false
-  getDatas(true)
+  getDatas()
 })
 </script>
 

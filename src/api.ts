@@ -322,6 +322,7 @@ export const GetTopicNftList = (params: {
   PageSize: string
   orderType: OrderType
   sortType: SortType
+  sellType?: string
 }): Promise<GetMetaBotListRes> => {
   return aggregation.post(`/v2/app/nftOnShow/getTopicNftList`, params)
 }

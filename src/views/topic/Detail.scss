@@ -13,7 +13,12 @@
 }
 
 .metabot-tags {
-    margin-top: 40px;
+    padding: 20px 30px;
+    position: sticky;
+    left: 0;
+    top: 69px;
+    z-index: 3;
+    background: $bgColor;
 
     .metabot-tag {
         cursor: pointer;
@@ -210,6 +215,120 @@
 }
 
 
+.series-intro {
+    margin-top: 20px;
+
+
+    .series-author,
+    .series-msg {
+        padding: 20px;
+        height: 200px;
+        box-sizing: border-box;
+        background: #fff;
+        border-radius: 8px;
+    }
+
+    .series-author {
+        margin-right: 20px;
+
+        .author-intro {
+            margin-top: 10px;
+            line-height: 24px;
+            color: #606266;
+        }
+    }
+
+    .series-msg {
+        .series-base {
+            .cover {
+                width: 90px;
+                height: 90px;
+                object-fit: contain;
+                margin-right: 15px;
+            }
+
+            .cont {
+                .name {
+                    font-size: 16px;
+                    color: #303133;
+                    font-weight: 500;
+                }
+
+                .drsc {
+                    margin-top: 10px;
+                    line-height: 20px;
+                    color: #606266;
+                    font-size: 14px;
+
+                    a {
+                        color: #456fc4;
+                    }
+                }
+            }
+        }
+
+        .series-data {
+            margin-top: 10px;
+
+            .series-data-item {
+                text-align: center;
+                position: relative;
+                height: 80px;
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    width: 1px;
+                    height: 20px;
+                    background: #EDEFF2;
+                    opacity: 1;
+                    border-radius: 2px;
+                    right: 0;
+                    top: 50%;
+                    margin-top: -10px;
+                }
+
+                &:last-child {
+                    &::after {
+                        display: none;
+                    }
+                }
+
+                .value {
+                    font-size: 16px;
+                    font-weight: 500;
+
+                    &.green {
+                        color: #56AE2D;
+                    }
+                }
+
+                .key {
+                    font-size: 12px;
+                    font-weight: 400;
+                    color: #909399;
+                    margin-top: 3px;
+
+                    svg {
+                        height: 14px;
+                        width: 14px;
+                        margin-left: 4px;
+                    }
+                }
+
+                &:last-child {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+
+
+.chart-warp {
+    max-width: 100%;
+}
+
 
 @media only screen and (max-width: 900px) {
     .meta-bot-list {
@@ -228,8 +347,21 @@
 }
 
 .sortWarp {
-    margin-top: 20px;
+
     text-align: right;
+
+    .switch-warp {
+        background: #fff;
+        display: inline-block;
+        margin-right: 10px;
+        padding: 8px;
+        border-radius: 6px;
+
+        .lable {
+            font-size: 14px;
+            margin-right: 5px;
+        }
+    }
 }
 
 @media only screen and (max-width: 800px) {
@@ -271,6 +403,109 @@
 
             &:nth-child(2n) {
                 margin-right: 0;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 750px) {
+    .series-intro {
+        flex-direction: column;
+
+        .series-author {
+            width: 100%;
+            margin-right: 0;
+
+            .author-intro {
+                flex: 1;
+            }
+        }
+
+        .series-msg {
+            border-radius: 0 0 8px 8px;
+            border-top: 1px solid #eee;
+
+            .series-base {
+                .cover {
+                    width: 90px;
+                    height: 90px;
+                    object-fit: contain;
+                    margin-right: 15px;
+                }
+
+                .cont {
+                    .name {
+                        font-size: 16px;
+                        color: #303133;
+                        font-weight: 500;
+                    }
+
+                    .drsc {
+                        margin-top: 10px;
+                        line-height: 20px;
+                        color: #606266;
+                        font-size: 14px;
+
+                        a {
+                            color: #456fc4;
+                        }
+                    }
+                }
+            }
+
+            .series-data {
+                margin-top: 10px;
+
+                .series-data-item {
+                    text-align: center;
+                    position: relative;
+                    height: 80px;
+
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        width: 1px;
+                        height: 20px;
+                        background: #EDEFF2;
+                        opacity: 1;
+                        border-radius: 2px;
+                        right: 0;
+                        top: 50%;
+                        margin-top: -10px;
+                    }
+
+                    &:last-child {
+                        &::after {
+                            display: none;
+                        }
+                    }
+
+                    .value {
+                        font-size: 16px;
+                        font-weight: 500;
+
+                        &.green {
+                            color: #56AE2D;
+                        }
+                    }
+
+                    .key {
+                        font-size: 12px;
+                        font-weight: 400;
+                        color: #909399;
+                        margin-top: 3px;
+
+                        svg {
+                            height: 14px;
+                            width: 14px;
+                            margin-left: 4px;
+                        }
+                    }
+
+                    &:last-child {
+                        cursor: pointer;
+                    }
+                }
             }
         }
     }

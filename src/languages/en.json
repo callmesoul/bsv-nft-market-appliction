@@ -325,5 +325,13 @@
   "sameAmount": "Group Price",
   "unAuth": "You do not have permission to access, please contact customer service staff for details",
   "articleUrl": "Article address",
-  "tokenIndx": "Serial number"
+  "tokenIndx": "Serial number",
+  "floorPrice": "Floor price",
+  "issueNumber": "Issue Number",
+  "highestTransactionPrice": "Highest transaction price",
+  "increase": "Increase",
+  "averageTransactionPrice": "Average transaction price",
+  "totalTurnover": "Total turnover",
+  "numberOfTransactions": "Number of transactions",
+  "isOnlyShowPutAway": "Only show available"
 }

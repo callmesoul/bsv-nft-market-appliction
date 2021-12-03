@@ -332,5 +332,13 @@
   "sameAmount": "统一价格",
   "unAuth": "您没有权限访问，详情咨询客服人员",
   "articleUrl": "文章地址",
-  "tokenIndx": "序号"
+  "tokenIndx": "序号",
+  "floorPrice": "地板价",
+  "issueNumber": "发行量",
+  "highestTransactionPrice": "最高成交价",
+  "increase": "升幅",
+  "averageTransactionPrice": "平均成交价",
+  "totalTurnover": "成交总额",
+  "numberOfTransactions": "成交数",
+  "isOnlyShowPutAway": "只显示已上架"
 }

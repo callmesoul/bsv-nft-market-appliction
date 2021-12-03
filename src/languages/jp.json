@@ -327,5 +327,13 @@
   "sameSaleDrsc": "Group Introduction",
   "sameSellTime": "Group Display Time",
   "startBatchSale": "Start Batch Listing",
-  "tokenIndx": "Serial number"
+  "tokenIndx": "Serial number",
+  "floorPrice": "Floor price",
+  "issueNumber": "Circulation",
+  "highestTransactionPrice": "Highest transaction price",
+  "increase": "Increase",
+  "averageTransactionPrice": "Average transaction price",
+  "totalTurnover": "Total turnover",
+  "numberOfTransactions": "Number of transactions",
+  "isOnlyShowPutAway": "Only show available"
 }
