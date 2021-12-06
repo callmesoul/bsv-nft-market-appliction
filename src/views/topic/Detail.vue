@@ -1,7 +1,7 @@
 <template>
   <InnerPageHeader :title="topic.val?.name" :isShowSearch="false" />
 
-  <!-- <div
+  <div
     class="series-intro container flex flex-align-center"
     v-if="route.params.key === 'WebotRightCard'"
   >
@@ -35,19 +35,19 @@
       <div class="series-data flex flex-align-center">
         <div class="series-data-item flex1 flex flex-align-center flex-pack-center">
           <div>
-            <div class="value">500</div>
+            <div class="value">{{ genesisVolumeInfo.val?.totalSupply }}</div>
             <div class="key">NFT {{ $t('issueNumber') }}</div>
           </div>
         </div>
         <div class="series-data-item flex1 flex flex-align-center flex-pack-center">
           <div>
-            <div class="value">0.38 BSV</div>
+            <div class="value">{{ $filters.bsv(genesisVolumeInfo.val?.minPrice) }} BSV</div>
             <div class="key">{{ $t('floorPrice') }}</div>
           </div>
         </div>
         <div class="series-data-item flex1 flex flex-align-center flex-pack-center">
           <div>
-            <div class="value">24.88 BSV</div>
+            <div class="value">{{ $filters.bsv(genesisVolumeInfo.val?.maxPrice) }} BSV</div>
             <div class="key">{{ $t('highestTransactionPrice') }}</div>
           </div>
         </div>
@@ -56,7 +56,7 @@
             <ElPopover :width="400" trigger="click" :placement="'bottom-end'" class="chart-warp">
               <template #reference>
                 <div>
-                  <div class="value green">65.47%</div>
+                  <div class="value green">{{ genesisVolumeInfo.val?.percentageIncrease }}</div>
                   <div class="key flex flex-align-center">
                     {{ $t('increase') }} <SvgIcon name="trend" />
                   </div>
@@ -68,10 +68,10 @@
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
 
   <!-- banner -->
-  <div class="banner container">
+  <div class="banner container" v-else>
     <a>
       <img
         v-if="topic.val"
@@ -264,7 +264,7 @@ import { ref, reactive, onMounted, computed, h } from 'vue'
 import { useStore } from '@/store'
 import IsNull from '@/components/IsNull/IsNull.vue'
 import { useRoute, useRouter } from 'vue-router'
-import { GetMetaBotListBySearch, GetTopicNftList } from '@/api'
+import { GetGenesisVolumeInfo, GetMetaBotListBySearch, GetTopicNftList } from '@/api'
 import {
   ElLoading,
   ElMessage,
@@ -391,6 +391,8 @@ lineChart.data.datasets.push(
   // }
 )
 
+const genesisVolumeInfo: { val: null | GenesisVolumeInfo } = reactive({ val: null })
+
 // nftSellState  0: 可购买 1: 下架 2：已购买 3：敬请期待 4：抢购状态 5： 非销售
 function itemBuyBtnClass(metabot: GetMetaBotListResItem) {
   // 可购买 和 抢购状态
@@ -490,6 +492,8 @@ function getDatas() {
       } else {
         sectionLength.value = 1
       }
+
+      getSeriesInfo(metaBots[0].nftGenesis)
       // const totalPages = Math.ceil(res.data.total / pagination.pageSize)
       // if (totalPages <= pagination.page) {
       //   pagination.nothing = true
@@ -617,6 +621,16 @@ function nftNotCanBuy(res: any) {
     isShowSkeleton.value = true
     getDatas()
   }
+}
+
+function getSeriesInfo(genesus: string) {
+  return new Promise<void>(async resolve => {
+    const res = await GetGenesisVolumeInfo(genesus)
+    if (res.code === 0) {
+      genesisVolumeInfo.val = res.data
+    }
+    resolve()
+  })
 }
 
 onMounted(() => {

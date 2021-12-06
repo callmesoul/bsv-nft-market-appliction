@@ -472,3 +472,10 @@ export const GetBanners = (): Promise<GetBannersRes> => {
 export const getTopics = (): Promise<getTopicsRes> => {
   return apiHttp.get(`/broad/v1/nos/topic/getNosTopicInfoList`)
 }
+
+export const GetGenesisVolumeInfo = (
+  genesis: string,
+  day: number = 7
+): Promise<GetGenesisVolumeInfoRes> => {
+  return apiHttp.get(`/broad/v1/nos/count/getGenesisVolumeInfo/${genesis}`, { params: { day } })
+}

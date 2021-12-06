@@ -11,6 +11,7 @@ export function dateTimeFormat(timestamp: Date, format: string = 'YYYY-MM-DD HH:
 }
 
 export function bsv(stas: number | string) {
+  if (typeof stas === 'undefined') return '--'
   return new Decimal(stas).div(Math.pow(10, 8)).toString()
 }
 

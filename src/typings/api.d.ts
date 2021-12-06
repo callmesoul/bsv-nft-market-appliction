@@ -597,3 +597,14 @@ declare interface NFTListSortItem {
   value: number
   orderType: number
 }
+declare interface GetGenesisVolumeInfoRes extends apiResponse {
+  data: GenesisVolumeInfo
+}
+
+declare interface GenesisVolumeInfo {
+  totalSupply: number
+  minPrice: number
+  maxPrice: number
+  percentageIncrease: string
+  dateCountList: number
+}
