@@ -175,7 +175,7 @@
   "tariffDescription3cont": "Note: Generally the miner fee for unlisting is about 20,000 Satoshi, so the total user downlisting fee is miner fee (20,000 Satoshi) + 10,000 Satoshi",
   "tariffDescription4cont": "Conditions: Users need to hold at least 10,000 MC (Temporary) to mint.  General minting an NFT will costs 20,000-40,000 Satoshi miner’s fee, so the user needs to pay about 30,000-50,000 Satoshi in total.",
   "buySellTxIdFail": "Can't get SellTxId, please try again later ",
-  "comingSoon ": "Coming Soon",
+  "comingSoon": "Coming Soon",
   "sellCountDown": "Countdown to start of sales",
   "priceSale": "Price sale",
   "auctionSale": "Auction sale",
@@ -333,5 +333,6 @@
   "averageTransactionPrice": "Average transaction price",
   "totalTurnover": "Total turnover",
   "numberOfTransactions": "Number of transactions",
-  "isOnlyShowPutAway": "Only show available"
+  "isOnlyShowPutAway": "Only show available",
+  "notSale": "Non-sale"
 }

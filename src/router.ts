@@ -60,7 +60,7 @@ export const router = createRouter({
     { path: '/certification', name: 'certification', component: CertSystemIntro },
     { path: '/metaBot', name: 'metaBot', component: MetaBot },
     { path: '/user/:metaId', name: 'user', component: User },
-    { path: '/market', name: 'market', component: CountryFair },
+    { path: '/market', name: 'market', component: CountryFair, meta: { keepAlive: true } },
     {
       path: '/collection',
       name: 'topic',

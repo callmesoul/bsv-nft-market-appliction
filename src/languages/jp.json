@@ -177,7 +177,7 @@
   "tariffDescription4cont": "注：通常、NFTクリエイト料金は20,000〜40,000satであり、ユーザーはNFT制作費用としてプラットフォーム利用料を加えて合計約30,000〜50,000satを支払う必要があります。",
   "buySellTxIdFail": "SellTxId取得できません。しばらくしてからもう一度お試しください",
   "notCanBuySelf": "自分で購入することはできません",
-  "comingSoon ": "近日公開",
+  "comingSoon": "近日公開",
   "sellCountDown": "販売開始までのカウントダウン",
   "priceSale": "定価販売",
   "auctionSale": "オークション販売",
@@ -335,5 +335,6 @@
   "averageTransactionPrice": "Average transaction price",
   "totalTurnover": "Total turnover",
   "numberOfTransactions": "Number of transactions",
-  "isOnlyShowPutAway": "Only show available"
+  "isOnlyShowPutAway": "Only show available",
+  "notSale": "非売品"
 }

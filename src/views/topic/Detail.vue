@@ -99,10 +99,10 @@
   </div>
 
   <div class="container sortWarp flex flex flex-align-center flex-pack-end">
-    <!-- <div class="switch-warp flex flex-align-center">
+    <div class="switch-warp flex flex-align-center">
       <span class="lable">{{ $t('isOnlyShowPutAway') }}</span>
       <ElSwitch v-model="isOnlyShowPutAway" active-color="#feb338" @change="getDatas" />
-    </div> -->
+    </div>
     <Sort :sorts="sorts" :sortValue="sortValue" @changeSort="changeSort" />
   </div>
 
@@ -188,8 +188,24 @@
                 <span class="type">({{ $t('owner') }})</span>
               </div>
             </div>
+            <!-- 可购买 和 抢购状态-->
+            <div class="btn btn-block" :class="itemBuyBtnClass(metabot)" @click.stop="buy(metabot)">
+              {{ itemBuyBtnText(metabot) }}
+            </div>
+            <!-- 下架 和 已被购买 -->
+            <!-- <template
+              v-else-if="metabot.nftSellState === 1 || metabot.nftSellState === 2"
+            >
+              <div
+                class="btn btn-block btn-gray line-through"
+                @click.stop="buy(metabot)"
+              >
+                {{ new Decimal(metabot.nftPrice).div(Math.pow(10, 8)).toString() }} BSV
+              </div>
+            </template> -->
+
             <!-- nftSellState !== 3 上架出售/ 已被下架/已被购买 -->
-            <template v-if="metabot.nftSellState !== 3 && metabot.nftIsReady">
+            <!-- <template v-if="metabot.nftSellState !== 3 && metabot.nftIsReady">
               <div
                 class="btn btn-block "
                 :class="{
@@ -232,7 +248,7 @@
               <div class="btn btn-block btn-gray" @click.stop="buy(metabot)">
                 {{ $t('comingSoon ') }}
               </div>
-            </template>
+            </template> -->
           </div>
         </a>
       </div>
@@ -374,6 +390,38 @@ lineChart.data.datasets.push(
   //   backgroundColor: 'blue',
   // }
 )
+
+// nftSellState  0: 可购买 1: 下架 2：已购买 3：敬请期待 4：抢购状态 5： 非销售
+function itemBuyBtnClass(metabot: GetMetaBotListResItem) {
+  // 可购买 和 抢购状态
+  if (metabot.nftSellState === 0 || metabot.nftSellState === 4) {
+    if (metabot.nftIsReady) {
+      if (metabot.nftSellState === 4) {
+        return 'btn-change'
+      }
+    } else {
+      return 'btn-gray line-through'
+    }
+  } else if (metabot.nftSellState === 1 || metabot.nftSellState === 2) {
+    // 1: 下架 2：已购买
+    return 'btn-gray line-through'
+  } else {
+    return 'btn-gray'
+  }
+}
+
+function itemBuyBtnText(metabot: GetMetaBotListResItem) {
+  // 3：敬请期待
+  if (metabot.nftSellState === 3) {
+    return i18n.t('comingSoon')
+  } else if (metabot.nftSellState === 5) {
+    // 5： 非销售
+    return i18n.t('notSale')
+  } else {
+    return new Decimal(metabot.nftPrice).div(Math.pow(10, 8)).toString() + ' BSV'
+  }
+}
+
 function changeSort(value: SortType) {
   isShowSkeleton.value = true
   if (sortValue.value === value) {
@@ -477,6 +525,7 @@ function getSearchDatas(isCover = false) {
 function getMore(page: number) {
   pagination.page = page
   pagination.loading = true
+  document.scrollingElement.scrollTop = 0
   getDatas().then(() => {
     pagination.loading = false
   })
@@ -502,7 +551,7 @@ async function buy(metabot: GetMetaBotListResItem) {
     ElMessage.warning(i18n.t('isBeBuyed'))
     return
   } else if (metabot.nftSellState === 3) {
-    ElMessage.warning(i18n.t('comingSoon '))
+    ElMessage.warning(i18n.t('comingSoon'))
     return
   } else {
     if (!metabot.nftIsReady) return
@@ -571,16 +620,18 @@ function nftNotCanBuy(res: any) {
 }
 
 onMounted(() => {
-  if (route.params.key) {
-    const topicItem = store.state.topics.find(item => item.key === route.params.key)
-    if (topicItem) {
-      topic.val = topicItem
+  if (isShowSkeleton.value) {
+    if (route.params.key) {
+      const topicItem = store.state.topics.find(item => item.key === route.params.key)
+      if (topicItem) {
+        topic.val = topicItem
+      }
     }
+    pagination.page = 1
+    pagination.loading = false
+    pagination.nothing = false
+    getDatas()
   }
-  pagination.page = 1
-  pagination.loading = false
-  pagination.nothing = false
-  getDatas()
 })
 </script>
 
