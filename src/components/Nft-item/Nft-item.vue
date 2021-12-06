@@ -16,7 +16,7 @@
       <span v-if="item.classify && item.classify.length > 0">{{ $t(item.classify[0]) }}</span>
     </div>
     <div class="cont">
-      <div class="name">
+      <div class="name" :title="route.name === 'self' ? item.productName : item?.name">
         {{ route.name === 'self' ? item.productName : item?.name }}
       </div>
       <div class="content flex">
