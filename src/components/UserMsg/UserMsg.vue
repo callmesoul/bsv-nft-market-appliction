@@ -15,7 +15,7 @@
       <div class="username">
         {{ name }}<img class="cert-icon" src="@/assets/images/icon_cer.svg" v-if="isCerted" />
       </div>
-      <div class="metaId">{{ metaId.slice(0, 6) }}</div>
+      <div class="metaId"><span>MetaID:</span>{{ metaId.slice(0, 6) }}</div>
     </div>
   </div>
 </template>
@@ -36,4 +36,32 @@ const isCerted = computed(() => {
   return props.metaId && store.state.isCertedMetaIds.find(item => item === props.metaId)
 })
 </script>
-<style lang="scss" scoped scr="./UserMsg.scss"></style>
+<style lang="scss" scoped>
+.user-msg {
+  .avatar {
+    border-radius: 50%;
+    margin-right: 20px;
+  }
+
+  .cont {
+    .username {
+      font-size: 16px;
+      font-weight: 500;
+      img {
+        margin-left: 8px;
+        width: 18px;
+        height: 18px;
+      }
+    }
+
+    .metaId {
+      font-size: 13px;
+      color: #909399;
+      margin-top: 4px;
+      span {
+        margin-right: 5px;
+      }
+    }
+  }
+}
+</style>

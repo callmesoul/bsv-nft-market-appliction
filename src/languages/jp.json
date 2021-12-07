@@ -328,13 +328,16 @@
   "sameSellTime": "Group Display Time",
   "startBatchSale": "Start Batch Listing",
   "tokenIndx": "Serial number",
-  "floorPrice": "Floor price",
-  "issueNumber": "Circulation",
-  "highestTransactionPrice": "Highest transaction price",
-  "increase": "Increase",
+  "floorPrice": "Floor Price",
+  "issueNumber": "Supply",
+  "highestTransactionPrice": "Highest Transaction Price",
+  "increase": "Change",
   "averageTransactionPrice": "Average transaction price",
   "totalTurnover": "Total turnover",
   "numberOfTransactions": "Number of transactions",
   "isOnlyShowPutAway": "Only show available",
-  "notSale": "非売品"
+  "notSale": "非売品",
+  "website": "Official website",
+  "webotAuthor": "aaron67, Webot Developer",
+  "webotIntro": "Webot 2022 Revenue NFT, total 500 NFTs, each represents 0.2% expected Revenue of Webot               in 2022."
 }

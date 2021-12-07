@@ -12,7 +12,7 @@
         metaId="b89840e798b334e4f2d5279b6a325b411125e927f2dba16af4208d827ede8e11"
       />
       <div class="author-intro">
-        aaron67，Webot开发者。
+        {{ $t('webotAuthor') }}
       </div>
     </div>
     <div class="series-msg flex2">
@@ -24,11 +24,8 @@
         <div class="cont flex1">
           <div class="name">Webot2022</div>
           <div class="drsc">
-            Webot 2022 Revenue Share NFT，总数500张，对应 Webot 2022 年全年 0.2% 的收入占比。<a
-              href="https://webot.sv/"
-              target="_blank"
-              >官网</a
-            >
+            {{ $t('webotIntro') }}
+            <a href="https://webot.sv/" target="_blank">{{ $t('website') }}</a>
           </div>
         </div>
       </div>
@@ -99,8 +96,13 @@
       v-for="(section, index) in Array.from({ length: sectionLength })"
       :key="index"
       @click="getMore(index + 1)"
-      >{{ `${index * 100 + 1} - ${index * 100 + 100}` }}</a
     >
+      {{
+        !isOnlyShowPutAway && sortValue === 2
+          ? `${index * 100 + 1} - ${index * 100 + 100}`
+          : index + 1
+      }}
+    </a>
   </div>
 
   <div class="container sortWarp flex flex flex-align-center flex-pack-end">

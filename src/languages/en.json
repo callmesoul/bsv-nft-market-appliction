@@ -326,13 +326,16 @@
   "unAuth": "You do not have permission to access, please contact customer service staff for details",
   "articleUrl": "Article address",
   "tokenIndx": "Serial number",
-  "floorPrice": "Floor price",
-  "issueNumber": "Issue Number",
-  "highestTransactionPrice": "Highest transaction price",
-  "increase": "Increase",
+  "floorPrice": "Floor Price",
+  "issueNumber": "Supply",
+  "highestTransactionPrice": "Highest Transaction Price",
+  "increase": "Change",
   "averageTransactionPrice": "Average transaction price",
   "totalTurnover": "Total turnover",
   "numberOfTransactions": "Number of transactions",
   "isOnlyShowPutAway": "Only show available",
-  "notSale": "Non-sale"
+  "notSale": "Non-sale",
+  "website": "Official website",
+  "webotAuthor": "aaron67, Webot Developer",
+  "webotIntro": "Webot 2022 Revenue NFT, total 500 NFTs, each represents 0.2% expected Revenue of Webot               in 2022."
 }
