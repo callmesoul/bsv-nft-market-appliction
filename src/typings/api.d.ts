@@ -606,5 +606,12 @@ declare interface GenesisVolumeInfo {
   minPrice: number
   maxPrice: number
   percentageIncrease: string
-  dateCountList: number
+  dateCountList?: {
+    date: string
+    percentageIncrease: string
+    totalTxPrice: number
+    totalTxPriceStr: string
+    volume: number
+    averagePrice: number
+  }[]
 }

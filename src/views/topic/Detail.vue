@@ -53,7 +53,12 @@
         </div>
         <div class="series-data-item flex1 flex flex-align-center flex-pack-center">
           <div>
-            <ElPopover :width="400" trigger="click" :placement="'bottom-end'" class="chart-warp">
+            <ElPopover
+              :width="documentWdith > 750 ? '100vh' : '90%'"
+              trigger="click"
+              :placement="'bottom-end'"
+              class="chart-warp"
+            >
               <template #reference>
                 <div>
                   <div class="value green">{{ genesisVolumeInfo.val?.percentageIncrease }}</div>
@@ -291,6 +296,7 @@ import SvgIcon from '@/components/SvgIcon/SvgIcon.vue'
 import Vue3ChartJs from '@j-t-mcc/vue3-chartjs'
 import zoomPlugin from 'chartjs-plugin-zoom'
 import dataLabels from 'chartjs-plugin-datalabels'
+import dayjs from 'dayjs'
 
 Vue3ChartJs.registerGlobalPlugins([zoomPlugin])
 
@@ -306,6 +312,7 @@ const pagination = reactive({
   pageSize: 100,
 })
 const isOnlyShowPutAway = ref(false)
+const documentWdith = window.outerWidth
 
 const isShowCountdown = ref(true)
 const now = new Date().getTime()
@@ -335,8 +342,16 @@ const lineChart = reactive({
   // locally registered and available for this chart
   plugins: [dataLabels],
   data: {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-    datasets: [],
+    labels: [],
+    datasets: [
+      {
+        label: i18n.t('averageTransactionPrice'),
+        data: [],
+        fill: false,
+        borderColor: '#feb338',
+        backgroundColor: '#feb338',
+      },
+    ],
   },
   options: {
     plugins: {
@@ -348,11 +363,11 @@ const lineChart = reactive({
           pinch: {
             enabled: true,
           },
-          mode: 'y',
+          mode: 'x',
         },
       },
       datalabels: {
-        backgroundColor: function(context) {
+        backgroundColor: function(context: any) {
           return context.dataset.backgroundColor
         },
         borderRadius: 4,
@@ -360,21 +375,16 @@ const lineChart = reactive({
         font: {
           weight: 'bold',
         },
-        formatter: Math.round,
+        // formatter: Math.round,
         padding: 6,
       },
     },
   },
 })
 
-lineChart.data.datasets.push(
-  {
-    label: i18n.t('averageTransactionPrice'),
-    data: [65, 59, 80, 81, 56, 55, 40],
-    fill: false,
-    borderColor: '#feb338',
-    backgroundColor: '#feb338',
-  }
+lineChart.data.datasets
+  .push
+
   // {
   //   label: i18n.t('totalTurnover'),
   //   data: [65, 59, 20, 90, 66, 15, 40],
@@ -389,7 +399,7 @@ lineChart.data.datasets.push(
   //   borderColor: 'blue',
   //   backgroundColor: 'blue',
   // }
-)
+  ()
 
 const genesisVolumeInfo: { val: null | GenesisVolumeInfo } = reactive({ val: null })
 
@@ -606,28 +616,26 @@ async function buy(metabot: GetMetaBotListResItem) {
   }
 }
 
-function nftNotCanBuy(res: any) {
-  if (
-    (res.code === 204 &&
-      res.data &&
-      res.data.message ===
-        'The NFT is not for sale because  the corresponding SellUtxo cannot be found.') ||
-    res.data.message === '258: txn-mempool-conflict'
-  ) {
-    ElMessage.error(i18n.t('nftNotCanBuy'))
-    pagination.page = 1
-    pagination.loading = false
-    pagination.nothing = false
-    isShowSkeleton.value = true
-    getDatas()
-  }
-}
-
 function getSeriesInfo(genesus: string) {
   return new Promise<void>(async resolve => {
     const res = await GetGenesisVolumeInfo(genesus)
     if (res.code === 0) {
-      genesisVolumeInfo.val = res.data
+      const { dateCountList, ...data } = res.data
+      genesisVolumeInfo.val = data
+      if (dateCountList && dateCountList.length > 0) {
+        const labels: string[] = []
+        const values: string[] = []
+        // dateCountList.splice(0, dateCountList.length - 7)
+        dateCountList.map((item, index) => {
+          if (index % 2 === 0) {
+            labels.push(dayjs(item.date).format('MM-DD'))
+            if (item.averagePrice === 0) return values.push('0')
+            else values.push(new Decimal(item.averagePrice).div(Math.pow(10, 8)).toFixed(2))
+          }
+        })
+        lineChart.data.labels = labels
+        lineChart.data.datasets[0].data = values
+      }
     }
     resolve()
   })
