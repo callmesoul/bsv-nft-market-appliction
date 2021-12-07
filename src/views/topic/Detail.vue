@@ -106,7 +106,11 @@
   <div class="container sortWarp flex flex flex-align-center flex-pack-end">
     <div class="switch-warp flex flex-align-center">
       <span class="lable">{{ $t('isOnlyShowPutAway') }}</span>
-      <ElSwitch v-model="isOnlyShowPutAway" active-color="#feb338" @change="getDatas" />
+      <ElSwitch
+        v-model="isOnlyShowPutAway"
+        active-color="#feb338"
+        @change="onChangeIsOnlyShowPutAway"
+      />
     </div>
     <Sort :sorts="sorts" :sortValue="sortValue" @changeSort="changeSort" />
   </div>
@@ -479,6 +483,11 @@ function toDetail(metabot: GetMetaBotListResItem) {
       tokenIndex: metabot.nftTokenIndex,
     },
   })
+}
+
+function onChangeIsOnlyShowPutAway() {
+  pagination.page = 1
+  getDatas()
 }
 
 function getDatas() {
