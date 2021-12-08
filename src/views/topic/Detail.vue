@@ -383,7 +383,7 @@ const lineChart = reactive({
         font: {
           weight: 'bold',
         },
-        // formatter: Math.round,
+        formatter: (value: any) => `${value}%`,
         padding: 6,
       },
     },
@@ -623,8 +623,7 @@ function getSeriesInfo(genesus: string) {
         dateCountList.map((item, index) => {
           if (index % 2 === 0) {
             labels.push(dayjs(item.date).format('MM-DD'))
-            if (item.averagePrice === 0) return values.push('0')
-            else values.push(new Decimal(item.averagePrice).div(Math.pow(10, 8)).toFixed(2))
+            values.push(parseFloat(item.averagePricePercentageIncrease).toFixed(2))
           }
         })
         lineChart.data.labels = labels

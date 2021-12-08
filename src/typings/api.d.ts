@@ -619,6 +619,7 @@ declare interface GenesisVolumeInfo {
     totalTxPriceStr: string
     volume: number
     averagePrice: number
+    averagePricePercentageIncrease: string
   }[]
 }
 
