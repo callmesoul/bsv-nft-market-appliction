@@ -479,3 +479,7 @@ export const GetGenesisVolumeInfo = (
 ): Promise<GetGenesisVolumeInfoRes> => {
   return apiHttp.get(`/broad/v1/nos/count/getGenesisVolumeInfo/${genesis}`, { params: { day } })
 }
+
+export const GetCertUserInfo = (metaId: string): Promise<GetCertUserInfoRes> => {
+  return apiHttp.get(`/broad/v1/nos/certification/getNosCertificationUserInfo/${metaId}`)
+}
