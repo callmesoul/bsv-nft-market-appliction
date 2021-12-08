@@ -13,7 +13,7 @@
       class="topic-item"
       v-for="topic in store.state.topics"
       :key="topic.key"
-      @click="toDetail(topic.key)"
+      @click="toDetail(topic.key, topic.createMetaId)"
     >
       <img
         class="cover"
@@ -50,12 +50,13 @@ const store = useStore()
 
 function search() {}
 
-function toDetail(key: string) {
-  if (key === 'MetaBot') {
-    router.push({ name: 'metaBot' })
-  } else {
-    router.push({ name: 'topicDetail', params: { key } })
-  }
+function toDetail(key: string, metaId: string) {
+  router.push({ name: 'topicDetail', params: { key, metaId } })
+  // if (key === 'MetaBot') {
+  //   router.push({ name: 'metaBot' })
+  // } else {
+  //   router.push({ name: 'topicDetail', params: { key } })
+  // }
 }
 </script>
 

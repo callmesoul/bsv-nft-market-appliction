@@ -69,7 +69,7 @@ export const router = createRouter({
       children: [
         { path: 'index', name: 'topicIndex', component: TopicIndex },
         {
-          path: 'detail/:key',
+          path: 'detail/:key/:metaId',
           name: 'topicDetail',
           component: TopicDetail,
           meta: { keepAlive: true },

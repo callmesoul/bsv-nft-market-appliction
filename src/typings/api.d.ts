@@ -602,10 +602,16 @@ declare interface GetGenesisVolumeInfoRes extends apiResponse {
 }
 
 declare interface GenesisVolumeInfo {
-  totalSupply: number
-  minPrice: number
+  averagePricePercentageIncrease: string
+  latestPercentageIncrease: string
   maxPrice: number
-  percentageIncrease: string
+  maxPriceStr: string
+  minPrice: number
+  minPriceOnSell: number
+  minPriceOnSellStr: string
+  minPriceOnSellTxId: string
+  minPriceStr: string
+  totalSupply: 400
   dateCountList?: {
     date: string
     percentageIncrease: string
@@ -614,4 +620,18 @@ declare interface GenesisVolumeInfo {
     volume: number
     averagePrice: number
   }[]
+}
+
+declare interface GetCertUserInfoRes extends apiResponse {
+  data: CertUserInfo
+}
+
+declare interface CertUserInfo {
+  idNumber: string
+  information: string
+  metaId: string
+  metaIdName: string
+  organizationName: string
+  realName: string
+  userCertificationType: number
 }

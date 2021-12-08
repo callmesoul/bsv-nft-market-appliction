@@ -1,6 +1,9 @@
 <template>
   <div class="user-msg flex flex-align-center">
-    <img
+    <div class="avatar-warp">
+      <UserAvatar :metaId="metaId" />
+    </div>
+    <!-- <img
       class="avatar"
       :src="$filters.avatar(metaId)"
       :alt="name"
@@ -10,12 +13,12 @@
         borderRadius: '50%',
         marginRight: '15px',
       }"
-    />
+    /> -->
     <div class="cont">
       <div class="username">
         {{ name }}<img class="cert-icon" src="@/assets/images/icon_cer.svg" v-if="isCerted" />
       </div>
-      <div class="metaId"><span>MetaID:</span>{{ metaId.slice(0, 6) }}</div>
+      <div class="metaId"><span>MetaID:</span>{{ metaId ? metaId.slice(0, 6) : '' }}</div>
     </div>
   </div>
 </template>
@@ -38,8 +41,8 @@ const isCerted = computed(() => {
 </script>
 <style lang="scss" scoped>
 .user-msg {
-  .avatar {
-    border-radius: 50%;
+  .avatar-warp {
+    width: 48px;
     margin-right: 20px;
   }
 

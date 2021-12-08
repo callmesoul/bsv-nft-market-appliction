@@ -1,16 +1,9 @@
 <template>
   <InnerPageHeader :title="topic.val?.name" :isShowSearch="false" />
 
-  <div
-    class="series-intro container flex flex-align-center"
-    v-if="route.params.key === 'WebotRightCard'"
-  >
+  <div class="series-intro container flex flex-align-center">
     <div class="series-author flex1">
-      <UserMsg
-        :width="48"
-        name="aaron67"
-        metaId="b89840e798b334e4f2d5279b6a325b411125e927f2dba16af4208d827ede8e11"
-      />
+      <UserMsg :width="48" :name="userInfo.val?.metaIdName" :metaId="userInfo.val?.metaId" />
       <div class="author-intro">
         {{ $t('webotAuthor') }}
       </div>
@@ -38,7 +31,7 @@
         </div>
         <div class="series-data-item flex1 flex flex-align-center flex-pack-center">
           <div>
-            <div class="value">{{ $filters.bsv(genesisVolumeInfo.val?.minPrice) }} BSV</div>
+            <div class="value">{{ $filters.bsv(genesisVolumeInfo.val?.minPriceOnSell) }} BSV</div>
             <div class="key">{{ $t('floorPrice') }}</div>
           </div>
         </div>
@@ -58,7 +51,9 @@
             >
               <template #reference>
                 <div>
-                  <div class="value green">{{ genesisVolumeInfo.val?.percentageIncrease }}</div>
+                  <div class="value green">
+                    {{ genesisVolumeInfo.val?.averagePricePercentageIncrease }}
+                  </div>
                   <div class="key flex flex-align-center">
                     {{ $t('increase') }} <SvgIcon name="trend" />
                   </div>
@@ -73,7 +68,7 @@
   </div>
 
   <!-- banner -->
-  <div class="banner container" v-else>
+  <!-- <div class="banner container" v-else>
     <a>
       <img
         v-if="topic.val"
@@ -87,7 +82,7 @@
         alt="Metabot"
       />
     </a>
-  </div>
+  </div> -->
 
   <div class="metabot-tags container">
     <a
@@ -271,11 +266,16 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, reactive, onMounted, computed, h } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useStore } from '@/store'
 import IsNull from '@/components/IsNull/IsNull.vue'
 import { useRoute, useRouter } from 'vue-router'
-import { GetGenesisVolumeInfo, GetMetaBotListBySearch, GetTopicNftList } from '@/api'
+import {
+  GetCertUserInfo,
+  GetGenesisVolumeInfo,
+  GetMetaBotListBySearch,
+  GetTopicNftList,
+} from '@/api'
 import {
   ElLoading,
   ElMessage,
@@ -293,7 +293,6 @@ import NFTDetail from '@/utils/nftDetail'
 import VueCountdown from '@chenfengyuan/vue-countdown'
 import { ElImage } from 'element-plus'
 import InnerPageHeader from '@/components/InnerPageHeader/InnerPageHeader.vue'
-import LoadMore from '@/components/LoadMore/LoadMore.vue'
 import Sort from '@/components/Sort/Sort.vue'
 import { OrderType, SortType } from '@/enum'
 import UserMsg from '@/components/UserMsg/UserMsg.vue'
@@ -343,6 +342,9 @@ const sortValue = ref(SortType.Index)
 
 const sectionLength = ref(0)
 
+// 用户信息
+const userInfo: { val: CertUserInfo | null } = { val: null }
+
 const lineChart = reactive({
   type: 'line',
   // locally registered and available for this chart
@@ -387,25 +389,6 @@ const lineChart = reactive({
     },
   },
 })
-
-lineChart.data.datasets
-  .push
-
-  // {
-  //   label: i18n.t('totalTurnover'),
-  //   data: [65, 59, 20, 90, 66, 15, 40],
-  //   fill: false,
-  //   borderColor: '#feb338',
-  //   backgroundColor: '#feb338',
-  // },
-  // {
-  //   label: i18n.t('numberOfTransactions'),
-  //   data: [65, 59, 80, 81, 56, 55, 90],
-  //   fill: false,
-  //   borderColor: 'blue',
-  //   backgroundColor: 'blue',
-  // }
-  ()
 
 const genesisVolumeInfo: { val: null | GenesisVolumeInfo } = reactive({ val: null })
 
@@ -494,7 +477,6 @@ function onChangeIsOnlyShowPutAway() {
 
 function getDatas() {
   return new Promise<void>(async resolve => {
-    isShowSkeleton.value = true
     const res = await GetTopicNftList({
       Page: pagination.page.toString(),
       PageSize: pagination.pageSize.toString(),
@@ -514,13 +496,14 @@ function getDatas() {
         sectionLength.value = 1
       }
 
-      getSeriesInfo(metaBots[0].nftGenesis)
+      if (metaBots[0]) {
+        getSeriesInfo(metaBots[0].nftGenesis)
+      }
       // const totalPages = Math.ceil(res.data.total / pagination.pageSize)
       // if (totalPages <= pagination.page) {
       //   pagination.nothing = true
       // }
     }
-    isShowSkeleton.value = false
     resolve()
   })
 }
@@ -652,7 +635,19 @@ function getSeriesInfo(genesus: string) {
   })
 }
 
-onMounted(() => {
+function getUserInfo() {
+  return new Promise<void>(async resolve => {
+    if (typeof route.params?.metaId === 'string') {
+      const res = await GetCertUserInfo(route.params?.metaId)
+      if (res.code === 0) {
+        userInfo.val = res.data
+      }
+    }
+    resolve()
+  })
+}
+
+onMounted(async () => {
   if (isShowSkeleton.value) {
     if (route.params.key) {
       const topicItem = store.state.topics.find(item => item.key === route.params.key)
@@ -663,7 +658,9 @@ onMounted(() => {
     pagination.page = 1
     pagination.loading = false
     pagination.nothing = false
-    getDatas()
+    await getDatas()
+    await getUserInfo()
+    isShowSkeleton.value = false
   }
 })
 </script>
