@@ -614,7 +614,7 @@ function itemBuyBtnText(metabot: GetMetaBotListResItem) {
   }
 }
 
-function changeSort(value: SortType) {
+async function changeSort(value: SortType) {
   isShowSkeleton.value = true
   if (sortValue.value === value) {
     const index = sorts.findIndex(item => item.value === value)
@@ -626,7 +626,8 @@ function changeSort(value: SortType) {
   pagination.page = 1
   pagination.loading = false
   pagination.nothing = false
-  getDatas()
+  await getDatas()
+  isShowSkeleton.value = false
 }
 
 function onCountdownEnd() {
@@ -661,9 +662,11 @@ function toDetail(metabot: GetMetaBotListResItem) {
   })
 }
 
-function onChangeIsOnlyShowPutAway() {
+async function onChangeIsOnlyShowPutAway() {
+  isShowSkeleton.value = true
   pagination.page = 1
-  getDatas()
+  await getDatas()
+  isShowSkeleton.value = false
 }
 
 function getDatas() {

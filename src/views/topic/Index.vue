@@ -51,12 +51,12 @@ const store = useStore()
 function search() {}
 
 function toDetail(key: string, metaId: string) {
-  router.push({ name: 'topicDetail', params: { key, metaId } })
-  // if (key === 'MetaBot') {
-  //   router.push({ name: 'metaBot' })
-  // } else {
-  //   router.push({ name: 'topicDetail', params: { key } })
-  // }
+  // router.push({ name: 'topicDetail', params: { key, metaId } })
+  if (key === 'MetaBot') {
+    router.push({ name: 'metaBot' })
+  } else {
+    router.push({ name: 'topicDetail', params: { key } })
+  }
 }
 </script>
 
