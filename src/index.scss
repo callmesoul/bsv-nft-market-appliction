@@ -5,8 +5,7 @@ body {
   background: $bgColor;
   font-size: 16px;
   color: $mainFontColor;
-  font-family: 'SF Pro', 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
-    'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+  font-family: inherit;
   min-height: 100vh;
 
   .container {
@@ -19,6 +18,11 @@ body {
     display: flex;
     flex-direction: column;
   }
+}
+
+pre {
+  white-space: break-spaces;
+  font-family: inherit;
 }
 
 .nowrap {

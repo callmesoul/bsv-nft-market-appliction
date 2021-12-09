@@ -259,9 +259,13 @@
                     line-height: 20px;
                     color: #606266;
                     font-size: 14px;
-
+                    overflow: hidden;
+                    pre{
+                        overflow: hidden;
+                    }
                     a {
                         color: #456fc4;
+                        cursor: pointer;
                     }
                 }
             }
@@ -324,6 +328,10 @@
     }
 }
 
+.all-intro {
+    font-size: 14px;
+    line-height: 20px;
+}
 
 .chart-warp {
     max-width: 100%;

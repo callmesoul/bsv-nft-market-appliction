@@ -673,7 +673,20 @@
   </div>
 
   <!-- drsc detail -->
-  <ElDialog v-model="isShowDrscDetail" custom-class="modal" :title="$t('seller') + $t('drsc')">
+  <MoreContentModal
+    :visible="isShowDrscDetail"
+    :title="$t('seller') + $t('drsc')"
+    @change="value => (isShowDrscDetail = value)"
+  >
+    {{
+      nft.val.isAuction
+        ? nft.val.auctionDrsc
+        : nft.val.putAway
+        ? nft.val.sellDesc
+        : nft.val.describe
+    }}
+  </MoreContentModal>
+  <!-- <ElDialog v-model="isShowDrscDetail" custom-class="modal" :title="$t('seller') + $t('drsc')">
     <div class="modal-drsc">
       <pre>{{
         nft.val.isAuction
@@ -688,7 +701,7 @@
         <div class="btn btn-default" @click="isShowDrscDetail = false">{{ $t('confirm') }}</div>
       </div>
     </template>
-  </ElDialog>
+  </ElDialog> -->
 
   <!-- auction price -->
   <ElDialog v-model="isShowAuctionModal">
@@ -779,6 +792,7 @@ import Buy from '@/utils/buy'
 import VueCountdown from '@chenfengyuan/vue-countdown'
 import LoadMore from '@/components/LoadMore/LoadMore.vue'
 import CertTemp from '@/components/Cert/Cert.vue'
+import MoreContentModal from '@/components/Modal/MoreContentModal/MoreContentModal.vue'
 
 const i18n = useI18n()
 const route = useRoute()
