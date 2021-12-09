@@ -1,11 +1,6 @@
 <template>
   <!-- drsc detail -->
-  <ElDialog
-    v-model="visible"
-    custom-class="modal"
-    :title="$t('seller') + $t('drsc')"
-    @close="emit('change', false)"
-  >
+  <ElDialog v-model="visible" custom-class="modal" :title="title" @close="emit('change', false)">
     <div class="modal-drsc">
       <pre>
        <slot></slot>   
