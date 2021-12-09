@@ -686,22 +686,6 @@
         : nft.val.describe
     }}
   </MoreContentModal>
-  <!-- <ElDialog v-model="isShowDrscDetail" custom-class="modal" :title="$t('seller') + $t('drsc')">
-    <div class="modal-drsc">
-      <pre>{{
-        nft.val.isAuction
-          ? nft.val.auctionDrsc
-          : nft.val.putAway
-          ? nft.val.sellDesc
-          : nft.val.describe
-      }}</pre>
-    </div>
-    <template #footer>
-      <div class="modal-footer" slot="footer">
-        <div class="btn btn-default" @click="isShowDrscDetail = false">{{ $t('confirm') }}</div>
-      </div>
-    </template>
-  </ElDialog> -->
 
   <!-- auction price -->
   <ElDialog v-model="isShowAuctionModal">
