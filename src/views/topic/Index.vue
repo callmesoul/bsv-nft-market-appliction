@@ -55,7 +55,7 @@ function toDetail(key: string, metaId: string) {
   if (key === 'MetaBot') {
     router.push({ name: 'metaBot' })
   } else {
-    router.push({ name: 'topicDetail', params: { key } })
+    router.push({ name: 'topicDetail', params: { key, metaId } })
   }
 }
 </script>
