@@ -22,6 +22,7 @@ const BatchCreate = () => import('@/views/batch/Create.vue')
 const BatchSale = () => import('@/views/batch/Sale.vue')
 const BatchTest = () => import('@/views/BatchTest.vue')
 const Right = () => import('@/views/Right.vue')
+const Advantage = () => import('@/views/app/Advantage.vue')
 import { useStore, Action, Mutation } from '@/store/index'
 import { ElMessage } from 'element-plus'
 import i18n from '@/utils/i18n'
@@ -102,6 +103,7 @@ export const router = createRouter({
       ],
     },
     { path: '/right', name: 'right', component: Right },
+    { path: '/advantage', name: 'advantage', component: Advantage },
   ],
   async scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {

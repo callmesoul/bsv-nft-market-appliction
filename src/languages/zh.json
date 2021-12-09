@@ -347,5 +347,8 @@
   "webotIntro": "Webot 2022 Revenue Share NFT，总数500张，对应 Webot 2022 年全年 0.2% 的收入占比。",
   "realName": "实名信息",
   "idNumber": "身份证号",
-  "certBody": "认证机构"
+  "certBody": "认证机构",
+  "userNotCerted": "用户还未认证",
+  "personCert": "个人认证",
+  "noMsg": "暂无信息"
 }

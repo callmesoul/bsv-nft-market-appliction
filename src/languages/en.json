@@ -340,5 +340,8 @@
   "webotIntro": "Webot 2022 Revenue NFT, total 500 NFTs, each represents 0.2% expected Revenue of Webot               in 2022.",
   "realName": "Real name",
   "idNumber": "ID number",
-  "certBody": "Certification body"
+  "certBody": "Certification body",
+  "userNotCerted": "User is not authenticated",
+  "personCert": "Personal authentication",
+  "noMsg": "no information"
 }

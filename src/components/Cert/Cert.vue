@@ -1,6 +1,6 @@
 <template>
   <div class="cert flex flex-pack-end">
-    <ElPopover placement="right" :width="400" trigger="click">
+    <ElPopover placement="bottom" trigger="hover" :width="'auto'">
       <template #reference>
         <a class="flex flex-align-center flex-pack-end">
           <img v-if="props.metaId && isCert" class="icon-cert" src="@/assets/images/icon_cer.svg" />
@@ -9,11 +9,33 @@
         </a>
       </template>
       <div class="certed-user-info">
-        <div class="certed-user-item flex flex-align-center">
-          <span class="label">{{ $t('realName') }}:</span><span class="value flex1"></span>
-          <span class="label">{{ $t('idNumber') }}:</span><span class="value flex1"></span>
-          <span class="label">{{ $t('certBody') }}:</span><span class="value flex1"></span>
-        </div>
+        <template v-if="isCert">
+          <div class="certed-user-item flex flex-align-center">
+            <span class="label">{{ $t('realName') }}:</span
+            ><span class="value flex1">{{
+              userInfo.val?.realName ? userInfo.val?.realName : $t('noMsg')
+            }}</span>
+          </div>
+          <div class="certed-user-item flex flex-align-center">
+            <span class="label">{{ $t('idNumber') }}:</span
+            ><span class="value flex1">{{
+              userInfo.val?.idNumber ? userInfo.val?.idNumber : $t('noMsg')
+            }}</span>
+          </div>
+          <div class="certed-user-item flex flex-align-center">
+            <span class="label">{{ $t('certBody') }}:</span
+            ><span class="value flex1">{{
+              userInfo.val?.userCertificationType === 1
+                ? $t('personCert')
+                : userInfo.val?.organizationName
+                ? userInfo.val?.organizationName
+                : $t('noMsg')
+            }}</span>
+          </div>
+        </template>
+        <template v-else>
+          <div class="no-cert">{{ $t('userNotCerted') }}</div>
+        </template>
       </div>
     </ElPopover>
   </div>
@@ -24,15 +46,32 @@ import { certedMetaIds } from '@/config'
 import { ElMessage, ElPopover } from 'element-plus'
 import { useI18n } from 'vue-i18n'
 import { useStore } from '@/store'
+import { GetCertUserInfo } from '@/api'
+
 const store = useStore()
+const i18n = useI18n()
+const userInfo: { val: CertUserInfo | null } = { val: null }
+const isGetUserInfoed = ref(false)
+
 const props = defineProps<{
   metaId?: string
   certed?: boolean
 }>()
 const isCert = computed(() => {
-  return props.metaId && store.state.isCertedMetaIds.find(item => item === props.metaId)
+  const result = props.metaId && store.state.isCertedMetaIds.find(item => item === props.metaId)
+  if (result && !isGetUserInfoed.value) {
+    isGetUserInfoed.value = true
+    getCertUserInfo()
+  }
+  return result
 })
-const i18n = useI18n()
+
+async function getCertUserInfo() {
+  const res = await GetCertUserInfo(props.metaId)
+  if (res.code === 0) {
+    userInfo.val = res.data
+  }
+}
 
 function toCert() {
   ElMessage.info(i18n.t('stayTuned'))
