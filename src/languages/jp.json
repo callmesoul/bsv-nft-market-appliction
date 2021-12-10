@@ -332,7 +332,7 @@
   "issueNumber": "Supply",
   "highestTransactionPrice": "Highest Transaction Price",
   "increase": "Change",
-  "averageTransactionPrice": "Average transaction price",
+  "averageTransactionPrice": "Average transaction price(BSV)",
   "totalTurnover": "Total turnover",
   "numberOfTransactions": "Number of transactions",
   "isOnlyShowPutAway": "Only show available",

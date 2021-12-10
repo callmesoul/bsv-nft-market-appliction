@@ -337,7 +337,7 @@
   "issueNumber": "发行量",
   "highestTransactionPrice": "最高成交价",
   "increase": "升幅",
-  "averageTransactionPrice": "平均成交价",
+  "averageTransactionPrice": "平均成交价(BSV)",
   "totalTurnover": "成交总额",
   "numberOfTransactions": "成交数",
   "isOnlyShowPutAway": "只显示已上架",
