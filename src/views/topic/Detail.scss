@@ -260,12 +260,20 @@
                     color: #606266;
                     font-size: 14px;
                     overflow: hidden;
-                    pre{
+
+                    pre {
                         overflow: hidden;
                     }
+
                     a {
                         color: #456fc4;
                         cursor: pointer;
+                        display: inline-block;
+                        margin-right: 15px;
+
+                        &:last-child {
+                            margin-right: 0;
+                        }
                     }
                 }
             }

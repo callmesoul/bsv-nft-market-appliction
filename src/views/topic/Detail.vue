@@ -32,8 +32,15 @@
           </div>
           <div class="drsc flex1 flex flex-v">
             <template v-if="route.params.key === 'WebotRightCard'">
-              {{ $t('webotIntro') }}
-              <a href="https://webot.sv/" target="_blank">{{ $t('website') }}</a>
+              <div>
+                {{ $t('webotIntro') }}
+                <a href="https://webot.sv/" target="_blank">{{ $t('website') }}</a>
+                <a
+                  href="https://aaron67.cc/2021/11/20/webot-2022-revenue-share-nft-exploration/"
+                  target="_blank"
+                  >Webot2022</a
+                >
+              </div>
             </template>
             <template v-else>
               <pre
