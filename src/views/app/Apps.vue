@@ -38,11 +38,13 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 import { GetApps } from '../../api'
 
 const i18n = useI18n()
 const certificationStage = ref('0')
 const apps: AppItem[] = reactive([])
+const route = useRoute()
 
 function getApps() {
   return new Promise(async resolve => {
@@ -58,6 +60,10 @@ function changeCert(type: string) {
   if (certificationStage.value === type) return
   certificationStage.value = type
   getApps()
+}
+
+if (route.query.lang && typeof route.query.lang === 'string') {
+  i18n.locale.value = route.query.lang
 }
 
 getApps()
