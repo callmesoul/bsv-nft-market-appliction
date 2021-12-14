@@ -483,3 +483,13 @@ export const GetGenesisVolumeInfo = (
 export const GetCertUserInfo = (metaId: string): Promise<GetCertUserInfoRes> => {
   return apiHttp.get(`/broad/v1/nos/certification/getNosCertificationUserInfo/${metaId}`)
 }
+
+// 获取appWeb列表
+export const GetApps = (params?: {
+  // metaId: string
+  certificationStage: string
+}): Promise<GetAppsRes> => {
+  return apiHttp.post(`/serviceapi/api/v1/showService/getAppWebviewList`, {
+    data: JSON.stringify(params),
+  })
+}

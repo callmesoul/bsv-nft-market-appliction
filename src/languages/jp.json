@@ -339,5 +339,12 @@
   "notSale": "非売品",
   "website": "Official website",
   "webotAuthor": "Webot developer.",
-  "webotIntro": "Webot 2022 Revenue NFT, total 500 NFTs, each represents 0.2% expected Revenue of Webot               in 2022."
+  "webotIntro": "Webot 2022 Revenue NFT, total 500 NFTs, each represents 0.2% expected Revenue of Webot               in 2022.",
+  "iscertBlock": "Certification area",
+  "appsDetail": "Application details",
+  "showApp": "Show Projects",
+  "developers": "Developer",
+  "appPayAddress": "Revenue Address",
+  "appLink": "Site",
+  "open": "Open"
 }

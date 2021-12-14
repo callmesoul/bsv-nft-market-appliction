@@ -22,6 +22,8 @@ const BatchCreate = () => import('@/views/batch/Create.vue')
 const BatchSale = () => import('@/views/batch/Sale.vue')
 const BatchTest = () => import('@/views/BatchTest.vue')
 const Right = () => import('@/views/Right.vue')
+const Apps = () => import('@/views/app/Apps.vue')
+const AppDetail = () => import('@/views/app/AppDetail.vue')
 import { useStore, Action, Mutation } from '@/store/index'
 import { ElMessage } from 'element-plus'
 import i18n from '@/utils/i18n'
@@ -102,6 +104,25 @@ export const router = createRouter({
       ],
     },
     { path: '/right', name: 'right', component: Right },
+    {
+      path: '/app',
+      name: 'app',
+      component: CommonLayout,
+      children: [
+        {
+          path: 'index',
+          name: 'appIndex',
+          component: Apps,
+          meta: { isHideHeaderAndFooter: true },
+        },
+        {
+          path: 'detail/:isCert/:tag',
+          name: 'appDetail',
+          component: AppDetail,
+          meta: { isHideHeaderAndFooter: true },
+        },
+      ],
+    },
   ],
   async scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
@@ -141,6 +162,9 @@ export const router = createRouter({
 // })
 
 router.beforeEach(async (to, from, next) => {
+  if (typeof to.name === 'string' && to.name.indexOf('app') !== -1) {
+    next()
+  }
   // 获取系统配置信息
   if (!store.state.isSetedSystemConfig) {
     await store.dispatch(Action.setSystemConfig)

@@ -636,3 +636,31 @@ declare interface CertUserInfo {
   realName: string
   userCertificationType: number
 }
+
+declare interface GetAppsRes {
+  code: number
+  result: {
+    apps: AppItem[]
+  }
+}
+
+declare interface AppItem {
+  appAddress: string
+  appCallbackUrl: string
+  appTag: string
+  appTimestamp: string
+  appType: number
+  avatar: string
+  avatarUrl: string
+  certificationStage: number
+  contentEN: string
+  contentZH: string
+  developerAvatarTxId: string
+  developerAvatarType: string
+  developerMetaId: string
+  developerName: string
+  nameEN: string
+  nameZH: string
+  tokenState: number
+  url: string
+}

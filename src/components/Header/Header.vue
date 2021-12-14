@@ -66,6 +66,7 @@
           <el-dropdown-menu>
             <el-dropdown-item @click="toSelf">{{ $t('mynft') }}</el-dropdown-item>
             <el-dropdown-item @click="toWallet">{{ $t('mywallet') }}</el-dropdown-item>
+            <el-dropdown-item @click="isShowApps = true">{{ $t('appsTitle') }}</el-dropdown-item>
             <el-dropdown-item @click="toPage('fees')">
               {{ $t('tariffDescription ') }}
             </el-dropdown-item>
@@ -128,10 +129,15 @@
       }}</router-link>
     </nav>
   </el-drawer>
+
+  <!-- 应用广场 -->
+  <ElDialog v-model="isShowApps" custom-class="app-modal">
+    <iframe src="/app/index" frameborder="0" />
+  </ElDialog>
 </template>
 
 <script setup lang="ts">
-import { ElDropdown, ElDropdownItem, ElDropdownMenu, ElLoading, ElDrawer } from 'element-plus'
+import { ElDropdown, ElDropdownItem, ElDropdownMenu, ElDialog, ElDrawer } from 'element-plus'
 import { ref } from 'vue'
 import { useStore, Mutation } from '@/store/index'
 import { useI18n } from 'vue-i18n'
@@ -145,6 +151,7 @@ const router = useRouter()
 const isShowDrawer = ref(false)
 const mode = import.meta.env.MODE
 const isShowToolsDropdown = ref(false)
+const isShowApps = ref(false)
 
 // 跳转授权
 function auth() {

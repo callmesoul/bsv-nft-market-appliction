@@ -344,5 +344,14 @@
   "notSale": "非销售",
   "website": "官网",
   "webotAuthor": "Webot开发者。",
-  "webotIntro": "Webot 2022 Revenue Share NFT，总数500张，对应 Webot 2022 年全年 0.2% 的收入占比。"
+  "webotIntro": "Webot 2022 Revenue Share NFT，总数500张，对应 Webot 2022 年全年 0.2% 的收入占比。",
+  "iscertBlock": "认证区",
+  "uncertBlock": "未认证区",
+  "appsTitle": "应用广场",
+  "appsDetail": "应用详情",
+  "showApp": "Show应用",
+  "developers": "开发者",
+  "appPayAddress": "应用收款地址",
+  "appLink": "应用链接",
+  "open": "打开"
 }
