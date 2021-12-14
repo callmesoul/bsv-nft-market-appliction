@@ -1,7 +1,7 @@
 <template>
   <div class="user-msg flex flex-align-center">
     <div class="avatar-warp" :style="{ marginRight: marginRight ? `${marginRight}px` : '20px' }">
-      <UserAvatar :metaId="metaId" />
+      <UserAvatar :metaId="metaId" :disabled="avatarDisabled" />
     </div>
     <!-- <img
       class="avatar"
@@ -34,6 +34,7 @@ const props = defineProps<{
   width?: number
   marginRight?: number
   nameSize?: number
+  avatarDisabled?: boolean
 }>()
 
 const store = useStore()

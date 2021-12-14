@@ -16,8 +16,8 @@
       </div>
     </div>
     <div class="app-list">
-      <router-link
-        :to="{ name: 'appDetail', params: { isCert: certificationStage, tag: app.appTag } }"
+      <a
+        @click="toAppDetail(app.appTag)"
         class="app-item flex flex-align-center"
         v-for="app in apps"
         :key="app.appTag"
@@ -28,9 +28,13 @@
             <div class="title">{{ app[`name${i18n.locale.value === 'zh' ? 'ZH' : 'EN'}`] }}</div>
             <div class="drsc">{{ app[`content${i18n.locale.value === 'zh' ? 'ZH' : 'EN'}`] }}</div>
           </div>
-          <img class="info" src="@/assets/images/list_icon_info.png" />
+          <img
+            class="info"
+            src="@/assets/images/list_icon_info.png"
+            @click.stop="open(app.url, $options)"
+          />
         </div>
-      </router-link>
+      </a>
     </div>
   </div>
 </template>
@@ -38,13 +42,14 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { GetApps } from '../../api'
 
 const i18n = useI18n()
 const certificationStage = ref('0')
 const apps: AppItem[] = reactive([])
 const route = useRoute()
+const router = useRouter()
 
 function getApps() {
   return new Promise(async resolve => {
@@ -60,6 +65,21 @@ function changeCert(type: string) {
   if (certificationStage.value === type) return
   certificationStage.value = type
   getApps()
+}
+
+function open(url: string, e) {
+  window.open(url, 'blank')
+  e.preventDefault()
+}
+
+function toAppDetail(tag: string) {
+  router.push({
+    name: 'appDetail',
+    params: {
+      isCert: certificationStage.value,
+      tag,
+    },
+  })
 }
 
 if (route.query.lang && typeof route.query.lang === 'string') {

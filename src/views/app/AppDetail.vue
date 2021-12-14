@@ -33,6 +33,7 @@
             :marginRight="8"
             :name="app.val?.developerName"
             :metaId="app.val?.developerMetaId"
+            :avatarDisabled="true"
           />
         </div>
       </div>
