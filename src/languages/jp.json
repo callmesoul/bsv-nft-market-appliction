@@ -321,7 +321,7 @@
   "unStar": "まだ始まっていません",
   "articleUrl": "記事のアドレス",
   "batchSale": "Batch Listing",
-  "batchSaleDrsc": "List your NFT in batches",
+  "batchSaleDrsc": "List your NFT in batches, batch casting and list functions only charge miner fees, no platform service fees",
   "batchSaleDrsc2": "NFTs with no prices or listing time will not be listed.",
   "sameAmount": "Group Price",
   "sameSaleDrsc": "Group Introduction",
