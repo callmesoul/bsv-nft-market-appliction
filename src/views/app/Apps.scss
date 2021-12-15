@@ -18,7 +18,7 @@
     .header {
         height: 52px;
         background: #F7FAFC;
-        font-size: 16px;
+        font-size: 18px;
         font-weight: bold;
         position: relative;
 
@@ -41,7 +41,7 @@
             text-align: center;
 
             a {
-                font-size: 15px;
+                font-size: 18px;
                 cursor: pointer;
                 font-weight: bold;
 
@@ -75,12 +75,12 @@
 
                 .cont {
                     .title {
-                        font-size: 16px;
+                        font-size: 18px;
                         @extend %text-ellipsis;
                     }
 
                     .drsc {
-                        font-size: 12px;
+                        font-size: 14px;
                         color: #BFC2CC;
                         margin-top: 4px;
                         @extend %text-ellipsis;
@@ -88,9 +88,9 @@
                 }
 
                 .info {
-                    width: 22px;
-                    height: 22px;
-                    margin-left: 12px;
+                    width: 26px;
+                    height: 26px;
+                    margin-left: 14px;
                 }
             }
         }
@@ -99,7 +99,7 @@
     // 滚动条
     /*滚动条的宽度*/
     &::-webkit-scrollbar {
-        width: 6px;
+        width: 8px;
         height: 10px;
     }
 
