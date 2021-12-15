@@ -164,48 +164,49 @@ export const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   if (typeof to.name === 'string' && to.name.indexOf('app') !== -1) {
     next()
-  }
-  // 获取系统配置信息
-  if (!store.state.isSetedSystemConfig) {
-    await store.dispatch(Action.setSystemConfig)
-  }
-
-  // app
-  const isApp = store.state.isApp
-  if (isApp) {
-    //  没有用户信息， 也没有正在加载用户信息, 则去获取用户信息
-    if (!store.state.userInfo && !store.state.userInfoLoading) {
-      store.dispatch(Action.getUserInfo)
-    }
   } else {
-    // web
-    const token = store.state.token
-    if (token) {
-      const now = new Date().getTime()
-      // token 过期先刷新token, 没过期直接用
-      // if (now >= token.expires_time!) {
-      //   await store.dispatch(Action.refreshToken)
-      // }
-      // 有token 没有初始化sdk 就去初始化sdk
-      if (!store.state.sdk && !store.state.sdkInitIng) {
-        store.dispatch(Action.initSdk)
-      }
+    // 获取系统配置信息
+    if (!store.state.isSetedSystemConfig) {
+      await store.dispatch(Action.setSystemConfig)
+    }
 
-      if (to.name === 'create' && store.state.userInfo) {
-        const result = await checkUserCanIssueNft()
-        if (!result) return
+    // app
+    const isApp = store.state.isApp
+    if (isApp) {
+      //  没有用户信息， 也没有正在加载用户信息, 则去获取用户信息
+      if (!store.state.userInfo && !store.state.userInfoLoading) {
+        store.dispatch(Action.getUserInfo)
       }
     } else {
-      // 没有token
-      const isAuth = to.meta && to.meta.isAuth ? to.meta.isAuth : false
-      if (isAuth) {
-        // 需要权限的提示先登陆且不给予跳转
-        ElMessage.error(i18n.global.t('toLoginTip'))
-        return
+      // web
+      const token = store.state.token
+      if (token) {
+        const now = new Date().getTime()
+        // token 过期先刷新token, 没过期直接用
+        // if (now >= token.expires_time!) {
+        //   await store.dispatch(Action.refreshToken)
+        // }
+        // 有token 没有初始化sdk 就去初始化sdk
+        if (!store.state.sdk && !store.state.sdkInitIng) {
+          store.dispatch(Action.initSdk)
+        }
+
+        if (to.name === 'create' && store.state.userInfo) {
+          const result = await checkUserCanIssueNft()
+          if (!result) return
+        }
+      } else {
+        // 没有token
+        const isAuth = to.meta && to.meta.isAuth ? to.meta.isAuth : false
+        if (isAuth) {
+          // 需要权限的提示先登陆且不给予跳转
+          ElMessage.error(i18n.global.t('toLoginTip'))
+          return
+        }
       }
     }
+    next()
   }
-  next()
 })
 
 // router.afterEach((to, from) => {
