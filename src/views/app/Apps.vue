@@ -17,7 +17,7 @@
     </div>
     <div class="app-list">
       <a
-        @click="toAppDetail(app.appTag)"
+        @click="open(app.url)"
         class="app-item flex flex-align-center"
         v-for="app in apps"
         :key="app.appTag"
@@ -31,7 +31,7 @@
           <img
             class="info"
             src="@/assets/images/list_icon_info.png"
-            @click.stop="open(app.url, $options)"
+            @click.stop="toAppDetail(app.appTag)"
           />
         </div>
       </a>
@@ -67,9 +67,8 @@ function changeCert(type: string) {
   getApps()
 }
 
-function open(url: string, e) {
+function open(url: string) {
   window.open(url, 'blank')
-  e.preventDefault()
 }
 
 function toAppDetail(tag: string) {

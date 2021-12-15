@@ -73,7 +73,6 @@ const route = useRoute()
 
 function getApps() {
   return new Promise<void>(async resolve => {
-    debugger
     const res = await GetApps({
       certificationStage: typeof route.params.isCert === 'string' ? route.params.isCert : '',
     })
