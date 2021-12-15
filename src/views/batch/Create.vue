@@ -389,13 +389,16 @@ function setUserCreatCard() {
       const cardIndex = classList.findIndex(item => item.classify === 'card')
       classList[cardIndex].disabled = false
     }
-    const _index = canCreateRightsClassifyListMetaids.findIndex(
-      item => item === store.state.userInfo?.metaId
-    )
-    if (_index !== -1) {
-      const rightsIndex = classList.findIndex(item => item.classify === 'rights')
-      classList[rightsIndex].disabled = false
-    }
+
+    const rightsIndex = classList.findIndex(item => item.classify === 'rights')
+    classList[rightsIndex].disabled = false
+    // const _index = canCreateRightsClassifyListMetaids.findIndex(
+    //   item => item === store.state.userInfo?.metaId
+    // )
+    // if (_index !== -1) {
+    //   const rightsIndex = classList.findIndex(item => item.classify === 'rights')
+    //   classList[rightsIndex].disabled = false
+    // }
   }
 }
 

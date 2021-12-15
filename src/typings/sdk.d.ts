@@ -218,6 +218,7 @@ export interface NftSellParams {
   sellDesc: string
   signersRaw?: any[]
   checkOnly?: boolean
+  isBatch?: boolean
 }
 
 export interface SellNFTParams extends NftSellParams {}
@@ -266,6 +267,7 @@ export interface NFTIssueParams {
   content: NFTIssueData
   signersRaw?: any[]
   checkOnly?: boolean
+  isBatch?: boolean
 }
 
 export interface NFTIssueData {

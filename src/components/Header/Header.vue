@@ -132,7 +132,7 @@
 
   <!-- 应用广场 -->
   <ElDialog v-model="isShowApps" custom-class="app-modal">
-    <iframe src="/app/index" frameborder="0" />
+    <iframe :src="`/app/index?lang=${i18n.locale.value}`" frameborder="0" />
   </ElDialog>
 </template>
 
