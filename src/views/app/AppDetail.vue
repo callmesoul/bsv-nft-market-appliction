@@ -50,7 +50,7 @@
         <div class="name">{{ $t('appLink') }}</div>
         <div class="cont flex1">
           <div class="detail-section-cont">
-            {{ app.val?.url }} <a :href="app.val?.url" target="_blank">{{ $t('open') }}</a>
+            {{ app.val?.url }} <a @click="open(app.val?.url)">{{ $t('open') }}</a>
           </div>
         </div>
       </div>
@@ -64,6 +64,8 @@ import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { GetApps } from '../../api'
 import UserMsg from '@/components/UserMsg/UserMsg.vue'
+import { ElMessage } from 'element-plus'
+import { store } from '@/store'
 
 const i18n = useI18n()
 const certificationStage = ref('0')
@@ -87,6 +89,14 @@ function changeCert(type: string) {
   if (certificationStage.value === type) return
   certificationStage.value = type
   getApps()
+}
+
+function open(url: string) {
+  if (store.state.isIOS) {
+    ElMessage.warning(i18n.t('iosNotToLink'))
+    return
+  }
+  window.open(url, 'blank')
 }
 
 if (route.query.lang && typeof route.query.lang === 'string') {

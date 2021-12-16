@@ -40,6 +40,8 @@
 </template>
 
 <script setup lang="ts">
+import { store } from '@/store'
+import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -68,6 +70,10 @@ function changeCert(type: string) {
 }
 
 function open(url: string) {
+  if (store.state.isIOS) {
+    ElMessage.warning(i18n.t('iosNotToLink'))
+    return
+  }
   window.open(url, 'blank')
 }
 

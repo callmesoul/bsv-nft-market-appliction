@@ -1,5 +1,8 @@
 import Sdk from '@/utils/sdk'
-import metaelf from '@/assets/images/metaelf_cn.png'
+
+const UA = window.navigator.userAgent.toLowerCase()
+const isAndroid = UA && UA.indexOf('android') > 0 ? true : false
+const isIOS = UA && /iphone|ipad|ipod|ios/.test(UA) ? true : false
 
 export interface State {
   debug: boolean
@@ -19,6 +22,8 @@ export interface State {
   isSetedSystemConfig: boolean
   banners: Banner[]
   topics: Topic[]
+  isAndroid: boolean
+  isIOS: boolean
 }
 
 // @ts-ignore
@@ -60,4 +65,6 @@ export const state: State = {
   isSetedSystemConfig: false,
   banners: [],
   topics: [],
+  isAndroid,
+  isIOS,
 }

@@ -345,5 +345,6 @@
   "developers": "Developer",
   "appPayAddress": "Revenue Address",
   "appLink": "Site",
-  "open": "Open"
+  "open": "Open",
+  "iosNotToLink": "iOS does not support application jump function, please look forward to it"
 }

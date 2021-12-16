@@ -347,5 +347,6 @@
   "appPayAddress": "Revenue Address",
   "appLink": "Site",
   "open": "Open",
-  "appsTitle": "App Center"
+  "appsTitle": "App Center",
+  "iosNotToLink": "iOS does not support application jump function, please look forward to it"
 }

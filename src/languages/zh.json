@@ -353,5 +353,6 @@
   "developers": "开发者",
   "appPayAddress": "应用收款地址",
   "appLink": "应用链接",
-  "open": "打开"
+  "open": "打开",
+  "iosNotToLink": "iOS暂不支持应用跳转功能，尽情期待"
 }
