@@ -313,7 +313,7 @@ import { computed, reactive, ref } from 'vue-demi'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import ChooseSeriesModal from '@/components/ChooseSeriesModal/ChooseSeriesModal.vue'
-import { checkSdkStatus, tranfromImgFile } from '@/utils/util'
+import { checkSdkStatus, checkUserCanIssueNft, tranfromImgFile } from '@/utils/util'
 import {
   classifyList,
   canCreateCardClassifyListMetaids,
@@ -542,6 +542,11 @@ async function startBacth() {
   isBreak.value = false
   // 檢查sdk狀態
   await checkSdkStatus()
+
+  // 检查是否开放铸造
+  const result = await checkUserCanIssueNft()
+  if (!result) return
+
   if (list.length <= 0) return
   const loading = ElLoading.service()
 

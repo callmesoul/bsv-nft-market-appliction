@@ -546,6 +546,7 @@ async function createNft() {
   // 檢查sdk狀態
   await checkSdkStatus()
 
+  // 检查是否开放铸造
   const result = await checkUserCanIssueNft()
   if (!result) return
 
