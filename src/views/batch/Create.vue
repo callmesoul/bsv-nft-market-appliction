@@ -362,7 +362,6 @@ const isShowResult = ref(false)
 const isBreak = ref(false)
 const isCreated = ref(false)
 const currentIndex = ref(null)
-const paramsList: any[] = []
 // 成功的数量
 const successNum = computed(() => {
   let num = 0
@@ -539,6 +538,7 @@ function sleepTime() {
 
 // 开始批量铸造
 async function startBacth() {
+  const paramsList: any[] = []
   isBreak.value = false
   // 檢查sdk狀態
   await checkSdkStatus()
@@ -635,6 +635,7 @@ async function startBacth() {
   if (!isReady) return
   //   checkOnly
   let amount = 0
+  debugger
   if (currentIndex.value !== null) {
     i = currentIndex.value
   } else {
