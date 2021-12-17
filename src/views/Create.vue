@@ -234,7 +234,7 @@ import {
 } from '@/utils/util'
 import { ref, reactive } from '@vue/reactivity'
 import { useI18n } from 'vue-i18n'
-import { GetSeries, GetTxData, NftApiCode } from '@/api'
+import { CreateNft, GetSeries, GetTxData, NftApiCode } from '@/api'
 import { useStore } from '@/store'
 import { router } from '@/router'
 import PickerModel from '@/components/PickerModal/PickerModel.vue'
