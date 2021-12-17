@@ -190,14 +190,8 @@
                 <template v-else>{{ $t('drsc') }}:</template>
               </div>
               <div class="cont">
-                {{
-                  nft.val.isAuction
-                    ? nft.val.auctionDrsc
-                    : nft.val.putAway
-                    ? nft.val.sellDesc
-                    : nft.val.describe
-                }}
-                <a>
+                {{ NFTMainMsgDesc.length > 60 ? NFTMainMsgDesc.slice(0, 60) : NFTMainMsgDesc }}
+                <a v-if="NFTMainMsgDesc.length > 60">
                   ...
                   <span @click="isShowDrscDetail = true">{{ $t('getmore') }}</span>
                 </a>
@@ -691,13 +685,7 @@
     :title="$t('seller') + $t('drsc')"
     @change="value => (isShowDrscDetail = value)"
   >
-    {{
-      nft.val.isAuction
-        ? nft.val.auctionDrsc
-        : nft.val.putAway
-        ? nft.val.sellDesc
-        : nft.val.describe
-    }}
+    {{ NFTMainMsgDesc }}
   </MoreContentModal>
 
   <!-- auction price -->
@@ -749,7 +737,7 @@
   </ElDialog>
 </template>
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { toClipboard } from '@soerenmartius/vue3-clipboard'
 import {
@@ -976,6 +964,16 @@ let day = ref(0)
 let hour = ref(0)
 let minute = ref(0)
 let second = ref(0)
+
+// 详细页头部描述我位置的内容
+const NFTMainMsgDesc = computed(() => {
+  // 1. 是否拍卖 显示拍卖描述 2. 是否上架 显示上架描述 3.下架状态 显示nft的描述
+  return nft.val.isAuction
+    ? nft.val.auctionDrsc
+    : nft.val.putAway
+    ? nft.val.sellDesc
+    : nft.val.describe
+})
 
 function countDownTimeLeft() {
   interval = setInterval(() => {
