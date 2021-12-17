@@ -338,7 +338,7 @@
   "website": "Official website",
   "webotAuthor": "Webot developer.",
   "webotIntro": "Webot 2022 Revenue NFT, total 500 NFTs, each represents 0.2% expected Revenue of Webot               in 2022.",
-  "iscertBlock": "Certification area",
+  "iscertBlock": "Certified",
   "appsTitle": "App Center",
   "appsDetail": "Application details",
   "showApp": "Show Projects",
@@ -346,5 +346,7 @@
   "appPayAddress": "Revenue Address",
   "appLink": "Site",
   "open": "Open",
-  "iosNotToLink": "iOS does not support application jump function, please look forward to it"
+  "iosNotToLink": "iOS does not support application jump function, please look forward to it",
+  "uncertBlock": "Uncertified",
+  "getSeriesFail": "Failed to get series information, please try again later"
 }

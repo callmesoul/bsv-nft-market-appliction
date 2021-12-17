@@ -16,6 +16,7 @@ const nftHttp = new HttpRequest(env.VITE_NftApi).request
 const auctionHttp = new HttpRequest(env.VITE_ShowBotApi).request
 // const auctionHttp = new HttpRequest('http://192.168.168.118').request
 const aggregation = new HttpRequest(env.VITE_AggregationBaseUrl).request
+const Sensible = new HttpRequest('https://api.sensiblequery.com').request
 export const GetToken = (params: object) => {
   return apiHttp.post('/showmoney/oauth2/oauth/token', params, {
     headers: {
@@ -492,4 +493,11 @@ export const GetApps = (params?: {
   return apiHttp.post(`/serviceapi/api/v1/showService/getAppWebviewList`, {
     data: JSON.stringify(params),
   })
+}
+
+export const GetNFTGenesisInfo = (params: {
+  codehash: string
+  genesis: string
+}): Promise<GetNFTGenesisInfoRes> => {
+  return Sensible.get(`/nft/genesis-info/${params.codehash}/${params.genesis}`)
 }

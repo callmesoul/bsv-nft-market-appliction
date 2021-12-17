@@ -664,3 +664,26 @@ declare interface AppItem {
   tokenState: number
   url: string
 }
+
+declare interface GetNFTGenesisInfoRes extends apiResponse {
+  data: NFTGenesisInfo
+}
+
+declare interface NFTGenesisInfo {
+  codehash: string
+  genesis: string
+  sensibleId: string
+  metaTxId: string
+  metaOutputIndex: number
+  name: string
+  symbol: string
+  desc: string
+  icon: string
+  website: string
+  supply: number
+  count: number
+  inTimes: number
+  outTimes: number
+  inSatoshi: number
+  outSatoshi: number
+}

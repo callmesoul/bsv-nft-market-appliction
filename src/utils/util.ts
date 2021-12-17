@@ -3,7 +3,7 @@ import { Action, store } from '@/store'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import i18n from '@/utils/i18n'
 import { router } from '@/router'
-import { GetMyNftEligibility, Langs } from '@/api'
+import { GetMyNftEligibility, GetNFTGenesisInfo, GetSeries, Langs, NftApiCode } from '@/api'
 import { resolve } from 'path/posix'
 
 export function tranfromImgFile(file: File) {
@@ -203,6 +203,31 @@ export function confirmToSendMetaData(amount: number) {
         }
       )
       reject()
+    }
+  })
+}
+
+export function getUserSeries() {
+  return new Promise<any[]>(async (resolve, reject) => {
+    try {
+      const res = await GetSeries({ page: 1, pageSize: 99 })
+      if (res.code === NftApiCode.success) {
+        for (let i = 0; i < res.data.length; i++) {
+          const getSeriesInfoRes = await GetNFTGenesisInfo({
+            codehash: res.data[i].codeHash,
+            genesis: res.data[i].genesis,
+          })
+          if (getSeriesInfoRes.code === 0) {
+            res.data[i].currentNumber = getSeriesInfoRes.data.count
+          }
+        }
+        resolve(res.data)
+      } else {
+        reject()
+      }
+    } catch (error) {
+      ElMessage.error(i18n.global.t('getSeriesFail'))
+      reject(error)
     }
   })
 }

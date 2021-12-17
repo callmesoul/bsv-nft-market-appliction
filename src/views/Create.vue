@@ -231,10 +231,11 @@ import {
   checkUserCanIssueNft,
   confirmToSendMetaData,
   tranfromImgFile,
+  getUserSeries,
 } from '@/utils/util'
 import { ref, reactive } from '@vue/reactivity'
 import { useI18n } from 'vue-i18n'
-import { CreateNft, GetSeries, GetTxData, NftApiCode } from '@/api'
+import { CreateNft, CreateSerice, GetSeries, GetTxData, NftApiCode } from '@/api'
 import { useStore } from '@/store'
 import { router } from '@/router'
 import PickerModel from '@/components/PickerModal/PickerModel.vue'
@@ -371,6 +372,11 @@ async function getSeries() {
     series.length = 0
     series.push(...res.data)
   }
+  /* const res = await getUserSeries()
+  if (res) {
+    series.length = 0
+    series.push(...res)
+  } */
 }
 
 //  创建系列
@@ -643,6 +649,21 @@ async function createNft() {
         // 余额足够且确认支付
         const res = await store.state.sdk?.createNFT(params)
         if (res && typeof res !== 'number') {
+          /* if (loading) loading.close()
+          ElMessage.success(i18n.t('castingsuccess'))
+          router.replace({
+            name: 'nftSuccess',
+            params: {
+              genesisId: res.genesisId,
+              tokenIndex: res.tokenIndex,
+              codehash: res.codehash,
+            },
+            query: {
+              type: 'created',
+              txId: res.txId,
+            },
+          }) */
+
           /* ElMessage.success(i18n.t('castingsuccess'))
         router.replace({ name: 'createSuccess', 
           params: { 
@@ -698,6 +719,7 @@ async function createNft() {
       }
     }
   } catch (error) {
+    debugger
     if (loading) loading.close()
     new Error(JSON.stringify(error))
   }

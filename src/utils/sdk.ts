@@ -509,11 +509,11 @@ export default class Sdk {
   issueNFT(params: NFTIssueParams) {
     return new Promise<IssueNFTResData>((resolve, reject) => {
       try {
-        const {isBatch, ...paramsOptions} = params
+        const { isBatch, ...paramsOptions } = params
         const _params = {
           data: {
             iconType: 'pic',
-            payTo: isBatch ? [] : [ { address: import.meta.env.VITE_AppAddress, amount: 10000 }],
+            payTo: isBatch ? [] : [{ address: import.meta.env.VITE_AppAddress, amount: 10000 }],
             ...paramsOptions,
           },
           callback: (res: MetaIdJsRes) => {
@@ -618,7 +618,7 @@ export default class Sdk {
   nftSell(params: NftSellParams) {
     return new Promise<NftSellResData>(async (resolve, reject) => {
       let signersRaw: any[] = []
-      const { isBatch, ...paramsOptins} = params
+      const { isBatch, ...paramsOptins } = params
       // const getSignRaw = await this.preFetchSignRaw({ genesisTxid: params.genesisTxid })
       // if (getSignRaw.code === 200) {
       //   signersRaw = getSignRaw.data.signersRaw

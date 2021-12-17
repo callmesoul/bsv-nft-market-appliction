@@ -5,8 +5,12 @@
         <ElSkeletonItem class="title" variant="h1" />
       </template>
       <template #default>
-        <div class="title" v-if="route.query.type === 'created'">{{ $t('createdSuccessTitle') }}</div>
-        <div class="title" v-else-if="route.query.type === 'buyed'">{{ $t('buySuccessTitle') }}</div>
+        <div class="title" v-if="route.query.type === 'created'">
+          {{ $t('createdSuccessTitle') }}
+        </div>
+        <div class="title" v-else-if="route.query.type === 'buyed'">
+          {{ $t('buySuccessTitle') }}
+        </div>
       </template>
     </ElSkeleton>
     <!-- nft 信息 卡片 -->
@@ -66,7 +70,7 @@ const nft: { val: NftItemDetail } = reactive({
 const isShowSkeleton = ref(true)
 
 function getDetail() {
-  return new Promise<void>(async (resolve) => {
+  return new Promise<void>(async resolve => {
     // 防止铸造完立刻跳转拿不到数据回来，检查上完链再获取数据
     if (route.query.txId && typeof route.query.txId === 'string') {
       await store.state.sdk?.checkNftTxIdStatus(route.query.txId)
@@ -74,8 +78,8 @@ function getDetail() {
     const _nft = await NFTDetail(
       typeof route.params.genesisId === 'string' ? route.params.genesisId : '',
       typeof route.params.codehash === 'string' ? route.params.codehash : '',
-      typeof route.params.tokenIndex === 'string' ? route.params.tokenIndex : '',
-    ).catch(() => isShowSkeleton.value = false)
+      typeof route.params.tokenIndex === 'string' ? route.params.tokenIndex : ''
+    ).catch(() => (isShowSkeleton.value = false))
     if (_nft && typeof _nft !== 'boolean') {
       nft.val = _nft
       isShowSkeleton.value = false
@@ -84,52 +88,53 @@ function getDetail() {
   })
 }
 
-
-
 function toDetail() {
-  router.replace({ name: 'detail', params: { 
-    genesisId: nft.val.genesis,
-    codehash: nft.val.codeHash,
-    tokenIndex: nft.val.tokenIndex
-  } })
+  router.replace({
+    name: 'detail',
+    params: {
+      genesisId: route.params.genesisId,
+      codehash: route.params.codehash,
+      tokenIndex: route.params.tokenIndex,
+    },
+  })
 }
 
 function toSale() {
-  router.replace({ name: 'sale', params: { 
-    genesisId: nft.val.genesis,
-    codehash: nft.val.codeHash,
-    tokenIndex: nft.val.tokenIndex
-  } })
+  router.replace({
+    name: 'sale',
+    params: {
+      genesisId: route.params.genesisId,
+      codehash: route.params.codehash,
+      tokenIndex: route.params.tokenIndex,
+    },
+  })
 }
 
 async function offSale() {
   await checkSdkStatus()
   const loading = ElLoading.service({
-      lock: true,
-      text: 'Loading',
-      spinner: 'el-icon-loading',
-      background: 'rgba(0, 0, 0, 0.7)',
-      customClass: 'full-loading',
+    lock: true,
+    text: 'Loading',
+    spinner: 'el-icon-loading',
+    background: 'rgba(0, 0, 0, 0.7)',
+    customClass: 'full-loading',
   })
-  ElMessageBox.confirm(
-    `${i18n.t('offsaleConfirm')} ${nft.val.nftName} ?`,
-    i18n.t('niceWarning'),
-    {
-      confirmButtonText: i18n.t('confirm'),
-      cancelButtonText: i18n.t('cancel'),
-      closeOnClickModal: false
-    }
-  ).then(async () => {
-    NftOffSale(nft.val, loading)
-      .then(() => {
-        nft.val.putAway = false
-        loading.close()
-      })
-      .catch(() => {
-        loading.close()
-      })
+  ElMessageBox.confirm(`${i18n.t('offsaleConfirm')} ${nft.val.nftName} ?`, i18n.t('niceWarning'), {
+    confirmButtonText: i18n.t('confirm'),
+    cancelButtonText: i18n.t('cancel'),
+    closeOnClickModal: false,
   })
-  .catch(() => loading.close())
+    .then(async () => {
+      NftOffSale(nft.val, loading)
+        .then(() => {
+          nft.val.putAway = false
+          loading.close()
+        })
+        .catch(() => {
+          loading.close()
+        })
+    })
+    .catch(() => loading.close())
 }
 
 if (route.params.genesisId && route.params.codehash && route.params.tokenIndex) {
