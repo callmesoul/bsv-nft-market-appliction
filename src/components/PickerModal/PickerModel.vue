@@ -4,7 +4,10 @@
       <div class="title flex1">
         {{ props.title }}<span v-if="multiple">({{ $t('multiple') }})</span>
       </div>
-      <a @click.stop="confirm">{{ $t('confirm') }}</a>
+      <span class="top-right">
+        <slot name="topRight"></slot>
+      </span>
+      <!-- <a @click.stop="confirm">{{ $t('confirm') }}</a> -->
     </div>
     <div class="picker-model-body">
       <div class="picker-model-list" v-if="props.list.length > 0">
@@ -29,7 +32,9 @@
         </div>
       </div>
       <div class="null" v-else>{{ $t('null') }}</div>
-      <slot name="bottom"></slot>
+    </div>
+    <div class="btn btn-block confirm-btn" @click.stop="confirm">
+      {{ $t('confirm') }}
     </div>
   </div>
 </template>

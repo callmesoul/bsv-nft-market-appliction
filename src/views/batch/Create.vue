@@ -796,16 +796,6 @@ if (store.state.userInfo) {
     }
   )
 }
-
-if (!store.state.nftToken) {
-  store.watch(
-    state => state.nftToken,
-    () => {
-      debugger
-      if (store.state.nftToken) root.value.getSeries()
-    }
-  )
-}
 </script>
 
 <style lang="scss" scoped src="./Create.scss"></style>

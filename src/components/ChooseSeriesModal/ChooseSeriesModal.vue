@@ -11,10 +11,10 @@
     <template v-slot:item="{ item }">
       <span>{{ item.currentNumber }}/{{ item.maxNumber }}</span>
     </template>
-    <template v-slot:bottom>
-      <div class="btn btn-block create-series-btn" @click="isShowCreateSeriesModal = true">
+    <template v-slot:topRight>
+      <a class="create-series-btn" @click="isShowCreateSeriesModal = true">
         {{ $t('createSerie') }}
-      </div>
+      </a>
     </template>
   </PickerModel>
 
@@ -84,7 +84,6 @@ async function createSerie() {
     ElMessage.error(i18n.t('havedSameNameSeries'))
     return
   }
-  debugger
   const loading = ElLoading.service({
     lock: true,
     text: 'Loading',
@@ -125,13 +124,16 @@ async function createSerie() {
   loading.close()
 }
 
-if (store.state.userInfo) {
+if (store.state.nftToken) {
   getSeries()
 } else {
-  store.watch(
-    state => state.userInfo,
-    () => {
-      getSeries()
+  const watchNFTToken = store.watch(
+    state => state.nftToken,
+    nftToken => {
+      if (nftToken) {
+        watchNFTToken()
+        getSeries()
+      }
     }
   )
 }
