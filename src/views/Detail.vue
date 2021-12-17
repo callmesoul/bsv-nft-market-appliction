@@ -424,7 +424,10 @@
                     <div class="key">{{ $t('createtime') }}：</div>
                     <div class="value flex1">{{ $filters.dateTimeFormat(nft.val.forgeTime) }}</div>
                   </div>
-                  <div class="work-detail-item flex flex flex-align-baseline">
+                  <div
+                    class="work-detail-item flex flex flex-align-baseline"
+                    v-if="nft.val.sellTxId !== ''"
+                  >
                     <div class="key">{{ $t('contractaddr') }}：</div>
                     <div class="value flex1 nowrap">
                       {{ nft.val.sellTxId }}
