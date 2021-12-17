@@ -21,7 +21,7 @@
 
       <!-- labels -->
       <div class="labels">
-        <span>{{ $t('showApp') }}</span>
+        <span v-if="app.val?.appType === 1">{{ $t('showApp') }}</span>
       </div>
 
       <!-- 开发者 -->
