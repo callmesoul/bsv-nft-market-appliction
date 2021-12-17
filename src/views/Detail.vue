@@ -132,7 +132,17 @@
 
           <div class="cont flex1 flex flex-v">
             <div class="name flex flex-align-center">
-              <span class="text flex1">{{ nft.val.nftName }}</span>
+              <ElPopover
+                placement="bottom"
+                :width="400"
+                trigger="hover"
+                popper-class="common-popover"
+              >
+                <template #reference>
+                  <span class="text flex1">{{ nft.val.nftName }}</span>
+                </template>
+                {{ nft.val.nftName }}
+              </ElPopover>
               <img src="@/assets/images/icon_share.svg" :alt="$t('share')" @click="share" />
             </div>
             <div
@@ -750,6 +760,7 @@ import {
   ElMessageBox,
   ElDialog,
   ElImage,
+  ElPopover,
 } from 'element-plus'
 import { useRoute } from 'vue-router'
 // @ts-ignore

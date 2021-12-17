@@ -31,6 +31,7 @@
         .text {
           font-size: 34px;
           font-weight: 500;
+          @include text-many-ellipsis(2);
 
           &.el-skeleton__text {
             height: 32px;

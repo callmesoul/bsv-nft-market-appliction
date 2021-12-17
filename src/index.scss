@@ -443,6 +443,10 @@ input[type='number'] {
   opacity: 0;
 }
 
+.common-popover {
+  max-width: 90%;
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s ease;
