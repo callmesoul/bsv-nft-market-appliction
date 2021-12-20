@@ -167,7 +167,6 @@
                 :isShowSeriesModal="isShowSeriesModal"
                 :selectedSeries="selectedSeries"
                 @confirm="isShowSeriesModal = false"
-                ref="root"
               />
             </div>
           </div>
