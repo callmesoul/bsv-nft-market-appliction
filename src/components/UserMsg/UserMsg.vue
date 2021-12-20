@@ -14,7 +14,7 @@
         marginRight: '15px',
       }"
     /> -->
-    <div class="cont">
+    <div class="cont flex1">
       <div class="username">
         {{ name }}<img class="cert-icon" src="@/assets/images/icon_cer.svg" v-if="isCerted" />
       </div>
