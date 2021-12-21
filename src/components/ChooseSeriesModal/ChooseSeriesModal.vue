@@ -119,6 +119,8 @@ async function createSerie() {
       serie.name = ''
       serie.number = ''
       isShowCreateSeriesModal.value = false
+    } else {
+      if (res.msg) ElMessage.error(res.msg)
     }
   }
   loading.close()
