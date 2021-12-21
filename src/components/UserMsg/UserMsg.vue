@@ -46,6 +46,9 @@ const isCerted = computed(() => {
 .user-msg {
   .avatar-warp {
     width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
     margin-right: 20px;
   }
 
