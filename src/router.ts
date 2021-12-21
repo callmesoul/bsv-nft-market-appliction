@@ -163,6 +163,10 @@ export const router = createRouter({
 // })
 
 router.beforeEach(async (to, from, next) => {
+  if (to.query && to.query.refCode && typeof to.query.refCode === 'string') {
+    localStorage.setItem('refCode', to.query.refCode)
+  }
+
   if (typeof to.name === 'string' && to.name.indexOf('app') !== -1) {
     next()
   } else {
