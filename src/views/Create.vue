@@ -167,6 +167,7 @@
                 :isShowSeriesModal="isShowSeriesModal"
                 :selectedSeries="selectedSeries"
                 @confirm="isShowSeriesModal = false"
+                ref="seriesModal"
               />
             </div>
           </div>
@@ -203,6 +204,7 @@ const classList = reactive(classifyList)
 const _nftTypes = reactive(nftTypes)
 const i18n = useI18n()
 const store = useStore()
+const seriesModal = ref()
 
 function setUserCreatCard() {
   if (store.state.userInfo) {
@@ -302,7 +304,6 @@ async function coverFileInputChage(e: Event) {
 //系列
 const selectedSeries: string[] = reactive([])
 const isShowSeriesModal = ref(false)
-const series: any[] = reactive([])
 
 function openSeriesModal() {
   isShowSeriesModal.value = true
@@ -480,11 +481,13 @@ async function createNft() {
     customClass: 'full-loading',
   })
   try {
+    debugger
+    const series = seriesModal.value.series
     let seriesIndex = -1
     if (selectedSeries[0]) {
-      seriesIndex = series.findIndex(item => item.series === selectedSeries[0])
+      seriesIndex = series.findIndex((item: any) => item.series === selectedSeries[0])
     }
-
+    debugger
     const params = {
       receiverAddress: store.state.userInfo!.address, //  创建者接收地址
       nftname: nft.nftName,
