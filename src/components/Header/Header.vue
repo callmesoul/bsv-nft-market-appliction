@@ -158,7 +158,10 @@ function auth() {
   if (store.state.userInfoLoading) return
   // 清楚缓存的信息，避免意外
   store.commit(Mutation.LOGOUT, undefined)
-  const url = `${env.VITE_AuthUrl}/userLogin?response_type=code&client_id=${env.VITE_AppId}&redirect_uri=${env.VITE_Hosts}${env.VITE_RedirectPath}&scope=app&from=${env.VITE_Hosts}`
+  let url = `${env.VITE_AuthUrl}/userLogin?response_type=code&client_id=${env.VITE_AppId}&redirect_uri=${env.VITE_Hosts}${env.VITE_RedirectPath}&scope=app&from=${env.VITE_Hosts}`
+  // 添加邀请码
+  const refCode = localStorage.getItem('refCode')
+  if (refCode) url += `&refCode=${refCode}`
   window.location.href = url
 }
 
