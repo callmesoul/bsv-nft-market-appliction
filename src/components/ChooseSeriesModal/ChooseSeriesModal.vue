@@ -1,7 +1,7 @@
 <template>
   <PickerModel
-    name="series"
-    listKey="series"
+    name="name"
+    listKey="name"
     :title="$t('chooseserices')"
     :visible="isShowSeriesModal"
     @confirm="emit('confirm')"
@@ -50,22 +50,28 @@ const props = defineProps<{
 }>()
 
 const store = useStore()
-const series: any[] = reactive([])
+const series: SeriesItem[] = reactive([])
 const i18n = useI18n()
 const serie = reactive({
   name: '',
   number: '',
 })
 const isShowCreateSeriesModal = ref(false)
+let key = ''
 
 function getSeries() {
   return new Promise<void>(async resolve => {
-    const res = await GetSeries({ page: 1, pageSize: 99 })
-    if (res.code === NftApiCode.success) {
-      series.length = 0
-      series.push(...res.data)
+    series.length = 0
+    const string = localStorage.getItem(key)
+    if (string) {
+      const list = JSON.parse(string)
+      series.push(...list.filter((item: any) => item.metaId === store.state.userInfo?.metaId))
     }
-    resolve()
+    // const res = await GetSeries({ page: 1, pageSize: 99 })
+    // if (res.code === NftApiCode.success) {
+    //   series.length = 0
+    //   series.push(...res.data)
+    // }
   })
 }
 
@@ -97,7 +103,23 @@ async function createSerie() {
     nftTotal: serie.number,
   })
   if (response && response.code === 200) {
-    const res = await CreateSerice({
+    series.unshift({
+      name: serie.name,
+      maxNumber: parseInt(serie.number),
+      codeHash: response.data.codehash,
+      genesis: response.data.genesisId,
+      genesisTxId: response.data.genesisTxid,
+      sensibleId: response.data.sensibleId,
+      metaId: store.state.userInfo.metaId,
+      currentNumber: 0,
+    })
+    localStorage.setItem(key, JSON.stringify(series))
+    ElMessage.success(i18n.t('createdSuccess'))
+    serie.name = ''
+    serie.number = ''
+    isShowCreateSeriesModal.value = false
+
+    /* const res = await CreateSerice({
       name: serie.name,
       count: parseInt(serie.number),
       codeHash: response.data.codehash,
@@ -121,12 +143,24 @@ async function createSerie() {
       isShowCreateSeriesModal.value = false
     } else {
       if (res.msg) ElMessage.error(res.msg)
-    }
+    } */
   }
   loading.close()
 }
 
+// 更新当前选择系列数量
+async function upgradeCurrentSeriesNumber() {
+  if (props.selectedSeries && props.selectedSeries[0]) {
+    const index = series.findIndex(item => item.name === props.selectedSeries[0])
+    if (index !== -1) {
+      series[index].currentNumber = series[index].currentNumber + 1
+      localStorage.setItem(key, JSON.stringify(series))
+    }
+  }
+}
+
 if (store.state.nftToken) {
+  key = `nftGenesis${store.state.userInfo.metaId}`
   getSeries()
 } else {
   const watchNFTToken = store.watch(
@@ -134,6 +168,7 @@ if (store.state.nftToken) {
     nftToken => {
       if (nftToken) {
         watchNFTToken()
+        key = `nftGenesis${store.state.userInfo.metaId}`
         getSeries()
       }
     }
@@ -143,6 +178,7 @@ if (store.state.nftToken) {
 defineExpose({
   series,
   getSeries,
+  upgradeCurrentSeriesNumber,
 })
 </script>
 

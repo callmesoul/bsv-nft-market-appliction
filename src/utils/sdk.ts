@@ -219,23 +219,20 @@ export default class Sdk {
   }
 
   // 检查NFT操作txid状态，成功后才可继续其他上链操作，否则容易双花
-  checkNftTxIdStatus(
-    txId: string,
-    timer?: number,
-    parentResolve?: (value: void | PromiseLike<void>) => void,
-    parentReject?: any
-  ) {
-    return new Promise<void>(async (resolve, reject) => {
+  checkNftTxIdStatus(txId: string, timer?: number, parentResolve?: any, parentReject?: any) {
+    return new Promise<boolean>(async (resolve, reject) => {
       axios
         .get(`https://api.sensiblequery.com/tx/${txId}`)
         .then(res => {
           if (res.data.code === 0) {
-            if (parentResolve) parentResolve()
-            else resolve()
+            // @ts-ignore
+            if (parentResolve) parentResolve(true)
+            else resolve(true)
           } else {
             if (timer && timer > 30) {
-              if (parentReject) parentReject()
-              else reject()
+              // @ts-ignore
+              if (parentResolve) parentResolve(false)
+              else resolve(false)
             } else {
               setTimeout(() => {
                 this.checkNftTxIdStatus(
@@ -312,6 +309,7 @@ export default class Sdk {
 
   // 铸造 nft 1. genesisNFT  2.createNftDataProtocol 3.issueNFT
   createNFT(params: CreateNFTParams) {
+    debugger
     return new Promise<
       | {
           // genesisNFT response data
@@ -338,34 +336,39 @@ export default class Sdk {
           // if (getSignRaw.code === 200) {
           //   signersRaw = getSignRaw.data.signersRaw
           // }
+          let result = true
           if (!params.checkOnly) {
-            await this.checkNftTxIdStatus(genesisTxId!).catch(() => reject('createNFT error'))
+            result = await this.checkNftTxIdStatus(genesisTxId!)
           }
-          const issueRes = await this.issueNFT({
-            genesisId: genesis!,
-            genesisTxid: genesisTxId!,
-            codehash: codeHash!,
-            sensibleId: sensibleId,
-            signersRaw,
-            ..._params,
-          })
-          if (issueRes.code === 200) {
-            if (issueRes.data.amount) {
-              amount += issueRes.data.amount
-            }
-            if (params.checkOnly) {
-              resolve(Math.ceil(amount))
+          if (result) {
+            const issueRes = await this.issueNFT({
+              genesisId: genesis!,
+              genesisTxid: genesisTxId!,
+              codehash: codeHash!,
+              sensibleId: sensibleId,
+              signersRaw,
+              ..._params,
+            })
+            if (issueRes.code === 200) {
+              if (issueRes.data.amount) {
+                amount += issueRes.data.amount
+              }
+              if (params.checkOnly) {
+                resolve(Math.ceil(amount))
+              } else {
+                resolve({
+                  ...issueRes.data,
+                  codehash: codeHash!,
+                  sensibleId: sensibleId!,
+                  genesisId: genesis!,
+                  genesisTxid: genesisTxId!,
+                })
+              }
             } else {
-              resolve({
-                ...issueRes.data,
-                codehash: codeHash!,
-                sensibleId: sensibleId!,
-                genesisId: genesis!,
-                genesisTxid: genesisTxId!,
-              })
+              reject('createNFT error')
             }
           } else {
-            reject('createNFT error')
+            reject('checkNftTxIdStatus error')
           }
         }
         if (!codeHash || !genesis || !genesisTxId || !sensibleId) {
@@ -473,6 +476,7 @@ export default class Sdk {
           }
         } else {
           // @ts-ignore
+          debugger
           this.metaidjs?.genesisNFT(_params)
         }
       } catch (error) {

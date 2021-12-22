@@ -481,11 +481,10 @@ async function createNft() {
     customClass: 'full-loading',
   })
   try {
-    debugger
-    const series = seriesModal.value.series
+    const series: SeriesItem[] = seriesModal.value.series
     let seriesIndex = -1
     if (selectedSeries[0]) {
-      seriesIndex = series.findIndex((item: any) => item.series === selectedSeries[0])
+      seriesIndex = series.findIndex((item: any) => item.name === selectedSeries[0])
     }
     debugger
     const params = {
@@ -524,6 +523,24 @@ async function createNft() {
         // 余额足够且确认支付
         const res = await store.state.sdk?.createNFT(params)
         if (res && typeof res !== 'number') {
+          if (selectedSeries[0] && seriesIndex !== -1) {
+            seriesModal.value.upgradeCurrentSeriesNumber()
+          }
+          if (loading) loading.close()
+          ElMessage.success(i18n.t('castingsuccess'))
+          router.replace({
+            name: 'nftSuccess',
+            params: {
+              genesisId: res.genesisId,
+              tokenIndex: res.tokenIndex,
+              codehash: res.codehash,
+            },
+            query: {
+              type: 'created',
+              txId: res.txId,
+            },
+          })
+
           /* if (loading) loading.close()
           ElMessage.success(i18n.t('castingsuccess'))
           router.replace({

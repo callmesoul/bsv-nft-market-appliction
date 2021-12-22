@@ -27,11 +27,12 @@ declare interface SaleNftResponstData extends apiResponse {
 declare interface SeriesItem {
   currentNumber: number
   maxNumber: number
-  series: string
   codeHash: string
   genesis: string
   genesisTxId: string
   sensibleId: string
+  metaId: string
+  name: string
 }
 declare interface GetSeriestData extends apiResponse {
   data: SeriesItem[]
