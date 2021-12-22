@@ -7,9 +7,14 @@
     @confirm="emit('confirm')"
     :list="series"
     :selecteds="selectedSeries"
+    :disabled="disabledFunction"
+    @change="selecteds => emit('change', selecteds)"
   >
     <template v-slot:item="{ item }">
-      <span>{{ item.currentNumber }}/{{ item.maxNumber }}</span>
+      <span
+        >{{ item.currentNumber }}/{{ item.maxNumber }}
+        <a class="delete" @click.stop="removeSeries(item)">{{ $t('delete') }}</a></span
+      >
     </template>
     <template v-slot:topRight>
       <a class="create-series-btn" @click="isShowCreateSeriesModal = true">
@@ -36,14 +41,13 @@
 </template>
 
 <script setup lang="ts">
-import { CreateSerice, GetSeries, NftApiCode } from '@/api'
 import PickerModel from '@/components/PickerModal/PickerModel.vue'
 import { useStore } from '@/store'
-import { ElLoading, ElMessage } from 'element-plus'
+import { ElLoading, ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-const emit = defineEmits(['confirm'])
+const emit = defineEmits(['confirm', 'change'])
 const props = defineProps<{
   isShowSeriesModal: boolean
   selectedSeries: string[]
@@ -57,6 +61,7 @@ const serie = reactive({
   number: '',
 })
 const isShowCreateSeriesModal = ref(false)
+const disabledFunction = (item: SeriesItem) => item.maxNumber <= item.currentNumber
 let key = ''
 
 function getSeries() {
@@ -157,6 +162,22 @@ async function upgradeCurrentSeriesNumber() {
       localStorage.setItem(key, JSON.stringify(series))
     }
   }
+}
+
+async function removeSeries(seriesItem: SeriesItem) {
+  ElMessageBox.confirm(`${i18n.t('deleteMessage')} ${seriesItem.name} ?`, i18n.t('niceWarning'), {
+    confirmButtonText: i18n.t('confirm'),
+    cancelButtonText: i18n.t('cancel'),
+  }).then(() => {
+    // 需删除的已选择， 先去掉已选择
+    if (props.selectedSeries && props.selectedSeries.indexOf(seriesItem.name) !== -1) {
+      props.selectedSeries.splice(props.selectedSeries.indexOf(seriesItem.name), 1)
+    }
+    // 删除
+    const index = series.findIndex(item => item.name === seriesItem.name)
+    series.splice(index, 1)
+    localStorage.setItem(key, JSON.stringify(series))
+  })
 }
 
 if (store.state.nftToken) {

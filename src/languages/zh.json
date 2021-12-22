@@ -355,5 +355,9 @@
   "appLink": "应用链接",
   "open": "打开",
   "iosNotToLink": "iOS暂不支持应用跳转功能，尽情期待",
-  "getSeriesFail": "获取系列信息失败，请稍后重试"
+  "getSeriesFail": "获取系列信息失败，请稍后重试",
+  "deleteMessage": "你确定要删除:",
+  "isSameOriginalFile": "是否相同源文件？",
+  "isSameNFTCover": "是否相同NFT封面图片",
+  "isCoverAndoriginalSame": "是否源文件和封面图一样？"
 }

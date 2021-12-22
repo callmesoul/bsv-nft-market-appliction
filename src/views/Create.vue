@@ -188,7 +188,7 @@ import {
 } from '@/utils/util'
 import { ref, reactive } from '@vue/reactivity'
 import { useI18n } from 'vue-i18n'
-import { CreateNft, GetTxData, NftApiCode } from '@/api'
+import { CreateNft, GetTxData, NftApiCode, NFTApiGetNFTDetail } from '@/api'
 import { useStore } from '@/store'
 import { router } from '@/router'
 import PickerModel from '@/components/PickerModal/PickerModel.vue'
@@ -526,6 +526,12 @@ async function createNft() {
           if (selectedSeries[0] && seriesIndex !== -1) {
             seriesModal.value.upgradeCurrentSeriesNumber()
           }
+          // 循环获取到nft信息 才跳去成功页面
+          await getNftDetailCycle({
+            tokenIndex: res.tokenIndex,
+            genesis: res.genesisId,
+            codehash: res.codehash,
+          })
           if (loading) loading.close()
           ElMessage.success(i18n.t('castingsuccess'))
           router.replace({
@@ -574,7 +580,8 @@ async function createNft() {
           // const coverForm = new FormData()
           // coverForm.append('file', coverFile.raw ? coverFile.raw : '')
           // const coverUrl = await Upload(coverForm)
-          const params = {
+
+          /* const params = {
             nftName: nft.nftName,
             intro: nft.intro,
             type: nft.type,
@@ -606,7 +613,7 @@ async function createNft() {
                 txId: res.txId,
               },
             })
-          }
+          } */
         }
       }
     }
@@ -615,6 +622,35 @@ async function createNft() {
     if (loading) loading.close()
     new Error(JSON.stringify(error))
   }
+}
+
+function getNftDetailCycle(
+  params: { tokenIndex: string; codehash: string; genesis: string },
+  curretNum = 0,
+  parentResolve?: Function
+) {
+  return new Promise<void>(async resolve => {
+    curretNum++
+    try {
+      const res = await NFTApiGetNFTDetail(params)
+      if (res && res.code === 0 && res.data.results.items.length > 0) {
+        if (parentResolve) parentResolve()
+        else resolve()
+      } else {
+        new Error('get nft detail fail')
+      }
+    } catch (error) {
+      debugger
+      if (curretNum < 10) {
+        setTimeout(() => {
+          getNftDetailCycle(params, curretNum, parentResolve ? parentResolve : resolve)
+        }, 1000)
+      } else {
+        if (parentResolve) parentResolve()
+        else resolve()
+      }
+    }
+  })
 }
 </script>
 <style lang="scss" scoped src="./Create.scss"></style>

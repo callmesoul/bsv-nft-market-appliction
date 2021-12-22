@@ -348,5 +348,9 @@
   "open": "Open",
   "iosNotToLink": "iOS does not support application jump function, please look forward to it",
   "uncertBlock": "Uncertified",
-  "getSeriesFail": "Failed to get series information, please try again later"
+  "getSeriesFail": "Failed to get series information, please try again later",
+  "deleteMessage": "Are you sure you want to delete:",
+  "isSameOriginalFile": "Are they the same source file?",
+  "isSameNFTCover": "Are they the same NFT cover image",
+  "isCoverAndoriginalSame": "Is the source file the same as the cover image?"
 }

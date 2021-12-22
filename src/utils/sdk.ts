@@ -309,7 +309,6 @@ export default class Sdk {
 
   // 铸造 nft 1. genesisNFT  2.createNftDataProtocol 3.issueNFT
   createNFT(params: CreateNFTParams) {
-    debugger
     return new Promise<
       | {
           // genesisNFT response data
@@ -476,7 +475,6 @@ export default class Sdk {
           }
         } else {
           // @ts-ignore
-          debugger
           this.metaidjs?.genesisNFT(_params)
         }
       } catch (error) {
@@ -552,8 +550,8 @@ export default class Sdk {
             )
           }
         } else {
-          debugger
           // @ts-ignore
+          debugger
           this.metaidjs?.issueNFT(_params)
         }
       } catch (error) {
@@ -608,7 +606,6 @@ export default class Sdk {
             )
           }
         } else {
-          debugger
           // @ts-ignore
           this.metaidjs?.nftBuy(_params)
         }
@@ -656,7 +653,6 @@ export default class Sdk {
           )
         }
       } else {
-        debugger
         // @ts-ignore
         this.metaidjs?.nftSell(_params)
       }
@@ -704,7 +700,6 @@ export default class Sdk {
           )
         }
       } else {
-        debugger
         // @ts-ignore
         this.metaidjs?.nftCancel(_params)
       }
