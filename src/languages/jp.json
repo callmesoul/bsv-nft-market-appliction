@@ -350,5 +350,8 @@
   "appsTitle": "App Center",
   "iosNotToLink": "iOS does not support application jump function, please look forward to it",
   "uncertBlock": "Uncertified",
-  "getSeriesFail": "Failed to get series information, please try again later"
+  "getSeriesFail": "Failed to get series information, please try again later",
+  "recommendedMining": "Referral Mining",
+  "recommendedMiningDrsc": "Share 62,500 ShowCoin Daily",
+  "appdownloadTips": " Download ShowApp to Explore!"
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="apps">
+  <div class="apps flex flex-v">
     <div class="top">
       <div class="header flex flex-align-center flex-pack-center">{{ $t('appsTitle') }}</div>
       <div class="tabs flex flex-align-center flex-pack-center">
@@ -15,7 +15,19 @@
         </div>
       </div>
     </div>
-    <div class="app-list">
+    <div class="app-list flex1">
+      <!-- 推荐挖矿 -->
+      <!-- <a @click="open('https://www.show.sv/')" class="app-item flex flex-align-center">
+        <img class="icon" src="@/assets/images/app_icon_showcoin.png" />
+        <div class="right flex1 flex flex-align-center">
+          <div class="cont flex1">
+            <div class="title">
+              {{ $t('recommendedMining') }} <img src="@/assets/images/icon_fire.png" />
+            </div>
+            <div class="drsc">{{ $t('recommendedMiningDrsc') }}</div>
+          </div>
+        </div>
+      </a> -->
       <a
         @click="open(app.url)"
         class="app-item flex flex-align-center"
@@ -35,6 +47,11 @@
           />
         </div>
       </a>
+    </div>
+    <div class="app-dowmload flex flex-align-center" @click="open('https://www.show.sv/')">
+      <img class="icon" src="@/assets/images/logo_app.png" />
+      <div class="flex1">{{ $t('appdownloadTips') }}</div>
+      <img class="right" src="@/assets/images/download_icon_ins.png" />
     </div>
   </div>
 </template>

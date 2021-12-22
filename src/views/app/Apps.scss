@@ -5,7 +5,7 @@
     width: 100%;
     margin: 0 auto;
     background: #fff;
-    overflow: auto;
+    overflow: hidden;
 
 
 
@@ -54,6 +54,39 @@
 
     .app-list {
         padding-bottom: 20px;
+        overflow-y: auto;
+
+        // 滚动条
+        /*滚动条的宽度*/
+        &::-webkit-scrollbar {
+            width: 8px;
+            height: 10px;
+        }
+
+        /*外层轨道。可以用display:none让其不显示，也可以添加背景图片，颜色改变显示效果*/
+        &::-webkit-scrollbar-track {
+            width: 0.06rem;
+            background-color: #eee;
+            -webkit-border-radius: 0em;
+            -moz-border-radius: 0em;
+            border-radius: 0em;
+        }
+
+        /*滚动条的设置*/
+        &::-webkit-scrollbar-thumb {
+            background-color: #fcd89e;
+            ;
+            background-clip: padding-box;
+            min-height: 0.28rem;
+            -webkit-border-radius: 1em;
+            -moz-border-radius: 1em;
+            border-radius: 1em;
+        }
+
+        /*滚动条移上去的背景*/
+        &::-webkit-scrollbar-thumb:hover {
+            background-color: #ffd99a;
+        }
 
         .app-item {
             padding: 0 12px;
@@ -77,6 +110,11 @@
                     .title {
                         font-size: 18px;
                         @extend %text-ellipsis;
+
+                        img {
+                            width: 14px;
+                            height: 14px;
+                        }
                     }
 
                     .drsc {
@@ -93,38 +131,29 @@
                     margin-left: 14px;
                 }
             }
+
+
         }
     }
 
-    // 滚动条
-    /*滚动条的宽度*/
-    &::-webkit-scrollbar {
-        width: 8px;
-        height: 10px;
+    .app-dowmload {
+        cursor: pointer;
+        height: 60px;
+        background: #303133;
+        color: #fff;
+        padding: 0 12px;
+        font-size: 16px;
+
+        .icon {
+            width: 34px;
+            height: 34px;
+            margin-right: 12px;
+        }
+
+        .right {
+            width: 16px;
+        }
     }
 
-    /*外层轨道。可以用display:none让其不显示，也可以添加背景图片，颜色改变显示效果*/
-    &::-webkit-scrollbar-track {
-        width: 0.06rem;
-        background-color: #eee;
-        -webkit-border-radius: 0em;
-        -moz-border-radius: 0em;
-        border-radius: 0em;
-    }
 
-    /*滚动条的设置*/
-    &::-webkit-scrollbar-thumb {
-        background-color: #fcd89e;
-        ;
-        background-clip: padding-box;
-        min-height: 0.28rem;
-        -webkit-border-radius: 1em;
-        -moz-border-radius: 1em;
-        border-radius: 1em;
-    }
-
-    /*滚动条移上去的背景*/
-    &::-webkit-scrollbar-thumb:hover {
-        background-color: #ffd99a;
-    }
 }
