@@ -358,5 +358,11 @@
   "getSeriesFail": "获取系列信息失败，请稍后重试",
   "recommendedMining": "推荐挖矿",
   "recommendedMiningDrsc": "每天瓜分62500枚SHOW",
-  "appdownloadTips": "下载ShowAPP体验更佳"
+  "appdownloadTips": "下载ShowAPP体验更佳",
+  "realName": "实名信息",
+  "idNumber": "身份证号",
+  "certBody": "认证机构",
+  "userNotCerted": "用户还未认证",
+  "personCert": "个人认证",
+  "noMsg": "暂无信息"
 }
