@@ -351,5 +351,11 @@
   "getSeriesFail": "Failed to get series information, please try again later",
   "recommendedMining": "Referral Mining",
   "recommendedMiningDrsc": "Share 62,500 ShowCoin Daily",
-  "appdownloadTips": " Download ShowApp to Explore!"
+  "appdownloadTips": " Download ShowApp to Explore!",
+  "realName": "Real name",
+  "idNumber": "ID number",
+  "certBody": "Certification body",
+  "userNotCerted": "User is not authenticated",
+  "personCert": "Personal authentication",
+  "noMsg": "no information"
 }
