@@ -10,7 +10,7 @@
     <div class="val" v-if="originalFile" :style="{ textAlign: align }">
       {{ originalFile.raw?.name }}
     </div>
-    <div class="placeholder" v-else>{{ placeholder }}</div>
+    <div class="placeholder" :style="{ textAlign: align }" v-else>{{ placeholder }}</div>
   </div>
 </template>
 

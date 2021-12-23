@@ -30,7 +30,7 @@ import {
 import { rejects } from 'assert/strict'
 import MetaIdJs, { ProtocolOptions } from 'metaidjs'
 // @ts-ignore
-import { v4 as uuid } from 'uuid'
+import { v1 as uuid } from 'uuid'
 
 import { ElMessage } from 'element-plus'
 
@@ -551,7 +551,6 @@ export default class Sdk {
           }
         } else {
           // @ts-ignore
-          debugger
           this.metaidjs?.issueNFT(_params)
         }
       } catch (error) {

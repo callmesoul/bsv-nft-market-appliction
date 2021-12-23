@@ -13,6 +13,13 @@
                 margin-right: 10px;
             }
         }
+
+        .val {}
+
+        input,
+        textarea {
+            border: 1px solid #eee;
+        }
     }
 }
 
@@ -141,6 +148,12 @@
                 &:last-child {
                     margin-right: 0;
                 }
+            }
+
+            .preview {
+                margin-top: 10px;
+                margin-bottom: 10px;
+                color: #909399;
             }
         }
 
@@ -301,9 +314,7 @@
         }
     }
 
-    .btn {
-        margin-top: 20px;
-    }
+    .btn {}
 }
 
 .result {

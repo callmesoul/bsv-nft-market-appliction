@@ -359,5 +359,12 @@
   "deleteMessage": "你确定要删除:",
   "isSameOriginalFile": "是否相同源文件？",
   "isSameNFTCover": "是否相同NFT封面图片",
-  "isCoverAndoriginalSame": "是否源文件和封面图一样？"
+  "isCoverAndoriginalSame": "是否源文件和封面图一样？",
+  "isSameNFTDrsc": "是否相同的描述？",
+  "isSameNFTName": "是否相同的NFT作品名称？",
+  "preview": "预览",
+  "batchAddMany": "批量增加至",
+  "piece": "个",
+  "mustLargeCurrentNum": "必须大于当前数量",
+  "sameNameTips": "$index 占位符表示当前序号； $total 占位符表示当前系列的总数"
 }

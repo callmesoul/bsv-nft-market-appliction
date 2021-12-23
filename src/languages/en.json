@@ -352,5 +352,12 @@
   "deleteMessage": "Are you sure you want to delete:",
   "isSameOriginalFile": "Are they the same source file?",
   "isSameNFTCover": "Are they the same NFT cover image",
-  "isCoverAndoriginalSame": "Is the source file the same as the cover image?"
+  "isCoverAndoriginalSame": "Is the source file the same as the cover image?",
+  "isSameNFTDrsc": "Is the description the same?",
+  "isSameNFTName": "Is the name of the same NFT work?",
+  "preview": "Preview",
+  "batchAddMany": "Batch increase to",
+  "piece": "Piece",
+  "mustLargeCurrentNum": "Must be greater than the current quantity",
+  "sameNameTips": "The $index placeholder represents the current serial number; the $total placeholder represents the total number of the current series"
 }

@@ -124,7 +124,79 @@
         </div>
       </div>
 
-      <div class="screen-item flex1"></div>
+      <!-- 是否相同NFT封面图片 -->
+      <div class="screen-item flex1">
+        <div class="input-item flex ">
+          <div class="select-warp flex ">
+            <div class="key flex1">
+              <span class="title">{{ $t('isSameNFTDrsc') }}:</span>
+              <ElSwitch :disabled="isCreated" v-model="sameInfo.isSameDrsc" />
+            </div>
+            <div class="value flex1" v-if="sameInfo.isSameDrsc">
+              <textarea
+                v-model="sameInfo.drsc"
+                :placeholder="$t('drscplac')"
+                :readonly="isCreated || !sameInfo.isSameDrsc"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header flex">
+      <!-- 是否相同的NFT作品名称？ -->
+      <div class="screen-item flex1">
+        <div class="input-item flex ">
+          <div class="select-warp">
+            <div class="key flex1">
+              <span class="title">{{ $t('isSameNFTName') }}:</span>
+              <ElSwitch :disabled="isCreated" v-model="sameInfo.isSameName" />
+            </div>
+            <div class="value flex1" v-if="sameInfo.isSameName">
+              <div class="preview" v-if="sameInfo.name !== ''">
+                {{ $t('preview') }}:
+                {{ sameInfo.name.replace(/\$index/g, '1').replace(/\$total/g, '999') }}
+              </div>
+              <div class="flex flex-align-center">
+                <input
+                  v-model="sameInfo.name"
+                  :readOnly="isCreated || !sameInfo.isSameName"
+                  type="text"
+                  :placeholder="$t('nameplac')"
+                  class="flex1"
+                />
+              </div>
+              <div class="preview">
+                {{ $t('sameNameTips') }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen-item flex1">
+        <div class="input-item flex ">
+          <div class="select-warp">
+            <div class="key flex1">
+              <span class="title">{{ $t('batchAddMany') }}:</span>
+              <ElSwitch :disabled="isCreated" v-model="sameInfo.isBatchAdd" />
+            </div>
+            <div class="value flex1" v-if="sameInfo.isBatchAdd">
+              <div class="flex flex-align-center mt10">
+                <input
+                  v-model="sameInfo.totalNum"
+                  :readOnly="isCreated"
+                  type="number"
+                  class="flex1"
+                />
+                {{ $t('piece') }}
+                <button class="btn ml10" @click="addTo">{{ $t('confirm') }}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- 批量铸造列表 -->
@@ -148,18 +220,19 @@
           :placeholder="$t('nftoriginal')"
           :original-file="item.originalFile"
           :disabled="isCreated"
+          :align="TextAlign.Start"
           v-if="!sameInfo.isSameOriginalFile && !sameInfo.isCoverAndoriginalSame"
           @change="files => (item.originalFile = files[0])"
         />
-        <div class="name input-item">
+        <div class="name input-item" v-if="!sameInfo.isSameName">
           <input
             type="text"
-            :readOnly="item.genesis"
+            :readOnly="isCreated || sameInfo.isSameName"
             v-model="item.name"
             :placeholder="$t('nameplac')"
           />
         </div>
-        <div class="intro input-item">
+        <div class="intro input-item" v-if="!sameInfo.isSameDrsc">
           <textarea
             v-model="item.intro"
             :readOnly="item.genesis"
@@ -167,6 +240,7 @@
           ></textarea>
         </div>
         <div
+          v-if="!isSameClassify"
           class="orginFile input-item"
           @click="
             isSameClassify || item.genesis
@@ -192,7 +266,7 @@
             :selecteds="item.classify"
           />
         </div>
-        <div class="index input-item" v-if="selectedSeries.length > 0">
+        <div class="index input-item">
           <input
             type="number"
             :readOnly="true"
@@ -230,16 +304,20 @@
           :placeholder="$t('nftoriginal')"
           v-if="!sameInfo.isSameOriginalFile && !sameInfo.isCoverAndoriginalSame"
         />
-        <div class="name input-item">
-          <input type="text" :placeholder="$t('nameplac')" />
+        <div class="name input-item" v-if="!sameInfo.isSameName">
+          <input
+            type="text"
+            :readOnly="isCreated || sameInfo.isSameName"
+            :placeholder="$t('nameplac')"
+          />
         </div>
-        <div class="intro input-item">
+        <div class="intro input-item" v-if="!sameInfo.isSameDrsc">
           <textarea :placeholder="$t('drscplac')"></textarea>
         </div>
-        <div class="orginFile input-item">
+        <div class="orginFile input-item" v-if="!isSameClassify">
           <div class="placeholder">{{ $t('choosetype') }}</div>
         </div>
-        <div class="index input-item" v-if="selectedSeries.length > 0">
+        <div class="index input-item">
           <input type="number" :readOnly="true" :disabled="true" />
         </div>
         <div class="btn btn-block btn-default">
@@ -309,6 +387,8 @@ import InnerPageHeader from '@/components/InnerPageHeader/InnerPageHeader.vue'
 import InputFile from '@/components/InputFile/InputFile.vue'
 import InputImage from '@/components/InputImage/InputImage.vue'
 import { NFTApiGetNFTDetail } from '@/api'
+import { TextAlign } from '@/enum'
+import { v1 as uuid } from 'uuid'
 
 const list: {
   id: string
@@ -325,7 +405,7 @@ const list: {
   tokenIndex?: string
 }[] = reactive([
   {
-    id: new Date().getTime().toString(),
+    id: uuid(),
     cover: null,
     originalFile: null,
     index: 1,
@@ -356,12 +436,24 @@ const sameInfo: {
   isSameCover: boolean
   cover: null | MetaFile
   isCoverAndoriginalSame: boolean
+  isSameDrsc: boolean
+  drsc: string
+  isSameName: boolean
+  name: string
+  isBatchAdd: boolean
+  totalNum: number
 } = reactive({
   isSameOriginalFile: false,
   originalFile: null,
   isSameCover: false,
   cover: null,
   isCoverAndoriginalSame: false,
+  isSameDrsc: false,
+  drsc: '',
+  isSameName: false,
+  name: '',
+  isBatchAdd: false,
+  totalNum: 0,
 })
 
 const paramsList: any[] = [] // 任务参数列表
@@ -418,7 +510,7 @@ function addItem() {
     }
   }
   list.push({
-    id: new Date().getTime().toString(),
+    id: uuid(),
     cover: null,
     originalFile: null,
     name: '',
@@ -469,7 +561,6 @@ async function onSetAllClassify() {
 async function onSeriesConfirm() {
   // 檢查sdk狀態
   await checkSdkStatus()
-  debugger
   isShowSeriesModal.value = false
   if (selectedSeries.length > 0) {
     const item: SeriesItem = root.value.series.find((item: any) => item.name === selectedSeries[0])
@@ -506,6 +597,16 @@ async function startBacth() {
   const result = await checkUserCanIssueNft()
   if (!result) return
 
+  if (sameInfo.isSameName && sameInfo.name === '') {
+    ElMessage.error(i18n.t('nameplac'))
+    return
+  }
+
+  if (sameInfo.isSameDrsc && sameInfo.drsc === '') {
+    ElMessage.error(i18n.t('drscplac'))
+    return
+  }
+
   if (sameInfo.isSameCover && !sameInfo.cover) {
     ElMessage.error(i18n.t('uploadcover'))
     return
@@ -518,25 +619,27 @@ async function startBacth() {
     }
   }
 
+  // if (isSameClassify.value && classify.length <= 0) {
+  //   ElMessage.error(i18n.t('choosetype'))
+  //   return
+  // }
+
   const loading = ElLoading.service()
 
-  let currentSeriesItem: SeriesItem | undefined = undefined
-  if (selectedSeries.length > 0) {
-    currentSeriesItem = root.value.series.find((item: any) => item.name === selectedSeries[0])
-    if (currentSeriesItem && currentSeriesItem.maxNumber < list[list.length - 1].index) {
-      ElMessage.error(i18n.t('overSeriesNum'))
-      loading.close()
-      return
+  try {
+    let currentSeriesItem: SeriesItem | undefined = undefined
+    if (selectedSeries.length > 0) {
+      currentSeriesItem = root.value.series.find((item: any) => item.name === selectedSeries[0])
+      if (currentSeriesItem && currentSeriesItem.maxNumber < list[list.length - 1].index) {
+        ElMessage.error(i18n.t('overSeriesNum'))
+        loading.close()
+        return
+      }
     }
-  }
+    let amount = 0
+    let isReady = true
 
-  let isReady = true
-  let i = 0
-  if (currentIndex.value) {
-    i = currentIndex.value
-  }
-  if (!isBreak.value) {
-    for (; i < list.length; i++) {
+    for (let i = 0; i < list.length; i++) {
       if (!list[i].cover && !sameInfo.isSameCover) {
         ElMessage.error(`${i + 1}: ${i18n.t('uploadcover')}`)
         isReady = false
@@ -553,14 +656,21 @@ async function startBacth() {
         }
       }
 
-      if (list[i].name === '') {
+      if (list[i].name === '' && !sameInfo.isSameName) {
         ElMessage.error(`${i + 1}: ${i18n.t('nameplac')}`)
         isReady = false
         loading.close()
         break
       }
-      if (list[i].intro === '') {
+      if (list[i].intro === '' && !sameInfo.isSameDrsc) {
         ElMessage.error(`${i + 1}: ${i18n.t('drscplac')}`)
+        isReady = false
+        loading.close()
+        break
+      }
+
+      if (list[i].classify.length <= 0) {
+        ElMessage.error(i18n.t('choosetype'))
         isReady = false
         loading.close()
         break
@@ -591,11 +701,20 @@ async function startBacth() {
             originalFile = list[i].originalFile
           }
         }
-        paramsList.push({
-          id: list[i].id,
+
+        // 设置nft名称
+        let nftname: string
+        if (sameInfo.isSameName) {
+          nftname = sameInfo.name
+            .replace(/\$index/g, list[i].index.toString())
+            .replace(/\$total/g, currentSeriesItem ? currentSeriesItem.maxNumber.toString() : '1')
+        } else {
+          nftname = list[i].name
+        }
+        const params = {
           receiverAddress: store.state.userInfo!.address, //  创建者接收地址
-          nftname: list[i].name,
-          nftdesc: list[i].intro,
+          nftname,
+          nftdesc: sameInfo.drsc ? sameInfo.drsc : list[i].intro,
           nfticon: {
             fileType: sameInfo.isSameCover ? sameInfo.cover.data_type : list[i].cover!.data_type,
             fileName: sameInfo.isSameCover ? sameInfo.cover.name : list[i].cover!.name,
@@ -617,94 +736,68 @@ async function startBacth() {
           genesis: currentSeriesItem ? currentSeriesItem.genesis : undefined,
           genesisTxId: currentSeriesItem ? currentSeriesItem.genesisTxId : undefined,
           sensibleId: currentSeriesItem ? currentSeriesItem.sensibleId : undefined,
-        })
-
-        // checkOnlyTasks.push(
-        //   store.state.sdk?.createNFT({
-        //     checkOnly: true,
-        //     ...params,
-        //   })
-        // )
-      }
-      // tasks.push(store.state.sdk?.createNFT(params))
-    }
-  }
-  if (!isReady) return
-  //   checkOnly
-  let amount = 0
-  debugger
-  if (currentIndex.value !== null) {
-    i = currentIndex.value
-  } else {
-    i = 0
-  }
-  try {
-    const res = await store.state.sdk?.createNFT({
-      checkOnly: true,
-      ...paramsList[i],
-    })
-    if (typeof res === 'number') {
-      amount += res
-    }
-  } catch (err) {
-    loading.close()
-    return
-  }
-  amount *= paramsList.length - i
-  const isConfirm = await confirmToSendMetaData(amount)
-  if (isConfirm) {
-    isCreated.value = true
-    loading.close()
-    isShowResult.value = true
-    if (currentIndex.value !== null) {
-      i = currentIndex.value
-    } else {
-      i = 0
-    }
-
-    for (; i < paramsList.length; i++) {
-      if (i === 2) break
-      try {
-        const { id, ...currentParams } = paramsList[i]
-        const res = await store.state.sdk?.createNFT({
-          ...currentParams,
-        })
-        if (res && typeof res !== 'number') {
-          if (currentSeriesItem) root.value.upgradeCurrentSeriesNumber()
-          const index = list.findIndex(item => item.id === id)
-          list[index].codehash = res.codehash
-          list[index].genesis = res.genesisId
-          list[index].tokenIndex = res.tokenIndex
-          if (parseInt(res.tokenIndex) === list[index].index - 1) {
-            ElMessage.success(
-              `${selectedSeries.length > 0 ? list[i].index : list[i].name}: ${i18n.t(
-                'castingsuccess'
-              )}`
-            )
-            await store.state.sdk
-              ?.checkNftTxIdStatus(res.sendMoneyTx)
-              .catch(() => ElMessage.error(i18n.t('networkTimeout')))
-            /* 间隔一段时间 提高批量铸造稳定性 */
-            await sleepTime()
-          } else {
-            isBreak.value = true
-            isShowResult.value = false
-            ElMessage.error(i18n.t('tokenIndexNotMatch'))
-            return
-          }
         }
-      } catch {
-        isBreak.value = true
-        isShowResult.value = false
-        return
+
+        paramsList.push({
+          id: list[i].id,
+          ...params,
+        })
+        //   checkOnly
+        const res = await store.state.sdk?.createNFT({
+          checkOnly: true,
+          ...params,
+        })
+        if (typeof res === 'number') {
+          amount += res
+        }
       }
-      currentIndex.value = i + 1
     }
-    isBreak.value = false
-    currentIndex.value = null
-    isShowResult.value = false
+    if (!isReady) return
+
+    const isConfirm = await confirmToSendMetaData(amount)
+    if (isConfirm) {
+      isCreated.value = true
+      loading.close()
+      isShowResult.value = true
+
+      for (let i = 0; i < paramsList.length; i++) {
+        try {
+          const { id, ...currentParams } = paramsList[i]
+          const res = await store.state.sdk?.createNFT({
+            ...currentParams,
+          })
+          if (res && typeof res !== 'number') {
+            if (currentSeriesItem) root.value.upgradeCurrentSeriesNumber()
+            const index = list.findIndex(item => item.id === id)
+            list[index].codehash = res.codehash
+            list[index].genesis = res.genesisId
+            list[index].tokenIndex = res.tokenIndex
+            debugger
+            if (parseInt(res.tokenIndex) === list[index].index - 1) {
+              ElMessage.success(`${i18n.t('castingsuccess')}`)
+              await store.state.sdk
+                ?.checkNftTxIdStatus(res.sendMoneyTx)
+                .catch(() => ElMessage.error(i18n.t('networkTimeout')))
+              /* 间隔一段时间 提高批量铸造稳定性 */
+              await sleepTime()
+            } else {
+              isBreak.value = true
+              isShowResult.value = false
+              ElMessage.error(i18n.t('tokenIndexNotMatch'))
+              return
+            }
+          }
+        } catch {
+          isShowResult.value = false
+          return
+        }
+      }
+      isShowResult.value = false
+      loading.close()
+    }
+  } catch (error) {
+    loading.close()
   }
-  loading.close()
 }
 
 // 初始化
@@ -725,35 +818,17 @@ function getDatas() {
   }
 }
 
-function getNftDetailCycle(
-  params: { tokenIndex: string; codehash: string; genesis: string },
-  curretNum = 0,
-  parentResolve?: Function
-) {
-  return new Promise<void>(async resolve => {
-    curretNum++
-    const res = await NFTApiGetNFTDetail(params).catch(() => {
-      if (curretNum < 10) {
-        setTimeout(() => {
-          getNftDetailCycle(params, curretNum, parentResolve ? parentResolve : resolve)
-        }, 1000)
-      } else {
-        resolve()
-      }
-    })
-    if (res && res.code === 0 && res.data.results.items.length > 0) {
-      if (parentResolve) parentResolve()
-      else resolve()
-    } else {
-      if (curretNum < 10) {
-        setTimeout(() => {
-          getNftDetailCycle(params, curretNum, parentResolve ? parentResolve : resolve)
-        }, 1000)
-      } else {
-        resolve()
-      }
-    }
-  })
+function addTo() {
+  if (list.length >= sameInfo.totalNum) {
+    ElMessage.error(i18n.t('mustLargeCurrentNum'))
+    return false
+  }
+  const loading = ElLoading.service()
+  const addNum = sameInfo.totalNum - list.length
+  for (let i = 0; i < addNum; i++) {
+    addItem()
+  }
+  loading.close()
 }
 
 if (store.state.userInfo) {
