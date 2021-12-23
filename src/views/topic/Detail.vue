@@ -44,7 +44,7 @@
             </template>
             <template v-else>
               <pre
-                class="flex1">{{ drsc.slice(0, 60) }}...<a @click="isShowMoreSeriesIntro = true">{{ $t('getmore') }}</a></pre>
+                class="flex1">{{ drsc.replace(/\s*/g,"").slice(0, 60) }}...<a @click="isShowMoreSeriesIntro = true">{{ $t('getmore') }}</a></pre>
             </template>
           </div>
         </div>
