@@ -88,7 +88,9 @@
             />
             <!-- 上架信息 -->
             <div class="form">
-              <div class="form-title">{{ $t('listedInformation') }}</div>
+              <div class="form-title">
+                {{ tabIndex === 0 ? $t('listedInformation') : $t('auctionMSg') }}
+              </div>
 
               <!-- 上架介绍 -->
               <div class="form-item" v-if="tabIndex === 0">

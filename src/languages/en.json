@@ -357,5 +357,6 @@
   "certBody": "Certification body",
   "userNotCerted": "User is not authenticated",
   "personCert": "Personal authentication",
-  "noMsg": "no information"
+  "noMsg": "no information",
+  "auctionMSg": "Auction Information"
 }

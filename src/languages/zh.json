@@ -364,5 +364,6 @@
   "certBody": "认证机构",
   "userNotCerted": "用户还未认证",
   "personCert": "个人认证",
-  "noMsg": "暂无信息"
+  "noMsg": "暂无信息",
+  "auctionMSg": "拍卖信息"
 }
