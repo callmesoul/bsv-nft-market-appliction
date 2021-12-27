@@ -340,6 +340,7 @@
         </div>
       </div>
     </template>
+
     <div class="btn btn-block" @click="startBacth" v-else>
       {{ isBreak ? $t('continue') : $t('startBatchCreate') }}
     </div>
@@ -762,6 +763,7 @@ async function startBacth() {
       isShowResult.value = true
 
       for (let i = 0; i < paramsList.length; i++) {
+        let isCreatedSuccess = false
         try {
           const { id, ...currentParams } = paramsList[i]
           const res = await store.state.sdk?.createNFT({
@@ -769,11 +771,11 @@ async function startBacth() {
           })
           if (res && typeof res !== 'number') {
             if (currentSeriesItem) root.value.upgradeCurrentSeriesNumber()
+            isCreatedSuccess = true
             const index = list.findIndex(item => item.id === id)
             list[index].codehash = res.codehash
             list[index].genesis = res.genesisId
             list[index].tokenIndex = res.tokenIndex
-            debugger
             if (parseInt(res.tokenIndex) === list[index].index - 1) {
               ElMessage.success(`${i18n.t('castingsuccess')}`)
               await store.state.sdk
@@ -791,6 +793,10 @@ async function startBacth() {
         } catch {
           isShowResult.value = false
           return
+        }
+        // 判断没有成功就 及时break 以防继续执行
+        if (!isCreatedSuccess) {
+          break
         }
       }
       isShowResult.value = false
