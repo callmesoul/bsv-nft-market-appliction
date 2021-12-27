@@ -409,6 +409,7 @@ async function confirmSale() {
         genesis: nft.val.genesis,
         tokenIndex: nft.val.tokenIndex,
         genesisTxid: nft.val.genesisTxId,
+        sensibleId: nft.val.sensibleId,
       },
       startBsvPrice: new Decimal(_auctionPrice).toNumber(),
       endTimeStamp: new Date(auctionTime.value).getTime(),

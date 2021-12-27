@@ -886,7 +886,7 @@ export default class Sdk {
     useFeeb: number
     checkOnly?: boolean
   }) {
-    return new Promise((resolve, reject) => {
+    return new Promise<MetaIdJsRes>((resolve, reject) => {
       const callback = (res: MetaIdJsRes) => {
         this.callback(res, resolve, reject)
       }
@@ -932,7 +932,7 @@ export default class Sdk {
     useFeeb: number
     checkOnly?: boolean
   }) {
-    return new Promise((resolve, reject) => {
+    return new Promise<MetaIdJsRes>((resolve, reject) => {
       const callback = (res: MetaIdJsRes) => {
         this.callback(res, resolve, reject)
       }
