@@ -11,7 +11,7 @@
     </div>
     <div class="series-msg flex2 flex flex-v">
       <div class="series-base flex flex1">
-        <img class="cover" :src="$filters.getI18nKey(genesisInfo.val, 'series')" />
+        <img class="cover" :src="$filters.getI18nKey(genesisInfo.val, 'seriesIcon')" />
         <div class="cont flex1 flex flex-v">
           <div class="name">
             {{ $filters.getI18nKey(genesisInfo.val, 'seriesName') }}
@@ -19,7 +19,7 @@
           <div class="drsc flex1 flex flex-v">
             <pre
               class="flex1"
-            ><template v-if="genesisInfo.val && $filters.getI18nKey(genesisInfo.val,'seriesInfo').length <= 60">{{ $filters.getI18nKey(genesisInfo.val,'seriesInfo')}}</template> <template v-else>{{ $filters.getI18nKey(genesisInfo.val,'seriesInfo').replace(/\s+/g,"").slice(0, 60) }}...<a @click="isShowMoreSeriesIntro = true">{{ $t('getmore') }}</a></template><a
+            ><template v-if="genesisInfo.val && $filters.getI18nKey(genesisInfo.val,'seriesInfo').length <= 60">{{ $filters.getI18nKey(genesisInfo.val,'seriesInfo')}}</template> <template v-else>{{ $filters.getI18nKey(genesisInfo.val,'seriesInfo').replace(/[\r\n]/g,"").replace(/\s+/g, ' ').slice(0, 60) }}...<a @click="isShowMoreSeriesIntro = true">{{ $t('getmore') }}</a></template><a
               v-if="genesisInfo.val && genesisInfo.val?.website && genesisInfo.val.website !== ''"
               :href="genesisInfo.val.website"
               target="_blank"
