@@ -565,13 +565,6 @@
   resolved "https://registry.nlark.com/@types/braces/download/@types/braces-3.0.1.tgz#5a284d193cfc61abb2e5a50d36ebbc50d942a32b"
   integrity sha1-WihNGTz8Yauy5aUNNuu8UNlCoys=
 
-"@types/echarts@^4.9.7":
-  version "4.9.12"
-  resolved "https://registry.npmmirror.com/@types/echarts/download/@types/echarts-4.9.12.tgz#c9b39f0ba2e8be99a6063a613683161e7f47a2cc"
-  integrity sha1-ybOfC6LovpmmBjphNoMWHn9Hosw=
-  dependencies:
-    "@types/zrender" "*"
-
 "@types/estree@^0.0.48":
   version "0.0.48"
   resolved "https://registry.nlark.com/@types/estree/download/@types/estree-0.0.48.tgz#18dc8091b285df90db2f25aa7d906cfc394b7f74"
@@ -659,11 +652,6 @@
   integrity sha1-xI5dVq/xREQJ45+hZLC01FUqe3o=
   dependencies:
     "@types/node" "*"
-
-"@types/zrender@*":
-  version "4.0.1"
-  resolved "https://registry.npmmirror.com/@types/zrender/download/@types/zrender-4.0.1.tgz#6280c40207927ce086be24b4391d668cd330e956"
-  integrity sha1-YoDEAgeSfOCGviS0OR1mjNMw6VY=
 
 "@typescript-eslint/eslint-plugin@~4":
   version "4.33.0"
@@ -2349,21 +2337,6 @@ ecc-jsbn@~0.1.1:
   dependencies:
     jsbn "~0.1.0"
     safer-buffer "^2.1.0"
-
-echarts-for-vue@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.npmmirror.com/echarts-for-vue/download/echarts-for-vue-1.4.1.tgz#f2f5dc7730f4fc85bff083440ec9247235926dc4"
-  integrity sha1-8vXcdzD0/IW/8INEDskkcjWSbcQ=
-  dependencies:
-    "@types/echarts" "^4.9.7"
-
-echarts@^5.2.2:
-  version "5.2.2"
-  resolved "https://registry.npmmirror.com/echarts/download/echarts-5.2.2.tgz?cache=0&sync_timestamp=1635741845024&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fecharts%2Fdownload%2Fecharts-5.2.2.tgz#ec3c8b2a151cbba71ba3c2c7cf9b2f2047ce4370"
-  integrity sha1-7DyLKhUcu6cbo8LHz5svIEfOQ3A=
-  dependencies:
-    tslib "2.3.0"
-    zrender "5.2.1"
 
 electron-to-chromium@^1.3.30, electron-to-chromium@^1.3.867:
   version "1.3.870"
@@ -4449,7 +4422,7 @@ merge2@^1.3.0:
   integrity sha1-Q2iJL4hekHRVpv19xVwMnUBJkK4=
 
 "metaidjs@file:.yalc/metaidjs":
-  version "1.11.0"
+  version "1.12.0"
 
 micromark@~2.11.0:
   version "2.11.4"
@@ -5756,11 +5729,6 @@ require-from-string@^2.0.1, require-from-string@^2.0.2:
   resolved "https://registry.nlark.com/require-from-string/download/require-from-string-2.0.2.tgz#89a7fdd938261267318eafe14f9c32e598c36909"
   integrity sha1-iaf92TgmEmcxjq/hT5wy5ZjDaQk=
 
-resize-detector@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.npmmirror.com/resize-detector/download/resize-detector-0.2.2.tgz#b207e72912bef0bda9fb825fe894ed9686ca965e"
-  integrity sha1-sgfnKRK+8L2p+4Jf6JTtlobKll4=
-
 resize-observer-polyfill@^1.5.1:
   version "1.5.1"
   resolved "https://registry.nlark.com/resize-observer-polyfill/download/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
@@ -6686,11 +6654,6 @@ trough@^1.0.0:
   resolved "https://registry.nlark.com/trough/download/trough-1.0.5.tgz?cache=0&sync_timestamp=1625400622069&other_urls=https%3A%2F%2Fregistry.nlark.com%2Ftrough%2Fdownload%2Ftrough-1.0.5.tgz#b8b639cefad7d0bb2abd37d433ff8293efa5f406"
   integrity sha1-uLY5zvrX0LsqvTfUM/+Ck++l9AY=
 
-tslib@2.3.0:
-  version "2.3.0"
-  resolved "https://registry.npmmirror.com/tslib/download/tslib-2.3.0.tgz#803b8cdab3e12ba581a4ca41c8839bbb0dacb09e"
-  integrity sha1-gDuM2rPhK6WBpMpByIObuw2ssJ4=
-
 tslib@^1.13.0, tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:
   version "1.14.1"
   resolved "https://registry.nlark.com/tslib/download/tslib-1.14.1.tgz?cache=0&sync_timestamp=1628722556410&other_urls=https%3A%2F%2Fregistry.nlark.com%2Ftslib%2Fdownload%2Ftslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
@@ -7074,13 +7037,6 @@ vary@^1:
   resolved "https://registry.npmmirror.com/vary/download/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
 
-ve-charts@^0.9.12:
-  version "0.9.12"
-  resolved "https://registry.npmmirror.com/ve-charts/download/ve-charts-0.9.12.tgz#4abc9da0b062c62f9ef049c93a699268392f6998"
-  integrity sha1-SrydoLBixi+e8EnJOmmSaDkvaZg=
-  dependencies:
-    resize-detector "^0.2.2"
-
 verror@1.10.0:
   version "1.10.0"
   resolved "https://registry.npm.taobao.org/verror/download/verror-1.10.0.tgz#3a105ca17053af55d6e270c1f8288682e18da400"
@@ -7399,13 +7355,6 @@ yauzl@^2.10.0:
   dependencies:
     buffer-crc32 "~0.2.3"
     fd-slicer "~1.1.0"
-
-zrender@5.2.1:
-  version "5.2.1"
-  resolved "https://registry.npmmirror.com/zrender/download/zrender-5.2.1.tgz#5f4bbda915ba6d412b0b19dc2431beaad05417bb"
-  integrity sha1-X0u9qRW6bUErCxncJDG+qtBUF7s=
-  dependencies:
-    tslib "2.3.0"
 
 zwitch@^1.0.0:
   version "1.0.5"
