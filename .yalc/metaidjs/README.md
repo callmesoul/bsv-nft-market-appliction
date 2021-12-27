@@ -106,6 +106,7 @@ metaIdJs.sendMetaDataTx({
   nodeName: "SimpleMicroblog",
   metaIdTag: "metaid",
   brfcId: "987654321",
+  appId: "showBuzz",
   accessToken: "token",
   encrypt: 0,
   payCurrency: "BSV",
@@ -164,6 +165,7 @@ metaIdJs.sendMetaDataTx({
 | payCurrency | 否   | string   | bsv        | 指定转账计价币种，支持 bsv 和 usd 两种，如果是 bsv 则计价单位为聪，如果是 usd 则计价单位为美元 |
 | payTo       | 否   | array    | []         | 同时向指定地址转账，交易输出格式为 [{address: 'XXXXXXXXXX', amount: 1000}] |
 | metaIdTag   | 否   | string   | metaid     | 固定为metaid                                                 |
+| appId       | 否   | String   |            | 当前appId，用于统计来源                                      |
 | nodeKey     | 否   | string   |            | 编辑数据时需要指定当前节点的 publicKey                       |
 | checkOnly   | 否   | boolean  | false      | 是否广播节点，默认false广播，为true时返回节点费率，txid之类信息，不广播 |
 | needConfirm | 否   | boolean  | true       | 用户是否需要支付前确认                                       |
@@ -233,7 +235,7 @@ metaIdJs.signMessage({
     "result": "<签名结果>"
   }
 }
-``` 
+```
 ### 
 * ### eciesEncryptData()
 

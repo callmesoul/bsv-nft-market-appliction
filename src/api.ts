@@ -379,6 +379,14 @@ export const GetNftAuctions = (params: {
   return auctionHttp.post(`/v1/app/metabot/all`, params)
 }
 
+export const GetNftAuction = (txId: string): Promise<GetNftAuctionRes> => {
+  return aggregation.get(`/v2/app/nftAuction/getNftAuctionBidByTxId/${txId}`)
+}
+
+export const GetNftAuctionDetail = (txId: string): Promise<GetNftAuctionRes> => {
+  return aggregation.get(`/v2/app/nftAuction/getNftAuctionCreateByTxId/${txId}`)
+}
+
 export const CheckUserCanAuction = (params: {
   codehash: string
   genesis: string
@@ -409,6 +417,17 @@ export const GetNftAuctionHistorys = (params: {
   page_size: number
 }): Promise<GetNftAuctionHistorysRes> => {
   return auctionHttp.post(`/v1/app/metabot/itemHistory`, params)
+}
+
+export const GetNftAuctionHistory = (params: {
+  auctionTxId: string
+  page: number
+  pageSize: number
+}): Promise<GetNftAuctionHistoryRes> => {
+  return aggregation.get(
+    `/v2/app/nftAuction/getNftAuctionBidListByAuctionId/${params.auctionTxId}`,
+    { params }
+  )
 }
 
 export const GetUserAuctionHistorys = (params: {

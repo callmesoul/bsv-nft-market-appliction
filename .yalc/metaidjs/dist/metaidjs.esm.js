@@ -88,7 +88,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "#showmoney-popup,\n#mainframewrapper {\n  font-size: 16px;\n  position: fixed;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0;\n}\n#showmoney-popup {\n  z-index: 9999;\n  display: none;\n  animation: smfadeOut 0.3s cubic-bezier(0, 0, 0.2, 1);\n}\n#showmoney-main-frame {\n  display: inline-block;\n  max-width: 500px;\n  width: 90vw;\n  height: 218px;\n  border-radius: 0.5em;\n  overflow: hidden;\n}\n#mainframewrapper {\n  z-index: 9998;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n#showmoney-popup.active,\n#mainframewrapper.active {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  animation: smfadeIn 0.3s cubic-bezier(0, 0, 0.2, 1);\n}\n\n.sm-popup-box {\n  width: 90vw;\n  max-width: 500px;\n  max-height: 90vh;\n  overflow-y: auto;\n  background: #FFF;\n  border-radius: 0.5em;\n  border-top: 0.8em solid #2196F3;\n  box-shadow: 0 0 0.8em rgba(0,0,0, .4);\n}\n.error-popup .sm-popup-box {\n  border-top: 0.8em solid #FF5252;\n}\n#showmoney-popup.active .sm-popup-box {\n  animation: smslideIn .3s cubic-bezier(0, 0, .2, 1);\n}\n#showmoney-popup .sm-popup-box {\n  animation: smslideOut .3s cubic-bezier(0, 0, .2, 1);\n}\n.sm-linear-progress {\n  display: none;\n  background: #bbdefb;\n  height: 6px;\n  position: relative;\n  width: 100%;\n  margin: 0 auto;\n  overflow: hidden;\n  animation: start 0.3s ease-in;\n}\n.loading .sm-linear-progress {\n  display: inherit;\n}\n.sm-linear-progress .bar {\n  position: absolute;\n  background: #2196F3;\n  /* background: #eab300; */\n  transition: transform 0.2s linear;\n  transition: transform 0.2s linear;\n  position: absolute;\n  left: 0;\n  top: 0;\n  bottom: 0;\n  width: 100%;\n}\n.sm-linear-progress .bar1 {\n  animation: progressLinearMovement 2.5s infinite;\n  animation-delay: 0;\n}\n.sm-linear-progress .bar2 {\n  left: -100%;\n  animation: progressLinearMovement 2.5s infinite;\n  animation-delay: 0.7s;\n}\n@keyframes progressLinearMovement {\n  0% {\n    left: -100%;\n  }\n  50% {\n    left: 100%;\n  }\n  100% {\n    left: 100%;\n  }\n}\n\n.sm-popup-header {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  position: relative;\n}\n.sm-popup-title {\n  font-weight: 600;\n  font-size: 1.25em;\n  line-height: 1.25;\n  color: #222;\n  box-sizing: border-box;\n  text-align: center;\n  width: 100%;\n  padding: 1em;\n}\n.sm-popup-close {\n  cursor: pointer;\n  font-family: inherit;\n  font-size: 120%;\n  line-height: 1.8;\n  border: 0;\n  background: transparent;\n  position: absolute;\n  right: 0.5em;\n  top: 0;\n  outline: none;\n}\n.sm-popup-close:before {\n  content: \"\\2715\";\n}\n.sm-popup-content {\n  margin: 1.5em 1em;\n  line-height: 1.5;\n  text-align: center;\n  color: #333;\n}\n.sm-popup-footer {\n  display: flex;\n  border-top: 1px solid #EEE;\n  justify-content: space-between;\n}\n.sm-popup-btn {\n  font-size: .875em;\n  padding: 1em;\n  border-radius: .25em;\n  border: 0;\n  cursor: pointer;\n  background: transparent;\n  will-change: transform;\n  transform: translateZ(0);\n  transition: transform .25s ease-out;\n  line-height: 1.15;\n  display: inline-block;\n  width: 49.99%;\n  outline: none;\n}\n.sm-popup-btn1 {\n  color: #888;\n  border-right: 1px solid #EEE;\n}\n.loading .sm-popup-btn2 {\n  color: #999;\n  cursor: not-allowed\n}\n.confirm-popup .amount-btn {\n  background: #eab300;\n  margin: 0 auto;\n  padding: 0.5em;\n  border-radius: 100px;\n  text-align: center;\n  width: 70%;\n  color: #FFF;\n  font-size: 1.2em;\n}\n.confirm-popup .amount-btn span {\n  font-size: 0.75em;\n  color: #EEE;\n}\n.confirm-popup .checkbox-group {\n  text-align: center;\n  margin: 1em 0;\n  color: #888;\n  font-size: 0.8em;\n  cursor: pointer;\n}\n.confirm-popup .checkbox-group input {\n  margin-right: 0.5em;\n}\n.confirm-popup .checkbox-group input:checked + label {\n  color: #eab300\n}\n\n@keyframes smslideIn {\n  from { transform: translateY(15%); }\n    to { transform: translateY(0); }\n}\n@keyframes smfadeIn {\n  from { opacity: 0; }\n    to { opacity: 1; }\n}\n@keyframes smfadeOut {\n  from { opacity: 1; }\n    to { opacity: 0; }\n}\n@keyframes smslideOut {\n  from { transform: translateY(0); }\n  to { transform: translateY(-10%); }\n}";
+var css_248z = "#showmoney-popup,\r\n#mainframewrapper {\r\n  font-size: 16px;\r\n  position: fixed;\r\n  left: 0;\r\n  right: 0;\r\n  top: 0;\r\n  bottom: 0;\r\n}\r\n#showmoney-popup {\r\n  z-index: 9999;\r\n  display: none;\r\n  animation: smfadeOut 0.3s cubic-bezier(0, 0, 0.2, 1);\r\n}\r\n#showmoney-main-frame {\r\n  display: inline-block;\r\n  max-width: 500px;\r\n  width: 90vw;\r\n  height: 218px;\r\n  border-radius: 0.5em;\r\n  overflow: hidden;\r\n}\r\n#mainframewrapper {\r\n  z-index: 9998;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n}\r\n#showmoney-popup.active,\r\n#mainframewrapper.active {\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  animation: smfadeIn 0.3s cubic-bezier(0, 0, 0.2, 1);\r\n}\r\n\r\n.sm-popup-box {\r\n  width: 90vw;\r\n  max-width: 500px;\r\n  max-height: 90vh;\r\n  overflow-y: auto;\r\n  background: #FFF;\r\n  border-radius: 0.5em;\r\n  border-top: 0.8em solid #2196F3;\r\n  box-shadow: 0 0 0.8em rgba(0,0,0, .4);\r\n}\r\n.error-popup .sm-popup-box {\r\n  border-top: 0.8em solid #FF5252;\r\n}\r\n#showmoney-popup.active .sm-popup-box {\r\n  animation: smslideIn .3s cubic-bezier(0, 0, .2, 1);\r\n}\r\n#showmoney-popup .sm-popup-box {\r\n  animation: smslideOut .3s cubic-bezier(0, 0, .2, 1);\r\n}\r\n.sm-linear-progress {\r\n  display: none;\r\n  background: #bbdefb;\r\n  height: 6px;\r\n  position: relative;\r\n  width: 100%;\r\n  margin: 0 auto;\r\n  overflow: hidden;\r\n  animation: start 0.3s ease-in;\r\n}\r\n.loading .sm-linear-progress {\r\n  display: inherit;\r\n}\r\n.sm-linear-progress .bar {\r\n  position: absolute;\r\n  background: #2196F3;\r\n  /* background: #eab300; */\r\n  transition: transform 0.2s linear;\r\n  transition: transform 0.2s linear;\r\n  position: absolute;\r\n  left: 0;\r\n  top: 0;\r\n  bottom: 0;\r\n  width: 100%;\r\n}\r\n.sm-linear-progress .bar1 {\r\n  animation: progressLinearMovement 2.5s infinite;\r\n  animation-delay: 0;\r\n}\r\n.sm-linear-progress .bar2 {\r\n  left: -100%;\r\n  animation: progressLinearMovement 2.5s infinite;\r\n  animation-delay: 0.7s;\r\n}\r\n@keyframes progressLinearMovement {\r\n  0% {\r\n    left: -100%;\r\n  }\r\n  50% {\r\n    left: 100%;\r\n  }\r\n  100% {\r\n    left: 100%;\r\n  }\r\n}\r\n\r\n.sm-popup-header {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  align-items: center;\r\n  position: relative;\r\n}\r\n.sm-popup-title {\r\n  font-weight: 600;\r\n  font-size: 1.25em;\r\n  line-height: 1.25;\r\n  color: #222;\r\n  box-sizing: border-box;\r\n  text-align: center;\r\n  width: 100%;\r\n  padding: 1em;\r\n}\r\n.sm-popup-close {\r\n  cursor: pointer;\r\n  font-family: inherit;\r\n  font-size: 120%;\r\n  line-height: 1.8;\r\n  border: 0;\r\n  background: transparent;\r\n  position: absolute;\r\n  right: 0.5em;\r\n  top: 0;\r\n  outline: none;\r\n}\r\n.sm-popup-close:before {\r\n  content: \"\\2715\";\r\n}\r\n.sm-popup-content {\r\n  margin: 1.5em 1em;\r\n  line-height: 1.5;\r\n  text-align: center;\r\n  color: #333;\r\n}\r\n.sm-popup-footer {\r\n  display: flex;\r\n  border-top: 1px solid #EEE;\r\n  justify-content: space-between;\r\n}\r\n.sm-popup-btn {\r\n  font-size: .875em;\r\n  padding: 1em;\r\n  border-radius: .25em;\r\n  border: 0;\r\n  cursor: pointer;\r\n  background: transparent;\r\n  will-change: transform;\r\n  transform: translateZ(0);\r\n  transition: transform .25s ease-out;\r\n  line-height: 1.15;\r\n  display: inline-block;\r\n  width: 49.99%;\r\n  outline: none;\r\n}\r\n.sm-popup-btn1 {\r\n  color: #888;\r\n  border-right: 1px solid #EEE;\r\n}\r\n.loading .sm-popup-btn2 {\r\n  color: #999;\r\n  cursor: not-allowed\r\n}\r\n.confirm-popup .amount-btn {\r\n  background: #eab300;\r\n  margin: 0 auto;\r\n  padding: 0.5em;\r\n  border-radius: 100px;\r\n  text-align: center;\r\n  width: 70%;\r\n  color: #FFF;\r\n  font-size: 1.2em;\r\n}\r\n.confirm-popup .amount-btn span {\r\n  font-size: 0.75em;\r\n  color: #EEE;\r\n}\r\n.confirm-popup .checkbox-group {\r\n  text-align: center;\r\n  margin: 1em 0;\r\n  color: #888;\r\n  font-size: 0.8em;\r\n  cursor: pointer;\r\n}\r\n.confirm-popup .checkbox-group input {\r\n  margin-right: 0.5em;\r\n}\r\n.confirm-popup .checkbox-group input:checked + label {\r\n  color: #eab300\r\n}\r\n\r\n@keyframes smslideIn {\r\n  from { transform: translateY(15%); }\r\n    to { transform: translateY(0); }\r\n}\r\n@keyframes smfadeIn {\r\n  from { opacity: 0; }\r\n    to { opacity: 1; }\r\n}\r\n@keyframes smfadeOut {\r\n  from { opacity: 1; }\r\n    to { opacity: 0; }\r\n}\r\n@keyframes smslideOut {\r\n  from { transform: translateY(0); }\r\n  to { transform: translateY(-10%); }\r\n}";
 styleInject(css_248z);
 
 /*
@@ -220,7 +220,7 @@ var Popup = /** @class */ (function () {
 var Popup$1 = new Popup();
 
 // Import here Polyfills if needed. Recommended core-js (npm i -D core-js)
-var generateRandomId = function () {
+var generateRandomId$1 = function () {
     return (Math.floor(Math.random() * 100000000000000000)).toString();
 };
 var PostmessageClient = /** @class */ (function () {
@@ -275,7 +275,7 @@ var PostmessageClient = /** @class */ (function () {
         if (!this.targetWindow) {
             return console.log('请指定目标窗口');
         }
-        var messageId = generateRandomId();
+        var messageId = generateRandomId$1();
         var message = {
             v1: __assign({ topic: topic,
                 payload: payload,
@@ -287,11 +287,11 @@ var PostmessageClient = /** @class */ (function () {
     return PostmessageClient;
 }());
 
-var generateRandomId$1 = function () {
-    return (Math.floor(Math.random() * 100000000000000000)).toString();
+var generateRandomId = function () {
+    return Math.floor(Math.random() * 100000000000000000).toString();
 };
 var hasClass = function (el, cls) {
-    return el.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+    return el.className.match(new RegExp("(\\s|^)" + cls + "(\\s|$)"));
 };
 var addClass = function (el, cls) {
     if (!hasClass(el, cls))
@@ -302,19 +302,19 @@ var MetaIdJs = /** @class */ (function () {
         var _this = this;
         this.postMessage = new PostmessageClient(window);
         this.mainFrameEl = null;
-        this.accessToken = '';
+        this.accessToken = "";
         this.isInjectMainFrame = false;
         this.isLoaded = false;
         this._handlers = {};
         this.onError = function (res) {
             Popup$1.error({
-                message: res.data.message
+                message: res.data.message,
             });
         };
         this.handleCreateNodeSuccess = function (res) {
             var _a, _b;
             Popup$1.close();
-            (_b = (_a = _this.mainFrameEl) === null || _a === void 0 ? void 0 : _a.parentElement) === null || _b === void 0 ? void 0 : _b.setAttribute('style', 'display: none;');
+            (_b = (_a = _this.mainFrameEl) === null || _a === void 0 ? void 0 : _a.parentElement) === null || _b === void 0 ? void 0 : _b.setAttribute("style", "display: none;");
             var payload = res.payload;
             var callback = _this._handlers[payload.handlerId].callback;
             if (callback) {
@@ -325,19 +325,19 @@ var MetaIdJs = /** @class */ (function () {
             var payload = res.payload;
             Popup$1.close();
             Popup$1.error({
-                message: payload.data && payload.data.message ? payload.data.message : res
+                message: payload.data && payload.data.message ? payload.data.message : res,
             });
         };
         this.handleConfirmCreateNode = function (res) {
             var _a, _b;
             // console.log("confirm", res);
             Popup$1.close();
-            (_b = (_a = _this.mainFrameEl) === null || _a === void 0 ? void 0 : _a.parentElement) === null || _b === void 0 ? void 0 : _b.removeAttribute('style');
+            (_b = (_a = _this.mainFrameEl) === null || _a === void 0 ? void 0 : _a.parentElement) === null || _b === void 0 ? void 0 : _b.removeAttribute("style");
         };
         this.handleCloseCreateNode = function (res) {
             var _a, _b;
             Popup$1.close();
-            (_b = (_a = _this.mainFrameEl) === null || _a === void 0 ? void 0 : _a.parentElement) === null || _b === void 0 ? void 0 : _b.setAttribute('style', 'display: none;');
+            (_b = (_a = _this.mainFrameEl) === null || _a === void 0 ? void 0 : _a.parentElement) === null || _b === void 0 ? void 0 : _b.setAttribute("style", "display: none;");
             var payload = res.payload;
             var callback = _this._handlers[payload.handlerId].onCancel;
             if (callback) {
@@ -355,21 +355,21 @@ var MetaIdJs = /** @class */ (function () {
         };
         this.handleSdkLoaded = function () {
             _this.isLoaded = true;
-            if (typeof _this.onLoaded === 'function') {
+            if (typeof _this.onLoaded === "function") {
                 _this.onLoaded();
             }
         };
         this.handleCommonError = function (res) {
-            console.log('error', res);
+            console.log("error", res);
             var payload = res.payload;
             Popup$1.close();
             if (payload.code === 202) {
                 Popup$1.confirm({
-                    message: 'User authentication expired.',
+                    message: "User authentication expired.",
                     showClose: false,
-                    buttonText: 'Cancel',
-                    buttonText2: 'Login',
-                    buttonUrl2: _this.SHOWMONEY_URL + "/userLogin?response_type=code&client_id=" + _this.oauthSettings.clientId + "&redirect_uri=" + _this.oauthSettings.redirectUri + "&scope=app&from=" + _this.oauthSettings.redirectUri
+                    buttonText: "Cancel",
+                    buttonText2: "Login",
+                    buttonUrl2: _this.SHOWMONEY_URL + "/userLogin?response_type=code&client_id=" + _this.oauthSettings.clientId + "&redirect_uri=" + _this.oauthSettings.redirectUri + "&scope=app&from=" + _this.oauthSettings.redirectUri,
                 });
             }
             else {
@@ -384,10 +384,10 @@ var MetaIdJs = /** @class */ (function () {
             var message = payload.data.message;
             Popup$1.close();
             Popup$1.confirm({
-                message: message ? message : 'Not enough money',
+                message: message ? message : "Not enough money",
                 showClose: false,
-                buttonText: 'Cancel',
-                buttonText2: 'Top up BSV',
+                buttonText: "Cancel",
+                buttonText2: "Top up BSV",
                 buttonUrl2: _this.SHOWMONEY_URL,
                 buttonAction: function () {
                     Popup$1.close();
@@ -398,15 +398,15 @@ var MetaIdJs = /** @class */ (function () {
                     // if (callback) {
                     //   callback(payload)
                     // }
-                }
+                },
             });
         };
         this.SHOWMONEY_URL = options.baseUri || "https://www.showmoney.app";
         this.onLoaded = options.onLoaded;
-        if (typeof options.onError === 'function') {
+        if (typeof options.onError === "function") {
             this.onError = options.onError;
         }
-        this.oauthSettings = __assign(__assign({}, options.oauthSettings), { clientSecret: '', scope: 'app', responseType: 'code' });
+        this.oauthSettings = __assign(__assign({}, options.oauthSettings), { clientSecret: "", scope: "app", responseType: "code" });
         this.init();
     }
     /**
@@ -414,12 +414,12 @@ var MetaIdJs = /** @class */ (function () {
      */
     MetaIdJs.prototype.injectMainFrame = function () {
         var _this = this;
-        var mainFrame = document.createElement('iframe');
-        var mainFrameWrapper = document.createElement('div');
-        mainFrame.setAttribute('id', 'showmoney-main-frame');
-        mainFrame.setAttribute('src', this.SHOWMONEY_URL + '/iframe');
-        mainFrameWrapper.setAttribute('id', 'mainframewrapper');
-        mainFrameWrapper.setAttribute('style', 'display: none;');
+        var mainFrame = document.createElement("iframe");
+        var mainFrameWrapper = document.createElement("div");
+        mainFrame.setAttribute("id", "showmoney-main-frame");
+        mainFrame.setAttribute("src", this.SHOWMONEY_URL + "/iframe");
+        mainFrameWrapper.setAttribute("id", "mainframewrapper");
+        mainFrameWrapper.setAttribute("style", "display: none;");
         mainFrameWrapper.appendChild(mainFrame);
         document.body.appendChild(mainFrameWrapper);
         // 报告 main-frame 载入完成
@@ -428,7 +428,7 @@ var MetaIdJs = /** @class */ (function () {
                 _this.mainFrameEl = mainFrame;
                 // 无法把postmessage实例保留，会报跨域错误
                 window.mainFrameMessage = new PostmessageClient(mainFrame.contentWindow);
-                window.mainFrameMessage.send('send-options', _this.oauthSettings);
+                window.mainFrameMessage.send("send-options", _this.oauthSettings);
                 // window.mainFrameMessage = mainFrameMessage
                 _this.isInjectMainFrame = true;
                 // console.log('mainFrame loaded')
@@ -450,13 +450,13 @@ var MetaIdJs = /** @class */ (function () {
             "issueNFT",
             "transferFT",
             "sendTxAuto",
-            "preFetchSignRaw"
+            "preFetchSignRaw",
         ];
         var _loop_1 = function (item) {
             this_1[item] = function (params) {
                 var defParams = params;
                 if (params.callback) {
-                    var handlerId = generateRandomId$1();
+                    var handlerId = generateRandomId();
                     this._handlers[handlerId] = {};
                     this._handlers[handlerId].callback = params.callback;
                     defParams.handlerId = handlerId;
@@ -477,13 +477,13 @@ var MetaIdJs = /** @class */ (function () {
     MetaIdJs.prototype.getUserInfo = function (params) {
         var defParams = params;
         if (params.callback) {
-            var handlerId = generateRandomId$1();
+            var handlerId = generateRandomId();
             this._handlers[handlerId] = {};
             this._handlers[handlerId].callback = params.callback;
             defParams.handlerId = handlerId;
         }
         delete defParams.callback;
-        window.mainFrameMessage.send('get-user-info', defParams);
+        window.mainFrameMessage.send("get-user-info", defParams);
     };
     /**
      * signMessage
@@ -491,13 +491,13 @@ var MetaIdJs = /** @class */ (function () {
     MetaIdJs.prototype.signMessage = function (params) {
         var defParams = params;
         if (params.callback) {
-            var handlerId = generateRandomId$1();
+            var handlerId = generateRandomId();
             this._handlers[handlerId] = {};
             this._handlers[handlerId].callback = params.callback;
             defParams.handlerId = handlerId;
         }
         delete defParams.callback;
-        window.mainFrameMessage.send('sign-messgae', defParams);
+        window.mainFrameMessage.send("sign-messgae", defParams);
     };
     /**
      * eciesEncryptData
@@ -505,24 +505,24 @@ var MetaIdJs = /** @class */ (function () {
     MetaIdJs.prototype.eciesEncryptData = function (params) {
         var defParams = params;
         if (params.callback) {
-            var handlerId = generateRandomId$1();
+            var handlerId = generateRandomId();
             this._handlers[handlerId] = {};
             this._handlers[handlerId].callback = params.callback;
             defParams.handlerId = handlerId;
         }
         delete defParams.callback;
-        window.mainFrameMessage.send('ecies-encrypt-data', defParams);
+        window.mainFrameMessage.send("ecies-encrypt-data", defParams);
     };
     MetaIdJs.prototype.eciesDecryptData = function (params) {
         var defParams = params;
         if (params.callback) {
-            var handlerId = generateRandomId$1();
+            var handlerId = generateRandomId();
             this._handlers[handlerId] = {};
             this._handlers[handlerId].callback = params.callback;
             defParams.handlerId = handlerId;
         }
         delete defParams.callback;
-        window.mainFrameMessage.send('ecies-decrypt-data', defParams);
+        window.mainFrameMessage.send("ecies-decrypt-data", defParams);
     };
     /**
      * ecdhEncryptData
@@ -530,35 +530,63 @@ var MetaIdJs = /** @class */ (function () {
     MetaIdJs.prototype.ecdhEncryptData = function (params) {
         var defParams = params;
         if (params.callback) {
-            var handlerId = generateRandomId$1();
+            var handlerId = generateRandomId();
             this._handlers[handlerId] = {};
             this._handlers[handlerId].callback = params.callback;
             defParams.handlerId = handlerId;
         }
         delete defParams.callback;
-        window.mainFrameMessage.send('ecdh-encrypt-data', defParams);
+        window.mainFrameMessage.send("ecdh-encrypt-data", defParams);
     };
     MetaIdJs.prototype.ecdhDecryptData = function (params) {
         var defParams = params;
         if (params.callback) {
-            var handlerId = generateRandomId$1();
+            var handlerId = generateRandomId();
             this._handlers[handlerId] = {};
             this._handlers[handlerId].callback = params.callback;
             defParams.handlerId = handlerId;
         }
         delete defParams.callback;
-        window.mainFrameMessage.send('ecdh-decrypt-data', defParams);
+        window.mainFrameMessage.send("ecdh-decrypt-data", defParams);
+    };
+    /**
+     * nftStartAuction nft 拍卖
+     */
+    MetaIdJs.prototype.nftStartAuction = function (params) {
+        var defParams = params;
+        if (params.callback) {
+            var handlerId = generateRandomId();
+            this._handlers[handlerId] = {};
+            this._handlers[handlerId].callback = params.callback;
+            defParams.handlerId = handlerId;
+        }
+        delete defParams.callback;
+        window.mainFrameMessage.send("nft-start-auction", defParams);
+    };
+    /**
+     * nftAuctionBid
+     */
+    MetaIdJs.prototype.nftAuctionBid = function (params) {
+        var defParams = params;
+        if (params.callback) {
+            var handlerId = generateRandomId();
+            this._handlers[handlerId] = {};
+            this._handlers[handlerId].callback = params.callback;
+            defParams.handlerId = handlerId;
+        }
+        delete defParams.callback;
+        window.mainFrameMessage.send("nft-auction-bid", defParams);
     };
     MetaIdJs.prototype.getFTList = function (params) {
         var defParams = params;
         if (params.callback) {
-            var handlerId = generateRandomId$1();
+            var handlerId = generateRandomId();
             this._handlers[handlerId] = {};
             this._handlers[handlerId].callback = params.callback;
             defParams.handlerId = handlerId;
         }
         delete defParams.callback;
-        window.mainFrameMessage.send('get-ftlist', defParams);
+        window.mainFrameMessage.send("get-ftlist", defParams);
     };
     // 版本兼容
     MetaIdJs.prototype.addProtocolNode = function (params) {
@@ -572,46 +600,46 @@ var MetaIdJs = /** @class */ (function () {
             this.showLoadingPopup();
         }
         if (params.callback || params.onCancel) {
-            var handlerId = generateRandomId$1();
+            var handlerId = generateRandomId();
             this._handlers[handlerId] = {};
             if (params.callback) {
-                this._handlers[handlerId]['callback'] = params.callback;
+                this._handlers[handlerId]["callback"] = params.callback;
             }
             if (params.onCancel) {
-                this._handlers[handlerId]['onCancel'] = params.onCancel;
+                this._handlers[handlerId]["onCancel"] = params.onCancel;
             }
             params = __assign(__assign({}, params), { handlerId: handlerId });
             delete params.callback;
             delete params.onCancel;
         }
         if (this.isInjectMainFrame) {
-            window.mainFrameMessage.send('create-node', params);
+            window.mainFrameMessage.send("create-node", params);
             // console.log(this._handlers)
         }
         else {
-            throw new Error('showmoney frame 未加载');
+            throw new Error("showmoney frame 未加载");
         }
     };
     MetaIdJs.prototype.payToAddress = function (params) {
         var defParams = params;
         if (params.callback) {
-            var handlerId = generateRandomId$1();
+            var handlerId = generateRandomId();
             this._handlers[handlerId] = {};
             this._handlers[handlerId].callback = params.callback;
             defParams.handlerId = handlerId;
         }
         delete defParams.callback;
-        window.mainFrameMessage.send('pay-to-address', defParams);
+        window.mainFrameMessage.send("pay-to-address", defParams);
     };
     MetaIdJs.prototype.showLoadingPopup = function () {
-        var popupEl = document.getElementById('showmoney-popup');
+        var popupEl = document.getElementById("showmoney-popup");
         if (!popupEl)
             return;
         Popup$1.info({
-            message: 'Processing data...',
-            showClose: false
+            message: "Processing data...",
+            showClose: false,
         });
-        addClass(popupEl, 'loading');
+        addClass(popupEl, "loading");
     };
     MetaIdJs.prototype.handleErrorNotLoggedIn = function (resolve) {
         var message = resolve.payload;
@@ -623,21 +651,21 @@ var MetaIdJs = /** @class */ (function () {
         // 监听信息
         this.postMessage.start();
         this.initHandle();
-        this.postMessage.subscribe('sdk-loaded', this.handleSdkLoaded);
-        this.postMessage.subscribe('error.not-logged-in', this.handleErrorNotLoggedIn);
-        this.postMessage.subscribe('loading', this.handleLoading);
-        this.postMessage.subscribe('success.create-node', this.handleCreateNodeSuccess);
-        this.postMessage.subscribe('confirm.create-node', this.handleConfirmCreateNode);
-        this.postMessage.subscribe('close.create-node', this.handleCloseCreateNode);
-        this.postMessage.subscribe('error.create-node', this.handleCreateNodeError);
-        this.postMessage.subscribe('error.not-enough-money', this.handleNotEnoughMoney);
-        this.postMessage.subscribe('receive-callback', this.handleCallback);
-        this.postMessage.subscribe('error.common', this.handleCommonError);
+        this.postMessage.subscribe("sdk-loaded", this.handleSdkLoaded);
+        this.postMessage.subscribe("error.not-logged-in", this.handleErrorNotLoggedIn);
+        this.postMessage.subscribe("loading", this.handleLoading);
+        this.postMessage.subscribe("success.create-node", this.handleCreateNodeSuccess);
+        this.postMessage.subscribe("confirm.create-node", this.handleConfirmCreateNode);
+        this.postMessage.subscribe("close.create-node", this.handleCloseCreateNode);
+        this.postMessage.subscribe("error.create-node", this.handleCreateNodeError);
+        this.postMessage.subscribe("error.not-enough-money", this.handleNotEnoughMoney);
+        this.postMessage.subscribe("receive-callback", this.handleCallback);
+        this.postMessage.subscribe("error.common", this.handleCommonError);
     };
     return MetaIdJs;
 }());
 
 window.MetaIdJs = MetaIdJs;
 
-export default MetaIdJs;
+export { MetaIdJs as default };
 //# sourceMappingURL=metaidjs.esm.js.map

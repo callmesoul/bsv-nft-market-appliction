@@ -70,12 +70,9 @@
           <a :class="{ active: tabIndex === 0 }" @click="changeTabIndex(0)">{{
             $t('priceSale')
           }}</a>
-          <a
-            :class="{ active: tabIndex === 1 }"
-            @click="changeTabIndex(1)"
-            v-if="mode !== 'prod'"
-            >{{ $t('auctionSale') }}</a
-          >
+          <a :class="{ active: tabIndex === 1 }" @click="changeTabIndex(1)">{{
+            $t('auctionSale')
+          }}</a>
         </div>
 
         <div class="cont-warp">
@@ -89,14 +86,18 @@
               :created-at="nft.val.forgeTime"
               :meta-id="nft.val.foundryMetaId"
             />
-
+            <!-- 上架信息 -->
             <div class="form">
               <div class="form-title">{{ $t('listedInformation') }}</div>
-              <div class="form-item">
+
+              <!-- 上架介绍 -->
+              <div class="form-item" v-if="tabIndex === 0">
                 <div class="cont flex flex-align-center">
                   <textarea v-model="saleIntro" :placeholder="$t('offSaleIntro')"></textarea>
                 </div>
               </div>
+
+              <!-- 时间 -->
               <!-- 上架时间 -->
               <div class="form-item" v-if="tabIndex === 0">
                 <div class="cont flex flex-align-center">
@@ -113,6 +114,7 @@
                   <img class="icon" src="@/assets/images/list_icon_calendar.svg" />
                 </div>
               </div>
+
               <!-- 竞拍时间 -->
               <div class="form-item" v-else>
                 <div class="cont flex flex-align-center">
@@ -129,68 +131,10 @@
                   <img class="icon" src="@/assets/images/list_icon_calendar.svg" />
                 </div>
               </div>
-              <!-- 设置起拍价 -->
-              <div class="form-item" v-if="tabIndex === 1">
-                <div class="cont flex flex-align-center">
-                  <input
-                    v-model="auctionPrice"
-                    :placeholder="
-                      $t('auctionPriceplac') +
-                        new Decimal(Math.pow(10, 8)).div(units[unitIndex].sats).mul(0.5)
-                    "
-                    @change="auctionAmountChange"
-                    type="number"
-                    class="flex1"
-                    min="0.5"
-                  />
-                  <div class="type">
-                    <ElDropdown trigger="click">
-                      <span class="flex flex-align-center">
-                        {{ units[unitIndex].unit }} <span class="arrow"></span>
-                      </span>
-                      <template #dropdown>
-                        <el-dropdown-menu>
-                          <el-dropdown-item
-                            v-for="(unit, index) in units"
-                            :key="index"
-                            @click="changeUnitIndex(index)"
-                            >{{ unit.unit }}</el-dropdown-item
-                          >
-                        </el-dropdown-menu>
-                      </template>
-                    </ElDropdown>
-                  </div>
-                </div>
-              </div>
-              <!-- 设置最少加价 -->
-              <div class="form-item" v-if="tabIndex === 1">
-                <div class="cont flex flex-align-center">
-                  <input
-                    v-model="minGapPrice"
-                    :placeholder="$t('minGapPriceplac')"
-                    type="number"
-                    class="flex1"
-                  />
-                  <div class="type">
-                    <ElDropdown trigger="click">
-                      <span class="flex flex-align-center">
-                        {{ units[unitIndex].unit }} <span class="arrow"></span>
-                      </span>
-                      <template #dropdown>
-                        <el-dropdown-menu>
-                          <el-dropdown-item
-                            v-for="(unit, index) in units"
-                            :key="index"
-                            @click="changeUnitIndex(index)"
-                            >{{ unit.unit }}</el-dropdown-item
-                          >
-                        </el-dropdown-menu>
-                      </template>
-                    </ElDropdown>
-                  </div>
-                </div>
-              </div>
-              <div class="form-item">
+
+              <!-- 价格 -->
+              <!-- 定价出售 -->
+              <div class="form-item" v-if="tabIndex === 0">
                 <div class="cont flex flex-align-center">
                   <input
                     v-model="saleAmount"
@@ -220,6 +164,65 @@
                   </div>
                 </div>
               </div>
+              <!-- 设置起拍价 -->
+              <div class="form-item" v-else>
+                <div class="cont flex flex-align-center">
+                  <input
+                    v-model="auctionPrice"
+                    :placeholder="$t('auctionPriceplac') + minPrice"
+                    @change="auctionAmountChange"
+                    type="number"
+                    class="flex1"
+                  />
+                  <div class="type">
+                    <ElDropdown trigger="click">
+                      <span class="flex flex-align-center">
+                        {{ units[unitIndex].unit }} <span class="arrow"></span>
+                      </span>
+                      <template #dropdown>
+                        <el-dropdown-menu>
+                          <el-dropdown-item
+                            v-for="(unit, index) in units"
+                            :key="index"
+                            @click="changeUnitIndex(index)"
+                            >{{ unit.unit }}</el-dropdown-item
+                          >
+                        </el-dropdown-menu>
+                      </template>
+                    </ElDropdown>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 设置最少加价 -->
+              <!-- <div class="form-item" v-if="tabIndex === 1">
+                <div class="cont flex flex-align-center">
+                  <input
+                    v-model="minGapPrice"
+                    :placeholder="$t('minGapPriceplac')"
+                    type="number"
+                    class="flex1"
+                  />
+                  <div class="type">
+                    <ElDropdown trigger="click">
+                      <span class="flex flex-align-center">
+                        {{ units[unitIndex].unit }} <span class="arrow"></span>
+                      </span>
+                      <template #dropdown>
+                        <el-dropdown-menu>
+                          <el-dropdown-item
+                            v-for="(unit, index) in units"
+                            :key="index"
+                            @click="changeUnitIndex(index)"
+                            >{{ unit.unit }}</el-dropdown-item
+                          >
+                        </el-dropdown-menu>
+                      </template>
+                    </ElDropdown>
+                  </div>
+                </div>
+              </div> -->
+
               <!-- <div class="to-histiry">
             <a>{{ $t('seehistoryprice') }}</a>
           </div> -->
@@ -230,10 +233,7 @@
                 'btn-gray':
                   tabIndex === 0
                     ? saleIntro === '' || saleAmount === '' || saleTime === ''
-                    : auctionTime === '' ||
-                      auctionPrice === '' ||
-                      saleIntro === '' ||
-                      minGapPrice === '',
+                    : auctionTime === '' || auctionPrice === '',
               }"
               @click="confirmSale"
             >
@@ -281,7 +281,7 @@ const auctionTime = ref('') // 拍卖时间
 const mode = import.meta.env.MODE
 
 const minPrice = computed(() => {
-  let min = 0.000001
+  let min = 0.00001
   if (units[unitIndex.value].unit === UnitName.BSV) {
     min = 0.000001
   } else {
@@ -386,13 +386,7 @@ async function confirmSale() {
     }
   } else if (tabIndex.value === 1) {
     // 拍卖
-    if (
-      auctionTime.value === '' ||
-      auctionPrice.value === '' ||
-      saleIntro.value === '' ||
-      minGapPrice.value === ''
-    )
-      return
+    if (auctionTime.value === '' || auctionPrice.value === '') return
 
     const loading = ElLoading.service({
       lock: true,
@@ -402,33 +396,41 @@ async function confirmSale() {
       customClass: 'full-loading',
     })
     let _auctionPrice
-    let fixed_value
-    let _minPrceGap
     if (units[unitIndex.value].unit === UnitName.SATS) {
       _auctionPrice = auctionPrice.value
-      fixed_value = saleAmount.value
-      _minPrceGap = minGapPrice.value
     } else {
       _auctionPrice = new Decimal(auctionPrice.value).mul(Math.pow(10, 8)).toString()
-      fixed_value = new Decimal(saleAmount.value).mul(Math.pow(10, 8)).toString()
-      _minPrceGap = new Decimal(minGapPrice.value).mul(Math.pow(10, 8)).toString()
     }
-    const response = await store.state.sdk?.createNFTAuctionProtocol({
-      sensibleInfo: {
+    const response = await store.state.sdk?.nftStartAuction({
+      nft: {
         codehash: nft.val.codeHash,
         genesis: nft.val.genesis,
         tokenIndex: nft.val.tokenIndex,
+        genesisTxid: nft.val.genesisTxId,
       },
-      auctionDesc: saleIntro.value,
-      auctionContractTxId: nft.val.sellContractTxId ? nft.val.sellContractTxId : '',
-      basePrice: new Decimal(_auctionPrice).toNumber(),
-      minPrceGap: new Decimal(_minPrceGap).toNumber(),
-      sellPrice: new Decimal(fixed_value).toNumber(),
-      availabeTime: new Date(auctionTime.value).getTime(),
+      startBsvPrice: new Decimal(_auctionPrice).toNumber(),
+      endTimeStamp: new Date(auctionTime.value).getTime(),
+      feeAddress: '19NeJJM6eEa3bruYnqkTA4Cp6VvdFGSepd',
+      feeAmount: 1000,
+      useFeeb: 0.5,
+      // sensibleInfo: {
+      //   codehash: nft.val.codeHash,
+      //   genesis: nft.val.genesis,
+      //   tokenIndex: nft.val.tokenIndex,
+      // },
+      // auctionDesc: saleIntro.value,
+      // auctionContractTxId: nft.val.sellContractTxId ? nft.val.sellContractTxId : '',
+      // basePrice: new Decimal(_auctionPrice).toNumber(),
+      // minPrceGap: new Decimal(_minPrceGap).toNumber(),
+      // sellPrice: new Decimal(fixed_value).toNumber(),
+      // availabeTime: new Date(auctionTime.value).getTime(),
     })
-    if (response?.code === 200) {
+    if (response && response?.code === 200) {
+      ElMessage.success(i18n.t('createAuctionSuccess'))
+      loading.close()
+      router.back()
       // 拍卖
-      const res = await CreateNftAuction({
+      /* const res = await CreateNftAuction({
         codehash: nft.val.codeHash,
         genesis: nft.val.genesis,
         token_index: parseInt(nft.val.tokenIndex),
@@ -442,10 +444,8 @@ async function confirmSale() {
         auction_tx: response.data.txId,
       })
       if (res.code === 0) {
-        ElMessage.success(i18n.t('createAuctionSuccess'))
-        loading.close()
-        router.back()
-      }
+        
+      } */
     }
   }
 

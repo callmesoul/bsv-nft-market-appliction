@@ -28,7 +28,7 @@ import {
   SignMessageRes,
 } from '@/typings/sdk'
 import { rejects } from 'assert/strict'
-import MetaIdJs, { ProtocolOptions } from 'metaidjs'
+import MetaIdJs, { NFTTypes, ProtocolOptions } from 'metaidjs'
 // @ts-ignore
 import { v4 as uuid } from 'uuid'
 
@@ -871,7 +871,94 @@ export default class Sdk {
     })
   }
 
-  createNFTAuctionProtocol(params: {
+  nftStartAuction(params: {
+    nft: {
+      codehash: string
+      genesis: string
+      genesisTxid: string
+      tokenIndex: string
+    }
+    startBsvPrice: number
+    endTimeStamp: number
+    feeAddress: string
+    feeAmount: number
+    useFeeb: number
+    checkOnly?: boolean
+  }) {
+    return new Promise((resolve, reject) => {
+      const callback = (res: MetaIdJsRes) => {
+        this.callback(res, resolve, reject)
+      }
+      if (this.isApp) {
+        const functionName: string = `nftStartAuctionCallBack`
+        // @ts-ignore
+        window[functionName] = callback
+        // @ts-ignore
+        if (window.appMetaIdJsV2) {
+          window.appMetaIdJsV2?.nftStartAuction(
+            store.state.token!.access_token,
+            JSON.stringify(params),
+            functionName
+          )
+        } else {
+          window.appMetaIdJs?.nftStartAuction(
+            store.state.token!.access_token,
+            JSON.stringify(params),
+            functionName
+          )
+        }
+      } else {
+        debugger
+        // @ts-ignore
+        this.metaidjs?.nftStartAuction({
+          ...params,
+          callback,
+        })
+      }
+    })
+  }
+
+  nftAuctionBid(params: {
+    nft: NFTTypes
+    bsvBidPrice: number
+    nftAuctionId: string
+    useFeeb: number
+    checkOnly?: boolean
+  }) {
+    return new Promise((resolve, reject) => {
+      const callback = (res: MetaIdJsRes) => {
+        this.callback(res, resolve, reject)
+      }
+      if (this.isApp) {
+        const functionName: string = `nftAuctionBidCallBack`
+        // @ts-ignore
+        window[functionName] = callback
+        // @ts-ignore
+        if (window.appMetaIdJsV2) {
+          window.appMetaIdJsV2?.nftAuctionBid(
+            store.state.token!.access_token,
+            JSON.stringify(params),
+            functionName
+          )
+        } else {
+          window.appMetaIdJs?.nftAuctionBid(
+            store.state.token!.access_token,
+            JSON.stringify(params),
+            functionName
+          )
+        }
+      } else {
+        debugger
+        // @ts-ignore
+        this.metaidjs?.nftAuctionBid({
+          ...params,
+          callback,
+        })
+      }
+    })
+  }
+
+  /* createNFTAuctionProtocol(params: {
     sensibleInfo: //如果type是sensible，则读取这信息
     {
       codehash: string //必须 // nft的codehash
@@ -921,7 +1008,7 @@ export default class Sdk {
       nodeName: 'NFTAuctionBid',
       payTo: [{ address, amount: params.bidPrice }],
     })
-  }
+  } */
 
   // 跳转tx详情
   toTxLink(txId: string) {

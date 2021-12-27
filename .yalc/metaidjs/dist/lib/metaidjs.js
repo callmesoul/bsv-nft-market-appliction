@@ -177,7 +177,7 @@ var MetaIdJs = /** @class */ (function () {
             "issueNFT",
             "transferFT",
             "sendTxAuto",
-            "preFetchSignRaw"
+            "preFetchSignRaw",
         ];
         var _loop_1 = function (item) {
             this_1[item] = function (params) {
@@ -275,6 +275,34 @@ var MetaIdJs = /** @class */ (function () {
         }
         delete defParams.callback;
         window.mainFrameMessage.send('ecdh-decrypt-data', defParams);
+    };
+    /**
+     * nftStartAuction nft 拍卖
+     */
+    MetaIdJs.prototype.nftStartAuction = function (params) {
+        var defParams = params;
+        if (params.callback) {
+            var handlerId = generateRandomId();
+            this._handlers[handlerId] = {};
+            this._handlers[handlerId].callback = params.callback;
+            defParams.handlerId = handlerId;
+        }
+        delete defParams.callback;
+        window.mainFrameMessage.send('nft-start-auction', defParams);
+    };
+    /**
+     * nftAuctionBid
+    */
+    MetaIdJs.prototype.nftAuctionBid = function (params) {
+        var defParams = params;
+        if (params.callback) {
+            var handlerId = generateRandomId();
+            this._handlers[handlerId] = {};
+            this._handlers[handlerId].callback = params.callback;
+            defParams.handlerId = handlerId;
+        }
+        delete defParams.callback;
+        window.mainFrameMessage.send('nft-auction-bid', defParams);
     };
     MetaIdJs.prototype.getFTList = function (params) {
         var defParams = params;
