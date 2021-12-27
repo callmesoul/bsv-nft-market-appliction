@@ -1,4 +1,5 @@
 // @ts-ignore
+import { ToBsvType } from '@/enum'
 import dayjs from 'dayjs'
 import Decimal from 'decimal.js-light'
 
@@ -11,6 +12,21 @@ export function dateTimeFormat(timestamp: Date, format: string = 'YYYY-MM-DD HH:
 }
 
 export function bsv(stas: number | string) {
+  if (typeof stas === 'undefined') return 0
+  return new Decimal(stas).div(Math.pow(10, 8)).toNumber()
+}
+
+export function bsvStr(stas: number | string) {
+  if (typeof stas === 'undefined') return '--'
+  return new Decimal(stas).div(Math.pow(10, 8)).toString()
+}
+
+export function satoshis(stas: number | string) {
+  if (typeof stas === 'undefined') return 0
+  return new Decimal(stas).div(Math.pow(10, 8)).toNumber()
+}
+
+export function satoshisStr(stas: number | string) {
   if (typeof stas === 'undefined') return '--'
   return new Decimal(stas).div(Math.pow(10, 8)).toString()
 }

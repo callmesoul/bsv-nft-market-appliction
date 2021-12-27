@@ -66,4 +66,5 @@ declare interface NftItemDetail {
   nftGenesisCertificationType: number
   nftGenesisCertificationName: string
   nftWebsite: string
+  auctionId?: string
 }

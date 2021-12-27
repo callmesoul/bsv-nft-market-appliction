@@ -227,7 +227,7 @@
                 <div class="title">{{ $t('currentBid') }}：</div>
                 <div class="cont" v-if="nft.val.currentPrice">{{ nft.val.currentPrice }} BSV</div>
               </div>
-              <div class="auction-msg-item flex1">
+              <div class="auction-msg-item" v-if="nft.val.isAuction && nft.val.auctionStatus === 2">
                 <div class="title">{{ $t('auctionEndTime') }}：</div>
                 <div class="cont">
                   <VueCountdown
@@ -235,7 +235,6 @@
                     :transform="transformSlotProps"
                     v-slot="{ days, hours, minutes, seconds }"
                     @end="auctionCountDownFinish"
-                    v-if="nft.val.isAuction && nft.val.auctionStatus === 2"
                     class="count-down-warp"
                   >
                     <div class="count-down">
@@ -351,11 +350,12 @@
               </template>
             </div>
 
-            <!-- buy-fee-tips -->
+            <!-- buy-fee-tips 拍卖的时候不显示 -->
             <div
               class="buy-fee-tips"
               v-if="
                 nft.val.putAway &&
+                  !nft.val.isAuction &&
                   (!store.state.userInfo ||
                     (store.state.userInfo && store.state.userInfo.metaId !== nft.val.ownerMetaId))
               "
@@ -562,7 +562,7 @@
                   <span class="td price flex1"
                     >{{
                       record.satoshisPrice
-                        ? new Decimal(record.satoshisPrice).div(10 ** 8).toString() + 'BSV'
+                        ? $filters.bsv(record.satoshisPrice) + 'BSV'
                         : $t('noPaid')
                     }}
                   </span>
@@ -634,7 +634,7 @@
                         <template>{{ $t('latestBid') }}</template>
                       </a>
                       <span class="title">{{ $t('auctionBid') }}</span>
-                      <span class="amount">{{ item.bidPrice }} BSV</span>
+                      <span class="amount">{{ $filters.bsv(item.bidPrice) }} BSV</span>
                     </div>
                     <div class="time">
                       {{ $filters.dateTimeFormat(item.timestamp, 'MM月DD日 HH:mm:ss') }}
@@ -661,11 +661,11 @@
                   <div class="auction-price">
                     <div class="price flex flex-align-center">
                       <span class="title">{{ $t('auctionBid') }}</span>
-                      <span class="amount">{{ nft.val.startPrice }} BSV</span>
+                      <span class="amount">{{ $filters.bsv(nft.val.startPrice) }} BSV</span>
                     </div>
                     <!-- <div class="time">
                       {{ $filters.dateTimeFormat(nft.val.update_time, 'MM月DD日 HH:mm:ss') }}
-                    </div>-->
+                    </div> -->
                   </div>
                 </div>
               </div>
@@ -695,7 +695,7 @@
           <div class="value" v-if="nft.val.currentPrice">{{ nft.val.currentPrice }} BSV</div>
         </div>
         <div class="msg-item flex flex-align-center">
-          <div class="key flex1">{{ $t('minimumMarkup') }}(5%)</div>
+          <div class="key flex1">{{ $t('minimumMarkup') }}(10%)</div>
           <div class="value" v-if="nft.val.minGapPrice">{{ nft.val.minGapPrice }} BSV</div>
         </div>
       </div>
@@ -790,6 +790,8 @@ import VueCountdown from '@chenfengyuan/vue-countdown'
 import LoadMore from '@/components/LoadMore/LoadMore.vue'
 import CertTemp from '@/components/Cert/Cert.vue'
 import MoreContentModal from '@/components/Modal/MoreContentModal/MoreContentModal.vue'
+import { bsv, bsvStr, satoshis } from '@/utils/filters'
+import { ToBsvType } from '@/enum'
 
 const i18n = useI18n()
 const route = useRoute()
@@ -803,10 +805,10 @@ let tabIndex = ref(0)
 let isShowSkeleton = ref(true)
 let isShowDrscDetail = ref(false)
 let isShowAuctionModal = ref(false)
-let auctionPrice = ref(0)
-let balance = ref(0) // 用户余额
+
+const balance = ref(0) // 用户余额
 const getBalanceLoading = ref(true)
-const minActionPrice = ref(0) // 最小叫价
+
 const auctionRecords = reactive<GetNftAuctionHistoryResItem[]>([]) // 最小叫价
 
 const ownerHistoryPagination = reactive({
@@ -817,6 +819,11 @@ const ownerHistoryPagination = reactive({
 const nft: { val: NftItemDetail } = reactive({
   val: {},
 })
+
+//拍卖价
+const auctionPrice = ref(0)
+// 最小叫价
+const minActionPrice = ref(0)
 
 // function getDetail() {
 //   return new Promise<void>(async (resolve) => {
@@ -843,7 +850,9 @@ function getDetail() {
     ).catch(() => (isShowSkeleton.value = false))
     if (_nft && typeof _nft !== 'boolean') {
       nft.val = _nft
-      if (route.query.isAuctioin) {
+
+      // 拍卖
+      if (route.query.isAuction) {
         nft.val.isAuction = true
         const _tabIndex = tabs.findIndex(item => item.key === 'historicalBid')
         if (_tabIndex === -1) {
@@ -852,20 +861,42 @@ function getDetail() {
         tabIndex.value = 2
         const res = await GetNftAuction(nft.val.issueMetaTxId)
         if (res.code === 0) {
-          nft.val.startPrice = res.data.startingPrice
-          nft.val.amount = res.data.startingPriceInt
+          if (!res.data) {
+            res.data = {
+              bidPrice: '100000', // 竞价价格
+              bidPriceInt: 100000, // 竞价价格
+              chargeUnit: 'STAS', // 竞价单位
+              codehash: 'string',
+              genesis: 'string',
+              genesisTxId: 'string',
+              issuerMetaId: 'string',
+              issuerMetaTxId: 'string',
+              metaId: 'string',
+              metanetId: 'string',
+              nftAuctionId: 'string', // nft拍卖创建txId
+              nftHash: 'string',
+              tokenIndex: 'string',
+              txId: 'string',
+              currentAuctionState: 2,
+              currentBidPrice: '1000',
+              currentBidPriceInt: 1000,
+              endTimeStamp: 1640673817000,
+              userName: 'string',
+              startingPrice: '1000',
+              startingPriceInt: 1000,
+              timestamp: 1640673817000,
+            }
+          }
+          nft.val.auctionId = res.data.nftAuctionId
+          nft.val.startPrice = bsvStr(res.data.startingPrice)
+          nft.val.amount = bsv(res.data.startingPriceInt)
+          // 当前价
           nft.val.currentPrice =
-            res.data.currentBidPrice === '0' ? res.data.startingPrice : res.data.currentBidPrice
-          nft.val.minGapPrice =
             res.data.currentBidPrice === '0'
-              ? new Decimal(res.data.startingPrice)
-                  .mul(0.1)
-                  .toFixed(8)
-                  .toString()
-              : new Decimal(res.data.currentBidPrice)
-                  .mul(0)
-                  .toFixed(8)
-                  .toString()
+              ? bsvStr(res.data.startingPrice)
+              : bsvStr(res.data.currentBidPrice)
+          // 最小出价
+          nft.val.minGapPrice = new Decimal(nft.val.currentPrice).mul(0.1).toString()
           if (new Decimal(nft.val.minGapPrice).toNumber() < 0.00001) {
             nft.val.minGapPrice = '0.00001'
           }
@@ -874,11 +905,12 @@ function getDetail() {
           nft.val.auctionStatus = res.data.currentAuctionState
           nft.val.update_time = res.data.timestamp
           auctionPrice.value = new Decimal(nft.val.currentPrice)
-            .plus(new Decimal(nft.val.minGapPrice))
+            .plus(nft.val.minGapPrice)
             .toNumber()
           minActionPrice.value = auctionPrice.value
+          // 获取拍卖记录
+          // getNftAuctionHistorys()
         }
-        getNftAuctionHistorys()
       }
       // countDownTimeLeft()
       isShowSkeleton.value = false
@@ -959,7 +991,7 @@ let second = ref(0)
 const NFTMainMsgDesc = computed(() => {
   // 1. 是否拍卖 显示拍卖描述 2. 是否上架 显示上架描述 3.下架状态 显示nft的描述
   return nft.val.isAuction
-    ? nft.val.auctionDrsc
+    ? nft.val.describe
     : nft.val.putAway
     ? nft.val.sellDesc
     : nft.val.describe
@@ -1176,20 +1208,19 @@ async function bid() {
     loading.close()
   })
   if (res?.code === 0) {
-    const response = await store.state.sdk
-      ?.nftAuctionBid({
-        /* sensibleInfo: {
-          codehash: nft.val.codeHash,
-          genesis: nft.val.genesis,
-          tokenIndex: nft.val.tokenIndex,
-        },
-        bidDesc: '',
-        bidPrice: new Decimal(auctionPrice.value).mul(Math.pow(10, 8)).toNumber(),
-        bidTo: '',
-        bidType: 'bid', */
-      })
-      .catch(() => loading.close())
-    if (response?.code === 200) {
+    const response = await store.state.sdk?.nftAuctionBid({
+      nft: {
+        codehash: nft.val.codeHash,
+        genesis: nft.val.genesis,
+        genesisTxid: nft.val.genesisTxId,
+        tokenIndex: nft.val.tokenIndex,
+        sensibleId: nft.val.sensibleId,
+      },
+      bsvBidPrice: satoshis(auctionPrice.value),
+      nftAuctionId: nft.val.auctionId,
+      useFeeb: 0.5,
+    })
+    if (response && response?.code === 200) {
       const getRawRes: any = await GetTxRaw(response.data.txId).catch(error => {
         ElMessage.error(error.response.data.data)
         getBalanceLoading.value = true

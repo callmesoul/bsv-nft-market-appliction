@@ -877,6 +877,7 @@ export default class Sdk {
       genesis: string
       genesisTxid: string
       tokenIndex: string
+      sensibleId: string
     }
     startBsvPrice: number
     endTimeStamp: number
@@ -919,7 +920,13 @@ export default class Sdk {
   }
 
   nftAuctionBid(params: {
-    nft: NFTTypes
+    nft: {
+      codehash: string
+      genesis: string
+      genesisTxid: string
+      tokenIndex: string
+      sensibleId: string
+    }
     bsvBidPrice: number
     nftAuctionId: string
     useFeeb: number
