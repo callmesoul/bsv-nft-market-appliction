@@ -366,5 +366,6 @@
   "batchAddMany": "批量增加至",
   "piece": "个",
   "mustLargeCurrentNum": "必须大于当前数量",
-  "sameNameTips": "$index 占位符表示当前序号； $total 占位符表示当前系列的总数"
+  "sameNameTips": "$index 占位符表示当前序号； $total 占位符表示当前系列的总数",
+  "sameNameTips2": "神话系列 第 $index 张/总共 $total 张"
 }

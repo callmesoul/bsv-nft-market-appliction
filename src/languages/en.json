@@ -359,5 +359,6 @@
   "batchAddMany": "Batch increase to",
   "piece": "Piece",
   "mustLargeCurrentNum": "Must be greater than the current quantity",
-  "sameNameTips": "The $index placeholder represents the current serial number; the $total placeholder represents the total number of the current series"
+  "sameNameTips": "The $index placeholder represents the current serial number; the $total placeholder represents the total number of the current series",
+  "sameNameTips2": "Mythology Series $index sheet/total $total sheet"
 }

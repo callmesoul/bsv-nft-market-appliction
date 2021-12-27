@@ -168,7 +168,8 @@
                 />
               </div>
               <div class="preview">
-                {{ $t('sameNameTips') }}
+                {{ $t('sameNameTips') }} <br />
+                例如： {{ $t('sameNameTips2') }}
               </div>
             </div>
           </div>
