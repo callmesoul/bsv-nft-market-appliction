@@ -1,10 +1,7 @@
 <template>
   <InnerPageHeader :title="topic.val?.name" :isShowSearch="false" />
 
-  <div
-    class="series-intro container flex flex-align-center"
-    v-if="route.params.key === 'WebotRightCard' || route.params.key === 'MetaElfLandRightCard'"
-  >
+  <div class="series-intro container flex flex-align-center">
     <div class="series-author flex1">
       <UserMsg :width="48" :name="userInfo.val?.metaIdName" :metaId="userInfo.val?.metaId" />
       <div class="author-intro">
@@ -12,40 +9,23 @@
         <template v-else>元灵大陆游戏的开发团队，MetaNet 相关项目的开发团队</template>
       </div>
     </div>
-    <div class="series-msg flex2">
-      <div class="series-base flex">
-        <img
-          v-if="route.params.key === 'WebotRightCard'"
-          class="cover"
-          src="https://showman.showpay.io/metafile/a3f7a2ac4b0341276087aba3bcdbc511358023768d09c96b494abe044d8caaba?x-oss-process=image/auto-orient,1/resize,m_lfit,w_235/quality,q_80"
-        />
-        <img
-          v-else
-          class="cover"
-          src="https://showman.showpay.io/metafile/9c27be93246d3bf058e51902008819a40b0e685f8ed244b7add590d6d611685f?x-oss-process=image/auto-orient,1/resize,m_lfit,w_235/quality,q_80"
-        />
+    <div class="series-msg flex2 flex flex-v">
+      <div class="series-base flex flex1">
+        <img class="cover" :src="$filters.getI18nKey(genesisInfo.val, 'series')" />
         <div class="cont flex1 flex flex-v">
           <div class="name">
-            {{
-              route.params.key === 'WebotRightCard' ? 'Webot2022' : 'MetaElf Land NFT Profit Rights'
-            }}
+            {{ $filters.getI18nKey(genesisInfo.val, 'seriesName') }}
           </div>
           <div class="drsc flex1 flex flex-v">
-            <template v-if="route.params.key === 'WebotRightCard'">
-              <div>
-                {{ $t('webotIntro') }}
-                <a href="https://webot.sv/" target="_blank">{{ $t('website') }}</a>
-                <a
-                  href="https://aaron67.cc/2021/11/20/webot-2022-revenue-share-nft-exploration/"
-                  target="_blank"
-                  >Webot2022</a
-                >
-              </div>
-            </template>
-            <template v-else>
-              <pre
-                class="flex1">{{ drsc.replace(/\s*/g,"").slice(0, 60) }}...<a @click="isShowMoreSeriesIntro = true">{{ $t('getmore') }}</a></pre>
-            </template>
+            <pre
+              class="flex1"
+            ><template v-if="genesisInfo.val && $filters.getI18nKey(genesisInfo.val,'seriesInfo').length <= 60">{{ $filters.getI18nKey(genesisInfo.val,'seriesInfo')}}</template> <template v-else>{{ $filters.getI18nKey(genesisInfo.val,'seriesInfo').replace(/\s+/g,"").slice(0, 60) }}...<a @click="isShowMoreSeriesIntro = true">{{ $t('getmore') }}</a></template><a
+              v-if="genesisInfo.val && genesisInfo.val?.website && genesisInfo.val.website !== ''"
+              :href="genesisInfo.val.website"
+              target="_blank"
+              >{{ $t('seriesWebsite') }}</a
+            >
+            </pre>
           </div>
         </div>
       </div>
@@ -95,7 +75,7 @@
   </div>
 
   <!-- banner -->
-  <div class="banner container" v-else>
+  <!-- <div class="banner container" v-else>
     <a>
       <img
         v-if="topic.val"
@@ -109,7 +89,7 @@
         alt="Metabot"
       />
     </a>
-  </div>
+  </div> -->
 
   <div class="metabot-tags container">
     <a
@@ -298,7 +278,7 @@
     title="MetaElf Land NFT Profit Rights"
     @change="val => (isShowMoreSeriesIntro = val)"
   >
-    <div class="all-intro">{{ drsc }}</div>
+    <div class="all-intro">{{ $filters.getI18nKey(genesisInfo.val, 'seriesInfo') }}</div>
   </MoreContentModal>
 </template>
 <script lang="ts" setup>
@@ -310,6 +290,7 @@ import {
   GetCertUserInfo,
   GetGenesisVolumeInfo,
   GetMetaBotListBySearch,
+  GetNosGenesisInfo,
   GetTopicNftList,
 } from '@/api'
 import {
@@ -596,6 +577,7 @@ const lineChart = reactive({
 })
 
 const genesisVolumeInfo: { val: null | GenesisVolumeInfo } = reactive({ val: null })
+const genesisInfo: { val: null | GenesisInfo } = reactive({ val: null })
 
 // nftSellState  0: 可购买 1: 下架 2：已购买 3：敬请期待 4：抢购状态 5： 非销售
 function itemBuyBtnClass(metabot: GetMetaBotListResItem) {
@@ -854,9 +836,23 @@ function getUserInfo() {
   })
 }
 
+function getGenesisInfo() {
+  return new Promise<void>(async resolve => {
+    const res = await GetNosGenesisInfo({
+      key: typeof route.params.key === 'string' ? route.params.key : '',
+      lang: i18n.locale.value,
+    })
+    if (res.code === 0) {
+      genesisInfo.val = res.data
+    }
+    resolve()
+  })
+}
+
 onMounted(async () => {
   if (isShowSkeleton.value) {
     if (route.params.key) {
+      getGenesisInfo()
       const topicItem = store.state.topics.find(item => item.key === route.params.key)
       if (topicItem) {
         topic.val = topicItem
@@ -866,9 +862,7 @@ onMounted(async () => {
     pagination.loading = false
     pagination.nothing = false
     await getDatas()
-    if (route.params.key === 'WebotRightCard' || route.params.key === 'MetaElfLandRightCard') {
-      await getUserInfo()
-    }
+    await getUserInfo()
     isShowSkeleton.value = false
   }
 })

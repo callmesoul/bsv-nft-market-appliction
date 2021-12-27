@@ -687,3 +687,20 @@ declare interface NFTGenesisInfo {
   inSatoshi: number
   outSatoshi: number
 }
+declare interface GetNosGenesisInfoRes extends apiResponse {
+  data: GenesisInfo
+}
+
+declare interface GenesisInfo {
+  genesis: string
+  seriesIconCn: string
+  seriesIconEn: string
+  seriesIconJp: string
+  seriesInfoCn: string
+  seriesInfoEn: string
+  seriesInfoJp: string
+  seriesNameCn: string
+  seriesNameEn: string
+  seriesNameJp: string
+  website: string
+}

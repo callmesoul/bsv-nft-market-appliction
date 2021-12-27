@@ -1,6 +1,7 @@
 // @ts-ignore
 import dayjs from 'dayjs'
 import Decimal from 'decimal.js-light'
+import i18n from './i18n'
 
 export function avatar(showId: string) {
   return `${import.meta.env.VITE_AppImgApi}/metafile/avatar/${showId}?time=${new Date().getTime()}`
@@ -20,4 +21,15 @@ export function assetsUrl(metafile: string) {
   metafile = metafile.replace('metafile://', '')
   if (metafile === '') return ''
   return `${import.meta.env.VITE_ShowMan}/metafile/${metafile}`
+}
+
+export function getI18nKey(object: any, key: string) {
+  const i18nKey = `${key}${i18n.global.locale.value
+    .slice(0, 1)
+    .toLocaleUpperCase()}${i18n.global.locale.value.slice(1, i18n.global.locale.value.length)}`
+  if (object && object[i18nKey]) {
+    return object[i18nKey]
+  } else {
+    return ''
+  }
 }

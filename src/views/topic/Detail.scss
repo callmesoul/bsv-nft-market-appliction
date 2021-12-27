@@ -265,17 +265,15 @@
 
                     pre {
                         overflow: hidden;
+                        margin: 0;
+                        padding: 0;
                     }
 
                     a {
                         color: #456fc4;
                         cursor: pointer;
                         display: inline-block;
-                        margin-right: 15px;
-
-                        &:last-child {
-                            margin-right: 0;
-                        }
+                        margin-left: 15px;
                     }
                 }
             }
@@ -287,7 +285,7 @@
             .series-data-item {
                 text-align: center;
                 position: relative;
-                height: 80px;
+                height: 40px;
 
                 &::after {
                     content: '';
@@ -466,6 +464,7 @@
 
                         a {
                             color: #456fc4;
+                            margin-left: 10px;
                         }
                     }
                 }
