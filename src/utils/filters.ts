@@ -23,10 +23,34 @@ export function assetsUrl(metafile: string) {
   return `${import.meta.env.VITE_ShowMan}/metafile/${metafile}`
 }
 
-export function getI18nKey(object: any, key: string) {
-  const i18nKey = `${key}${i18n.global.locale.value
-    .slice(0, 1)
-    .toLocaleUpperCase()}${i18n.global.locale.value.slice(1, i18n.global.locale.value.length)}`
+/**
+ * @function 获取对象对应i18n内容
+ * @description 获取对象对应i18n内容
+ * @param object 获取对应字段所在的对象
+ * @param key 对应字段前缀，例如 introJp = intro
+ * @param option 需要替换的配置，因为后端返回的翻译字段不一定对应前端字段，后端中文标识是cn 而前端是zh 则可以传 {'zh': 'cn'} 解决
+ * _________________ _________________
+ * | 年龄 | 姓名 | | 年龄 | 姓名 |
+ * ----------------- mergeCells(grid,[0]) -----------------
+ * | 18 | 张三 | => | | 张三 |
+ * ----------------- - 18 ---------
+ * | 18 | 王五 | | | 王五 |
+ * ----------------- -----------------
+ */
+export function getI18nContent(object: any, key: string, option?: any) {
+  let localeValue = i18n.global.locale.value
+  if (option) {
+    for (let i in option) {
+      if (localeValue === i) {
+        localeValue = option[i]
+        break
+      }
+    }
+  }
+  const i18nKey = `${key}${localeValue.slice(0, 1).toLocaleUpperCase()}${localeValue.slice(
+    1,
+    i18n.global.locale.value.length
+  )}`
   if (object && object[i18nKey]) {
     return object[i18nKey]
   } else {

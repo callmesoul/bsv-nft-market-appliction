@@ -635,6 +635,7 @@ declare interface CertUserInfo {
   organizationName: string
   realName: string
   userCertificationType: number
+  userProfile: string
 }
 
 declare interface GetAppsRes {
