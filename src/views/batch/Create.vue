@@ -787,12 +787,13 @@ async function startBacth() {
               isBreak.value = true
               isShowResult.value = false
               ElMessage.error(i18n.t('tokenIndexNotMatch'))
-              return
+              break
             }
           }
-        } catch {
+        } catch (error) {
+          if (error) ElMessage.error(JSON.stringify(error))
           isShowResult.value = false
-          return
+          break
         }
         // 判断没有成功就 及时break 以防继续执行
         if (!isCreatedSuccess) {
@@ -803,6 +804,8 @@ async function startBacth() {
       loading.close()
     }
   } catch (error) {
+    debugger
+    if (error) ElMessage.error(JSON.stringify(error))
     loading.close()
   }
 }

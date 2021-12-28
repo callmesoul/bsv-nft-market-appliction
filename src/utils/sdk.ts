@@ -335,9 +335,11 @@ export default class Sdk {
           // if (getSignRaw.code === 200) {
           //   signersRaw = getSignRaw.data.signersRaw
           // }
-          let result = true
+          let result: any = true
           if (!params.checkOnly) {
-            result = await this.checkNftTxIdStatus(genesisTxId!)
+            result = await this.checkNftTxIdStatus(genesisTxId!).catch(() =>
+              reject('get sensible txId Fail')
+            )
           }
           if (result) {
             const issueRes = await this.issueNFT({
@@ -397,6 +399,7 @@ export default class Sdk {
           await issueOperate()
         }
       } catch (error) {
+        debugger
         reject(error)
       }
     })
