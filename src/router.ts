@@ -6,7 +6,10 @@ const Detail = () => import('@/views/Detail.vue')
 const Sale = () => import('@/views/sale/Sale.vue')
 const SaleLegend = () => import('@/views/sale/Legend.vue')
 const Login = () => import('@/views/Login.vue')
-const Self = () => import('@/views/Self.vue')
+const SelfLayout = () => import('@/views/self/Index.vue')
+const SelfOffsale = () => import('@/views/self/Offsale.vue')
+const SelfSale = () => import('@/views/self/Sale.vue')
+const SelfAuction = () => import('@/views/self/Auction.vue')
 const Auction = () => import('@/views/Auction.vue')
 const User = () => import('@/views/User.vue')
 const Series = () => import('@/views/Series.vue')
@@ -56,7 +59,18 @@ export const router = createRouter({
       meta: { isAuth: true },
     },
     { path: '/saleLegend', name: 'saleLegend', component: SaleLegend },
-    { path: '/self', name: 'self', component: Self, meta: { isAuth: true } },
+    {
+      path: '/self/:metaId',
+      name: 'self',
+      component: SelfLayout,
+      meta: { isAuth: true },
+      redirect: { name: 'selfOffsale' },
+      children: [
+        { path: 'offsale', name: 'selfOffsale', component: SelfOffsale },
+        { path: 'sale', name: 'selfSale', component: SelfSale },
+        { path: 'auction', name: 'selfAuction', component: SelfAuction },
+      ],
+    },
     { path: '/series/:genesisId/:codehash', name: 'series', component: Series },
     { path: '/login', name: 'login', component: Login },
     { path: '/recommned', name: 'recommned', component: Recommend },
@@ -64,7 +78,16 @@ export const router = createRouter({
     { path: '/termsOfUse', name: 'termsOfUse', component: TermsOfUse },
     { path: '/certification', name: 'certification', component: CertSystemIntro },
     { path: '/metaBot', name: 'metaBot', component: MetaBot },
-    { path: '/user/:metaId', name: 'user', component: User },
+    {
+      path: '/user/:metaId',
+      name: 'user',
+      component: User,
+      redirect: { name: 'userSale' },
+      children: [
+        { path: 'sale', name: 'userSale', component: SelfSale },
+        { path: 'auction', name: 'userAuction', component: SelfAuction },
+      ],
+    },
     { path: '/market', name: 'market', component: CountryFair, meta: { keepAlive: true } },
     {
       path: '/collection',

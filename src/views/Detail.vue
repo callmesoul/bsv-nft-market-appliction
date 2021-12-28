@@ -1188,7 +1188,6 @@ async function openAuctionModal() {
 
 // 出价
 async function bid() {
-  debugger
   if (new Decimal(balance.value).toNumber() < new Decimal(auctionPrice.value).toNumber()) return
   const loading = ElLoading.service({
     lock: true,
@@ -1222,10 +1221,14 @@ async function bid() {
         const response = await store.state.sdk?.nftAuctionBid(params)
         if (response && response?.code === 200) {
           ElMessage.success(i18n.t('bidSuccess'))
+          nft.val.minGapPrice = new Decimal(auctionPrice.value).mul(0.1).toString()
+          if (new Decimal(nft.val.minGapPrice).toNumber() < 0.00001) {
+            nft.val.minGapPrice = '0.00001'
+          }
           isShowAuctionModal.value = false
+          // 获取拍卖记录
+          getNftAuctionHistorys()
           loading.close()
-          isShowSkeleton.value = true
-          getDetail()
 
           /* const getRawRes: any = await GetTxRaw(response.data.txId).catch(error => {
       ElMessage.error(error.response.data.data)

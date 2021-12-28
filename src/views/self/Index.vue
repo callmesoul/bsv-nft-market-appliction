@@ -5,7 +5,9 @@
     :user="user"
     :isHideAuthor="true"
     @openRecordModal="openRecordModal"
-  />
+  >
+    <router-view></router-view>
+  </UserCenter>
   <!-- record -->
   <div class="record-modal">
     <ElDialog v-model="isShowRecordModal" custom-class="" top="0">
@@ -108,7 +110,7 @@ import { GetMyNftOnShowBuySuccessList, GetMyNftOnShowSellSuccessList } from '@/a
 import { useStore } from '@/store'
 import { onMounted, reactive, ref } from 'vue'
 import LoadMore from '@/components/LoadMore/LoadMore.vue'
-import IsNull from '../components/IsNull/IsNull.vue'
+import IsNull from '@/components/IsNull/IsNull.vue'
 import { useI18n } from 'vue-i18n'
 import { ElMessage, ElDialog, ElImage, ElSkeleton, ElSkeletonItem } from 'element-plus'
 import { metafileUrl } from '@/utils/util'
@@ -194,7 +196,6 @@ onMounted(() => {
   if (store.state.token) {
     // 还没拿到用户信息的时候要等待拿用户信息完再调接口
     if (store.state.userInfo) {
-      root.value.getMyNfts()
     } else {
       store.watch(
         state => state.userInfo,
@@ -202,8 +203,7 @@ onMounted(() => {
           if (userInfo) {
             ;(user.name = store.state.userInfo?.name),
               (user.metaId = store.state.userInfo?.metaId),
-              (user.address = store.state.userInfo?.address),
-              root.value.getMyNfts()
+              (user.address = store.state.userInfo?.address)
           }
         }
       )
@@ -214,4 +214,4 @@ onMounted(() => {
   }
 })
 </script>
-<style lang="scss" scoped src="./Self.scss"></style>
+<style lang="scss" scoped src="./Index.scss"></style>

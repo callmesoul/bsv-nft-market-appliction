@@ -53,10 +53,7 @@
           </div>
         </div>
       </div>
-      <div
-        class="operate flex flex-align-center"
-        v-if="route.name === 'self' || route.name === 'series'"
-      >
+      <div class="operate flex flex-align-center" v-if="isSelf">
         <div class="timeleft flex1">
           <!-- 系列 且拥有数量 > 1 -->
           <template v-if="item.hasCount && item.hasCount > 1"
@@ -136,6 +133,7 @@ const props = defineProps<{
   item: NftItem
   isRecommendCard?: boolean
   isHideAuthor?: boolean
+  isSelf?: boolean
 }>()
 
 function toDetail() {

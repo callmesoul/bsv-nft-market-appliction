@@ -181,7 +181,7 @@ function setLang(lang: string) {
   window.localStorage.setItem('lang', lang)
 }
 function toSelf() {
-  router.push('/self')
+  router.push(`/self/${store.state.userInfo.metaId}`)
 }
 function toWallet() {
   window.open(import.meta.env.VITE_AuthUrl)
