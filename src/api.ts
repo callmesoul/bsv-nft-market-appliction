@@ -387,6 +387,25 @@ export const GetNftAuctionDetail = (txId: string): Promise<GetNftAuctionRes> => 
   return aggregation.get(`/v2/app/nftAuction/getNftAuctionCreateByTxId/${txId}`)
 }
 
+export const GetAuctionList = (params: {
+  page: number
+  pageSize: number
+  nowTimestamp?: number
+}): Promise<GetAuctionListRes> => {
+  return aggregation.get(`/v2/app/nftAuction/getAllNftAuctionList`, { params: params })
+}
+
+export const GetUserAuctionList = (params: {
+  metaId: string
+  page: number
+  pageSize: number
+  nowTimestamp?: number
+}): Promise<GetAuctionListRes> => {
+  return aggregation.get(`/v2/app/nftAuction/getMyNftAuctionList/${params.metaId}`, {
+    params: params,
+  })
+}
+
 export const CheckUserCanAuction = (params: {
   codehash: string
   genesis: string

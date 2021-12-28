@@ -360,5 +360,8 @@
   "userNotCerted": "User is not authenticated",
   "personCert": "Personal authentication",
   "noMsg": "no information",
-  "auctionMSg": "Auction Information"
+  "auctionMSg": "Auction Information",
+  "auction": "Auction",
+  "myAuctionNFT": "My Auction NFT",
+  "AuctionNFT": "Auction NFT"
 }

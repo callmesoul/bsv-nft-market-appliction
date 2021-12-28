@@ -86,9 +86,9 @@
             "
           >
             <a
-              :class="{ active: index === tabIndex }"
+              :class="{ active: tabValue === tab.val }"
               :key="index"
-              @click="changeTabIndex(index)"
+              @click="changeTabIndex(tab.val)"
               >{{ tab.name }}</a
             >
           </template>
@@ -99,6 +99,7 @@
       :loading="isShowNftListSkeleton"
       :count="pagination.pageSize"
       class="section-cont nft-list"
+      v-if="tabValue <= 2"
     >
       <template #default>
         <div class="section-cont nft-list">
@@ -181,29 +182,40 @@ const pagination = reactive({
 })
 const tabs = computed(() => {
   return [
-    { name: i18n.t('mynft') },
+    { name: i18n.t('mynft'), val: 1 },
     {
       name:
         store.state.userInfo && store.state.userInfo.metaId === props.user.metaId
           ? i18n.t('mySellNft')
           : i18n.t('SellNft'),
+      val: 2,
+    },
+    {
+      name:
+        store.state.userInfo && store.state.userInfo.metaId === props.user.metaId
+          ? i18n.t('myAuctionNFT')
+          : i18n.t('AuctionNFT'),
+      val: 3,
     },
   ]
 })
-const tabIndex = ref(0)
+const tabValue = ref(1)
 const nfts: NftItem[] = reactive([])
 const isShowNftListSkeleton = ref(true)
 
-function changeTabIndex(index: number) {
-  isShowNftListSkeleton.value = true
-  tabIndex.value = index
-  pagination.loading = false
-  pagination.nothing = false
-  pagination.page = 1
-  if (tabIndex.value === 0) {
-    getMyNfts(true)
-  } else {
-    getMySelledNfts(true)
+function changeTabIndex(value: number) {
+  if (value !== 3) {
+    isShowNftListSkeleton.value = true
+    tabValue.value = value
+    pagination.loading = false
+    pagination.nothing = false
+    pagination.page = 1
+
+    if (tabValue.value === 1) {
+      getMyNfts(true)
+    } else if (tabValue.value === 2) {
+      getMySelledNfts(true)
+    }
   }
 }
 
@@ -336,11 +348,11 @@ function openUrl(type: string) {
 function getMore() {
   pagination.loading = true
   pagination.page++
-  if (tabIndex.value === 0) {
+  if (tabValue.value === 1) {
     getMyNfts().then(() => {
       pagination.loading = false
     })
-  } else {
+  } else if (tabValue.value === 2) {
     getMySelledNfts().then(() => {
       pagination.loading = false
     })

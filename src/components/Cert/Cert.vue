@@ -67,10 +67,12 @@ const isCert = computed(() => {
 })
 
 async function getCertUserInfo() {
-  const res = await GetCertUserInfo(props.metaId)
-  if (res.code === 0) {
-    userInfo.val = res.data
-  }
+  try {
+    const res = await GetCertUserInfo(props.metaId)
+    if (res.code === 0) {
+      userInfo.val = res.data
+    }
+  } catch (error) {}
 }
 
 function toCert() {

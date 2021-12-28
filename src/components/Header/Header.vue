@@ -12,6 +12,7 @@
     </div>
     <nav class="flex flex-align-center flex-pack-center">
       <router-link to="/">{{ $t('home') }}</router-link>
+      <router-link to="/auction">{{ $t('auction') }}</router-link>
       <router-link to="/collection" class="flex flex-align-center">
         {{ $t('topic') }}
       </router-link>

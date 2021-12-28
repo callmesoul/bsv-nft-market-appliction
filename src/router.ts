@@ -7,6 +7,7 @@ const Sale = () => import('@/views/sale/Sale.vue')
 const SaleLegend = () => import('@/views/sale/Legend.vue')
 const Login = () => import('@/views/Login.vue')
 const Self = () => import('@/views/Self.vue')
+const Auction = () => import('@/views/Auction.vue')
 const User = () => import('@/views/User.vue')
 const Series = () => import('@/views/Series.vue')
 const MetaBot = () => import('@/views/MetaBot.vue')
@@ -39,6 +40,7 @@ export const router = createRouter({
   strict: true,
   routes: [
     { path: '/', name: 'home', component: Home, meta: { keepAlive: true } },
+    { path: '/auction', name: 'auction', component: Auction, meta: { keepAlive: true } },
     { path: '/create', name: 'create', component: Create, meta: { isAuth: true } },
     {
       path: '/nftSuccess/:genesisId/:codehash/:tokenIndex',

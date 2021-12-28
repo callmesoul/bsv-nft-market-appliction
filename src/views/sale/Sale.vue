@@ -283,11 +283,11 @@ const auctionTime = ref('') // 拍卖时间
 const mode = import.meta.env.MODE
 
 const minPrice = computed(() => {
-  let min = 0.00001
+  let min = 0.0001
   if (units[unitIndex.value].unit === UnitName.BSV) {
     min = 0.000001
   } else {
-    min = 1000
+    min = 10000
   }
   return min
 })
@@ -428,6 +428,7 @@ async function confirmSale() {
       // sellPrice: new Decimal(fixed_value).toNumber(),
       // availabeTime: new Date(auctionTime.value).getTime(),
     })
+    debugger
     if (response && response?.code === 200) {
       ElMessage.success(i18n.t('createAuctionSuccess'))
       loading.close()

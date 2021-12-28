@@ -4,7 +4,8 @@ declare module '@vue/runtime-core' {
     $filters: {
       avatar: (showId: string) => string
       dateTimeFormat: (timestamp: Date | string | number, format?: string) => string
-      bsv: (stas: string | number) => string
+      bsv: (stas: string | number) => number
+      bsvStr: (stas: string | number) => string
       assetsUrl: (stas: string) => string
     }
   }
