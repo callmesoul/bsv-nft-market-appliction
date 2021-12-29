@@ -365,7 +365,7 @@
   "userNotCerted": "用户还未认证",
   "personCert": "个人认证",
   "noMsg": "暂无信息",
-  "auctionFeeTips": "将收取手续费:",
+  "auctionFeeTips": "将收取5%手续费(若竞拍失败将会退回):",
   "auctioning": "拍卖中",
   "auctioned": "已拍卖结束",
   "unauctioning": "拍卖准备开始",

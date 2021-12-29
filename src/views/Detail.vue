@@ -741,8 +741,7 @@
         <img src="@/assets/images/card_icon_ins.svg" />
       </div>
       <div class="auctionFailTips">
-        *{{ $t('auctionFeeTips') }}
-        {{ new Decimal(auctionPrice).mul(0.05).toString() }}
+        *{{ $t('auctionFeeTips') }} {{ new Decimal(auctionPrice).mul(0.05).toString() }} BSV
       </div>
     </div>
   </ElDialog>
@@ -1217,7 +1216,10 @@ async function bid() {
         codehash: nft.val.codeHash,
         genesis: nft.val.genesis,
         token_index: parseInt(nft.val.tokenIndex),
-        value: new Decimal(auctionPrice.value).toString(),
+        value: new Decimal(auctionPrice.value)
+          .mul(0.05)
+          .plus(auctionPrice.value)
+          .toString(),
         tx: response.data.txId,
         raw_tx: response.data.rawTx,
         buyer_meta_id: store.state.userInfo!.metaId,
