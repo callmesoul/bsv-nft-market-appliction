@@ -361,5 +361,6 @@
   "auctionFeeTips": "A 5% handling fee will be charged (it will be refunded if the bid fails):",
   "auctioning": "Auction",
   "auctioned": "Auction Over",
-  "unauctioning": "Ready Auction"
+  "unauctioning": "Ready Auction",
+  "auctionFail": "Bid failed, please refresh and try again"
 }
