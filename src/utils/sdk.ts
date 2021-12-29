@@ -978,6 +978,7 @@ export default class Sdk {
   }) {
     return new Promise<MetaIdJsRes>((resolve, reject) => {
       const callback = (res: MetaIdJsRes) => {
+        debugger
         this.callback(res, resolve, reject)
       }
       if (this.isApp) {

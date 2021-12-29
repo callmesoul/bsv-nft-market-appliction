@@ -14,7 +14,7 @@ import { useStore } from '@/store'
 import { useRoute } from 'vue-router'
 import { pagination as initPagination } from '@/config'
 import { reactive, ref } from 'vue'
-import { setDataStrclassify } from '@/utils/util'
+import { checkUserInfoFinish, setDataStrclassify } from '@/utils/util'
 import NftListVue from '@/components/NftList/NftList.vue'
 
 const pagination = reactive({
@@ -100,7 +100,9 @@ function getMore() {
   getMyNfts()
 }
 
-getMyNfts()
+checkUserInfoFinish().then(() => {
+  getMyNfts()
+})
 </script>
 
 <style lang="scss" scoped src="./Offsale.scss"></style>

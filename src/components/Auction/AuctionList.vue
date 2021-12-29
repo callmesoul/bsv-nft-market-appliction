@@ -17,6 +17,8 @@ import { reactive } from 'vue'
 import AuctionItemVue from './AuctionItem.vue'
 import LoadMore from '@/components/LoadMore/LoadMore.vue'
 import IsNull from '@/components/IsNull/IsNull.vue'
+import { router } from '@/router'
+import { useRoute } from 'vue-router'
 
 interface Props {
   isUser: boolean
@@ -28,6 +30,7 @@ const props = withDefaults(defineProps<Props>(), {
 const pagination = reactive({ ...initPagination })
 const auctions: GetAuctionListResItem[] = reactive([])
 const store = useStore()
+const route = useRoute()
 
 function getAuctionList(isCover = false) {
   return new Promise<void>(async resolve => {
@@ -35,7 +38,7 @@ function getAuctionList(isCover = false) {
     if (props.isUser) {
       res = await GetUserAuctionList({
         ...pagination,
-        metaId: store.state.userInfo?.metaId,
+        metaId: typeof route.params?.metaId === 'string' ? route.params?.metaId : '',
       })
     } else {
       res = await GetAuctionList({
