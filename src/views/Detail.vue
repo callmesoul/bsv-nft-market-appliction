@@ -1259,9 +1259,6 @@ async function getNftAuctionHistorys() {
   })
   if (res.code === 0) {
     auctionRecords.length = 0
-    res.data.map(item => {
-      const metaInfo = GetMetaIdInfo
-    })
     auctionRecords.push(...res.data)
   }
 }
