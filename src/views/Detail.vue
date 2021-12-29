@@ -1216,10 +1216,14 @@ async function bid() {
         codehash: nft.val.codeHash,
         genesis: nft.val.genesis,
         token_index: parseInt(nft.val.tokenIndex),
-        value: new Decimal(auctionPrice.value)
-          .mul(0.05)
-          .plus(auctionPrice.value)
-          .toString(),
+        value: new Decimal(
+          Math.ceil(
+            new Decimal(auctionPrice.value)
+              .mul(0.05)
+              .plus(auctionPrice.value)
+              .toNumber()
+          )
+        ).toString(),
         tx: response.data.txId,
         raw_tx: response.data.rawTx,
         buyer_meta_id: store.state.userInfo!.metaId,
