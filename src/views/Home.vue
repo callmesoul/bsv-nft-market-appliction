@@ -18,15 +18,7 @@
           "
         >
           <!-- @ts-ignore -->
-          <img
-            :src="
-              banner[
-                'picUrl' +
-                  i18n.locale.value.slice(0, 1).toLocaleUpperCase() +
-                  i18n.locale.value.slice(1, i18n.locale.value.length)
-              ]
-            "
-            alt="metaelf"
+          <img :src="$filters.getI18nContent(banner, 'picUrl')" alt="metaelf"
         /></a>
       </SwiperSlide>
     </Swiper>

@@ -635,6 +635,7 @@ declare interface CertUserInfo {
   organizationName: string
   realName: string
   userCertificationType: number
+  userProfile: string
 }
 
 declare interface GetAppsRes {
@@ -686,4 +687,21 @@ declare interface NFTGenesisInfo {
   outTimes: number
   inSatoshi: number
   outSatoshi: number
+}
+declare interface GetNosGenesisInfoRes extends apiResponse {
+  data: GenesisInfo
+}
+
+declare interface GenesisInfo {
+  genesis: string
+  seriesIconCn: string
+  seriesIconEn: string
+  seriesIconJp: string
+  seriesInfoCn: string
+  seriesInfoEn: string
+  seriesInfoJp: string
+  seriesNameCn: string
+  seriesNameEn: string
+  seriesNameJp: string
+  website: string
 }

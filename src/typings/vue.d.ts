@@ -6,6 +6,7 @@ declare module '@vue/runtime-core' {
       dateTimeFormat: (timestamp: Date | string | number, format?: string) => string
       bsv: (stas: string | number) => string
       assetsUrl: (stas: string) => string
+      getI18nContent: (object: any, key: string, option?: any) => string
     }
   }
 }

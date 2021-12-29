@@ -15,16 +15,7 @@
       :key="topic.key"
       @click="toDetail(topic.key, topic.createMetaId)"
     >
-      <img
-        class="cover"
-        :src="
-          topic[
-            'coverPicUrl' +
-              i18n.locale.value.slice(0, 1).toLocaleUpperCase() +
-              i18n.locale.value.slice(1, i18n.locale.value.length)
-          ]
-        "
-      />
+      <img class="cover" :src="$filters.getI18nContent(topic, 'coverPicUrl')" />
       <div class="title">{{ topic.name }}</div>
       <div class="msg flex flex-align-center">
         <div class="creater flex1 flex flex-align-center">

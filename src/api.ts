@@ -487,6 +487,15 @@ export const GetCertUserInfo = (metaId: string): Promise<GetCertUserInfoRes> => 
   return apiHttp.get(`/broad/v1/nos/certification/getNosCertificationUserInfo/${metaId}`)
 }
 
+export const GetNosGenesisInfo = (params: {
+  key: string
+  lang: string
+}): Promise<GetNosGenesisInfoRes> => {
+  return apiHttp.get(
+    `/broad/v1/nos/certification/getNosGenesisInfo/${params.key}?lang=${params.lang}`
+  )
+}
+
 // 获取appWeb列表
 export const GetApps = (params?: {
   // metaId: string
