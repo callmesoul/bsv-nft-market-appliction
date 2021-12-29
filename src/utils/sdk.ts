@@ -910,7 +910,9 @@ export default class Sdk {
   }) {
     const mode = import.meta.env.MODE
     const address =
-      mode === 'prod' ? '14VW3cDiMimxFYELo88kUbM5JtcCyP5n4c' : '19B92x1c7EGqwEabHfvXLPsMjRriKSUNRe'
+      mode === 'prod' || mode === 'gray'
+        ? '181nQ8A4a3YaDEft3FNNvhebWYd9RasuxR'
+        : '19B92x1c7EGqwEabHfvXLPsMjRriKSUNRe'
     return this.sendMetaDataTx({
       data: JSON.stringify({
         type: 'sensible', //token类型,如果不使用合约则为空
