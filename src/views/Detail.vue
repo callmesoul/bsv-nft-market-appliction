@@ -1221,30 +1221,28 @@ async function bid() {
         loading.close()
       })
     if (response?.code === 200) {
-      let price = new Decimal(auctionPrice.value)
-        .mul(0.05)
-        .plus(auctionPrice.value)
-        .toNumber()
-      const result = await SubmitBid({
-        codehash: nft.val.codeHash,
-        genesis: nft.val.genesis,
-        token_index: parseInt(nft.val.tokenIndex),
-        value: new Decimal(allPricePriceStot).div(Math.pow(10, 8)).toString(),
-        tx: response.data.txId,
-        raw_tx: response.data.rawTx,
-        buyer_meta_id: store.state.userInfo!.metaId,
-        buyer_address: store.state.userInfo!.address,
-      }).catch(error => {
-        ElMessage.error(i18n.t('auctionFail'))
-        loading.close()
-      })
-      if (result && result?.code === 0) {
-        ElMessage.success(i18n.t('bidSuccess'))
-        isShowAuctionModal.value = false
-        loading.close()
-        isShowSkeleton.value = true
-        getDetail()
-      }
+      setTimeout(async () => {
+        const result = await SubmitBid({
+          codehash: nft.val.codeHash,
+          genesis: nft.val.genesis,
+          token_index: parseInt(nft.val.tokenIndex),
+          value: new Decimal(allPricePriceStot).div(Math.pow(10, 8)).toString(),
+          tx: response.data.txId,
+          raw_tx: response.data.rawTx,
+          buyer_meta_id: store.state.userInfo!.metaId,
+          buyer_address: store.state.userInfo!.address,
+        }).catch(error => {
+          ElMessage.error(i18n.t('auctionFail'))
+          loading.close()
+        })
+        if (result && result?.code === 0) {
+          ElMessage.success(i18n.t('bidSuccess'))
+          isShowAuctionModal.value = false
+          loading.close()
+          isShowSkeleton.value = true
+          getDetail()
+        }
+      }, 1000)
     }
   }
 }
