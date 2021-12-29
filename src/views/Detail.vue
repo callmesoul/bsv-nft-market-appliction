@@ -764,6 +764,7 @@ import { useRoute } from 'vue-router'
 // @ts-ignore
 import {
   CheckUserCanAuction,
+  GetMetaSvSign,
   GetMyNftEligibility,
   GetNftAuctionHistorys,
   GetNftAuctions,
@@ -1196,7 +1197,6 @@ async function bid() {
     getDetail()
     loading.close()
   })
-  debugger
   if (res?.code === 0) {
     let priceStot = new Decimal(auctionPrice.value).mul(Math.pow(10, 8)).toNumber()
     let allPricePriceStot = new Decimal(priceStot)
@@ -1220,27 +1220,41 @@ async function bid() {
         ElMessage.error(i18n.t('auctionFail'))
         loading.close()
       })
+    debugger
     if (response?.code === 200) {
       setTimeout(async () => {
-        const result = await SubmitBid({
-          codehash: nft.val.codeHash,
-          genesis: nft.val.genesis,
-          token_index: parseInt(nft.val.tokenIndex),
-          value: new Decimal(allPricePriceStot).div(Math.pow(10, 8)).toString(),
-          tx: response.data.txId,
-          raw_tx: response.data.rawTx,
-          buyer_meta_id: store.state.userInfo!.metaId,
-          buyer_address: store.state.userInfo!.address,
-        }).catch(error => {
-          ElMessage.error(i18n.t('auctionFail'))
-          loading.close()
-        })
-        if (result && result?.code === 0) {
-          ElMessage.success(i18n.t('bidSuccess'))
-          isShowAuctionModal.value = false
-          loading.close()
-          isShowSkeleton.value = true
-          getDetail()
+        const getSignRes = await GetMetaSvSign({ path: `/tx/${response.data.txId}/raw` })
+        debugger
+        if (getSignRes && getSignRes.code === 0) {
+          const getRawRes: any = await GetTxRaw(response.data.txId, {
+            'MetaSV-Client-Pubkey': getSignRes.data.publicKey,
+            'MetaSV-Nonce': getSignRes.data.nonce,
+            'MetaSV-Signature': getSignRes.data.signEncoded,
+            'MetaSV-Timestamp': getSignRes.data.timestamp,
+          })
+          debugger
+          if (getRawRes) {
+            const result = await SubmitBid({
+              codehash: nft.val.codeHash,
+              genesis: nft.val.genesis,
+              token_index: parseInt(nft.val.tokenIndex),
+              value: new Decimal(allPricePriceStot).div(Math.pow(10, 8)).toString(),
+              tx: response.data.txId,
+              raw_tx: getRawRes.hex,
+              buyer_meta_id: store.state.userInfo!.metaId,
+              buyer_address: store.state.userInfo!.address,
+            }).catch(error => {
+              ElMessage.error(i18n.t('auctionFail'))
+              loading.close()
+            })
+            if (result && result?.code === 0) {
+              ElMessage.success(i18n.t('bidSuccess'))
+              isShowAuctionModal.value = false
+              loading.close()
+              isShowSkeleton.value = true
+              getDetail()
+            }
+          }
         }
       }, 1000)
     }

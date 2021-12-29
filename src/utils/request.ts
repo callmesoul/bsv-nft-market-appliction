@@ -9,15 +9,19 @@ export default class HttpRequest {
     })
     this.request.interceptors.request.use(
       async config => {
-        const index = config.baseURL?.indexOf('nftonshow')
-        if (config.baseURL === import.meta.env.VITE_NftApi) {
-          config.headers['token'] = `${store.state.nftToken}`
-          config.headers['type'] = store.state.isApp ? '0' : '2'
-          config.headers['metaId'] = store.state.userInfo?.metaId
+        if (config.data.NotHeader) {
+          delete config.data.NotHeader
         } else {
-          const token = store.state.token ? store.state.token.access_token : null
-          if (token) {
-            config.headers['Authorization'] = `Bearer ${token}`
+          const index = config.baseURL?.indexOf('nftonshow')
+          if (config.baseURL === import.meta.env.VITE_NftApi) {
+            config.headers['token'] = `${store.state.nftToken}`
+            config.headers['type'] = store.state.isApp ? '0' : '2'
+            config.headers['metaId'] = store.state.userInfo?.metaId
+          } else {
+            const token = store.state.token ? store.state.token.access_token : null
+            if (token) {
+              config.headers['Authorization'] = `Bearer ${token}`
+            }
           }
         }
         return config

@@ -49,6 +49,16 @@ declare interface GetProductListResponstData extends apiResponse {
   data: NftItem[]
 }
 
+declare interface GetMetaSvSignRes extends apiResponse {
+  data: {
+    nonce: string
+    publicKey: string
+    signEncoded: string
+    timestamp: string
+  }
+  message: string
+}
+
 declare interface GetProductDetailResponstData extends apiResponse {
   data: NftItemDetail
 }

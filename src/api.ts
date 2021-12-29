@@ -30,6 +30,9 @@ export const GetToken = (params: object) => {
   })
 }
 
+export const GetMetaSvSign = (params: { path: string }): Promise<GetMetaSvSignRes> => {
+  return apiHttp.post(`/metasv-signature/signature`, { ...params, NotHeader: true })
+}
 export const QueryFindMetaData = (params: string) => {
   return apiHttp.get(`/v2showMANDB/api/v1/query/queryFindMetaData/${params}`)
 }
@@ -419,10 +422,18 @@ export const GetUserAuctionHistorys = (params: {
   return auctionHttp.post(`/v1/app/metabot/metaId`, params)
 }
 
-export const GetTxRaw = (txid: string): Promise<GetMetaBotListRes> => {
+export const GetTxRaw = (
+  txid: string,
+  params: {
+    'MetaSV-Client-Pubkey': string
+    'MetaSV-Nonce': string
+    'MetaSV-Signature': string
+    'MetaSV-Timestamp': string
+  }
+): Promise<GetMetaBotListRes> => {
   return new Promise((resolve, reject) => {
     fetch(`https://apiv2.metasv.com/tx/${txid}/raw`, {
-      headers: {},
+      headers: params,
     })
       .then(function(response) {
         return response.json()
