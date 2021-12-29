@@ -908,6 +908,7 @@ export default class Sdk {
     bidTo: string //出价的拍卖 createNFTAuctionProtocol txid
     bidType: string //"bid"/"buy" “bid”为普通竞拍出价，“buy”为一口价购买
   }) {
+    debugger
     const mode = import.meta.env.MODE
     const address =
       mode === 'prod' || mode === 'gray'
@@ -917,10 +918,14 @@ export default class Sdk {
       data: JSON.stringify({
         type: 'sensible', //token类型,如果不使用合约则为空
         ...params,
-        bidPrice: new Decimal(params.bidPrice)
-          .mul(0.05)
-          .plus(params.bidPrice)
-          .toNumber(),
+        bidPrice: new Decimal(
+          Math.ceil(
+            new Decimal(params.bidPrice)
+              .mul(0.05)
+              .plus(params.bidPrice)
+              .toNumber()
+          )
+        ).toNumber,
       }),
       brfcId: '546dasddsd',
       path: '/Protocols/NFTAuctionBid',
@@ -928,10 +933,14 @@ export default class Sdk {
       payTo: [
         {
           address,
-          amount: new Decimal(params.bidPrice)
-            .mul(0.05)
-            .plus(params.bidPrice)
-            .toNumber(),
+          amount: new Decimal(
+            Math.ceil(
+              new Decimal(params.bidPrice)
+                .mul(0.05)
+                .plus(params.bidPrice)
+                .toNumber()
+            )
+          ).toNumber(),
         },
       ],
     })
