@@ -25,7 +25,6 @@ const Right = () => import('@/views/Right.vue')
 const Apps = () => import('@/views/app/Apps.vue')
 const AppDetail = () => import('@/views/app/AppDetail.vue')
 const Advantage = () => import('@/views/app/Advantage.vue')
-const Bid = () => import('@/views/Bid.vue')
 import { useStore, Action, Mutation } from '@/store/index'
 import { ElMessage } from 'element-plus'
 import i18n from '@/utils/i18n'
@@ -126,7 +125,6 @@ export const router = createRouter({
       ],
     },
     { path: '/advantage', name: 'advantage', component: Advantage },
-    { path: '/bid', name: 'bid', component: Bid },
   ],
   async scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
