@@ -918,14 +918,6 @@ export default class Sdk {
       data: JSON.stringify({
         type: 'sensible', //token类型,如果不使用合约则为空
         ...params,
-        bidPrice: new Decimal(
-          Math.ceil(
-            new Decimal(params.bidPrice)
-              .mul(0.05)
-              .plus(params.bidPrice)
-              .toNumber()
-          )
-        ).toNumber,
       }),
       brfcId: '546dasddsd',
       path: '/Protocols/NFTAuctionBid',
@@ -933,14 +925,7 @@ export default class Sdk {
       payTo: [
         {
           address,
-          amount: new Decimal(
-            Math.ceil(
-              new Decimal(params.bidPrice)
-                .mul(0.05)
-                .plus(params.bidPrice)
-                .toNumber()
-            )
-          ).toNumber(),
+          amount: params.bidPrice,
         },
       ],
     })

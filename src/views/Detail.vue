@@ -1198,6 +1198,12 @@ async function bid() {
   })
   debugger
   if (res?.code === 0) {
+    let priceStot = new Decimal(auctionPrice.value).mul(Math.pow(10, 8)).toNumber()
+    let allPricePriceStot = new Decimal(priceStot)
+      .mul(0.05)
+      .plus(priceStot)
+      .toNumber()
+    allPricePriceStot = Math.ceil(allPricePriceStot)
     const response = await store.state.sdk
       ?.createNFTAuctionBidProtocol({
         sensibleInfo: {
@@ -1206,24 +1212,21 @@ async function bid() {
           tokenIndex: nft.val.tokenIndex,
         },
         bidDesc: '',
-        bidPrice: new Decimal(auctionPrice.value).mul(Math.pow(10, 8)).toNumber(),
+        bidPrice: allPricePriceStot,
         bidTo: '',
         bidType: 'bid',
       })
       .catch(() => loading.close())
     if (response?.code === 200) {
+      let price = new Decimal(auctionPrice.value)
+        .mul(0.05)
+        .plus(auctionPrice.value)
+        .toNumber()
       const result = await SubmitBid({
         codehash: nft.val.codeHash,
         genesis: nft.val.genesis,
         token_index: parseInt(nft.val.tokenIndex),
-        value: new Decimal(
-          Math.ceil(
-            new Decimal(auctionPrice.value)
-              .mul(0.05)
-              .plus(auctionPrice.value)
-              .toNumber()
-          )
-        ).toString(),
+        value: new Decimal(allPricePriceStot).div(Math.pow(10, 8)).toString(),
         tx: response.data.txId,
         raw_tx: response.data.rawTx,
         buyer_meta_id: store.state.userInfo!.metaId,
