@@ -965,6 +965,50 @@ export default class Sdk {
     })
   }
 
+  nftAuctionWithdraw(params: {
+    nft: {
+      codehash: string
+      genesis: string
+      genesisTxid: string
+      tokenIndex: string
+    }
+    nftAuctionId: string
+    useFeeb: number
+    checkOnly?: boolean
+  }) {
+    return new Promise<MetaIdJsRes>((resolve, reject) => {
+      const callback = (res: MetaIdJsRes) => {
+        this.callback(res, resolve, reject)
+      }
+      if (this.isApp) {
+        const functionName: string = `nftAuctionWithdrawCallBack`
+        // @ts-ignore
+        window[functionName] = callback
+        // @ts-ignore
+        if (window.appMetaIdJsV2) {
+          window.appMetaIdJsV2?.nftAuctionWithdraw(
+            store.state.token!.access_token,
+            JSON.stringify(params),
+            functionName
+          )
+        } else {
+          window.appMetaIdJs?.nftAuctionWithdraw(
+            store.state.token!.access_token,
+            JSON.stringify(params),
+            functionName
+          )
+        }
+      } else {
+        debugger
+        // @ts-ignore
+        this.metaidjs?.nftAuctionWithdraw({
+          ...params,
+          callback,
+        })
+      }
+    })
+  }
+
   /* createNFTAuctionProtocol(params: {
     sensibleInfo: //如果type是sensible，则读取这信息
     {

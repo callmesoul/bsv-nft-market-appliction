@@ -171,7 +171,7 @@
                 <div class="cont flex flex-align-center">
                   <input
                     v-model="auctionPrice"
-                    :placeholder="$t('auctionPriceplac') + minPrice"
+                    :placeholder="$t('auctionPriceplac') + minAuctionPrice"
                     @change="auctionAmountChange"
                     type="number"
                     class="flex1"
@@ -292,6 +292,16 @@ const minPrice = computed(() => {
   return min
 })
 
+const minAuctionPrice = computed(() => {
+  let min = 0.0001
+  if (units[unitIndex.value].unit === UnitName.BSV) {
+    min = 0.0001
+  } else {
+    min = 10000
+  }
+  return min
+})
+
 // @ts-ignore
 const nft: { val: NftItemDetail } = reactive({
   val: {},
@@ -321,10 +331,8 @@ if (route.params.genesisId && route.params.codehash && route.params.tokenIndex) 
 }
 
 function saleAmountChange() {
-  let min = 0.00001
-  if (units[unitIndex.value].unit === 'SATS') min = 1000
-  if (new Decimal(saleAmount.value).toNumber() <= min) {
-    saleAmount.value = min.toString()
+  if (new Decimal(saleAmount.value).toNumber() < minPrice.value) {
+    saleAmount.value = minPrice.value.toString()
   }
 }
 
@@ -389,7 +397,6 @@ async function confirmSale() {
   } else if (tabIndex.value === 1) {
     // 拍卖
     if (auctionTime.value === '' || auctionPrice.value === '') return
-
     const loading = ElLoading.service({
       lock: true,
       text: 'Loading',
@@ -397,59 +404,73 @@ async function confirmSale() {
       background: 'rgba(0, 0, 0, 0.7)',
       customClass: 'full-loading',
     })
-    let _auctionPrice
-    if (units[unitIndex.value].unit === UnitName.SATS) {
-      _auctionPrice = auctionPrice.value
-    } else {
-      _auctionPrice = new Decimal(auctionPrice.value).mul(Math.pow(10, 8)).toString()
-    }
-    const response = await store.state.sdk?.nftStartAuction({
-      nft: {
-        codehash: nft.val.codeHash,
-        genesis: nft.val.genesis,
-        tokenIndex: nft.val.tokenIndex,
-        genesisTxid: nft.val.genesisTxId,
-        sensibleId: nft.val.sensibleId,
-      },
-      startBsvPrice: new Decimal(_auctionPrice).toNumber(),
-      endTimeStamp: new Date(auctionTime.value).getTime(),
-      feeAddress: '19NeJJM6eEa3bruYnqkTA4Cp6VvdFGSepd',
-      feeAmount: 1000,
-      useFeeb: 0.5,
-      // sensibleInfo: {
-      //   codehash: nft.val.codeHash,
-      //   genesis: nft.val.genesis,
-      //   tokenIndex: nft.val.tokenIndex,
-      // },
-      // auctionDesc: saleIntro.value,
-      // auctionContractTxId: nft.val.sellContractTxId ? nft.val.sellContractTxId : '',
-      // basePrice: new Decimal(_auctionPrice).toNumber(),
-      // minPrceGap: new Decimal(_minPrceGap).toNumber(),
-      // sellPrice: new Decimal(fixed_value).toNumber(),
-      // availabeTime: new Date(auctionTime.value).getTime(),
-    })
-    debugger
-    if (response && response?.code === 200) {
-      ElMessage.success(i18n.t('createAuctionSuccess'))
-      loading.close()
-      router.back()
-      // 拍卖
-      /* const res = await CreateNftAuction({
-        codehash: nft.val.codeHash,
-        genesis: nft.val.genesis,
-        token_index: parseInt(nft.val.tokenIndex),
-        value: new Decimal(_auctionPrice).div(Math.pow(10, 8)).toString(),
-        fixed_value: new Decimal(fixed_value).div(Math.pow(10, 8)).toString(),
-        begin_value: new Decimal(_minPrceGap).div(Math.pow(10, 8)).toString(),
-        one_value: new Decimal(_minPrceGap).div(Math.pow(10, 8)).toString(),
-        icon: `metafile://${store.state.userInfo!.avatarTxId}`,
-        memo: saleIntro.value,
-        dead_time: new Date(auctionTime.value).getTime(),
-        auction_tx: response.data.txId,
+    try {
+      let _auctionPrice
+      if (units[unitIndex.value].unit === UnitName.SATS) {
+        _auctionPrice = auctionPrice.value
+      } else {
+        _auctionPrice = new Decimal(auctionPrice.value).mul(Math.pow(10, 8)).toString()
+      }
+      const params = {
+        nft: {
+          codehash: nft.val.codeHash,
+          genesis: nft.val.genesis,
+          tokenIndex: nft.val.tokenIndex,
+          genesisTxid: nft.val.genesisTxId,
+          sensibleId: nft.val.sensibleId,
+        },
+        startBsvPrice: new Decimal(_auctionPrice).toNumber(),
+        endTimeStamp: new Date(auctionTime.value).getTime(),
+        feeAddress: '19NeJJM6eEa3bruYnqkTA4Cp6VvdFGSepd',
+        feeAmount: 1000,
+        useFeeb: 0.5,
+        // sensibleInfo: {
+        //   codehash: nft.val.codeHash,
+        //   genesis: nft.val.genesis,
+        //   tokenIndex: nft.val.tokenIndex,
+        // },
+        // auctionDesc: saleIntro.value,
+        // auctionContractTxId: nft.val.sellContractTxId ? nft.val.sellContractTxId : '',
+        // basePrice: new Decimal(_auctionPrice).toNumber(),
+        // minPrceGap: new Decimal(_minPrceGap).toNumber(),
+        // sellPrice: new Decimal(fixed_value).toNumber(),
+        // availabeTime: new Date(auctionTime.value).getTime(),
+      }
+      const res = await store.state.sdk?.nftStartAuction({
+        ...params,
+        checkOnly: true,
       })
-      if (res.code === 0) {
-        
-      } */
+      if (res.code === 200) {
+        const result = await confirmToSendMetaData(res.data.amount)
+        if (result) {
+          const response = await store.state.sdk?.nftStartAuction(params)
+          if (response && response?.code === 200) {
+            ElMessage.success(i18n.t('createAuctionSuccess'))
+            loading.close()
+            router.back()
+            // 拍卖
+            /* const res = await CreateNftAuction({
+              codehash: nft.val.codeHash,
+              genesis: nft.val.genesis,
+              token_index: parseInt(nft.val.tokenIndex),
+              value: new Decimal(_auctionPrice).div(Math.pow(10, 8)).toString(),
+              fixed_value: new Decimal(fixed_value).div(Math.pow(10, 8)).toString(),
+              begin_value: new Decimal(_minPrceGap).div(Math.pow(10, 8)).toString(),
+              one_value: new Decimal(_minPrceGap).div(Math.pow(10, 8)).toString(),
+              icon: `metafile://${store.state.userInfo!.avatarTxId}`,
+              memo: saleIntro.value,
+              dead_time: new Date(auctionTime.value).getTime(),
+              auction_tx: response.data.txId,
+            })
+            if (res.code === 0) {
+              
+            } */
+          }
+        }
+      }
+    } catch (error) {
+      if (error) ElMessage.error(JSON.stringify(error))
+      if (loading) loading.close()
     }
   }
 
@@ -493,31 +514,12 @@ const setAuctionDisabledDate = (time: string) => {
 // 更改单位
 function changeUnitIndex(index: number) {
   if (unitIndex.value === index) return
-  if (saleAmount.value !== '') {
-    const oldSats = units[unitIndex.value].sats
-    const newSats = units[index].sats
-    saleAmount.value = new Decimal(oldSats)
-      .div(newSats)
-      .mul(saleAmount.value)
-      .toString()
-  }
-  if (auctionPrice.value !== '') {
-    const oldSats = units[unitIndex.value].sats
-    const newSats = units[index].sats
-    auctionPrice.value = new Decimal(oldSats)
-      .div(newSats)
-      .mul(auctionPrice.value)
-      .toString()
-  }
-  if (minGapPrice.value !== '') {
-    const oldSats = units[unitIndex.value].sats
-    const newSats = units[index].sats
-    minGapPrice.value = new Decimal(oldSats)
-      .div(newSats)
-      .mul(minGapPrice.value)
-      .toString()
-  }
   unitIndex.value = index
+  if (saleAmount.value !== '') {
+    saleAmount.value = new Decimal(units[index].sats).mul(saleAmount.value).toString()
+  } else if (auctionPrice.value !== '') {
+    auctionPrice.value = new Decimal(units[index].sats).mul(auctionPrice.value).toString()
+  }
 }
 
 // 更改tab
@@ -528,10 +530,8 @@ function changeTabIndex(index: number) {
 
 // 起拍价格更改
 function auctionAmountChange() {
-  let min = 0
-  if (units[unitIndex.value].unit === 'SATS') min = new Decimal(min).mul(Math.pow(10, 8)).toNumber()
-  if (parseFloat(auctionPrice.value) < min) {
-    auctionPrice.value = min.toString()
+  if (parseFloat(auctionPrice.value) < minAuctionPrice.value) {
+    auctionPrice.value = minAuctionPrice.value.toString()
   }
 }
 </script>

@@ -363,5 +363,6 @@
   "auctionMSg": "Auction Information",
   "auction": "Auction",
   "myAuctionNFT": "My Auction NFT",
-  "AuctionNFT": "Auction NFT"
+  "AuctionNFT": "Auction NFT",
+  "confirmAuctionSend": "Confirm Send"
 }

@@ -1208,23 +1208,27 @@ async function bid() {
       bsvBidPrice: satoshis(auctionPrice.value),
       nftAuctionId: nft.val.nftCurrentAuctionCreateTxId,
       useFeeb: 0.5,
+      lastBidPrice: nft.val.currentPrice,
     }
     const res = await store.state.sdk?.nftAuctionBid({
       ...params,
       checkOnly: true,
     })
     if (res?.code === 200) {
-      const usedAmount = new Decimal(Math.abs(res.data.amount)).plus(params.bsvBidPrice).toNumber()
+      const usedAmount = new Decimal(Math.abs(res.data.amount)).toNumber()
       const result = await confirmToSendMetaData(usedAmount)
       if (result) {
         // 确认支付
         const response = await store.state.sdk?.nftAuctionBid(params)
         if (response && response?.code === 200) {
           ElMessage.success(i18n.t('bidSuccess'))
-          nft.val.minGapPrice = new Decimal(auctionPrice.value).mul(0.1).toString()
+          nft.val.currentPrice = new Decimal(auctionPrice.value).toString()
+          const min = new Decimal(auctionPrice.value).mul(0.1)
+          nft.val.minGapPrice = min.toString()
           if (new Decimal(nft.val.minGapPrice).toNumber() < 0.00001) {
             nft.val.minGapPrice = '0.00001'
           }
+          auctionPrice.value = min.toNumber()
           isShowAuctionModal.value = false
           // 获取拍卖记录
           getNftAuctionHistorys()

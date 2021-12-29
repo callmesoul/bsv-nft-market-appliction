@@ -805,4 +805,9 @@ declare interface GetAuctionListResItem {
   userName: string
   website: string
   zeroAddress: string
+  ownerAvatarTxId: string
+  ownerAvatarType: string
+  ownerMetaId: string
+  ownerName: string
+  sensibleId: string
 }

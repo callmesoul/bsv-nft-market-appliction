@@ -1,7 +1,7 @@
 <template>
   <div class="auction-list container">
     <template v-for="auction in auctions">
-      <AuctionItemVue :auction="auction"></AuctionItemVue>
+      <AuctionItemVue :auction="auction" @remove="removeItem"></AuctionItemVue>
     </template>
 
     <LoadMore :pagination="pagination" @getMore="getMore" v-if="auctions.length > 0" />
@@ -53,6 +53,13 @@ function getAuctionList(isCover = false) {
     }
     resolve()
   })
+}
+
+function removeItem(auction: GetAuctionListResItem) {
+  const index = auctions.findIndex(item => item.txId === auction.txId)
+  if (index !== -1) {
+    auctions.splice(index, 1)
+  }
 }
 
 function getMore() {

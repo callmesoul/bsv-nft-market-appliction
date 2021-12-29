@@ -426,7 +426,7 @@ var MetaIdJs = /** @class */ (function () {
         mainFrame.onload = function () {
             if (mainFrame.contentWindow) {
                 _this.mainFrameEl = mainFrame;
-                // 无法把postmessage实例保留，会报跨域错误
+                // 无法把 postmessage 实例保留，会报跨域错误
                 window.mainFrameMessage = new PostmessageClient(mainFrame.contentWindow);
                 window.mainFrameMessage.send("send-options", _this.oauthSettings);
                 // window.mainFrameMessage = mainFrameMessage
@@ -576,6 +576,20 @@ var MetaIdJs = /** @class */ (function () {
         }
         delete defParams.callback;
         window.mainFrameMessage.send("nft-auction-bid", defParams);
+    };
+    /**
+     * nftAuctionWithdraw
+     */
+    MetaIdJs.prototype.nftAuctionWithdraw = function (params) {
+        var defParams = params;
+        if (params.callback) {
+            var handlerId = generateRandomId();
+            this._handlers[handlerId] = {};
+            this._handlers[handlerId].callback = params.callback;
+            defParams.handlerId = handlerId;
+        }
+        delete defParams.callback;
+        window.mainFrameMessage.send("nft-auction-withdraw", defParams);
     };
     MetaIdJs.prototype.getFTList = function (params) {
         var defParams = params;

@@ -127,6 +127,7 @@ export declare class MetaIdJs {
             genesis: string;
             genesisTxid: string;
             tokenIndex: string;
+            sensibleId: string;
         };
         startBsvPrice: number;
         endTimeStamp: number;
@@ -140,8 +141,30 @@ export declare class MetaIdJs {
      * nftAuctionBid
      */
     nftAuctionBid(params: {
-        nft: NFTTypes;
+        nft: {
+            codehash: string;
+            genesis: string;
+            genesisTxid: string;
+            tokenIndex: string;
+            sensibleId: string;
+        };
         bsvBidPrice: number;
+        nftAuctionId: string;
+        useFeeb: number;
+        checkOnly?: boolean;
+        callback?: Function;
+    }): void;
+    /**
+     * nftAuctionWithdraw
+     */
+    nftAuctionWithdraw(params: {
+        nft: {
+            codehash: string;
+            genesis: string;
+            genesisTxid: string;
+            tokenIndex: string;
+            sensibleId: string;
+        };
         nftAuctionId: string;
         useFeeb: number;
         checkOnly?: boolean;
