@@ -227,7 +227,7 @@
                 <div class="title">{{ $t('currentBid') }}：</div>
                 <div class="cont" v-if="nft.val.currentPrice">{{ nft.val.currentPrice }} BSV</div>
               </div>
-              <div class="auction-msg-item flex1">
+              <div class="auction-msg-item">
                 <div class="title">{{ $t('auctionEndTime') }}：</div>
                 <div class="cont">
                   <VueCountdown
