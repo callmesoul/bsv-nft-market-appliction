@@ -714,6 +714,7 @@
         />
         <span>BSV</span>
       </div>
+
       <!-- <div class="equal">≈1036 CNY</div> -->
       <div class="msg-list haved-bsv">
         <div class="msg-item flex flex-align-center">
@@ -721,10 +722,16 @@
           <div class="value">{{ balance }} BSV</div>
         </div>
       </div>
+
       <div
         class="btn btn-block"
         v-loading="getBalanceLoading"
-        v-if="auctionPrice <= balance"
+        v-if="
+          new Decimal(auctionPrice)
+            .mul(0.05)
+            .plus(auctionPrice)
+            .toNumber() <= balance
+        "
         @click="bid"
       >
         {{ $t('bid') }}
@@ -732,6 +739,10 @@
       <div class="btn btn-block btn-gray" v-loading="getBalanceLoading" v-else @click="toWallet">
         {{ $t('insufficientBalanceToWallet') }}
         <img src="@/assets/images/card_icon_ins.svg" />
+      </div>
+      <div class="auctionFailTips">
+        *{{ $t('auctionFeeTips') }}
+        {{ new Decimal(auctionPrice).mul(0.05).toString() }}
       </div>
     </div>
   </ElDialog>
@@ -823,6 +834,7 @@ const nft: { val: NftItemDetail } = reactive({
 //   })
 // }
 let isCanBuy = ref(true)
+
 function getDetail() {
   return new Promise<void>(async resolve => {
     const _nft = await NFTDetail(
@@ -1185,6 +1197,7 @@ async function bid() {
     getDetail()
     loading.close()
   })
+  debugger
   if (res?.code === 0) {
     const response = await store.state.sdk
       ?.createNFTAuctionBidProtocol({
@@ -1200,36 +1213,24 @@ async function bid() {
       })
       .catch(() => loading.close())
     if (response?.code === 200) {
-      const getRawRes: any = await GetTxRaw(response.data.txId).catch(error => {
-        ElMessage.error(error.response.data.data)
-        getBalanceLoading.value = true
-        isShowSkeleton.value = true
-        isShowAuctionModal.value = false
-        getDetail()
+      const result = await SubmitBid({
+        codehash: nft.val.codeHash,
+        genesis: nft.val.genesis,
+        token_index: parseInt(nft.val.tokenIndex),
+        value: new Decimal(auctionPrice.value).toString(),
+        tx: response.data.txId,
+        raw_tx: response.data.rawTx,
+        buyer_meta_id: store.state.userInfo!.metaId,
+        buyer_address: store.state.userInfo!.address,
+      }).catch(error => {
         loading.close()
       })
-      if (getRawRes.hex) {
-        const result = await SubmitBid({
-          codehash: nft.val.codeHash,
-          genesis: nft.val.genesis,
-          token_index: parseInt(nft.val.tokenIndex),
-          value: new Decimal(auctionPrice.value).toString(),
-          tx: response.data.txId,
-          raw_tx: getRawRes.hex,
-          buyer_meta_id: store.state.userInfo!.metaId,
-          buyer_address: store.state.userInfo!.address,
-        }).catch(error => {
-          loading.close()
-        })
-        if (result?.code === 0) {
-          ElMessage.success(i18n.t('bidSuccess'))
-          isShowAuctionModal.value = false
-          loading.close()
-          isShowSkeleton.value = true
-          getDetail()
-        }
-      } else {
+      if (result?.code === 0) {
+        ElMessage.success(i18n.t('bidSuccess'))
+        isShowAuctionModal.value = false
         loading.close()
+        isShowSkeleton.value = true
+        getDetail()
       }
     }
   }

@@ -910,7 +910,7 @@ export default class Sdk {
   }) {
     const mode = import.meta.env.MODE
     const address =
-      mode === 'prod' ? '14VW3cDiMimxFYELo88kUbM5JtcCyP5n4c' : '13JYVkJHCpaUsMgb9eRR4qSWF5KaoHtb31'
+      mode === 'prod' ? '14VW3cDiMimxFYELo88kUbM5JtcCyP5n4c' : '19B92x1c7EGqwEabHfvXLPsMjRriKSUNRe'
     return this.sendMetaDataTx({
       data: JSON.stringify({
         type: 'sensible', //token类型,如果不使用合约则为空
@@ -919,7 +919,15 @@ export default class Sdk {
       brfcId: '546dasddsd',
       path: '/Protocols/NFTAuctionBid',
       nodeName: 'NFTAuctionBid',
-      payTo: [{ address, amount: params.bidPrice }],
+      payTo: [
+        {
+          address,
+          amount: new Decimal(params.bidPrice)
+            .mul(0.05)
+            .plus(params.bidPrice)
+            .toNumber(),
+        },
+      ],
     })
   }
 

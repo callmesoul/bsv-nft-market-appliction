@@ -67,3 +67,5 @@ declare interface NftItemDetail {
   nftGenesisCertificationName: string
   nftWebsite: string
 }
+
+declare interface BidItem extends NftItemDetail, GetNftAuctionsResItem {}

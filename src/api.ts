@@ -421,7 +421,9 @@ export const GetUserAuctionHistorys = (params: {
 
 export const GetTxRaw = (txid: string): Promise<GetMetaBotListRes> => {
   return new Promise((resolve, reject) => {
-    fetch(`https://apiv2.metasv.com/tx/${txid}/raw`)
+    fetch(`https://apiv2.metasv.com/tx/${txid}/raw`, {
+      headers: {},
+    })
       .then(function(response) {
         return response.json()
       })

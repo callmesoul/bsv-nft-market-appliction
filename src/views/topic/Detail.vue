@@ -599,8 +599,15 @@ const genesisVolumeInfo: { val: null | GenesisVolumeInfo } = reactive({ val: nul
 
 // nftSellState  0: 可购买 1: 下架 2：已购买 3：敬请期待 4：抢购状态 5： 非销售
 function itemBuyBtnClass(metabot: GetMetaBotListResItem) {
+  if (metabot.nftSellState === 7) {
+    // 拍卖进行中
+    return ''
+  } else if (metabot.nftSellState === 6 || metabot.nftSellState === 8) {
+    // 拍卖为开始 拍卖已结束
+    return 'btn-gray'
+  }
   // 可购买 和 抢购状态
-  if (metabot.nftSellState === 0 || metabot.nftSellState === 4) {
+  else if (metabot.nftSellState === 0 || metabot.nftSellState === 4) {
     if (metabot.nftIsReady) {
       if (metabot.nftSellState === 4) {
         return 'btn-change'
@@ -623,6 +630,15 @@ function itemBuyBtnText(metabot: GetMetaBotListResItem) {
   } else if (metabot.nftSellState === 5) {
     // 5： 非销售
     return i18n.t('notSale')
+  } else if (metabot.nftSellState === 6) {
+    // 6： 拍卖准备开始
+    return i18n.t('unauctioning')
+  } else if (metabot.nftSellState === 7) {
+    // 5： 非销售
+    return i18n.t('auctioning')
+  } else if (metabot.nftSellState === 8) {
+    // 5： 非销售
+    return i18n.t('auctioned')
   } else {
     return new Decimal(metabot.nftPrice).div(Math.pow(10, 8)).toString() + ' BSV'
   }
@@ -666,6 +682,10 @@ function transformSlotProps(props: any) {
 }
 
 function toDetail(metabot: GetMetaBotListResItem) {
+  let query: any = {}
+  if (metabot.nftSellState === 6 || metabot.nftSellState === 7 || metabot.nftSellState === 8) {
+    query.isAuctioin = true
+  }
   router.push({
     name: 'detail',
     params: {
@@ -673,6 +693,7 @@ function toDetail(metabot: GetMetaBotListResItem) {
       codehash: metabot.nftCodehash,
       tokenIndex: metabot.nftTokenIndex,
     },
+    query,
   })
 }
 
@@ -760,7 +781,10 @@ function changeSectionIndex(index: number) {
 
 // 购买
 async function buy(metabot: GetMetaBotListResItem) {
-  if (metabot.nftSellState === 1) {
+  if (metabot.nftSellState === 6 || metabot.nftSellState === 7 || metabot.nftSellState === 8) {
+    toDetail(metabot)
+    return
+  } else if (metabot.nftSellState === 1) {
     ElMessage.warning(i18n.t('isBeCancelSelled'))
     return
   } else if (metabot.nftSellState === 2) {

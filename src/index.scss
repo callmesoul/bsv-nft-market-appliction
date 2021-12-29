@@ -29,8 +29,11 @@ pre {
   white-space: nowrap;
 }
 
-.nft-list {
-  .nft-item {
+.nft-list,
+.bid-list {
+
+  .nft-item,
+  .bid-item {
     display: inline-block;
     width: calc((100% - (20px * 3)) / 4);
     margin-right: 20px;
@@ -469,8 +472,11 @@ input[type='number'] {
     padding-bottom: 60px;
   }
 
-  .nft-list {
-    .nft-item {
+  .nft-list,
+  .bid-list {
+
+    .nft-item,
+    .bid-item {
       width: calc((100% - (20px * 1)) / 2);
 
       &:nth-child(4n) {
