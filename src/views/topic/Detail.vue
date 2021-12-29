@@ -683,7 +683,7 @@ function transformSlotProps(props: any) {
 
 function toDetail(metabot: GetMetaBotListResItem) {
   let query: any = {}
-  if (metabot.nftSellState === 6 || metabot.nftSellState === 7 || metabot.nftSellState === 8) {
+  if (metabot.nftSellState === 7 || metabot.nftSellState === 8) {
     query.isAuctioin = true
   }
   router.push({
