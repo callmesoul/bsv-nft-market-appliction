@@ -852,7 +852,7 @@ function getDetail() {
         isCanBuy.value = false
       }
 
-      if (route.query.isAuctioin) {
+      if (route.query.isAuctioin || (nft.val.sellState >= 6 && nft.val.sellState <= 8)) {
         nft.val.isAuction = true
         const _tabIndex = tabs.findIndex(item => item.key === 'historicalBid')
         if (_tabIndex === -1) {
