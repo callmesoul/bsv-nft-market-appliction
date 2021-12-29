@@ -24,6 +24,27 @@
         <div class="time">{{ $filters.dateTimeFormat(topic.timestamp, 'YYYY-MM-DD') }}</div>
       </div>
     </div>
+
+    <div
+      class="topic-item"
+      key="soul"
+      @click="toDetail('soul', 'f071580414e3a6ce87952b7b7cc66c7c4f35709ff1edd66b88fa1a308c14d6d7')"
+    >
+      <img
+        class="cover"
+        src="http://filecdn.showpay.top/nos/topic/Webot%202022%20Revenue%20NFT%20Sale.png"
+      />
+      <div class="title">soul</div>
+      <div class="msg flex flex-align-center">
+        <div class="creater flex1 flex flex-align-center">
+          {{ $t('eventParty') }}:<UserAvatar
+            metaId="f071580414e3a6ce87952b7b7cc66c7c4f35709ff1edd66b88fa1a308c14d6d7"
+          />
+          soul
+        </div>
+        <div class="time">2021-05-05</div>
+      </div>
+    </div>
   </div>
 </template>
 
