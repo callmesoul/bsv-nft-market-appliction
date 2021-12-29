@@ -364,5 +364,6 @@
   "auctioning": "Auction",
   "auctioned": "Auction Over",
   "unauctioning": "Ready Auction",
-  "seriesWebsite": "Series website"
+  "seriesWebsite": "Series website",
+  "auctionFail": "Bid failed, please refresh and try again"
 }

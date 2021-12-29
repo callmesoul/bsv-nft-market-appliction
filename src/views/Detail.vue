@@ -1216,7 +1216,10 @@ async function bid() {
         bidTo: '',
         bidType: 'bid',
       })
-      .catch(() => loading.close())
+      .catch(() => {
+        ElMessage.error(i18n.t('auctionFail'))
+        loading.close()
+      })
     if (response?.code === 200) {
       let price = new Decimal(auctionPrice.value)
         .mul(0.05)
@@ -1232,9 +1235,10 @@ async function bid() {
         buyer_meta_id: store.state.userInfo!.metaId,
         buyer_address: store.state.userInfo!.address,
       }).catch(error => {
+        ElMessage.error(i18n.t('auctionFail'))
         loading.close()
       })
-      if (result?.code === 0) {
+      if (result && result?.code === 0) {
         ElMessage.success(i18n.t('bidSuccess'))
         isShowAuctionModal.value = false
         loading.close()
@@ -1255,6 +1259,9 @@ async function getNftAuctionHistorys() {
   })
   if (res.code === 0) {
     auctionRecords.length = 0
+    res.data.map(item => {
+      const metaInfo = GetMetaIdInfo
+    })
     auctionRecords.push(...res.data)
   }
 }
