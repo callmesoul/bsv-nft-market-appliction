@@ -360,7 +360,7 @@
   "userNotCerted": "User is not authenticated",
   "personCert": "Personal authentication",
   "noMsg": "no information",
-  "auctionFeeTips": "A handling fee will be charged:",
+  "auctionFeeTips": "A 5% handling fee will be charged (it will be refunded if the bid fails):",
   "auctioning": "Auction",
   "auctioned": "Auction Over",
   "unauctioning": "Ready Auction"
