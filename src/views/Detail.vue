@@ -779,7 +779,7 @@ import {
 import dayjs from 'dayjs'
 import { useStore } from '@/store'
 import { nftTypes, pagination } from '@/config'
-import { checkSdkStatus, ToUser } from '@/utils/util'
+import { checkSdkStatus, sleep, ToUser } from '@/utils/util'
 import Decimal from 'decimal.js-light'
 import { router } from '@/router'
 import NftOffSale from '@/utils/offSale'
@@ -1210,39 +1210,40 @@ async function bid() {
         bidType: 'bid',
       })
       if (response?.code === 200) {
-        setTimeout(async () => {
-          const getSignRes = await GetMetaSvSign({ path: `/tx/${response.data.txId}/raw` })
-          if (getSignRes && getSignRes.code === 0) {
-            const getRawRes: any = await GetTxRaw(response.data.txId, {
-              'MetaSV-Client-Pubkey': getSignRes.data.publicKey,
-              'MetaSV-Nonce': getSignRes.data.nonce,
-              'MetaSV-Signature': getSignRes.data.signEncoded,
-              'MetaSV-Timestamp': getSignRes.data.timestamp,
+        await sleep() // 延迟一秒 以防拿不到数据
+        const getSignRes = await GetMetaSvSign({ path: `/tx/${response.data.txId}/raw` })
+        if (getSignRes && getSignRes.code === 0) {
+          const getRawRes: any = await GetTxRaw(response.data.txId, {
+            'MetaSV-Client-Pubkey': getSignRes.data.publicKey,
+            'MetaSV-Nonce': getSignRes.data.nonce,
+            'MetaSV-Signature': getSignRes.data.signEncoded,
+            'MetaSV-Timestamp': getSignRes.data.timestamp,
+          })
+          if (getRawRes) {
+            const result = await SubmitBid({
+              codehash: nft.val.codeHash,
+              genesis: nft.val.genesis,
+              token_index: parseInt(nft.val.tokenIndex),
+              value: new Decimal(allPricePriceStot).div(Math.pow(10, 8)).toString(),
+              tx: response.data.txId,
+              raw_tx: getRawRes.hex,
+              buyer_meta_id: store.state.userInfo!.metaId,
+              buyer_address: store.state.userInfo!.address,
             })
-            if (getRawRes) {
-              const result = await SubmitBid({
-                codehash: nft.val.codeHash,
-                genesis: nft.val.genesis,
-                token_index: parseInt(nft.val.tokenIndex),
-                value: new Decimal(allPricePriceStot).div(Math.pow(10, 8)).toString(),
-                tx: response.data.txId,
-                raw_tx: getRawRes.hex,
-                buyer_meta_id: store.state.userInfo!.metaId,
-                buyer_address: store.state.userInfo!.address,
-              })
-              if (result && result?.code === 0) {
-                ElMessage.success(i18n.t('bidSuccess'))
-                isShowAuctionModal.value = false
-                loading.close()
-                isShowSkeleton.value = true
-                getDetail()
-              }
+            if (result && result?.code === 0) {
+              ElMessage.success(i18n.t('bidSuccess'))
+              isShowAuctionModal.value = false
+              loading.close()
+              isShowSkeleton.value = true
+              getDetail()
             }
           }
-        }, 1000)
+        }
       }
     }
   } catch (error) {
+    debugger
+    getDetail()
     ElMessage.error(i18n.t('auctionFail'))
     getBalanceLoading.value = true
     isShowSkeleton.value = true

@@ -152,7 +152,6 @@ export const actions: ActionTree<State, State> & Actions = {
           state.isSetedSystemConfig = false
         }
       )
-      debugger
       if (result) {
         if (result[0].code === 0) {
           state.isCertedMetaIds = result[0].data

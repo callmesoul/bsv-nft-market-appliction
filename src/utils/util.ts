@@ -246,3 +246,11 @@ export function getUserSeries() {
     })
   })
 }
+
+export function sleep(timer: number = 1000) {
+  return new Promise<void>(resolve => {
+    setTimeout(() => {
+      resolve()
+    }, timer)
+  })
+}
