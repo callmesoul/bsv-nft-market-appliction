@@ -58,7 +58,7 @@ const router = useRouter()
 const i18n = useI18n()
 const pagination = reactive({
   ...store.state.pagination,
-  pageSize: 6,
+  pageSize: 12,
 })
 const nfts: NftItem[] = reactive([])
 const isShowNftListSkeleton = ref(true)
