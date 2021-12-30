@@ -31,7 +31,7 @@
       @click="
         toDetail('shengdan', 'f071580414e3a6ce87952b7b7cc66c7c4f35709ff1edd66b88fa1a308c14d6d7')
       "
-      v-if="mode === 'gray'"
+      v-if="isShowGrayTopic"
     >
       <img
         class="cover"
@@ -57,6 +57,7 @@ import { ref } from 'vue-demi'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useStore } from '@/store'
+import { computed } from 'vue'
 
 const keyword = ref('')
 const router = useRouter()
@@ -65,6 +66,24 @@ const store = useStore()
 const mode = import.meta.env.MODE
 
 function search() {}
+
+const isShowGrayTopic = computed(() => {
+  let result = false
+  const metaIds = [
+    '9bb6bf6aab238912d16018b4ba0cdea4b49ac50c0c319ca7b42dc2649bf76c4c',
+    '6fea074ef3faeabc0211624c47d6ff0fb95693e14cfa861a35c029b88177c7e7',
+    'c90c06b66c4c155b0ee0ba18c5d075df53d4fd5ad37c1cd2c05ef03f18c57af2',
+    'd87608e93f84982acacd186b9aee65c837baf9923186bf5f984a4ad776edcb81',
+    'e9ab42667c5f5a6a1e7d45ed023f8961ee6950bba8a771d68732c8fb460a7aae',
+  ]
+  if (
+    store.state.userInfo &&
+    metaIds.findIndex(item => item === store.state.userInfo.metaId) !== -1
+  ) {
+    result = true
+  }
+  return mode === 'gray' || result
+})
 
 function toDetail(key: string, metaId: string) {
   // router.push({ name: 'topicDetail', params: { key, metaId } })
