@@ -9,7 +9,7 @@ export default class HttpRequest {
     })
     this.request.interceptors.request.use(
       async config => {
-        if (config.data.NotHeader) {
+        if (config.data && config.data.NotHeader) {
           delete config.data.NotHeader
         } else {
           const index = config.baseURL?.indexOf('nftonshow')
