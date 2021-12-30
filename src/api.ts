@@ -523,3 +523,7 @@ export const GetNFTGenesisInfo = (params: {
 }): Promise<GetNFTGenesisInfoRes> => {
   return Sensible.get(`/nft/genesis-info/${params.codehash}/${params.genesis}`)
 }
+
+export const GetAuctionAddress = (): Promise<GetAuctionAddressRes> => {
+  return apiHttp.get(`/issue/api/bsv/address`)
+}

@@ -36,7 +36,7 @@ import { ElMessage } from 'element-plus'
 
 import { store } from '@/store'
 import { Decimal } from 'decimal.js-light'
-import { Langs } from '@/api'
+import { GetAuctionAddress, Langs } from '@/api'
 import { fail } from 'assert'
 import axios from 'axios'
 import { state } from '@/store/state'
@@ -776,7 +776,7 @@ export default class Sdk {
 
   // 获取用户余额
   getBalance() {
-    return new Promise<GetBalanceRes>(resolve => {
+    return new Promise<GetBalanceRes>((resolve, reject) => {
       if (this.isApp) {
         //@ts-ignore
         window['getBalanceCallBack'] = res => {
@@ -790,7 +790,8 @@ export default class Sdk {
                 satoshis: new Decimal(bsv).mul(Math.pow(10, 8)),
               },
             },
-            resolve
+            resolve,
+            reject
           )
         }
         if (window.appMetaIdJsV2) {
@@ -896,7 +897,7 @@ export default class Sdk {
     })
   }
 
-  createNFTAuctionBidProtocol(params: {
+  async createNFTAuctionBidProtocol(params: {
     sensibleInfo: //如果type是sensible，则读取这信息
     {
       codehash: string // 必须 // nft的codehash
@@ -908,27 +909,30 @@ export default class Sdk {
     bidTo: string //出价的拍卖 createNFTAuctionProtocol txid
     bidType: string //"bid"/"buy" “bid”为普通竞拍出价，“buy”为一口价购买
   }) {
-    debugger
-    const mode = import.meta.env.MODE
-    const address =
-      mode === 'prod' || mode === 'gray'
-        ? '181nQ8A4a3YaDEft3FNNvhebWYd9RasuxR'
-        : '19B92x1c7EGqwEabHfvXLPsMjRriKSUNRe'
-    return this.sendMetaDataTx({
-      data: JSON.stringify({
-        type: 'sensible', //token类型,如果不使用合约则为空
-        ...params,
-      }),
-      brfcId: '546dasddsd',
-      path: '/Protocols/NFTAuctionBid',
-      nodeName: 'NFTAuctionBid',
-      payTo: [
-        {
-          address,
-          amount: params.bidPrice,
-        },
-      ],
-    })
+    const getAddressRes = await GetAuctionAddress()
+    if (getAddressRes && getAddressRes.code === 0) {
+      debugger
+      /* const mode = import.meta.env.MODE
+      const address =
+        mode === 'prod' || mode === 'gray'
+          ? '181nQ8A4a3YaDEft3FNNvhebWYd9RasuxR'
+          : '19B92x1c7EGqwEabHfvXLPsMjRriKSUNRe' */
+      return this.sendMetaDataTx({
+        data: JSON.stringify({
+          type: 'sensible', //token类型,如果不使用合约则为空
+          ...params,
+        }),
+        brfcId: '546dasddsd',
+        path: '/Protocols/NFTAuctionBid',
+        nodeName: 'NFTAuctionBid',
+        payTo: [
+          {
+            address: getAddressRes.data,
+            amount: params.bidPrice,
+          },
+        ],
+      })
+    }
   }
 
   // 跳转tx详情

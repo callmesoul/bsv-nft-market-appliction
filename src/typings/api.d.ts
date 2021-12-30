@@ -715,3 +715,7 @@ declare interface GenesisInfo {
   seriesNameJp: string
   website: string
 }
+
+declare interface GetAuctionAddressRes extends apiResponse {
+  data: string
+}
