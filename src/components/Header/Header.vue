@@ -112,12 +112,9 @@
       <router-link to="/market" @click.stop="isShowDrawer = false">{{
         $t('countryFair')
       }}</router-link>
-      <router-link
-        to="/create"
-        @click.stop="isShowDrawer = false"
-        v-if="!store.state.isApp || (store.state.isApp && mode !== 'prod')"
-        >{{ $t('createnft') }}</router-link
-      >
+      <router-link to="/create" @click.stop="isShowDrawer = false">{{
+        $t('createnft')
+      }}</router-link>
       <router-link :to="{ name: 'right' }" @click.stop="isShowDrawer = false">{{
         $t('rightsList')
       }}</router-link>

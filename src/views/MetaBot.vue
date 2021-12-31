@@ -514,8 +514,13 @@ function getDatas(isCover = false) {
           page_size: pagination.pageSize,
         })
         if (auctionRes.code === 0) {
-          for (let i = 0; i < auctionRes.data.length; i++) {
-            const auctionItem = auctionRes.data[i]
+          const list = auctionRes.data.filter(
+            item =>
+              item.codehash === '0d0fc08db6e27dc0263b594d6b203f55fb5282e2' &&
+              item.genesis === '204dafb6ee543796b4da6f1d4134c1df2609bdf1'
+          )
+          for (let i = 0; i < list.length; i++) {
+            const auctionItem = list[i]
             const item = res.data.results.items.find(
               item =>
                 item.nftCodehash === auctionItem.codehash &&
