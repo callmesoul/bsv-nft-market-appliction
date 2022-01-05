@@ -53,13 +53,17 @@
           <span class="type">({{ $t('owner') }})</span>
         </div>
       </div>
+      <!-- 提取 -->
       <div
         class="btn btn-block"
-        :class="{
-          'btn-gray': auction.currentAuctionState !== 2 && auction.currentAuctionState !== 4,
-        }"
-        v-if="auction.currentAuctionState <= 3"
+        v-if="
+          store.state.userInfo &&
+            auction.ownerMetaId === store.state.userInfo.metaId &&
+            auction.currentAuctionState === 4
+        "
+        @click.stop="confirmSend(auction)"
       >
+        <div class="mb5" v>{{ $t('confirmAuctionSend') }}</div>
         {{
           auction.currentBidPrice === '' || auction.currentBidPrice === '0'
             ? $filters.bsvStr(auction.startingPriceInt)
@@ -67,9 +71,13 @@
         }}
         BSV
       </div>
-      <!-- 提取 -->
-      <div class="btn btn-block" v-else @click.stop="confirmSend(auction)">
-        <div class="mb5">{{ $t('confirmAuctionSend') }}</div>
+      <div
+        class="btn btn-block"
+        :class="{
+          'btn-gray': auction.currentAuctionState !== 2,
+        }"
+        v-else
+      >
         {{
           auction.currentBidPrice === '' || auction.currentBidPrice === '0'
             ? $filters.bsvStr(auction.startingPriceInt)
@@ -147,7 +155,6 @@ async function confirmSend(auction: GetAuctionListResItem) {
       ...params,
       checkOnly: true,
     })
-    debugger
     if (res.code === 200) {
       const result = await confirmToSendMetaData(res.data.amount)
       if (result) {
@@ -159,7 +166,10 @@ async function confirmSend(auction: GetAuctionListResItem) {
         }
       }
     }
-  } catch (error) {}
+  } catch (error) {
+    if (error) ElMessage.error(JSON.stringify(error))
+    loading.close()
+  }
 }
 </script>
 

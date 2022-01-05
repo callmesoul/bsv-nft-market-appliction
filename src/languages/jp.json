@@ -364,5 +364,6 @@
   "auction": "Auction",
   "myAuctionNFT": "My Auction NFT",
   "AuctionNFT": "Auction NFT",
-  "confirmAuctionSend": "Confirm Send"
+  "confirmAuctionSend": "Confirm Send",
+  "bidFail": "Bid failed, please bid again"
 }

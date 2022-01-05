@@ -898,7 +898,10 @@ function getDetail() {
               ? bsvStr(res.data.startingPrice)
               : bsvStr(res.data.currentBidPrice)
           // 最小出价
-          nft.val.minGapPrice = new Decimal(nft.val.currentPrice).mul(0.1).toString()
+          nft.val.minGapPrice = new Decimal(nft.val.currentPrice)
+            .mul(0.1)
+            .toFixed(8)
+            .toString()
           if (new Decimal(nft.val.minGapPrice).toNumber() < 0.00001) {
             nft.val.minGapPrice = '0.00001'
           }
@@ -1144,10 +1147,6 @@ async function toSale() {
   })
 }
 
-function more() {
-  ElMessage.info(i18n.t('stayTuned'))
-}
-
 async function getBalance() {
   const res = await store.state.sdk?.getBalance()
   if (res?.code === 200) {
@@ -1223,53 +1222,43 @@ async function bid() {
         if (response && response?.code === 200) {
           ElMessage.success(i18n.t('bidSuccess'))
           nft.val.currentPrice = new Decimal(auctionPrice.value).toString()
-          const min = new Decimal(auctionPrice.value).mul(0.1)
+          const min = new Decimal(auctionPrice.value).mul(0.1).toFixed(8)
           nft.val.minGapPrice = min.toString()
           if (new Decimal(nft.val.minGapPrice).toNumber() < 0.00001) {
             nft.val.minGapPrice = '0.00001'
           }
-          auctionPrice.value = min.toNumber()
+          minActionPrice.value = new Decimal(nft.val.currentPrice)
+            .plus(nft.val.minGapPrice)
+            .toNumber()
+          auctionPrice.value = minActionPrice.value
           isShowAuctionModal.value = false
-          // 获取拍卖记录
-          getNftAuctionHistorys()
+          // 插入拍卖记录
+          auctionRecords.unshift({
+            bidPrice: satoshis(nft.val.currentPrice).toString(),
+            bidPriceInt: satoshis(nft.val.currentPrice),
+            chargeUnit: 'bsv',
+            codehash: nft.val.codeHash,
+            genesis: nft.val.genesis,
+            genesisTxId: nft.val.genesisTxId,
+            issuerMetaId: nft.val.foundryMetaId,
+            issuerMetaTxId: nft.val.issueMetaTxId,
+            metaId: store.state.userInfo.metaId,
+            metanetId: '',
+            nftAuctionId: response.data.txId,
+            nftHash: '',
+            tokenIndex: nft.val.tokenIndex,
+            txId: response.data.txId,
+            zeroAddress: store.state.userInfo.address,
+            timestamp: new Date().getTime(),
+            userName: store.state.userInfo.name,
+          })
           loading.close()
-
-          /* const getRawRes: any = await GetTxRaw(response.data.txId).catch(error => {
-      ElMessage.error(error.response.data.data)
-      getBalanceLoading.value = true
-      isShowSkeleton.value = true
-      isShowAuctionModal.value = false
-      getDetail()
-      loading.close()
-    })
-    if (getRawRes.hex) {
-      const result = await SubmitBid({
-        codehash: nft.val.codeHash,
-        genesis: nft.val.genesis,
-        token_index: parseInt(nft.val.tokenIndex),
-        value: new Decimal(auctionPrice.value).toString(),
-        tx: response.data.txId,
-        raw_tx: getRawRes.hex,
-        buyer_meta_id: store.state.userInfo!.metaId,
-        buyer_address: store.state.userInfo!.address,
-      }).catch(error => {
-        loading.close()
-      })
-      if (result?.code === 0) {
-        ElMessage.success(i18n.t('bidSuccess'))
-        isShowAuctionModal.value = false
-        loading.close()
-        isShowSkeleton.value = true
-        getDetail()
-      }
-    } else {
-      loading.close()
-    } */
         }
       }
     }
   } catch (error) {
-    if (error) ElMessage.error(JSON.stringify(error))
+    getDetail()
+    ElMessage.error(i18n.t('bidFail'))
     if (loading) loading.close()
   }
 

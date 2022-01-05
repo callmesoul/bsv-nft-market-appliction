@@ -369,5 +369,6 @@
   "auction": "拍卖",
   "myAuctionNFT": "我拍卖的NFT",
   "AuctionNFT": "拍卖的NFT",
-  "confirmAuctionSend": "确认发出"
+  "confirmAuctionSend": "确认发出",
+  "bidFail": "出价失败，请重新出价"
 }
