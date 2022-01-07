@@ -1239,6 +1239,10 @@ async function openAuctionModal() {
 
 // 出价
 async function bid() {
+  if (store.state.sdk.isApp) {
+    ElMessage.warning(i18n.t('appNotBid'))
+    return
+  }
   if (new Decimal(balance.value).toNumber() < new Decimal(auctionPrice.value).toNumber()) return
   const loading = ElLoading.service({
     lock: true,

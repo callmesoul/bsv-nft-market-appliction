@@ -395,6 +395,10 @@ async function confirmSale() {
       if (loading) loading.close()
     }
   } else if (tabIndex.value === 1) {
+    if (store.state.sdk.isApp) {
+      ElMessage.warning(i18n.t('appNotBid'))
+      return
+    }
     // 拍卖
     if (auctionTime.value === '' || auctionPrice.value === '') return
     const loading = ElLoading.service({
