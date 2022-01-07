@@ -293,11 +293,11 @@ const minPrice = computed(() => {
 })
 
 const minAuctionPrice = computed(() => {
-  let min = 0.0001
+  let min = 0.01
   if (units[unitIndex.value].unit === UnitName.BSV) {
-    min = 0.0001
+    min = 0.01
   } else {
-    min = 10000
+    min = 1000000
   }
   return min
 })
