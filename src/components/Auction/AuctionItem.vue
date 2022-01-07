@@ -59,11 +59,11 @@
         v-if="
           store.state.userInfo &&
             auction.ownerMetaId === store.state.userInfo.metaId &&
-            auction.currentAuctionState === 4
+            auction.currentAuctionState === 3
         "
         @click.stop="confirmSend(auction)"
       >
-        <div class="mb5" v>{{ $t('confirmAuctionSend') }}</div>
+        <div class="mb5">{{ $t('confirmAuctionSend') }}</div>
         {{
           auction.currentBidPrice === '' || auction.currentBidPrice === '0'
             ? $filters.bsvStr(auction.startingPriceInt)
@@ -96,6 +96,7 @@ import VueCountdown from '@chenfengyuan/vue-countdown'
 import { useStore } from '@/store'
 import { ElLoading, ElMessage } from 'element-plus'
 import { useI18n } from 'vue-i18n'
+import { auctionConfirmSend } from '@/utils/auction'
 
 interface Props {
   auction: GetAuctionListResItem
@@ -128,10 +129,7 @@ function transformSlotProps(props: any) {
 }
 
 async function confirmSend(auction: GetAuctionListResItem) {
-  checkSdkStatus()
-
-  // if (store.state.userInfo.metaId !== auction.ownerMetaId) return
-  if (auction.currentAuctionState !== 4) return
+  if (auction.currentAuctionState !== 3) return
   const loading = ElLoading.service({
     lock: true,
     text: 'Loading',
@@ -139,36 +137,25 @@ async function confirmSend(auction: GetAuctionListResItem) {
     background: 'rgba(0, 0, 0, 0.7)',
     customClass: 'full-loading',
   })
-  try {
-    const params = {
-      nft: {
-        codehash: auction.codehash,
-        genesis: auction.genesis,
-        genesisTxid: auction.genesisTxId,
-        tokenIndex: auction.tokenIndex,
-        sensibleId: auction.sensibleId,
-      },
-      nftAuctionId: auction.txId,
-      useFeeb: 0.5,
-    }
-    const res = await store.state.sdk.nftAuctionWithdraw({
-      ...params,
-      checkOnly: true,
-    })
-    if (res.code === 200) {
-      const result = await confirmToSendMetaData(res.data.amount)
-      if (result) {
-        const response = await store.state.sdk.nftAuctionWithdraw(params)
-        if (response.code === 200) {
-          emit('remove', auction)
-          loading.close()
-          ElMessage.success(i18n.t('success'))
-        }
-      }
-    }
-  } catch (error) {
+  const params = {
+    nft: {
+      codehash: auction.codehash,
+      genesis: auction.genesis,
+      genesisTxid: auction.genesisTxId,
+      tokenIndex: auction.tokenIndex,
+      sensibleId: auction.sensibleId,
+    },
+    nftAuctionId: auction.txId,
+    useFeeb: 0.5,
+  }
+  const result = await await auctionConfirmSend(params).catch(error => {
     if (error) ElMessage.error(JSON.stringify(error))
     loading.close()
+  })
+  if (result) {
+    emit('remove', auction)
+    loading.close()
+    ElMessage.success(i18n.t('success'))
   }
 }
 </script>

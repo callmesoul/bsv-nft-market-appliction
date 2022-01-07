@@ -445,9 +445,11 @@ async function confirmSale() {
         if (result) {
           const response = await store.state.sdk?.nftStartAuction(params)
           if (response && response?.code === 200) {
-            ElMessage.success(i18n.t('createAuctionSuccess'))
-            loading.close()
-            router.back()
+            setTimeout(() => {
+              ElMessage.success(i18n.t('createAuctionSuccess'))
+              loading.close()
+              router.back()
+            }, 2000)
             // 拍卖
             /* const res = await CreateNftAuction({
               codehash: nft.val.codeHash,
