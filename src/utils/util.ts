@@ -11,7 +11,7 @@ import {
   NftApiCode,
   QueryFindMetaDataForPost,
 } from '@/api'
-import { resolve } from 'path/posix'
+import { rejects } from 'assert'
 
 export function tranfromImgFile(file: File) {
   return new Promise<MetaFile>((resolve, reject) => {
@@ -164,9 +164,11 @@ export function getMyNftEligibility(IssueMetaId: string) {
       }).catch(() => {
         resolve(false)
       })
+      // @ts-ignore
       if (res?.code === 0) {
         resolve(true)
       } else {
+        // @ts-ignore
         ElMessage.error(res?.data)
         resolve(false)
       }
@@ -252,5 +254,49 @@ export function sleep(timer: number = 1000) {
     setTimeout(() => {
       resolve()
     }, timer)
+  })
+}
+
+/**
+ * @function 处理完用户信息的回调。已处理完reslov,未登陆返回reject
+ * 用户处理需要获取用户信息后再可进行的操作
+ */
+export function checkUserInfoFinish() {
+  return new Promise<void>((resolve, reject) => {
+    if (store.state.token) {
+      if (store.state.userInfo) {
+        resolve()
+      } else {
+        if (store.state.sdkInitIng) {
+          let watchUserInfo: any
+          let setTimeOutUserInfo: any
+          // 设置定时，处理异常
+          setTimeOutUserInfo = setTimeout(() => {
+            watchUserInfo() // 移除监听
+            ElMessage.warning(i18n.global.t('toLoginTip'))
+            router.push('/')
+            reject()
+          }, 50000)
+          watchUserInfo = store.watch(
+            state => state.userInfo,
+            newVal => {
+              if (newVal) {
+                watchUserInfo() // 移除监听
+                clearTimeout(setTimeOutUserInfo) // 定时器
+                resolve()
+              }
+            }
+          )
+        } else {
+          ElMessage.warning(i18n.global.t('toLoginTip'))
+          router.push('/')
+          reject()
+        }
+      }
+    } else {
+      ElMessage.warning(i18n.global.t('toLoginTip'))
+      router.push('/')
+      reject()
+    }
   })
 }

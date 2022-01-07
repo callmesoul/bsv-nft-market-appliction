@@ -1,5 +1,7 @@
 <template>
-  <UserCenter :user="user" :userInfoLoading="loading" ref="root"></UserCenter>
+  <UserCenter :user="user" :userInfoLoading="loading" ref="root">
+    <router-view></router-view>
+  </UserCenter>
 </template>
 
 <script setup lang="ts">
@@ -21,7 +23,6 @@ onMounted(async () => {
     if (res.code === 200) {
       user.name = res.result.name
       user.metaId = res.result.metaId
-      root.value.changeTabIndex(1)
       loading.value = false
     }
   }

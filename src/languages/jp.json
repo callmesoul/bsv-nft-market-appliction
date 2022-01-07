@@ -365,5 +365,11 @@
   "auctioned": "Auction Over",
   "unauctioning": "Ready Auction",
   "seriesWebsite": "Series website",
-  "auctionFail": "Bid failed, please try again later"
+  "auctionFail": "Bid failed, please try again later",
+  "auctionMSg": "Auction Information",
+  "auction": "Auction",
+  "myAuctionNFT": "My Auction NFT",
+  "AuctionNFT": "Auction NFT",
+  "confirmAuctionSend": "Confirm Send",
+  "bidFail": "Bid failed, please bid again"
 }

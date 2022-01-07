@@ -117,8 +117,9 @@
             padding: 0;
             margin-right: 20px;
             color: #909399;
+            text-decoration: none;
 
-            &.active {
+            &.router-link-active {
                 color: #303133;
 
                 &::after {

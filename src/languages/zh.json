@@ -370,5 +370,11 @@
   "auctioned": "已拍卖结束",
   "unauctioning": "拍卖准备开始",
   "seriesWebsite": "系列官网",
-  "auctionFail": "出价失败，请稍候重试"
+  "auctionFail": "出价失败，请稍候重试",
+  "auctionMSg": "拍卖信息",
+  "auction": "拍卖",
+  "myAuctionNFT": "我拍卖的NFT",
+  "AuctionNFT": "拍卖的NFT",
+  "confirmAuctionSend": "确认发出",
+  "bidFail": "出价失败，请重新出价"
 }

@@ -8,3 +8,8 @@ export const enum OrderType {
   ASC = 1,
   DESC = -1,
 }
+
+export const enum ToBsvType {
+  Number = 'number',
+  String = 'string',
+}

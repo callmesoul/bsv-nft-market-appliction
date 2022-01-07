@@ -38,7 +38,7 @@
               <div
                 class="operate-item flex flex-align-center"
                 @click="openRecordModal"
-                v-if="route.name === 'self'"
+                v-if="store.state.userInfo && store.state.userInfo.metaId === user.metaId"
               >
                 <img src="@/assets/images/me_icon_record.svg" />
                 {{ $t('ransactionRecord') }}
@@ -85,44 +85,12 @@
                 (index === 0 && store.state.userInfo && store.state.userInfo.metaId === user.metaId)
             "
           >
-            <a
-              :class="{ active: index === tabIndex }"
-              :key="index"
-              @click="changeTabIndex(index)"
-              >{{ tab.name }}</a
-            >
+            <router-link :to="{ path: tab.path }" :key="index">{{ tab.name }}</router-link>
           </template>
         </template>
       </div>
     </div>
-    <NftSkeleton
-      :loading="isShowNftListSkeleton"
-      :count="pagination.pageSize"
-      class="section-cont nft-list"
-    >
-      <template #default>
-        <div class="section-cont nft-list">
-          <template v-for="nft in nfts">
-            <NftItem :item="nft" :isSelf="true" :isHideAuthor="isHideAuthor && tabIndex === 1" />
-          </template>
-        </div>
-      </template>
-    </NftSkeleton>
-  </div>
-
-  <LoadMore :pagination="pagination" @getMore="getMore" v-if="nfts.length > 0" />
-
-  <div class="nft-null flex flex-align-center flex-pack-center" v-if="nfts.length <= 0">
-    <div>
-      <img src="@/assets/images/default_icon_casting.svg" />
-      <div class="tips">
-        <template v-if="store.state.userInfo && store.state.userInfo.metaId === user.metaId">
-          {{ $t('nftNullTips') }}
-          <router-link :to="{ name: 'create' }">{{ $t('Casting') }}</router-link>
-        </template>
-        <template v-else>{{ $t('isNull') }}</template>
-      </div>
-    </div>
+    <slot></slot>
   </div>
 </template>
 
@@ -180,150 +148,32 @@ const pagination = reactive({
   pageSize: 12,
 })
 const tabs = computed(() => {
+  const metaId = route.params.metaId
+  const key = store.state.userInfo && store.state.userInfo.metaId === metaId ? 'self' : 'user'
+
   return [
-    { name: i18n.t('mynft') },
+    { name: i18n.t('mynft'), val: 1, path: `/${key}/${metaId}/offsale` },
     {
       name:
         store.state.userInfo && store.state.userInfo.metaId === props.user.metaId
           ? i18n.t('mySellNft')
           : i18n.t('SellNft'),
+      val: 2,
+      path: `/${key}/${metaId}/sale`,
+    },
+    {
+      name:
+        store.state.userInfo && store.state.userInfo.metaId === props.user.metaId
+          ? i18n.t('myAuctionNFT')
+          : i18n.t('AuctionNFT'),
+      val: 3,
+      path: `/${key}/${metaId}/auction`,
     },
   ]
 })
-const tabIndex = ref(0)
+const tabValue = ref(1)
 const nfts: NftItem[] = reactive([])
 const isShowNftListSkeleton = ref(true)
-
-function changeTabIndex(index: number) {
-  isShowNftListSkeleton.value = true
-  tabIndex.value = index
-  pagination.loading = false
-  pagination.nothing = false
-  pagination.page = 1
-  if (tabIndex.value === 0) {
-    getMyNfts(true)
-  } else {
-    getMySelledNfts(true)
-  }
-}
-
-function getMyNfts(isCover: boolean = false) {
-  return new Promise<void>(async resolve => {
-    const res = await GetMyNftSummaryList({
-      Address: props.user.address,
-      Page: pagination.page.toString(),
-      PageSize: pagination.pageSize.toString(),
-    })
-    if (res && res.code === 0) {
-      if (isCover) {
-        nfts.length = 0
-      }
-      if (res.data.results.items.length > 0) {
-        res.data.results.items.map(item => {
-          const nft =
-            item.nftDetailItemList && item.nftDetailItemList[0]
-              ? item.nftDetailItemList[0]
-              : undefined
-          const count = item.nftMyCount + item.nftMyPendingCount
-          const name =
-            count > 1 && item.nftSeriesName && item.nftSeriesName !== ''
-              ? item.nftSeriesName
-              : item.nftName
-              ? item.nftName
-              : '--'
-          const data:
-            | {
-                nftname: string
-                nftdesc: string
-                nfticon: string
-                nftwebsite: string
-                nftissuerName: string
-                nftType: string
-                classifyList: string
-                originalFileTxid: string
-                contentTxId: string
-              }
-            | undefined = nft && nft.nftDataStr !== '' ? JSON.parse(nft.nftDataStr) : undefined
-          const classify = setDataStrclassify(data)
-          nfts.push({
-            name: name,
-            amount: 0,
-            foundryName: item.nftIssuer,
-            classify: classify,
-            head: '',
-            tokenId: item.nftGenesis + item.nftCodehash + item.nftTokenIndex,
-            coverUrl: item.nftIcon,
-            putAway: item.nftIsReady,
-            metaId: item.nftIssueMetaId,
-            productName: name,
-            deadlineTime: 0,
-            genesis: item.nftGenesis,
-            tokenIndex: nft?.nftTokenIndex ? nft?.nftTokenIndex : '',
-            codehash: item.nftCodehash,
-            total: item.nftTotalSupply,
-            hasCount: count,
-            ownerAvatarType: item.nftOwnerAvatarType,
-            issueUserAvatarType: item.nftIssueAvatarType,
-          })
-        })
-      } else {
-        pagination.nothing = true
-      }
-    }
-    isShowNftListSkeleton.value = false
-    resolve()
-  })
-}
-
-function getMySelledNfts(isCover: boolean = false) {
-  return new Promise<void>(async resolve => {
-    const res = await GetMyOnSellNftList({
-      Page: pagination.page.toString(),
-      PageSize: pagination.pageSize.toString(),
-      MetaId: props.user.metaId,
-    })
-    if (res && res.code === 0) {
-      if (isCover) {
-        nfts.length = 0
-      }
-      if (res.data.results.items.length > 0) {
-        for (let i = 0; i < res.data.results.items.length; i++) {
-          const item = res.data.results.items[i]
-          const data = item.nftDataStr ? JSON.parse(item.nftDataStr) : null
-          const deadlineTimeRes = await GetDeadlineTime({
-            codeHash: item.nftCodehash,
-            genesis: item.nftGenesis,
-            tokenIndex: item.nftTokenIndex,
-          })
-          const classify = setDataStrclassify(data)
-          nfts.push({
-            name: item.nftName ? item.nftName : '--',
-            amount: item.nftPrice,
-            foundryName: item.nftIssuer,
-            classify: classify,
-            head: '',
-            tokenId: item.nftGenesis + item.nftTokenIndex,
-            coverUrl: item.nftIcon,
-            putAway: item.nftIsReady,
-            metaId: item.nftIssueMetaId,
-            productName: item.nftName,
-            deadlineTime:
-              deadlineTimeRes && deadlineTimeRes.data && deadlineTimeRes.data.deadlineTime
-                ? deadlineTimeRes.data.deadlineTime
-                : null,
-            genesis: item.nftGenesis,
-            tokenIndex: item.nftTokenIndex,
-            codehash: item.nftCodehash,
-          })
-        }
-      } else {
-        pagination.nothing = true
-      }
-    }
-    isShowNftListSkeleton.value = false
-    resolve()
-  })
-}
 
 function openUrl(type: string) {
   let url =
@@ -333,29 +183,9 @@ function openUrl(type: string) {
   window.open(url)
 }
 
-function getMore() {
-  pagination.loading = true
-  pagination.page++
-  if (tabIndex.value === 0) {
-    getMyNfts().then(() => {
-      pagination.loading = false
-    })
-  } else {
-    getMySelledNfts().then(() => {
-      pagination.loading = false
-    })
-  }
-}
-
 function openRecordModal() {
   emit('openRecordModal')
 }
-
-defineExpose({
-  getMyNfts,
-  getMySelledNfts,
-  changeTabIndex,
-})
 </script>
 
 <style lang="scss" scoped src="./UserCenter.scss"></style>

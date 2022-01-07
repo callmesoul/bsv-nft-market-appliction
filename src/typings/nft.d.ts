@@ -66,6 +66,8 @@ declare interface NftItemDetail {
   nftGenesisCertificationType: number
   nftGenesisCertificationName: string
   nftWebsite: string
+  auctionId?: string
+  nftCurrentAuctionCreateTxId: string
 }
 
 declare interface BidItem extends NftItemDetail, GetNftAuctionsResItem {}

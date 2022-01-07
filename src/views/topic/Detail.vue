@@ -166,15 +166,14 @@
             <ElImage :lazy="true" :src="metafileUrl(metabot.nftIcon)" fit="contain"></ElImage>
             <VueCountdown
               class="countdown"
-              :time="metabot.auctionDeadTime ? metabot.auctionDeadTime - new Date().getTime() : 0"
+              :time="metabot.nftEndTimeStamp ? metabot.nftEndTimeStamp - new Date().getTime() : 0"
               :transform="transformSlotProps"
               v-slot="{ days, hours, minutes, seconds }"
               @end="onCountdownEnd"
               v-if="
-                metabot.isAuction &&
-                  metabot.auctionStatus === 1 &&
-                  metabot.auctionDeadTime &&
-                  metabot.auctionDeadTime > now
+                metabot.nftSellState === 7 &&
+                  metabot.nftEndTimeStamp &&
+                  metabot.nftEndTimeStamp > now
               "
             >
               <span class="dot"></span
@@ -205,6 +204,19 @@
             </div>
             <!-- 可购买 和 抢购状态-->
             <div class="btn btn-block" :class="itemBuyBtnClass(metabot)" @click.stop="buy(metabot)">
+              <!-- 拍卖显示字段 -->
+              <div
+                class="auction-text status"
+                v-if="metabot.nftSellState >= 6 && metabot.nftSellState <= 8"
+              >
+                {{
+                  metabot.nftSellState === 6
+                    ? $t('unStart')
+                    : metabot.nftSellState === 7
+                    ? $t('currentBid')
+                    : $t('finalPrice')
+                }}
+              </div>
               {{ itemBuyBtnText(metabot) }}
             </div>
             <!-- 下架 和 已被购买 -->
@@ -435,6 +447,11 @@ function itemBuyBtnClass(metabot: GetMetaBotListResItem) {
   } else if (metabot.nftSellState === 1 || metabot.nftSellState === 2) {
     // 1: 下架 2：已购买
     return 'btn-gray line-through'
+  } else if (metabot.nftSellState >= 6 && metabot.nftSellState <= 8) {
+    // 拍卖
+    if (metabot.nftSellState === 6 || metabot.nftSellState === 7) {
+      return 'btn-gray'
+    }
   } else {
     return 'btn-gray'
   }
@@ -499,8 +516,9 @@ function transformSlotProps(props: any) {
 }
 
 function toDetail(metabot: GetMetaBotListResItem) {
-  let query: any = {}
-  if (metabot.nftSellState === 7 || metabot.nftSellState === 8) {
+  const query: any = {}
+  // 拍卖
+  if (metabot.nftSellState >= 6 && metabot.nftSellState <= 8) {
     query.isAuctioin = true
   }
   router.push({
@@ -609,6 +627,10 @@ async function buy(metabot: GetMetaBotListResItem) {
     return
   } else if (metabot.nftSellState === 3) {
     ElMessage.warning(i18n.t('comingSoon'))
+    return
+  } else if (metabot.nftSellState >= 6 && metabot.nftSellState <= 8) {
+    // 拍卖的，跳去详情页
+    toDetail(metabot)
     return
   } else {
     if (!metabot.nftIsReady) return

@@ -227,7 +227,7 @@
                 <div class="title">{{ $t('currentBid') }}：</div>
                 <div class="cont" v-if="nft.val.currentPrice">{{ nft.val.currentPrice }} BSV</div>
               </div>
-              <div class="auction-msg-item">
+              <div class="auction-msg-item" v-if="nft.val.isAuction && nft.val.auctionStatus === 2">
                 <div class="title">{{ $t('auctionEndTime') }}：</div>
                 <div class="cont">
                   <VueCountdown
@@ -235,7 +235,6 @@
                     :transform="transformSlotProps"
                     v-slot="{ days, hours, minutes, seconds }"
                     @end="auctionCountDownFinish"
-                    v-if="nft.val.isAuction && nft.val.auctionStatus === 1"
                     class="count-down-warp"
                   >
                     <div class="count-down">
@@ -255,22 +254,30 @@
 
             <!-- 操作 -->
             <div class="operate-warp flex flex-align-center">
-              <template v-if="nft.val.isAuction">
+              <template
+                v-if="
+                  nft.val.isAuction && nft.val.auctionStatus !== 0 && nft.val.auctionStatus !== 4
+                "
+              >
                 <!-- 拍卖 -->
                 <div class="flex1">
                   <div
                     class="btn btn-block flex1 flex flex-align-center flex-pack-center"
-                    :class="{ 'btn-gray': nft.val.auctionStatus !== 1 }"
+                    :class="{
+                      'btn-gray': auctionBtnClassGray,
+                    }"
                     @click="openAuctionModal"
                   >
                     {{
-                      nft.val.auctionStatus === 0
+                      nft.val.auctionStatus === 1
                         ? $t('unStart')
-                        : nft.val.auctionStatus === 1
-                        ? $t('iWanToBid')
                         : nft.val.auctionStatus === 2
-                        ? $t('isBeBuyed')
-                        : ''
+                        ? $t('iWanToBid')
+                        : nft.val.auctionStatus === 3 &&
+                          store.state.userInfo &&
+                          store.state.userInfo.metaId === nft.val.ownerMetaId
+                        ? $t('confirmAuctionSend')
+                        : $t('isBeBuyed')
                     }}
                   </div>
                   <div class="auctionFailTips">*{{ $t('auctionFailTips') }}</div>
@@ -291,71 +298,66 @@
                   {{ $t('comingSoon ') }}
                 </div>
               </template>
-
               <template v-else>
-                <template v-if="isCanBuy">
-                  <!-- 非自己的 -->
-                  <template
-                    v-if="
-                      !store.state.userInfo ||
-                        (store.state.userInfo &&
-                          store.state.userInfo.metaId !== nft.val.ownerMetaId)
-                    "
+                <!-- 非自己的 -->
+                <template
+                  v-if="
+                    !store.state.userInfo ||
+                      (store.state.userInfo && store.state.userInfo.metaId !== nft.val.ownerMetaId)
+                  "
+                >
+                  <!-- 购买 -->
+                  <div
+                    class="btn btn-block flex1 flex flex-align-center flex-pack-center"
+                    :class="{ 'btn-gray': !nft.val.putAway }"
+                    @click="buy"
                   >
-                    <!-- 购买 -->
+                    <template v-if="nft.val.putAway">
+                      {{
+                        i18n.locale.value === 'zh'
+                          ? `以 ${new Decimal(nft.val.amount)
+                              .div(Math.pow(10, 8))
+                              .toString()} BSV 购买`
+                          : `Buy Now At ${new Decimal(nft.val.amount).div(10 ** 8).toString()} BSV`
+                      }}
+                    </template>
+                    <template v-else>{{ $t('isBeBuyedOrCanceled') }}</template>
+                  </div>
+                </template>
+                <!-- 自己的 -->
+                <template
+                  v-else-if="
+                    store.state.userInfo && store.state.userInfo.metaId === nft.val.ownerMetaId
+                  "
+                >
+                  <div class="flex flex-align-center putAway-warp flex1" v-if="nft.val.putAway">
                     <div
-                      class="btn btn-block flex1 flex flex-align-center flex-pack-center"
-                      :class="{ 'btn-gray': !nft.val.putAway }"
-                      @click="buy"
+                      class="btn btn-block btn-plain flex1 flex flex-align-center flex-pack-center"
+                      @click="offSale"
                     >
-                      <template v-if="nft.val.putAway">
-                        {{
-                          i18n.locale.value === 'zh'
-                            ? `以 ${new Decimal(nft.val.amount)
-                                .div(Math.pow(10, 8))
-                                .toString()} BSV 购买`
-                            : `Buy Now At ${new Decimal(nft.val.amount)
-                                .div(10 ** 8)
-                                .toString()} BSV`
-                        }}
-                      </template>
-                      <template v-else>{{ $t('isBeBuyedOrCanceled') }}</template>
+                      {{ $t('offsale') }}
                     </div>
-                  </template>
-                  <!-- 自己的 -->
-                  <template
-                    v-else-if="
-                      store.state.userInfo && store.state.userInfo.metaId === nft.val.ownerMetaId
-                    "
-                  >
-                    <div class="flex flex-align-center putAway-warp flex1" v-if="nft.val.putAway">
-                      <div
-                        class="btn btn-block btn-plain flex1 flex flex-align-center flex-pack-center"
-                        @click="offSale"
-                      >
-                        {{ $t('offsale') }}
-                      </div>
-                      <!-- <template v-if="now > nft.val.remainingTime">
+                    <!-- <template v-if="now > nft.val.remainingTime">
                     <div class="btn btn-block flex1" @click="toSale">{{$t('saleAgain')}}</div>
                       </template>-->
-                    </div>
-                    <div
-                      class="btn btn-block flex1 flex flex-align-center flex-pack-center"
-                      v-else
-                      @click="toSale"
-                    >
-                      {{ $t('sale') }}
-                    </div>
-                  </template>
+                  </div>
+                  <div
+                    class="btn btn-block flex1 flex flex-align-center flex-pack-center"
+                    v-else
+                    @click="toSale"
+                  >
+                    {{ $t('sale') }}
+                  </div>
                 </template>
               </template>
             </div>
 
-            <!-- buy-fee-tips -->
+            <!-- buy-fee-tips 拍卖的时候不显示 -->
             <div
               class="buy-fee-tips"
               v-if="
                 nft.val.putAway &&
+                  !nft.val.isAuction &&
                   (!store.state.userInfo ||
                     (store.state.userInfo && store.state.userInfo.metaId !== nft.val.ownerMetaId))
               "
@@ -562,7 +564,7 @@
                   <span class="td price flex1"
                     >{{
                       record.satoshisPrice
-                        ? new Decimal(record.satoshisPrice).div(10 ** 8).toString() + 'BSV'
+                        ? $filters.bsv(record.satoshisPrice) + 'BSV'
                         : $t('noPaid')
                     }}
                   </span>
@@ -613,19 +615,15 @@
                 <div
                   class="historical-bid-item flex flex-align-center"
                   v-for="(item, index) in auctionRecords"
-                  :key="item.id"
+                  :key="item.txId"
                 >
                   <!-- 用户信息 -->
                   <div class="author flex1 flex flex-align-center">
-                    <UserAvatar
-                      class="avatar"
-                      :metaId="item.buyer_metaId"
-                      :hasmask="item?.avatarType === 'nft-metabot'"
-                    />
+                    <UserAvatar class="avatar" :metaId="item.metaId" />
                     <div class="author-msg flex1">
-                      <div class="creater">{{ item.meta_id_name }}</div>
-                      <div class="metaid" v-if="item.buyer_metaId">
-                        MetaID:{{ item.buyer_metaId.slice(0, 6) }}
+                      <div class="creater">{{ item.userName }}</div>
+                      <div class="metaid" v-if="item.metaId">
+                        MetaID:{{ item.metaId.slice(0, 6) }}
                       </div>
                     </div>
                   </div>
@@ -633,14 +631,15 @@
                   <div class="auction-price">
                     <div class="price flex flex-align-center">
                       <a class="btn btn-min" v-if="index === 0 || auctionRecords.length === 1">
-                        <template v-if="item.status === 2">{{ $t('sealTheDeal') }}</template>
-                        <template v-else>{{ $t('latestBid') }}</template>
+                        <!-- <template v-if="item.status === 2">{{ $t('sealTheDeal') }}</template>
+                        <template v-else>{{ $t('latestBid') }}</template> -->
+                        {{ $t('latestBid') }}
                       </a>
                       <span class="title">{{ $t('auctionBid') }}</span>
-                      <span class="amount">{{ item.buyer_value }} BSV</span>
+                      <span class="amount">{{ $filters.bsv(item.bidPrice) }} BSV</span>
                     </div>
                     <div class="time">
-                      {{ $filters.dateTimeFormat(item.create_time, 'MM月DD日 HH:mm:ss') }}
+                      {{ $filters.dateTimeFormat(item.timestamp, 'MM月DD日 HH:mm:ss') }}
                     </div>
                   </div>
                 </div>
@@ -668,7 +667,7 @@
                     </div>
                     <!-- <div class="time">
                       {{ $filters.dateTimeFormat(nft.val.update_time, 'MM月DD日 HH:mm:ss') }}
-                    </div>-->
+                    </div> -->
                   </div>
                 </div>
               </div>
@@ -698,7 +697,7 @@
           <div class="value" v-if="nft.val.currentPrice">{{ nft.val.currentPrice }} BSV</div>
         </div>
         <div class="msg-item flex flex-align-center">
-          <div class="key flex1">{{ $t('minimumMarkup') }}(5%)</div>
+          <div class="key flex1">{{ $t('minimumMarkup') }}(10%)</div>
           <div class="value" v-if="nft.val.minGapPrice">{{ nft.val.minGapPrice }} BSV</div>
         </div>
       </div>
@@ -714,7 +713,6 @@
         />
         <span>BSV</span>
       </div>
-
       <!-- <div class="equal">≈1036 CNY</div> -->
       <div class="msg-list haved-bsv">
         <div class="msg-item flex flex-align-center">
@@ -766,6 +764,9 @@ import {
   CheckUserCanAuction,
   GetMetaSvSign,
   GetMyNftEligibility,
+  GetNftAuction,
+  GetNftAuctionDetail,
+  GetNftAuctionHistory,
   GetNftAuctionHistorys,
   GetNftAuctions,
   GetNftHolderList,
@@ -779,7 +780,7 @@ import {
 import dayjs from 'dayjs'
 import { useStore } from '@/store'
 import { nftTypes, pagination } from '@/config'
-import { checkSdkStatus, sleep, ToUser } from '@/utils/util'
+import { checkSdkStatus, confirmToSendMetaData, ToUser, sleep } from '@/utils/util'
 import Decimal from 'decimal.js-light'
 import { router } from '@/router'
 import NftOffSale from '@/utils/offSale'
@@ -790,6 +791,9 @@ import VueCountdown from '@chenfengyuan/vue-countdown'
 import LoadMore from '@/components/LoadMore/LoadMore.vue'
 import CertTemp from '@/components/Cert/Cert.vue'
 import MoreContentModal from '@/components/Modal/MoreContentModal/MoreContentModal.vue'
+import { bsv, bsvStr, satoshis } from '@/utils/filters'
+import { ToBsvType } from '@/enum'
+import { auctionConfirmSend } from '@/utils/auction'
 
 const i18n = useI18n()
 const route = useRoute()
@@ -803,11 +807,25 @@ let tabIndex = ref(0)
 let isShowSkeleton = ref(true)
 let isShowDrscDetail = ref(false)
 let isShowAuctionModal = ref(false)
-let auctionPrice = ref(0)
-let balance = ref(0) // 用户余额
+
+const auctionBtnClassGray = computed(() => {
+  if (nft.val.auctionStatus === 2) {
+    return false
+  } else if (nft.val.auctionStatus === 3) {
+    if (store.state.userInfo && store.state.userInfo.metaId === nft.val.ownerMetaId) {
+      return false
+    } else {
+      return true
+    }
+  } else {
+    return true
+  }
+})
+
+const balance = ref(0) // 用户余额
 const getBalanceLoading = ref(true)
-const minActionPrice = ref(0) // 最小叫价
-const auctionRecords = reactive<GetNftAuctionHistorysResItem[]>([]) // 最小叫价
+
+const auctionRecords = reactive<GetNftAuctionHistoryResItem[]>([]) // 最小叫价
 
 const ownerHistoryPagination = reactive({
   ...pagination,
@@ -817,6 +835,11 @@ const ownerHistoryPagination = reactive({
 const nft: { val: NftItemDetail } = reactive({
   val: {},
 })
+
+//拍卖价
+const auctionPrice = ref(0)
+// 最小叫价
+const minActionPrice = ref(0)
 
 // function getDetail() {
 //   return new Promise<void>(async (resolve) => {
@@ -844,63 +867,70 @@ function getDetail() {
     ).catch(() => (isShowSkeleton.value = false))
     if (_nft && typeof _nft !== 'boolean') {
       nft.val = _nft
-      if (nft.val.foundryMetaId.slice(0, 6) === '0064d4') isCanBuy.value = false
-      if (
-        nft.val.foundryName.toLowerCase().indexOf('showpayteam') !== -1 &&
-        nft.val.foundryMetaId !== '974e2977d5c9446f7f48fd82c9ea51f82749b9ef7c00d26b73bc450d167d5f31'
-      ) {
-        nft.val.foundryName = '这是个有问题账号'
-        isCanBuy.value = false
-      }
 
-      if (route.query.isAuctioin || (nft.val.sellState >= 7 && nft.val.sellState <= 8)) {
+      // 拍卖
+      if (nft.val.nftCurrentAuctionCreateTxId && nft.val.nftCurrentAuctionCreateTxId !== '') {
         nft.val.isAuction = true
         const _tabIndex = tabs.findIndex(item => item.key === 'historicalBid')
         if (_tabIndex === -1) {
           tabs.push({ name: i18n.t('historicalBid'), key: 'historicalBid' })
         }
         tabIndex.value = 2
-        const res = await GetNftAuctions({
-          page: 1,
-          page_size: 999,
-        })
+        const res = await GetNftAuctionDetail(nft.val.nftCurrentAuctionCreateTxId)
         if (res.code === 0) {
-          const item = res.data.find(
-            item =>
-              item.codehash === nft.val.codeHash &&
-              item.genesis === nft.val.genesis &&
-              nft.val.tokenIndex === item.token_index.toString()
-          )
-          if (item) {
-            nft.val.startPrice = item.value
-            nft.val.amount = new Decimal(item.value).toNumber()
-            nft.val.currentPrice = item.buyer_value === '0' ? item.value : item.buyer_value
-            nft.val.minGapPrice =
-              item.buyer_value === '0'
-                ? new Decimal(item.value)
-                    .mul(0.05)
-                    .toFixed(8)
-                    .toString()
-                : new Decimal(item.buyer_value)
-                    .mul(0.05)
-                    .toFixed(8)
-                    .toString()
-            if (new Decimal(nft.val.minGapPrice).toNumber() < 0.00001) {
-              nft.val.minGapPrice = '0.00001'
+          /* if (!res.data) {
+            res.data = {
+              bidPrice: '100000', // 竞价价格
+              bidPriceInt: 100000, // 竞价价格
+              chargeUnit: 'STAS', // 竞价单位
+              codehash: 'string',
+              genesis: 'string',
+              genesisTxId: 'string',
+              issuerMetaId: 'string',
+              issuerMetaTxId: 'string',
+              metaId: 'string',
+              metanetId: 'string',
+              nftAuctionId: 'string', // nft拍卖创建txId
+              nftHash: 'string',
+              tokenIndex: 'string',
+              txId: 'string',
+              currentAuctionState: 2,
+              currentBidPrice: '1000',
+              currentBidPriceInt: 1000,
+              endTimeStamp: 1640673817000,
+              userName: 'string',
+              startingPrice: '1000',
+              startingPriceInt: 1000,
+              timestamp: 1640673817000,
             }
-            nft.val.auctionDrsc = item.memo
-            nft.val.auctionTime = item.dead_time - new Date().getTime()
-            nft.val.auctionStatus = item.status
-            nft.val.update_time = item.update_time
-            auctionPrice.value = new Decimal(nft.val.currentPrice)
-              .plus(new Decimal(nft.val.minGapPrice))
-              .toNumber()
-            minActionPrice.value = auctionPrice.value
-          } else {
-            nft.val.auctionStatus = 0
+          } */
+          nft.val.auctionId = res.data.nftAuctionId
+          nft.val.startPrice = bsvStr(res.data.startingPrice)
+          nft.val.amount = bsv(res.data.startingPriceInt)
+          // 当前价
+          nft.val.currentPrice =
+            res.data.currentBidPrice === '' || res.data.currentBidPrice === '0'
+              ? bsvStr(res.data.startingPrice)
+              : bsvStr(res.data.currentBidPrice)
+          // 最小出价
+          nft.val.minGapPrice = new Decimal(nft.val.currentPrice)
+            .mul(0.1)
+            .toFixed(8)
+            .toString()
+          if (new Decimal(nft.val.minGapPrice).toNumber() < 0.00001) {
+            nft.val.minGapPrice = '0.00001'
           }
+          // nft.val.auctionDrsc = item.memo
+          nft.val.auctionTime = res.data.endTimeStamp - new Date().getTime()
+          nft.val.auctionStatus = res.data.currentAuctionState
+          nft.val.update_time = res.data.timestamp
+          auctionPrice.value = new Decimal(nft.val.currentPrice)
+            .plus(nft.val.minGapPrice)
+            .toNumber()
+          minActionPrice.value = auctionPrice.value
+          // 获取拍卖记录
+          getNftAuctionHistorys()
         }
-        getNftAuctionHistorys()
       }
       // countDownTimeLeft()
       isShowSkeleton.value = false
@@ -942,7 +972,9 @@ function getRecord() {
 }
 
 function auctionCountDownFinish() {
-  nft.val.auctionStatus = 2
+  if (nft.val.auctionStatus === 2) {
+    nft.val.auctionStatus = 3
+  }
 }
 
 function transformSlotProps(props: any) {
@@ -981,7 +1013,7 @@ let second = ref(0)
 const NFTMainMsgDesc = computed(() => {
   // 1. 是否拍卖 显示拍卖描述 2. 是否上架 显示上架描述 3.下架状态 显示nft的描述
   return nft.val.isAuction
-    ? nft.val.auctionDrsc
+    ? nft.val.describe
     : nft.val.putAway
     ? nft.val.sellDesc
     : nft.val.describe
@@ -1121,7 +1153,6 @@ async function toSale() {
     ElMessage.error(res.data)
     return
   }
-  debugger
   router.push({
     name: 'sale',
     params: {
@@ -1130,10 +1161,6 @@ async function toSale() {
       tokenIndex: nft.val.tokenIndex,
     },
   })
-}
-
-function more() {
-  ElMessage.info(i18n.t('stayTuned'))
 }
 
 async function getBalance() {
@@ -1168,7 +1195,43 @@ function toWallet() {
 }
 
 async function openAuctionModal() {
-  if (nft.val.auctionStatus !== 1) return
+  // 待发送
+  if (
+    nft.val.auctionStatus === 3 &&
+    store.state.userInfo &&
+    store.state.userInfo.metaId === nft.val.ownerMetaId
+  ) {
+    const loading = ElLoading.service({
+      lock: true,
+      text: 'Loading',
+      spinner: 'el-icon-loading',
+      background: 'rgba(0, 0, 0, 0.7)',
+      customClass: 'full-loading',
+    })
+    const params = {
+      nft: {
+        codehash: nft.val.codeHash,
+        genesis: nft.val.genesis,
+        genesisTxid: nft.val.genesisTxId,
+        tokenIndex: nft.val.tokenIndex,
+        sensibleId: nft.val.sensibleId,
+      },
+      nftAuctionId: nft.val.nftCurrentAuctionCreateTxId,
+      useFeeb: 0.5,
+    }
+    const result = await await auctionConfirmSend(params).catch(error => {
+      if (error) ElMessage.error(JSON.stringify(error))
+      loading.close()
+    })
+    if (result) {
+      setTimeout(() => {
+        loading.close()
+        getDetail()
+      }, 2000)
+    }
+  }
+
+  if (nft.val.auctionStatus !== 2) return
   await checkSdkStatus()
   isShowAuctionModal.value = true
   getBalance()
@@ -1185,84 +1248,99 @@ async function bid() {
     customClass: 'full-loading',
   })
   try {
-    const res = await CheckUserCanAuction({
-      codehash: nft.val.codeHash,
-      genesis: nft.val.genesis,
-      token_index: parseInt(nft.val.tokenIndex),
-      value: new Decimal(auctionPrice.value).toString(),
+    const params = {
+      nft: {
+        codehash: nft.val.codeHash,
+        genesis: nft.val.genesis,
+        genesisTxid: nft.val.genesisTxId,
+        tokenIndex: nft.val.tokenIndex,
+        sensibleId: nft.val.sensibleId,
+      },
+      bsvBidPrice: satoshis(auctionPrice.value),
+      nftAuctionId: nft.val.nftCurrentAuctionCreateTxId,
+      useFeeb: 0.5,
+      lastBidPrice: nft.val.currentPrice,
+    }
+    const res = await store.state.sdk?.nftAuctionBid({
+      ...params,
+      checkOnly: true,
     })
-    if (res?.code === 0) {
-      let priceStot = new Decimal(auctionPrice.value).mul(Math.pow(10, 8)).toNumber()
-      let allPricePriceStot = new Decimal(priceStot)
-        .mul(0.05)
-        .plus(priceStot)
-        .toNumber()
-      allPricePriceStot = Math.ceil(allPricePriceStot)
-      const response = await store.state.sdk?.createNFTAuctionBidProtocol({
-        sensibleInfo: {
-          codehash: nft.val.codeHash,
-          genesis: nft.val.genesis,
-          tokenIndex: nft.val.tokenIndex,
-        },
-        bidDesc: '',
-        bidPrice: allPricePriceStot,
-        bidTo: '',
-        bidType: 'bid',
-      })
-      if (response?.code === 200) {
-        await sleep() // 延迟一秒 以防拿不到数据
-        const getSignRes = await GetMetaSvSign({ path: `/tx/${response.data.txId}/raw` })
-        if (getSignRes && getSignRes.code === 0) {
-          const getRawRes: any = await GetTxRaw(response.data.txId, {
-            'MetaSV-Client-Pubkey': getSignRes.data.publicKey,
-            'MetaSV-Nonce': getSignRes.data.nonce,
-            'MetaSV-Signature': getSignRes.data.signEncoded,
-            'MetaSV-Timestamp': getSignRes.data.timestamp,
-          })
-          if (getRawRes) {
-            const result = await SubmitBid({
-              codehash: nft.val.codeHash,
-              genesis: nft.val.genesis,
-              token_index: parseInt(nft.val.tokenIndex),
-              value: new Decimal(allPricePriceStot).div(Math.pow(10, 8)).toString(),
-              tx: response.data.txId,
-              raw_tx: getRawRes.hex,
-              buyer_meta_id: store.state.userInfo!.metaId,
-              buyer_address: store.state.userInfo!.address,
-            })
-            if (result && result?.code === 0) {
-              ElMessage.success(i18n.t('bidSuccess'))
-              isShowAuctionModal.value = false
-              loading.close()
-              isShowSkeleton.value = true
-              getDetail()
-            }
+    if (res?.code === 200) {
+      const usedAmount = new Decimal(Math.abs(res.data.amount)).toNumber()
+      const result = await confirmToSendMetaData(usedAmount)
+      if (result) {
+        // 确认支付
+        const response = await store.state.sdk?.nftAuctionBid(params)
+        if (response && response?.code === 200) {
+          ElMessage.success(i18n.t('bidSuccess'))
+          nft.val.currentPrice = new Decimal(auctionPrice.value).toString()
+          const min = new Decimal(auctionPrice.value).mul(0.1).toFixed(8)
+          nft.val.minGapPrice = min.toString()
+          if (new Decimal(nft.val.minGapPrice).toNumber() < 0.00001) {
+            nft.val.minGapPrice = '0.00001'
           }
+          minActionPrice.value = new Decimal(nft.val.currentPrice)
+            .plus(nft.val.minGapPrice)
+            .toNumber()
+          auctionPrice.value = minActionPrice.value
+          isShowAuctionModal.value = false
+          // 插入拍卖记录
+          auctionRecords.unshift({
+            bidPrice: satoshis(nft.val.currentPrice).toString(),
+            bidPriceInt: satoshis(nft.val.currentPrice),
+            chargeUnit: 'bsv',
+            codehash: nft.val.codeHash,
+            genesis: nft.val.genesis,
+            genesisTxId: nft.val.genesisTxId,
+            issuerMetaId: nft.val.foundryMetaId,
+            issuerMetaTxId: nft.val.issueMetaTxId,
+            metaId: store.state.userInfo.metaId,
+            metanetId: '',
+            nftAuctionId: response.data.txId,
+            nftHash: '',
+            tokenIndex: nft.val.tokenIndex,
+            txId: response.data.txId,
+            zeroAddress: store.state.userInfo.address,
+            timestamp: new Date().getTime(),
+            userName: store.state.userInfo.name,
+          })
+          loading.close()
         }
       }
     }
   } catch (error) {
-    debugger
     getDetail()
-    ElMessage.error(i18n.t('auctionFail'))
-    getBalanceLoading.value = true
-    isShowSkeleton.value = true
-    isShowAuctionModal.value = false
-    loading.close()
+    ElMessage.error(i18n.t('bidFail'))
+    if (loading) loading.close()
   }
-}
 
-async function getNftAuctionHistorys() {
-  const res = await GetNftAuctionHistorys({
+  /* const res = await CheckUserCanAuction({
     codehash: nft.val.codeHash,
     genesis: nft.val.genesis,
     token_index: parseInt(nft.val.tokenIndex),
+    value: new Decimal(auctionPrice.value).toString(),
+  }).catch(error => {
+    ElMessage.error(error.response.data.data)
+    getBalanceLoading.value = true
+    isShowSkeleton.value = true
+    isShowAuctionModal.value = false
+    getDetail()
+    loading.close()
+  })
+  if (res?.code === 0) {
+    
+  } */
+}
+
+async function getNftAuctionHistorys() {
+  const res = await GetNftAuctionHistory({
+    auctionTxId: nft.val.nftCurrentAuctionCreateTxId,
     page: 1,
-    page_size: 99,
+    pageSize: 99,
   })
   if (res.code === 0) {
     auctionRecords.length = 0
-    auctionRecords.push(...res.data)
+    auctionRecords.push(...res.data.results.items)
   }
 }
 

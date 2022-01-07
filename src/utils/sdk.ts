@@ -28,7 +28,7 @@ import {
   SignMessageRes,
 } from '@/typings/sdk'
 import { rejects } from 'assert/strict'
-import MetaIdJs, { ProtocolOptions } from 'metaidjs'
+import MetaIdJs, { NFTTypes, ProtocolOptions } from 'metaidjs'
 // @ts-ignore
 import { v4 as uuid } from 'uuid'
 
@@ -58,6 +58,7 @@ export const enum PreFetchSignRawType {
 }
 
 export default class Sdk {
+  // @ts-ignore
   metaidjs: null | MetaIdJs = null
   appMetaidjs: null | {
     sendMetaDataTx: (accessToken: string, data: string, functionName: string) => Function
@@ -87,6 +88,7 @@ export default class Sdk {
       this.isApp = true
     } else {
       if (options) {
+        // @ts-ignore
         this.metaidjs = new MetaIdJs(options)
       }
     }
@@ -105,7 +107,7 @@ export default class Sdk {
         const that = this
         // @ts-ignore
         window[functionName] = function(res) {
-          that.callback(res, resolve)
+          that.callback(res, resolve, reject)
         }
         if (window.appMetaIdJsV2) {
           window.appMetaIdJsV2?.getUserInfo(this.appId, this.appScrect, functionName)
@@ -709,10 +711,10 @@ export default class Sdk {
 
   // nft 列表查询
   nftList(address: string) {
-    return new Promise<NFTLIstRes>(resolve => {
+    return new Promise<NFTLIstRes>((resolve, reject) => {
       const params = {
         callback: (res: MetaIdJsRes) => {
-          this.callback(res, resolve)
+          this.callback(res, resolve, reject)
         },
         address,
       }
@@ -803,7 +805,7 @@ export default class Sdk {
         //@ts-ignore
         this.metaidjs.getBalance({
           callback: (res: GetBalanceRes) => {
-            this.callback(res, resolve)
+            this.callback(res, resolve, reject)
           },
         })
       }
@@ -872,7 +874,146 @@ export default class Sdk {
     })
   }
 
-  createNFTAuctionProtocol(params: {
+  nftStartAuction(params: {
+    nft: {
+      codehash: string
+      genesis: string
+      genesisTxid: string
+      tokenIndex: string
+      sensibleId: string
+    }
+    startBsvPrice: number
+    endTimeStamp: number
+    feeAddress: string
+    feeAmount: number
+    useFeeb: number
+    checkOnly?: boolean
+  }) {
+    return new Promise<MetaIdJsRes>((resolve, reject) => {
+      const callback = (res: MetaIdJsRes) => {
+        this.callback(res, resolve, reject)
+      }
+      if (this.isApp) {
+        const functionName: string = `nftStartAuctionCallBack`
+        // @ts-ignore
+        window[functionName] = callback
+        // @ts-ignore
+        if (window.appMetaIdJsV2) {
+          window.appMetaIdJsV2?.nftStartAuction(
+            store.state.token!.access_token,
+            JSON.stringify(params),
+            functionName
+          )
+        } else {
+          window.appMetaIdJs?.nftStartAuction(
+            store.state.token!.access_token,
+            JSON.stringify(params),
+            functionName
+          )
+        }
+      } else {
+        debugger
+        // @ts-ignore
+        this.metaidjs?.nftStartAuction({
+          ...params,
+          callback,
+        })
+      }
+    })
+  }
+
+  nftAuctionBid(params: {
+    nft: {
+      codehash: string
+      genesis: string
+      genesisTxid: string
+      tokenIndex: string
+      sensibleId: string
+    }
+    bsvBidPrice: number
+    nftAuctionId: string
+    useFeeb: number
+    checkOnly?: boolean
+  }) {
+    return new Promise<MetaIdJsRes>((resolve, reject) => {
+      const callback = (res: MetaIdJsRes) => {
+        this.callback(res, resolve, reject)
+      }
+      if (this.isApp) {
+        const functionName: string = `nftAuctionBidCallBack`
+        // @ts-ignore
+        window[functionName] = callback
+        // @ts-ignore
+        if (window.appMetaIdJsV2) {
+          window.appMetaIdJsV2?.nftAuctionBid(
+            store.state.token!.access_token,
+            JSON.stringify(params),
+            functionName
+          )
+        } else {
+          window.appMetaIdJs?.nftAuctionBid(
+            store.state.token!.access_token,
+            JSON.stringify(params),
+            functionName
+          )
+        }
+      } else {
+        debugger
+        // @ts-ignore
+        this.metaidjs?.nftAuctionBid({
+          ...params,
+          callback,
+        })
+      }
+    })
+  }
+
+  nftAuctionWithdraw(params: {
+    nft: {
+      codehash: string
+      genesis: string
+      genesisTxid: string
+      tokenIndex: string
+    }
+    nftAuctionId: string
+    useFeeb: number
+    checkOnly?: boolean
+  }) {
+    return new Promise<MetaIdJsRes>((resolve, reject) => {
+      const callback = (res: MetaIdJsRes) => {
+        debugger
+        this.callback(res, resolve, reject)
+      }
+      if (this.isApp) {
+        const functionName: string = `nftAuctionWithdrawCallBack`
+        // @ts-ignore
+        window[functionName] = callback
+        // @ts-ignore
+        if (window.appMetaIdJsV2) {
+          window.appMetaIdJsV2?.nftAuctionWithdraw(
+            store.state.token!.access_token,
+            JSON.stringify(params),
+            functionName
+          )
+        } else {
+          window.appMetaIdJs?.nftAuctionWithdraw(
+            store.state.token!.access_token,
+            JSON.stringify(params),
+            functionName
+          )
+        }
+      } else {
+        debugger
+        // @ts-ignore
+        this.metaidjs?.nftAuctionWithdraw({
+          ...params,
+          callback,
+        })
+      }
+    })
+  }
+
+  /* createNFTAuctionProtocol(params: {
     sensibleInfo: //如果type是sensible，则读取这信息
     {
       codehash: string //必须 // nft的codehash
@@ -911,12 +1052,6 @@ export default class Sdk {
   }) {
     const getAddressRes = await GetAuctionAddress()
     if (getAddressRes && getAddressRes.code === 0) {
-      debugger
-      /* const mode = import.meta.env.MODE
-      const address =
-        mode === 'prod' || mode === 'gray'
-          ? '181nQ8A4a3YaDEft3FNNvhebWYd9RasuxR'
-          : '19B92x1c7EGqwEabHfvXLPsMjRriKSUNRe' */
       return this.sendMetaDataTx({
         data: JSON.stringify({
           type: 'sensible', //token类型,如果不使用合约则为空
@@ -934,6 +1069,8 @@ export default class Sdk {
       })
     }
   }
+
+  */
 
   // 跳转tx详情
   toTxLink(txId: string) {

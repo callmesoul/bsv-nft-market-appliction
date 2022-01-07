@@ -252,6 +252,34 @@ declare interface GetMyOnSellNftListRes extends apiResponse {
 declare interface GetNftAuctionsRes extends apiResponse {
   data: GetNftAuctionsResItem[]
 }
+declare interface GetNftAuctionRes extends apiResponse {
+  data: GetNftAuctionResItem
+}
+
+declare interface GetNftAuctionResItem {
+  bidPrice: string // 竞价价格
+  bidPriceInt: number // 竞价价格
+  chargeUnit: string // 竞价单位
+  codehash: string
+  genesis: string
+  genesisTxId: string
+  issuerMetaId: string
+  issuerMetaTxId: string
+  metaId: string
+  metanetId: string
+  nftAuctionId: string // nft拍卖创建txId
+  nftHash: string
+  tokenIndex: string
+  txId: string
+  currentAuctionState: number
+  currentBidPrice: string
+  currentBidPriceInt: number
+  endTimeStamp: number
+  userName: string
+  startingPrice: string
+  startingPriceInt: number
+  timestamp: number
+}
 
 declare interface GetNftAuctionsResItem {
   begin_value: string
@@ -287,6 +315,38 @@ declare interface GetNftAuctionHistorysResItem {
   token_index: number
   update_time: number
   value: string
+}
+
+declare interface GetNftAuctionHistoryRes extends apiResponse {
+  data: {
+    results: {
+      info: {
+        responseTime: string
+        version: string
+      }
+      items: GetNftAuctionHistoryResItem[]
+    }
+  }
+}
+
+declare interface GetNftAuctionHistoryResItem {
+  bidPrice: string
+  bidPriceInt: number
+  chargeUnit: string
+  codehash: string
+  genesis: string
+  genesisTxId: string
+  issuerMetaId: string
+  issuerMetaTxId: string
+  metaId: string
+  metanetId: string
+  nftAuctionId: string
+  nftHash: string
+  tokenIndex: string
+  txId: string
+  zeroAddress: string
+  timestamp: number
+  userName: string
 }
 declare interface GetMetaBotListRes extends apiResponse {
   data: {
@@ -446,6 +506,13 @@ declare interface GetMetaBotListResItem {
   auctionDeadTime?: number
   nftOwnerAvatarType?: string
   nftIssueAvatarType?: string
+  nftCurrentBidPrice: string
+  nftCurrentBidPriceInt: number
+  nftCurrentAuctionState: number
+  nftStartingPrice: string
+  nftStartingPriceInt: number
+  nftChargeUnit: string
+  nftEndTimeStamp: number
 }
 
 declare interface GetNftIssueyTxIdResItem {
@@ -551,6 +618,7 @@ declare interface NFTApiGetNFTDetailResDataItem {
   nftGenesisCertificationType: number
   nftCertificationType: number
   nftGenesisCertificationName: string
+  nftCurrentAuctionCreateTxId: string
 }
 
 declare interface BroadApiRes {
@@ -718,4 +786,59 @@ declare interface GenesisInfo {
 
 declare interface GetAuctionAddressRes extends apiResponse {
   data: string
+}
+declare interface GetAuctionListRes extends apiResponse {
+  data: {
+    total: number
+    results: {
+      items: GetAuctionListResItem[]
+    }
+  }
+}
+
+declare interface GetAuctionListResItem {
+  avatarTxId: string
+  avatarType: string
+  certificationType: number
+  chargeUnit: string
+  classifyList: string[]
+  classifyListStr: string
+  codehash: string
+  currentAuctionState: number
+  currentBidPrice: string
+  currentBidPriceInt: number
+  dataStr: string
+  desc: string
+  endTimeStamp: string
+  endTimeStampInt: number
+  genesis: string
+  genesisCertificationName: string
+  genesisCertificationType: number
+  genesisTxId: string
+  icon: string
+  issueTimestamp: number
+  issueVersion: string
+  issuerMetaId: string
+  issuerMetaTxId: string
+  metaId: string
+  metanetId: string
+  name: string
+  nftHash: string
+  number: number
+  part: string
+  seriesName: string
+  sig: string
+  startingPrice: string
+  startingPriceInt: number
+  timestamp: number
+  tokenIndex: string
+  txId: string
+  userName: string
+  website: string
+  zeroAddress: string
+  ownerAvatarTxId: string
+  ownerAvatarType: string
+  ownerMetaId: string
+  ownerName: string
+  sensibleId: string
 }

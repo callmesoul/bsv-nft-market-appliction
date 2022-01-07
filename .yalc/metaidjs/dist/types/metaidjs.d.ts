@@ -1,4 +1,4 @@
-import PostmessageClient from './postmessage-client';
+import PostmessageClient from "./postmessage-client";
 declare global {
     interface Window {
         mainFrameMessage: PostmessageClient;
@@ -25,6 +25,12 @@ interface ConstructorOptionsTypes {
     oauthSettings: OauthSettingsTypes;
     onLoaded?: Function;
     onError?: Function;
+}
+export interface NFTTypes {
+    txId: string;
+    outputIndex: number;
+    satoshisPrice?: number;
+    sellerAddress?: string;
 }
 export interface ProtocolOptions {
     nodeName: string;
@@ -111,6 +117,58 @@ export declare class MetaIdJs {
         accessToken: string;
         callback?: Function;
         data: string;
+    }): void;
+    /**
+     * nftStartAuction nft 拍卖
+     */
+    nftStartAuction(params: {
+        nft: {
+            codehash: string;
+            genesis: string;
+            genesisTxid: string;
+            tokenIndex: string;
+            sensibleId: string;
+        };
+        startBsvPrice: number;
+        endTimeStamp: number;
+        feeAddress: string;
+        feeAmount: number;
+        useFeeb: number;
+        checkOnly?: boolean;
+        callback?: Function;
+    }): void;
+    /**
+     * nftAuctionBid
+     */
+    nftAuctionBid(params: {
+        nft: {
+            codehash: string;
+            genesis: string;
+            genesisTxid: string;
+            tokenIndex: string;
+            sensibleId: string;
+        };
+        bsvBidPrice: number;
+        nftAuctionId: string;
+        useFeeb: number;
+        checkOnly?: boolean;
+        callback?: Function;
+    }): void;
+    /**
+     * nftAuctionWithdraw
+     */
+    nftAuctionWithdraw(params: {
+        nft: {
+            codehash: string;
+            genesis: string;
+            genesisTxid: string;
+            tokenIndex: string;
+            sensibleId: string;
+        };
+        nftAuctionId: string;
+        useFeeb: number;
+        checkOnly?: boolean;
+        callback?: Function;
     }): void;
     getFTList(params: {
         accessToken: string;
