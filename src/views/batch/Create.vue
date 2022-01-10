@@ -531,7 +531,7 @@ function removeItem(index: number) {
     list.splice(index, 1)
     if (selectedSeries.length > 0) {
       const startNum =
-        root.value.series.find((item: any) => item.series === selectedSeries[0]).currentNumber + 1
+        root.value.series.find((item: any) => item.name === selectedSeries[0]).currentNumber + 1
       for (let i = 0; i < list.length; i++) {
         list[i].index = startNum + i
       }
