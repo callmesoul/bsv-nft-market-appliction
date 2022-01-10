@@ -49,7 +49,6 @@
         fill: #e8adcf;
         stroke: rgba(0,0,0,0);
         font-size: 14px;
-        font-family: SF Pro;
         font-weight: 700;
       }
 

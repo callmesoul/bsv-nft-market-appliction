@@ -6,7 +6,7 @@
     </linearGradient>
   </defs>
   <g id="logo_nos_w" transform="translate(-40 -41)">
-    <text id="NFTonShow" transform="translate(76 59)" fill="#feb338" font-size="18" font-family="Ubuntu-Bold, Ubuntu" font-weight="700"><tspan x="0" y="0">NFT</tspan><tspan y="0" fill="#fff">onShow</tspan></text>
+    <text id="NFTonShow" transform="translate(76 59)" fill="#feb338" font-size="18"  font-weight="700"><tspan x="0" y="0">NFT</tspan><tspan y="0" fill="#fff">onShow</tspan></text>
     <g id="logo_nos" transform="translate(40 41)">
       <path id="shape_1" data-name="shape 1" d="M0,22H0V0L6.677,1.883l2.26,7.651V2.521L13,3.667V18.333l-5.15,1.453L5.687,12.467V20.4L0,22Z" transform="translate(13 0)" fill="url(#linear-gradient)"/>
       <g id="shape_2" data-name="shape 2" fill="none">
