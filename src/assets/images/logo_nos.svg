@@ -6,7 +6,8 @@
     </linearGradient>
   </defs>
   <g id="logo_nos" transform="translate(-40 -24)">
-    <text id="NFTOnShow" transform="translate(76 42)" fill="#feb338" font-size="18" font-weight="700"><tspan x="0" y="0">NFT</tspan><tspan y="0" fill="#303133">OnShow</tspan></text>
+    <text id="NFTOnShow" transform="translate(76 42)" fill="#feb338" font-family: 'SF Pro', 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', '微软雅黑', Arial, sans-serif; font-size="18" font-weight="700"><tspan x="0" y="0">NFT</tspan><tspan y="0" fill="#303133">OnShow</tspan></text>
     <g id="logo_nos-2" data-name="logo_nos" transform="translate(40 24)">
       <path id="shape_1" data-name="shape 1" d="M0,22H0V0L6.677,1.883l2.26,7.651V2.521L13,3.667V18.333l-5.15,1.453L5.687,12.467V20.4L0,22Z" transform="translate(13 0)" fill="url(#linear-gradient)"/>
       <g id="shape_2" data-name="shape 2" fill="none">
