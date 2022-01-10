@@ -504,7 +504,7 @@ function addItem() {
       index = list[list.length - 1].index + 1
     } else {
       const seriesIndex = root.value.series.findIndex(
-        (item: any) => item.series === selectedSeries[0]
+        (item: any) => item.name === selectedSeries[0]
       )
       if (seriesIndex !== -1) {
         index = root.value.series[seriesIndex].currentNumber + 1
