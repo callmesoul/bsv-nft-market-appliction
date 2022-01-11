@@ -131,7 +131,12 @@
             </div>
           </template>
           <template #default>
-            <div class="record-item flex" v-for="record in records" :key="record.nftSellTxId">
+            <div
+              class="record-item flex"
+              v-for="record in records"
+              :key="record.nftSellTxId"
+              @click="toDetail(record)"
+            >
               <ElImage
                 class="cover"
                 :src="metafileUrl(record.nftIcon)"
@@ -168,7 +173,9 @@
                       {{ record.nftOwnerName }}
                     </template>
                   </div>
-                  <a @click="store.state.sdk?.toTxLink(record.nftSellTxId)">{{ $t('look') }}TX</a>
+                  <a @click.stop="store.state.sdk?.toTxLink(record.nftSellTxId)"
+                    >{{ $t('look') }}TX</a
+                  >
                 </div>
               </div>
             </div>
@@ -206,6 +213,7 @@ import { metafileUrl } from '@/utils/util'
 import CertTemp from '@/components/Cert/Cert.vue'
 import Decimal from 'decimal.js-light'
 import dayjs from 'dayjs'
+import { router } from '@/router'
 const props = defineProps({
   userInfoLoading: {
     type: Boolean,
@@ -320,6 +328,17 @@ function changeRecordTab(index: number) {
 function openRecordModal() {
   getRecordList(true)
   isShowRecordModal.value = true
+}
+
+function toDetail(record: GetMyNftOnShowSellSuccessListResItem) {
+  router.push({
+    name: 'detail',
+    params: {
+      genesisId: record.nftGenesis,
+      codehash: record.nftCodehash,
+      tokenIndex: record.nftTokenIndex,
+    },
+  })
 }
 </script>
 
