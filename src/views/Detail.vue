@@ -653,9 +653,9 @@
                       :hasmask="nft.val.issueUserAvatarType === 'nft-metabot'"
                     />
                     <div class="author-msg flex1">
-                      <div class="creater">{{ nft.val.foundryName }}</div>
-                      <div class="metaid" v-if="nft.val.foundryMetaId">
-                        MetaID:{{ nft.val.foundryMetaId.slice(0, 6) }}
+                      <div class="creater">{{ nft.val.ownerName }}</div>
+                      <div class="metaid" v-if="nft.val.ownerMetaId">
+                        MetaID:{{ nft.val.ownerMetaId.slice(0, 6) }}
                       </div>
                     </div>
                   </div>
