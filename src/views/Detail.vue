@@ -702,7 +702,7 @@
         </div>
       </div>
       <div class="cont flex flex-align-center">
-        <span>竞拍</span>
+        <span>{{ $t('myBid') }}</span>
         <input
           type="number"
           v-model="auctionPrice"

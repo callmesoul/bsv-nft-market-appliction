@@ -372,5 +372,6 @@
   "AuctionNFT": "Auction NFT",
   "confirmAuctionSend": "Confirm Send",
   "bidFail": "Bid failed, please bid again",
-  "appNotBid": "The auction function is not supported on the App side, please go to the web side to experience"
+  "appNotBid": "The auction function is not supported on the App side, please go to the web side to experience",
+  "myBid": "My Bid"
 }
