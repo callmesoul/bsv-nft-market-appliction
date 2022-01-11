@@ -580,7 +580,7 @@ async function startBacth() {
         loading.close()
         break
       }
-      if (list[i].name === '') {
+      if (list[i].name.replace(/\s*/g, '') === '') {
         ElMessage.error(`${i + 1}: ${i18n.t('nameplac')}`)
         isReady = false
         loading.close()

@@ -27,6 +27,14 @@ app.config.globalProperties.$filters = {
 app.component('UserAvatar', UserAvatar)
 app.component('SvgIcon', svgIcon)
 
+// 去除空格
+app.directive('trim', {
+  // 当被绑定的元素挂载到 DOM 中时……
+  beforeUpdate: function(el, binding) {
+    el.value = el.value.replace(/\s*/g, '')
+  },
+})
+
 app
   .use(router)
   .use(ElementPlus, {

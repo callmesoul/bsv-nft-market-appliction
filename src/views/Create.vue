@@ -456,7 +456,7 @@ async function createNft() {
   }
 
   // 名称
-  if (nft.nftName === '') {
+  if (nft.nftName.replace(/\s*/g, '') === '') {
     ElMessage.warning(i18n.t('nameplac'))
     return
   }
