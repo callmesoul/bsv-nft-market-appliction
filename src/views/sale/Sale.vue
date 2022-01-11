@@ -386,7 +386,12 @@ async function confirmSale() {
             await store.state.sdk?.checkNftTxIdStatus(res.data.txid)
             loading.close()
             ElMessage.success(i18n.t('saleSuccess'))
-            router.back()
+            router.replace({
+              name: 'selfSale',
+              params: {
+                metaId: store.state.userInfo.metaId,
+              },
+            })
           }
         }
       }
@@ -452,7 +457,12 @@ async function confirmSale() {
             setTimeout(() => {
               ElMessage.success(i18n.t('createAuctionSuccess'))
               loading.close()
-              router.back()
+              router.replace({
+                name: 'selfAuction',
+                params: {
+                  metaId: store.state.userInfo.metaId,
+                },
+              })
             }, 2000)
             // 拍卖
             /* const res = await CreateNftAuction({
