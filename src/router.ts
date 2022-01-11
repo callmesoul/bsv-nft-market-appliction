@@ -29,6 +29,7 @@ const Right = () => import('@/views/Right.vue')
 const Apps = () => import('@/views/app/Apps.vue')
 const AppDetail = () => import('@/views/app/AppDetail.vue')
 const Advantage = () => import('@/views/app/Advantage.vue')
+const NotFoundPage = () => import('@/views/404.vue')
 import { useStore, Action, Mutation } from '@/store/index'
 import { ElMessage } from 'element-plus'
 import i18n from '@/utils/i18n'
@@ -150,6 +151,12 @@ export const router = createRouter({
       ],
     },
     { path: '/advantage', name: 'advantage', component: Advantage },
+    // 404
+    { path: '/404', name: '404', component: NotFoundPage },
+    {
+      path: '/:pathMatch(.*)',
+      redirect: '/404',
+    },
   ],
   async scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
