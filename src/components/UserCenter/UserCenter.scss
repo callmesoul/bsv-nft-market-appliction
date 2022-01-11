@@ -157,6 +157,100 @@
     }
 }
 
+.record-modal {
+    :deep(.el-overlay) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .el-overlay-dialog {
+            position: static;
+            width: 100%;
+
+        }
+    }
+
+    :deep(.el-dialog) {
+        max-width: 550px !important;
+        max-height: 86vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+
+        .el-dialog__body {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+        }
+    }
+}
+
+.record-list {
+    .record-item {
+        padding: 20px 0;
+        border-bottom: 1px solid #f5f7fa;
+
+        .cover {
+            width: 70px;
+            height: 70px;
+            margin-right: 8px;
+        }
+
+        .cont {
+            .top {
+                .title {
+                    font-size: 16px;
+                    font-weight: 500;
+                    text-align: left;
+                }
+
+                .price {
+                    font-size: 16px;
+                    font-weight: 500;
+                    color: #456fc4;
+
+                    &.active {
+                        color: $mainColor;
+                    }
+                }
+            }
+
+            .time {
+                font-size: 14px;
+                font-weight: 400;
+                color: #606266;
+                text-align: left;
+            }
+
+            .bottom {
+                .seller {
+                    font-size: 14px;
+                    font-weight: 400;
+                    color: #606266;
+
+                    img {
+                        border-radius: 50%;
+                        width: 20px;
+                        height: 20px;
+                        margin: 0 8px;
+                    }
+                }
+
+                a {
+                    font-size: 12px;
+                    font-weight: 400;
+                    color: #bfc2cc;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    .pagination {
+        margin-top: 20px;
+    }
+}
+
 
 @media only screen and (max-width: 750px) {
     .user-msg {

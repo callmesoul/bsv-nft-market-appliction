@@ -35,11 +35,7 @@
             </div>
             <!-- operate -->
             <div class="operate flex flex-align-center">
-              <div
-                class="operate-item flex flex-align-center"
-                @click="openRecordModal"
-                v-if="store.state.userInfo && store.state.userInfo.metaId === user.metaId"
-              >
+              <div class="operate-item flex flex-align-center" @click="openRecordModal">
                 <img src="@/assets/images/me_icon_record.svg" />
                 {{ $t('ransactionRecord') }}
               </div>
@@ -92,33 +88,124 @@
     </div>
     <slot></slot>
   </div>
+
+  <!-- record -->
+  <div class="record-modal">
+    <ElDialog v-model="isShowRecordModal" custom-class="" top="0">
+      <template #title>
+        <div class="tab record-tab">
+          <a
+            v-for="(tab, index) in recordTabs"
+            :class="{ active: index === recordTabIndex }"
+            @click="changeRecordTab(index)"
+            >{{ $t(tab.key) }}</a
+          >
+        </div>
+      </template>
+      <div class="record-list">
+        <ElSkeleton :loading="isShowRcordSkeleton" animated :count="recordPagination.pageSize">
+          <template #template>
+            <div class="record-item flex">
+              <ElSkeletonItem variant="image" class="cover" />
+              <div class="cont flex1 flex flex-v flex-pack-justify">
+                <div class="top flex flex flex-align-center">
+                  <div class="title flex1">
+                    <ElSkeletonItem variant="text" style="width:40%" />
+                  </div>
+                  <div class="price" :class="{ active: recordTabIndex === 1 }">
+                    <ElSkeletonItem variant="text" style="width:20%" />
+                  </div>
+                </div>
+                <div class="time">
+                  <ElSkeletonItem variant="text" style="width:20%" />
+                </div>
+                <div class="bottom flex flex-align-center">
+                  <div class="seller flex1 flex flex-align-center">
+                    <ElSkeletonItem variant="text" style="width:30%" />
+                  </div>
+                  <a>
+                    <ElSkeletonItem variant="text" style="width:10%" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </template>
+          <template #default>
+            <div class="record-item flex" v-for="record in records" :key="record.nftSellTxId">
+              <ElImage
+                class="cover"
+                :src="metafileUrl(record.nftIcon)"
+                :lazy="true"
+                :preview-src-list="[metafileUrl(record.nftIcon, 800)]"
+                fit="contain"
+              />
+              <div class="cont flex1 flex flex-v flex-pack-justify">
+                <div class="top flex flex flex-align-center">
+                  <div class="title flex1">
+                    {{ recordTabIndex === 0 ? $t('buy') : $t('sell') }} {{ record.nftName }}
+                  </div>
+                  <div
+                    class="price flex flex-align-center"
+                    :class="{ active: recordTabIndex === 1 }"
+                  >
+                    {{ recordTabIndex === 0 ? '-' : '+'
+                    }}{{ new Decimal(record.nftPrice).div(Math.pow(10, 8)).toString() }} BSV
+                  </div>
+                </div>
+                <div class="time">
+                  {{ dayjs(record.nftBuyerTimestamp).format('YYYY-MM-DD HH:mm') }}
+                </div>
+                <div class="bottom flex flex-align-center">
+                  <div class="seller flex1 flex flex-align-center">
+                    <template v-if="recordTabIndex === 1">
+                      {{ $t('buyer') }}:
+                      <img :src="$filters.avatar(record.nftBuyerMetaId)" />
+                      {{ record.nftBuyerName }}
+                    </template>
+                    <template v-else>
+                      {{ $t('seller') }}:
+                      <img :src="$filters.avatar(record.nftOwnerMetaId)" />
+                      {{ record.nftOwnerName }}
+                    </template>
+                  </div>
+                  <a @click="store.state.sdk?.toTxLink(record.nftSellTxId)">{{ $t('look') }}TX</a>
+                </div>
+              </div>
+            </div>
+            <!-- 加载更多 -->
+            <LoadMore
+              :pagination="recordPagination"
+              @getMore="getMoreRecords"
+              v-if="records.length > 0 && !isShowRcordSkeleton"
+            />
+            <!-- 内容为空 -->
+            <IsNull v-else-if="records.length <= 0 && !isShowRcordSkeleton" />
+          </template>
+        </ElSkeleton>
+      </div>
+    </ElDialog>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { GetDeadlineTime, GetMyNftSummaryList, GetMyOnSellNftList } from '@/api'
+import { GetMyNftOnShowBuySuccessList, GetMyNftOnShowSellSuccessList } from '@/api'
 import { useStore } from '@/store'
-import { setDataStrclassify } from '@/utils/util'
 import { computed, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
-import NftItem from '@/components/Nft-item/Nft-item.vue'
 import LoadMore from '@/components/LoadMore/LoadMore.vue'
-import NftSkeleton from '@/components/NftSkeleton/NftSkeleton.vue'
 import {
   ElDropdown,
   ElDropdownItem,
   ElDropdownMenu,
-  ElMessage,
   ElSkeleton,
   ElSkeletonItem,
+  ElImage,
 } from 'element-plus'
 import { metafileUrl } from '@/utils/util'
 import CertTemp from '@/components/Cert/Cert.vue'
 import Decimal from 'decimal.js-light'
 import dayjs from 'dayjs'
-import { router } from '@/router'
-
-const emit = defineEmits(['openRecordModal'])
 const props = defineProps({
   userInfoLoading: {
     type: Boolean,
@@ -143,10 +230,13 @@ const props = defineProps({
 const i18n = useI18n()
 const store = useStore()
 const route = useRoute()
-const pagination = reactive({
+const recordPagination = reactive({
   ...store.state.pagination,
-  pageSize: 12,
 })
+const recordTabs = [
+  { name: i18n.t('purchaseHistory'), key: 'purchaseHistory' },
+  { name: i18n.t('saleRecord'), key: 'saleRecord' },
+]
 const tabs = computed(() => {
   const metaId = route.params.metaId
   const key = store.state.userInfo && store.state.userInfo.metaId === metaId ? 'self' : 'user'
@@ -171,9 +261,10 @@ const tabs = computed(() => {
     },
   ]
 })
-const tabValue = ref(1)
-const nfts: NftItem[] = reactive([])
-const isShowNftListSkeleton = ref(true)
+const isShowRcordSkeleton = ref(true)
+const records: GetMyNftOnShowSellSuccessListResItem[] = reactive([])
+const recordTabIndex = ref(0)
+const isShowRecordModal = ref(false)
 
 function openUrl(type: string) {
   let url =
@@ -183,8 +274,52 @@ function openUrl(type: string) {
   window.open(url)
 }
 
+function getMoreRecords() {
+  recordPagination.loading = true
+  recordPagination.page++
+  getRecordList().then(() => {
+    recordPagination.loading = false
+  })
+}
+
+async function getRecordList(isCover: boolean = false) {
+  return new Promise<void>(async resolve => {
+    let res
+    const params = {
+      MetaId: typeof route.params.metaId === 'string' ? route.params.metaId : '',
+      Page: recordPagination.page.toString(),
+      PageSize: recordPagination.pageSize.toString(),
+    }
+    if (recordTabIndex.value === 1) {
+      res = await GetMyNftOnShowSellSuccessList(params)
+    } else {
+      res = await GetMyNftOnShowBuySuccessList(params)
+    }
+    if (res.code === 0) {
+      if (isCover) records.length = 0
+      records.push(...res.data.results.items)
+      isShowRcordSkeleton.value = false
+      const totalPages = Math.ceil(res.data.total / recordPagination.pageSize)
+      if (recordPagination.page >= totalPages) {
+        recordPagination.nothing = true
+      }
+    }
+    resolve()
+  })
+}
+
+function changeRecordTab(index: number) {
+  if (recordTabIndex.value === index) return
+  recordPagination.page = 1
+  recordPagination.loading = false
+  recordPagination.nothing = false
+  recordTabIndex.value = index
+  getRecordList(true)
+}
+
 function openRecordModal() {
-  emit('openRecordModal')
+  getRecordList(true)
+  isShowRecordModal.value = true
 }
 </script>
 

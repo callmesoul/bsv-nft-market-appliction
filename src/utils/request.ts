@@ -39,7 +39,6 @@ export default class HttpRequest {
       },
       function(error) {
         // const status = error.response.status
-        console.log(error.response)
         let message
         if (error.response.data.error_description) {
           message = error.response.data.error_description
