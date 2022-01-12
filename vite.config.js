@@ -7,6 +7,7 @@ import vueI18n from '@intlify/vite-plugin-vue-i18n'
 import { svgBuilder } from './svgBuilder'
 import ElementPlus from 'unplugin-element-plus/vite'
 import viteSvgIcons from 'vite-plugin-svg-icons'
+import { VitePWA } from 'vite-plugin-pwa'
 
 export default ({ mode }) => {
   console.log('mode')
@@ -33,6 +34,7 @@ export default ({ mode }) => {
         iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
         symbolId: 'icon-[dir]-[name]',
       }),
+      VitePWA({}),
     ],
     resolve: {
       alias: {
