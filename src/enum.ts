@@ -13,3 +13,11 @@ export const enum ToBsvType {
   Number = 'number',
   String = 'string',
 }
+export const enum TextAlign {
+  Start = 'start',
+  End = 'end',
+  Right = 'right',
+  Center = 'center',
+  Justify = 'justify',
+  MatchParent = 'match-parent',
+}

@@ -13,7 +13,7 @@
       <div class="picker-model-list" v-if="props.list.length > 0">
         <div
           class="picker-model-item flex flex-align-center"
-          :class="{ disabled: props.disabled ? item[props.disabled] : false }"
+          :class="{ disabled: checkDisabled(item) }"
           v-for="(item, index) in props.list"
           :key="item.toString()"
           @click="itemClick(item)"
@@ -49,10 +49,10 @@ const props = defineProps<{
   selecteds: any[]
   multiple?: boolean
   title: string
-  disabled?: string
+  disabled?: string | Function
 }>()
 
-const emit = defineEmits(['confirm'])
+const emit = defineEmits(['confirm', 'change'])
 
 function confirm() {
   emit('confirm')
@@ -63,7 +63,9 @@ function isSellected(item: any) {
 }
 
 function itemClick(item: any) {
-  if (props.disabled && item[props.disabled]) return
+  const isDisabled = checkDisabled(item)
+  if (isDisabled) return
+
   let index
   if (typeof item === 'string') {
     index = props.selecteds.findIndex((_item: any) => _item === item)
@@ -77,6 +79,19 @@ function itemClick(item: any) {
     props.selecteds.push(typeof item === 'string' ? item : item[props.listKey!])
   } else {
     props.selecteds.splice(index, 1)
+  }
+  emit('change', props.selecteds)
+}
+
+function checkDisabled(item: any) {
+  if (props.disabled) {
+    if (typeof props.disabled === 'string') {
+      return item[props.disabled]
+    } else {
+      return props.disabled(item)
+    }
+  } else {
+    return false
   }
 }
 

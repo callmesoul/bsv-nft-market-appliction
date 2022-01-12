@@ -2,9 +2,17 @@ import { ActionTree, ActionContext } from 'vuex'
 
 import { State } from './state'
 import { Mutations, Mutation } from './mutations'
-import { GetBanners, GetCertMetaIdList, GetToken, getTopics, GetUserDiscount } from '@/api'
+import {
+  GetBanners,
+  GetCertMetaIdList,
+  GetToken,
+  getTopics,
+  GetUserDiscount,
+  QueryFindMetaDataForPost,
+} from '@/api'
 import Sdk from '@/utils/sdk'
 import { store } from '.'
+import { getUserSeries } from '@/utils/util'
 
 export enum Action {
   initApp = 'initApp',
@@ -14,6 +22,7 @@ export enum Action {
   checkToken = 'checkToken',
   setUserDiscount = 'setUserDiscount',
   setSystemConfig = 'setSystemConfig',
+  setUserSeries = 'setUserSeries',
 }
 
 type AugmentedActionContext = {
@@ -32,6 +41,7 @@ export interface Actions {
   [Action.setUserDiscount]({ state, commit, dispatch }: AugmentedActionContext): void
   [Action.setUserDiscount]({ state, commit, dispatch }: AugmentedActionContext): void
   [Action.setSystemConfig]({ state, commit, dispatch }: AugmentedActionContext): void
+  [Action.setUserSeries]({ state, commit, dispatch }: AugmentedActionContext): void
 }
 
 export const actions: ActionTree<State, State> & Actions = {
@@ -76,6 +86,7 @@ export const actions: ActionTree<State, State> & Actions = {
       // 中心化登陆
       commit(Mutation.NFTLOGIN)
       dispatch(Action.setUserDiscount)
+      // dispatch(Action.setUserSeries)
     } else {
       state.sdkInitIng = false
       state.userInfoLoading = false
@@ -164,6 +175,24 @@ export const actions: ActionTree<State, State> & Actions = {
         }
       }
       resolve()
+    })
+  },
+  [Action.setUserSeries]({ state, commit, dispatch }) {
+    return new Promise(async resolve => {
+      const res = await QueryFindMetaDataForPost({
+        find: {
+          parentNodeName: 'NftGenesis',
+          // 'data.totalSupply': { $gt: 1 },
+          'data.seriesName': { $exists: true },
+          rootTxId: state.userInfo.metaId,
+        },
+        skip: 0,
+        limit: 99,
+        sort: { timestamp: -1 },
+      })
+      if (res.code === 200) {
+        res.result.data
+      }
     })
   },
 }

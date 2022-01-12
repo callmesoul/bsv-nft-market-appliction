@@ -23,7 +23,8 @@
             <ChooseSeriesModal
               :isShowSeriesModal="isShowSeriesModal"
               :selectedSeries="selectedSeries"
-              @confirm="onSeriesConfirm"
+              @change="onSeriesConfirm"
+              @confirm="isShowSeriesModal = false"
               ref="root"
             />
           </div>
@@ -38,7 +39,7 @@
           <div class="select-warp flex flex-align-center">
             <div class="key flex1 flex flex-align-center" @click.stop="onChangeSameClassify">
               <span class="title">{{ $t('sameClassify') }}:</span>
-              <ElSwitch v-model="isSameClassify" />
+              <ElSwitch :disabled="isCreated" v-model="isSameClassify" />
             </div>
             <div class="value">
               <span v-if="classify.length > 0">
@@ -65,45 +66,139 @@
       </div>
     </div>
 
-    <!-- 相同内容选择 -->
-    <!-- <div class="batch-same-warp batch-create-list">
-      <div class="batch-create-item">
-        <div class="cover upload-warp">
-          <div class="upload">
-            <div class="add flex flex-align-center flex-pack-center">
-              <template>
-                <div>
-                  <img class="icon" src="@/assets/images/img_upload.svg" />
-                  <div class="label">{{ $t('uploadcover') }}</div>
-                </div>
-                <input type="file" accept="image/*" @change="changeAllCover" />
-              </template>
+    <div class="section-header flex">
+      <!-- 是否源文件和封面图一样 -->
+      <div class="screen-item flex1">
+        <div class="input-item flex ">
+          <div class="select-warp flex ">
+            <div class="key flex1">
+              <span class="title">{{ $t('isCoverAndoriginalSame') }}:</span>
+              <ElSwitch :disabled="isCreated" v-model="sameInfo.isCoverAndoriginalSame" />
             </div>
           </div>
         </div>
-        <div class="orginFile input-item">
-          <div class="placeholder">{{ $t('nftoriginal') }}</div>
-        </div>
-        <div class="name input-item">
-          <input type="text" :placeholder="$t('nameplac')" />
-        </div>
-        <div class="intro input-item">
-          <textarea :placeholder="$t('drscplac')"></textarea>
-        </div>
-        <div class="orginFile input-item">
-          <div class="placeholder">{{ $t('choosetype') }}</div>
-        </div>
-        <div class="index input-item" v-if="selectedSeries.length > 0">
-          <input type="number" :readOnly="true" :disabled="true" />
-        </div>
-        <div class="btn btn-block btn-default">
-          {{ $t('delete') }}
-        </div>
-        <div class="add flex flex-align-center flex-pack-center" @click="addItem">
-          +
+      </div>
+
+      <!-- 是否相同源文件 -->
+      <div class="screen-item flex1">
+        <div class="input-item flex flex-align-center" v-if="!sameInfo.isCoverAndoriginalSame">
+          <div class="select-warp flex flex-align-center">
+            <div class="key flex1 flex flex-align-center">
+              <span class="title">{{ $t('isSameOriginalFile') }}:</span>
+              <ElSwitch :disabled="isCreated" v-model="sameInfo.isSameOriginalFile" />
+            </div>
+            <div class="value flex1 flex flex-pack-end">
+              <InputFile
+                class="flex1"
+                :disabled="isCreated"
+                :placeholder="$t('nftoriginal')"
+                :original-file="sameInfo.originalFile"
+                @change="files => (sameInfo.originalFile = files[0])"
+              />
+            </div>
+            <i class="el-icon-arrow-right"></i>
+          </div>
         </div>
       </div>
-    </div> -->
+    </div>
+
+    <div class="section-header flex">
+      <!-- 是否相同NFT封面图片 -->
+      <div class="screen-item flex1">
+        <div class="input-item flex ">
+          <div class="select-warp flex ">
+            <div class="key flex1">
+              <span class="title">{{ $t('isSameNFTCover') }}:</span>
+              <ElSwitch :disabled="isCreated" v-model="sameInfo.isSameCover" />
+            </div>
+            <div class="value flex1">
+              <InputImage
+                v-if="sameInfo.isSameCover"
+                :disabled="isCreated"
+                :cover="sameInfo.cover"
+                @change="file => (sameInfo.cover = file)"
+                :placeholder="$t('uploadcover')"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 是否相同NFT封面图片 -->
+      <div class="screen-item flex1">
+        <div class="input-item flex ">
+          <div class="select-warp flex ">
+            <div class="key flex1">
+              <span class="title">{{ $t('isSameNFTDrsc') }}:</span>
+              <ElSwitch :disabled="isCreated" v-model="sameInfo.isSameDrsc" />
+            </div>
+            <div class="value flex1" v-if="sameInfo.isSameDrsc">
+              <textarea
+                v-model="sameInfo.drsc"
+                :placeholder="$t('drscplac')"
+                :readonly="isCreated || !sameInfo.isSameDrsc"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header flex">
+      <!-- 是否相同的NFT作品名称？ -->
+      <div class="screen-item flex1">
+        <div class="input-item flex ">
+          <div class="select-warp">
+            <div class="key flex1">
+              <span class="title">{{ $t('isSameNFTName') }}:</span>
+              <ElSwitch :disabled="isCreated" v-model="sameInfo.isSameName" />
+            </div>
+            <div class="value flex1" v-if="sameInfo.isSameName">
+              <div class="preview" v-if="sameInfo.name !== ''">
+                {{ $t('preview') }}:
+                {{ sameInfo.name.replace(/\$index/g, '1').replace(/\$total/g, '999') }}
+              </div>
+              <div class="flex flex-align-center">
+                <input
+                  v-model="sameInfo.name"
+                  :readOnly="isCreated || !sameInfo.isSameName"
+                  type="text"
+                  :placeholder="$t('nameplac')"
+                  class="flex1"
+                />
+              </div>
+              <div class="preview">
+                {{ $t('sameNameTips') }} <br />
+                例如： {{ $t('sameNameTips2') }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen-item flex1">
+        <div class="input-item flex ">
+          <div class="select-warp">
+            <div class="key flex1">
+              <span class="title">{{ $t('batchAddMany') }}:</span>
+              <ElSwitch :disabled="isCreated" v-model="sameInfo.isBatchAdd" />
+            </div>
+            <div class="value flex1" v-if="sameInfo.isBatchAdd">
+              <div class="flex flex-align-center mt10">
+                <input
+                  v-model="sameInfo.totalNum"
+                  :readOnly="isCreated"
+                  type="number"
+                  class="flex1"
+                />
+                {{ $t('piece') }}
+                <button class="btn ml10" @click="addTo">{{ $t('confirm') }}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- 批量铸造列表 -->
     <div class="batch-create-list">
@@ -113,54 +208,32 @@
         :key="index"
         :id="'batchItem' + index"
       >
-        <div class="cover upload-warp">
-          <div class="upload">
-            <div class="add flex flex-align-center flex-pack-center">
-              <template v-if="item.cover">
-                <ElImage
-                  class="cover"
-                  fit="cover"
-                  :src="item.cover.base64Data"
-                  :preview-src-list="[item.cover.base64Data]"
-                  :append-to-body="true"
-                />
-                <a class="close" @click="removeCover(index)">{{ $t('delete') }}</a>
-              </template>
-              <template v-else>
-                <div>
-                  <img class="icon" src="@/assets/images/img_upload.svg" />
-                  <div class="label">{{ $t('uploadcover') }}</div>
-                </div>
-                <input
-                  type="file"
-                  accept="image/*"
-                  :data-index="index"
-                  @change="coverFileInputChage"
-                />
-              </template>
-            </div>
-          </div>
-        </div>
-        <div class="orginFile input-item">
-          <input
-            type="file"
-            :placeholder="$t('nftoriginal')"
-            :data-index="index"
-            @change="originalFileInputChage"
-            v-if="!item.genesis"
+        <div class="cover upload-warp" v-if="!sameInfo.isSameCover">
+          <InputImage
+            :cover="item.cover"
+            :disabled="isCreated"
+            :is-preview="true"
+            @change="file => (item.cover = file)"
+            :placeholder="$t('uploadcover')"
           />
-          <div class="val" v-if="item.originalFile">{{ item.originalFile.raw?.name }}</div>
-          <div class="placeholder" v-else>{{ $t('nftoriginal') }}</div>
         </div>
-        <div class="name input-item">
+        <InputFile
+          :placeholder="$t('nftoriginal')"
+          :original-file="item.originalFile"
+          :disabled="isCreated"
+          :align="TextAlign.Start"
+          v-if="!sameInfo.isSameOriginalFile && !sameInfo.isCoverAndoriginalSame"
+          @change="files => (item.originalFile = files[0])"
+        />
+        <div class="name input-item" v-if="!sameInfo.isSameName">
           <input
             type="text"
-            :readOnly="item.genesis"
+            :readOnly="isCreated || sameInfo.isSameName"
             v-model="item.name"
             :placeholder="$t('nameplac')"
           />
         </div>
-        <div class="intro input-item">
+        <div class="intro input-item" v-if="!sameInfo.isSameDrsc">
           <textarea
             v-model="item.intro"
             :readOnly="item.genesis"
@@ -168,6 +241,7 @@
           ></textarea>
         </div>
         <div
+          v-if="!isSameClassify"
           class="orginFile input-item"
           @click="
             isSameClassify || item.genesis
@@ -193,7 +267,7 @@
             :selecteds="item.classify"
           />
         </div>
-        <div class="index input-item" v-if="selectedSeries.length > 0">
+        <div class="index input-item">
           <input
             type="number"
             :readOnly="true"
@@ -222,32 +296,29 @@
       </div>
       <!-- 添加 -->
       <div class="batch-create-item" v-if="!isCreated">
-        <div class="cover upload-warp">
+        <div class="cover upload-warp" v-if="!sameInfo.isSameCover">
           <div class="upload">
-            <div class="add flex flex-align-center flex-pack-center">
-              <template>
-                <div>
-                  <img class="icon" src="@/assets/images/img_upload.svg" />
-                  <div class="label">{{ $t('uploadcover') }}</div>
-                </div>
-                <input type="file" accept="image/*" />
-              </template>
-            </div>
+            <InputImage :placeholder="$t('uploadcover')" />
           </div>
         </div>
-        <div class="orginFile input-item">
-          <div class="placeholder">{{ $t('nftoriginal') }}</div>
+        <InputFile
+          :placeholder="$t('nftoriginal')"
+          v-if="!sameInfo.isSameOriginalFile && !sameInfo.isCoverAndoriginalSame"
+        />
+        <div class="name input-item" v-if="!sameInfo.isSameName">
+          <input
+            type="text"
+            :readOnly="isCreated || sameInfo.isSameName"
+            :placeholder="$t('nameplac')"
+          />
         </div>
-        <div class="name input-item">
-          <input type="text" :placeholder="$t('nameplac')" />
-        </div>
-        <div class="intro input-item">
+        <div class="intro input-item" v-if="!sameInfo.isSameDrsc">
           <textarea :placeholder="$t('drscplac')"></textarea>
         </div>
-        <div class="orginFile input-item">
+        <div class="orginFile input-item" v-if="!isSameClassify">
           <div class="placeholder">{{ $t('choosetype') }}</div>
         </div>
-        <div class="index input-item" v-if="selectedSeries.length > 0">
+        <div class="index input-item">
           <input type="number" :readOnly="true" :disabled="true" />
         </div>
         <div class="btn btn-block btn-default">
@@ -258,16 +329,18 @@
         </div>
       </div>
     </div>
+
     <template v-if="isCreated">
-      <div class="flex flex-align-center">
+      <div class="flex flex-align-center btn-group">
         <div class="btn btn-block flex1" @click="resetBacth">
           {{ $t('resetBatchCreate') }}
         </div>
-        <!-- <div class="btn btn-block flex1" @click="resetBacth">
+        <div class="btn btn-block flex1" v-if="successNum < list.length" @click="startBacth">
           {{ $t('continueBatchCreate') }}
-        </div> -->
+        </div>
       </div>
     </template>
+
     <div class="btn btn-block" @click="startBacth" v-else>
       {{ isBreak ? $t('continue') : $t('startBatchCreate') }}
     </div>
@@ -298,29 +371,26 @@
 </template>
 
 <script setup lang="ts">
-import { CreateNft, NftApiCode } from '@/api'
 import { useStore } from '@/store'
-import {
-  ElLoading,
-  ElMessage,
-  ElMessageBox,
-  ElSwitch,
-  ElDialog,
-  ElProgress,
-  ElImage,
-} from 'element-plus'
+import { ElLoading, ElMessage, ElSwitch, ElDialog, ElProgress } from 'element-plus'
 import { computed, reactive, ref } from 'vue-demi'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import ChooseSeriesModal from '@/components/ChooseSeriesModal/ChooseSeriesModal.vue'
-import { checkSdkStatus, checkUserCanIssueNft, tranfromImgFile } from '@/utils/util'
 import {
-  classifyList,
-  canCreateCardClassifyListMetaids,
-  canCreateRightsClassifyListMetaids,
-} from '@/config'
+  checkSdkStatus,
+  checkUserCanIssueNft,
+  confirmToSendMetaData,
+  tranfromImgFile,
+} from '@/utils/util'
+import { classifyList, canCreateCardClassifyListMetaids } from '@/config'
 import PickerModel from '@/components/PickerModal/PickerModel.vue'
 import InnerPageHeader from '@/components/InnerPageHeader/InnerPageHeader.vue'
+import InputFile from '@/components/InputFile/InputFile.vue'
+import InputImage from '@/components/InputImage/InputImage.vue'
+import { NFTApiGetNFTDetail } from '@/api'
+import { TextAlign } from '@/enum'
+import { v1 as uuid } from 'uuid'
 
 const list: {
   id: string
@@ -337,7 +407,7 @@ const list: {
   tokenIndex?: string
 }[] = reactive([
   {
-    id: new Date().getTime().toString(),
+    id: uuid(),
     cover: null,
     originalFile: null,
     index: 1,
@@ -362,6 +432,34 @@ const isShowResult = ref(false)
 const isBreak = ref(false)
 const isCreated = ref(false)
 const currentIndex = ref(null)
+const sameInfo: {
+  isSameOriginalFile: boolean
+  originalFile: null | MetaFile
+  isSameCover: boolean
+  cover: null | MetaFile
+  isCoverAndoriginalSame: boolean
+  isSameDrsc: boolean
+  drsc: string
+  isSameName: boolean
+  name: string
+  isBatchAdd: boolean
+  totalNum: number
+} = reactive({
+  isSameOriginalFile: false,
+  originalFile: null,
+  isSameCover: false,
+  cover: null,
+  isCoverAndoriginalSame: false,
+  isSameDrsc: false,
+  drsc: '',
+  isSameName: false,
+  name: '',
+  isBatchAdd: false,
+  totalNum: 0,
+})
+
+const paramsList: any[] = [] // 任务参数列表
+
 // 成功的数量
 const successNum = computed(() => {
   let num = 0
@@ -375,9 +473,6 @@ const successNum = computed(() => {
   return num
 })
 
-// 相同的属性
-const allCover: { val: null | MetaFile } = reactive({ val: null })
-const originalFile: null | MetaFile = null
 // 设置用户可选的分类
 function setUserCreatCard() {
   if (store.state.userInfo) {
@@ -409,7 +504,7 @@ function addItem() {
       index = list[list.length - 1].index + 1
     } else {
       const seriesIndex = root.value.series.findIndex(
-        (item: any) => item.series === selectedSeries[0]
+        (item: any) => item.name === selectedSeries[0]
       )
       if (seriesIndex !== -1) {
         index = root.value.series[seriesIndex].currentNumber + 1
@@ -417,7 +512,7 @@ function addItem() {
     }
   }
   list.push({
-    id: new Date().getTime().toString(),
+    id: uuid(),
     cover: null,
     originalFile: null,
     name: '',
@@ -429,49 +524,6 @@ function addItem() {
   })
 }
 
-// 更改封面
-async function coverFileInputChage(e: any) {
-  const index = parseInt(e.currentTarget.dataset.index)
-  const input = e.target as HTMLInputElement
-  let files = input.files
-  if (files) {
-    const res = await tranfromImgFile(files[0])
-    if (res) {
-      list[index].cover = res
-    }
-  }
-}
-// 更改全部封面
-async function changeAllCover(e: any) {
-  const index = parseInt(e.currentTarget.dataset.index)
-  const input = e.target as HTMLInputElement
-  let files = input.files
-  if (files) {
-    const res = await tranfromImgFile(files[0])
-    if (res) {
-      allCover.val = res
-    }
-  }
-}
-
-// 更改源文件
-async function originalFileInputChage(e: any) {
-  const index = parseInt(e.currentTarget.dataset.index)
-  const input = e.target as HTMLInputElement
-  let files = input.files
-  if (files) {
-    const res = await tranfromImgFile(files[0])
-    if (res) {
-      list[index].originalFile = res
-    }
-  }
-}
-
-// 删除封面
-function removeCover(index: number) {
-  list[index].cover = null
-}
-
 // 删除项
 function removeItem(index: number) {
   if (index === list.length - 1 || selectedSeries.length <= 0) list.splice(index, 1)
@@ -479,7 +531,7 @@ function removeItem(index: number) {
     list.splice(index, 1)
     if (selectedSeries.length > 0) {
       const startNum =
-        root.value.series.find((item: any) => item.series === selectedSeries[0]).currentNumber + 1
+        root.value.series.find((item: any) => item.name === selectedSeries[0]).currentNumber + 1
       for (let i = 0; i < list.length; i++) {
         list[i].index = startNum + i
       }
@@ -513,9 +565,7 @@ async function onSeriesConfirm() {
   await checkSdkStatus()
   isShowSeriesModal.value = false
   if (selectedSeries.length > 0) {
-    const item: SeriesItem = root.value.series.find(
-      (item: any) => item.series === selectedSeries[0]
-    )
+    const item: SeriesItem = root.value.series.find((item: any) => item.name === selectedSeries[0])
     if (item) {
       for (let i = 0; i < list.length; i++) {
         list[i].index = item.currentNumber + 1 + i
@@ -538,7 +588,9 @@ function sleepTime() {
 
 // 开始批量铸造
 async function startBacth() {
-  const paramsList: any[] = []
+  if (list.length <= 0) return
+
+  paramsList.length = 0
   isBreak.value = false
   // 檢查sdk狀態
   await checkSdkStatus()
@@ -547,62 +599,129 @@ async function startBacth() {
   const result = await checkUserCanIssueNft()
   if (!result) return
 
-  if (list.length <= 0) return
-  const loading = ElLoading.service()
+  if (sameInfo.isSameName && sameInfo.name === '') {
+    ElMessage.error(i18n.t('nameplac'))
+    return
+  }
 
-  let currentSeriesItem: SeriesItem | undefined = undefined
-  // 检查是否超出 系列数量
-  if (selectedSeries.length > 0) {
-    currentSeriesItem = root.value.series.find((item: any) => item.series === selectedSeries[0])
-    if (currentSeriesItem && currentSeriesItem.maxNumber < list[list.length - 1].index) {
-      ElMessage.error(i18n.t('overSeriesNum'))
-      loading.close()
+  if (sameInfo.isSameDrsc && sameInfo.drsc === '') {
+    ElMessage.error(i18n.t('drscplac'))
+    return
+  }
+
+  if (sameInfo.isSameCover && !sameInfo.cover) {
+    ElMessage.error(i18n.t('uploadcover'))
+    return
+  }
+
+  if (!sameInfo.isCoverAndoriginalSame) {
+    if (sameInfo.isSameOriginalFile && !sameInfo.originalFile) {
+      ElMessage.error(i18n.t('nftoriginal'))
       return
     }
   }
 
-  let isReady = true
-  let i = 0
-  if (currentIndex.value) {
-    i = currentIndex.value
-  }
-  if (!isBreak.value) {
-    for (; i < list.length; i++) {
-      if (!list[i].cover) {
+  // if (isSameClassify.value && classify.length <= 0) {
+  //   ElMessage.error(i18n.t('choosetype'))
+  //   return
+  // }
+
+  const loading = ElLoading.service()
+
+  try {
+    let currentSeriesItem: SeriesItem | undefined = undefined
+    if (selectedSeries.length > 0) {
+      currentSeriesItem = root.value.series.find((item: any) => item.name === selectedSeries[0])
+      if (currentSeriesItem && currentSeriesItem.maxNumber < list[list.length - 1].index) {
+        ElMessage.error(i18n.t('overSeriesNum'))
+        loading.close()
+        return
+      }
+    }
+    let amount = 0
+    let isReady = true
+
+    for (let i = 0; i < list.length; i++) {
+      if (!list[i].cover && !sameInfo.isSameCover) {
         ElMessage.error(`${i + 1}: ${i18n.t('uploadcover')}`)
         isReady = false
         loading.close()
         break
       }
-      if (!list[i].originalFile) {
-        ElMessage.error(`${i + 1}: ${i18n.t('uploadTips')}`)
-        isReady = false
-        loading.close()
-        break
+
+      if (!sameInfo.isCoverAndoriginalSame) {
+        if (!list[i].originalFile && !sameInfo.isSameOriginalFile) {
+          ElMessage.error(`${i + 1}: ${i18n.t('uploadTips')}`)
+          isReady = false
+          loading.close()
+          break
+        }
       }
-      if (list[i].name.replace(/\s*/g, '') === '') {
+
+      if (list[i].name.replace(/\s*/g, '') === '' && !sameInfo.isSameName) {
         ElMessage.error(`${i + 1}: ${i18n.t('nameplac')}`)
         isReady = false
         loading.close()
         break
       }
-      if (list[i].intro === '') {
+
+      if (list[i].intro === '' && !sameInfo.isSameDrsc) {
         ElMessage.error(`${i + 1}: ${i18n.t('drscplac')}`)
         isReady = false
         loading.close()
         break
       }
 
+      if (list[i].classify.length <= 0) {
+        ElMessage.error(i18n.t('choosetype'))
+        isReady = false
+        loading.close()
+        break
+      }
+
       if (!list[i].genesis && !list[i].codehash && !list[i].tokenIndex) {
-        paramsList.push({
-          id: list[i].id,
+        // 设置当前源文件
+        let originalFile: MetaFile
+        // 源文件和封面图相同
+        if (sameInfo.isCoverAndoriginalSame) {
+          // 全部封面图相同
+          if (sameInfo.isSameCover) {
+            // 源文件 = 统一的封面图
+            originalFile = sameInfo.cover
+          } else {
+            // 源文件 = 当前项的封面图
+            originalFile = list[i].cover
+          }
+        } else {
+          // 源文件和封面图不同
+
+          // 是否统一源文件？
+          if (sameInfo.isSameOriginalFile) {
+            // 源文件 =  统一的源文件
+            originalFile = sameInfo.originalFile
+          } else {
+            // 源文件 =  当前项的源文件
+            originalFile = list[i].originalFile
+          }
+        }
+
+        // 设置nft名称
+        let nftname: string
+        if (sameInfo.isSameName) {
+          nftname = sameInfo.name
+            .replace(/\$index/g, list[i].index.toString())
+            .replace(/\$total/g, currentSeriesItem ? currentSeriesItem.maxNumber.toString() : '1')
+        } else {
+          nftname = list[i].name
+        }
+        const params = {
           receiverAddress: store.state.userInfo!.address, //  创建者接收地址
-          nftname: list[i].name,
-          nftdesc: list[i].intro,
+          nftname,
+          nftdesc: sameInfo.drsc ? sameInfo.drsc : list[i].intro,
           nfticon: {
-            fileType: list[i].cover!.data_type,
-            fileName: list[i].cover!.name,
-            data: list[i].cover!.hexData,
+            fileType: sameInfo.isSameCover ? sameInfo.cover.data_type : list[i].cover!.data_type,
+            fileName: sameInfo.isSameCover ? sameInfo.cover.name : list[i].cover!.name,
+            data: sameInfo.isSameCover ? sameInfo.cover.hexData : list[i].cover!.hexData,
           },
           nftwebsite: '',
           nftissuerName: store.state.userInfo!.name,
@@ -610,9 +729,9 @@ async function startBacth() {
             nftType: '1',
             classifyList: JSON.stringify(list[i].classify),
             originalFileTxid: {
-              fileType: list[i].originalFile!.data_type,
-              fileName: list[i].originalFile!.name,
-              data: list[i].originalFile!.hexData,
+              fileType: originalFile.data_type,
+              fileName: originalFile.name,
+              data: originalFile.hexData,
             },
             contentTxId: '',
           },
@@ -620,156 +739,80 @@ async function startBacth() {
           genesis: currentSeriesItem ? currentSeriesItem.genesis : undefined,
           genesisTxId: currentSeriesItem ? currentSeriesItem.genesisTxId : undefined,
           sensibleId: currentSeriesItem ? currentSeriesItem.sensibleId : undefined,
-        })
-
-        // checkOnlyTasks.push(
-        //   store.state.sdk?.createNFT({
-        //     checkOnly: true,
-        //     ...params,
-        //   })
-        // )
-      }
-      // tasks.push(store.state.sdk?.createNFT(params))
-    }
-  }
-  if (!isReady) return
-  //   checkOnly
-  let amount = 0
-  debugger
-  if (currentIndex.value !== null) {
-    i = currentIndex.value
-  } else {
-    i = 0
-  }
-  try {
-    const res = await store.state.sdk?.createNFT({
-      checkOnly: true,
-      ...paramsList[i],
-    })
-    if (typeof res === 'number') {
-      amount += res
-    }
-  } catch (err) {
-    loading.close()
-    return
-  }
-  amount *= paramsList.length - i
-  const userBalanceRes = await store.state.sdk?.getBalance()
-  if (userBalanceRes && userBalanceRes.code === 200 && userBalanceRes.data.satoshis > amount) {
-    ElMessageBox.confirm(`${i18n.t('useAmountTips')}: ${amount} SATS`, i18n.t('niceWarning'), {
-      confirmButtonText: i18n.t('confirm'),
-      cancelButtonText: i18n.t('cancel'),
-      closeOnClickModal: false,
-    }).then(
-      async () => {
-        isCreated.value = true
-        loading.close()
-        isShowResult.value = true
-        if (currentIndex.value !== null) {
-          i = currentIndex.value
-        } else {
-          i = 0
         }
-        for (; i < paramsList.length; i++) {
-          try {
-            const { id, ...currentParams } = paramsList[i]
-            const res = await store.state.sdk
-              ?.createNFT({
-                ...currentParams,
-              })
-              .catch(() => {
-                isBreak.value = true
-                ElMessage.error(i18n.t('onLineFail'))
-                return
-              })
-            if (res && typeof res !== 'number') {
-              // 上报 更新 系列信息
-              const response = await CreateNft({
-                nftName: paramsList[i].nftname,
-                intro: paramsList[i].nftdesc,
-                type: paramsList[i].content.nftType,
-                seriesName: selectedSeries[0],
-                tx: res.txId,
-                classify: paramsList[i].content.classifyList,
-                fileUrl: 'test',
-                coverUrl: 'test',
-                tokenId: res.codehash + res.genesisId + res.tokenIndex,
-                nftId: res.txId,
-                codeHash: res.codehash,
-                genesis: res.genesisId,
-                genesisTxId: res.genesisTxid,
-                tokenIndex: res.tokenIndex,
-              })
-              if (response.code === NftApiCode.success) {
-                const index = list.findIndex(item => item.id === id)
-                list[index].codehash = res.codehash
-                list[index].genesis = res.genesisId
-                list[index].tokenIndex = res.tokenIndex
-                if (parseInt(res.tokenIndex) === list[index].index - 1) {
-                  ElMessage.success(
-                    `${selectedSeries.length > 0 ? list[i].index : list[i].name}: ${i18n.t(
-                      'castingsuccess'
-                    )}`
-                  )
-                  await store.state.sdk
-                    ?.checkNftTxIdStatus(res.sendMoneyTx)
-                    .catch(() => ElMessage.error(i18n.t('networkTimeout')))
-                  /* 间隔一段时间 提高批量铸造稳定性 */
-                  await sleepTime()
-                } else {
-                  isBreak.value = true
-                  isShowResult.value = false
-                  ElMessage.error(i18n.t('tokenIndexNotMatch'))
-                  return
-                }
-              } else {
-                isBreak.value = true
-                isShowResult.value = false
-                ElMessage.error(i18n.t('reportFail'))
-                return
-              }
+
+        paramsList.push({
+          id: list[i].id,
+          ...params,
+        })
+        //   checkOnly
+        const res = await store.state.sdk?.createNFT({
+          checkOnly: true,
+          ...params,
+        })
+        if (typeof res === 'number') {
+          amount += res
+        }
+      }
+    }
+    if (!isReady) return
+
+    const isConfirm = await confirmToSendMetaData(amount)
+    if (isConfirm) {
+      isCreated.value = true
+      loading.close()
+      isShowResult.value = true
+
+      for (let i = 0; i < paramsList.length; i++) {
+        let isCreatedSuccess = false
+        try {
+          const { id, ...currentParams } = paramsList[i]
+          const res = await store.state.sdk?.createNFT({
+            ...currentParams,
+          })
+          if (res && typeof res !== 'number') {
+            if (currentSeriesItem) root.value.upgradeCurrentSeriesNumber()
+            isCreatedSuccess = true
+            const index = list.findIndex(item => item.id === id)
+            list[index].codehash = res.codehash
+            list[index].genesis = res.genesisId
+            list[index].tokenIndex = res.tokenIndex
+            if (parseInt(res.tokenIndex) === list[index].index - 1) {
+              ElMessage.success(`${i18n.t('castingsuccess')}`)
+              await store.state.sdk
+                ?.checkNftTxIdStatus(res.sendMoneyTx)
+                .catch(() => ElMessage.error(i18n.t('networkTimeout')))
+              /* 间隔一段时间 提高批量铸造稳定性 */
+              await sleepTime()
             } else {
               isBreak.value = true
               isShowResult.value = false
-              ElMessage.error(i18n.t('onLineFail'))
-              return
+              ElMessage.error(i18n.t('tokenIndexNotMatch'))
+              break
             }
-          } catch {
-            isBreak.value = true
-            isShowResult.value = false
-            return
           }
-          currentIndex.value = i + 1
+        } catch (error) {
+          if (error) ElMessage.error(JSON.stringify(error))
+          isShowResult.value = false
+          break
         }
-        paramsList.length = 0
-        isBreak.value = false
-        currentIndex.value = null
-        isShowResult.value = false
-      },
-      () => {
-        isShowResult.value = false
-        loading.close()
+        // 判断没有成功就 及时break 以防继续执行
+        if (!isCreatedSuccess) {
+          break
+        }
       }
-    )
-  } else {
+      isShowResult.value = false
+      loading.close()
+    }
+  } catch (error) {
+    debugger
+    if (error) ElMessage.error(JSON.stringify(error))
     loading.close()
-    ElMessageBox.alert(
-      `
-        <p>${i18n.t('useAmountTips')}: ${amount} SATS</p>
-        <p>${i18n.t('insufficientBalance')}</p>
-      `,
-      {
-        confirmButtonText: i18n.t('confirm'),
-        dangerouslyUseHTMLString: true,
-      }
-    )
-    return
   }
 }
 
 // 初始化
 async function resetBacth() {
-  await root.value.getSeries()
   list.length = 0
   isCreated.value = false
 }
@@ -784,6 +827,19 @@ function getDatas() {
     loading.close()
     router.push({ name: 'home' })
   }
+}
+
+function addTo() {
+  if (list.length >= sameInfo.totalNum) {
+    ElMessage.error(i18n.t('mustLargeCurrentNum'))
+    return false
+  }
+  const loading = ElLoading.service()
+  const addNum = sameInfo.totalNum - list.length
+  for (let i = 0; i < addNum; i++) {
+    addItem()
+  }
+  loading.close()
 }
 
 if (store.state.userInfo) {

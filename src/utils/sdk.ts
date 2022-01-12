@@ -30,7 +30,7 @@ import {
 import { rejects } from 'assert/strict'
 import MetaIdJs, { NFTTypes, ProtocolOptions } from 'metaidjs'
 // @ts-ignore
-import { v4 as uuid } from 'uuid'
+import { v1 as uuid } from 'uuid'
 
 import { ElMessage } from 'element-plus'
 
@@ -221,23 +221,20 @@ export default class Sdk {
   }
 
   // 检查NFT操作txid状态，成功后才可继续其他上链操作，否则容易双花
-  checkNftTxIdStatus(
-    txId: string,
-    timer?: number,
-    parentResolve?: (value: void | PromiseLike<void>) => void,
-    parentReject?: any
-  ) {
-    return new Promise<void>(async (resolve, reject) => {
+  checkNftTxIdStatus(txId: string, timer?: number, parentResolve?: any, parentReject?: any) {
+    return new Promise<boolean>(async (resolve, reject) => {
       axios
         .get(`https://api.sensiblequery.com/tx/${txId}`)
         .then(res => {
           if (res.data.code === 0) {
-            if (parentResolve) parentResolve()
-            else resolve()
+            // @ts-ignore
+            if (parentResolve) parentResolve(true)
+            else resolve(true)
           } else {
             if (timer && timer > 30) {
-              if (parentReject) parentReject()
-              else reject()
+              // @ts-ignore
+              if (parentResolve) parentResolve(false)
+              else resolve(false)
             } else {
               setTimeout(() => {
                 this.checkNftTxIdStatus(
@@ -340,34 +337,41 @@ export default class Sdk {
           // if (getSignRaw.code === 200) {
           //   signersRaw = getSignRaw.data.signersRaw
           // }
+          let result: any = true
           if (!params.checkOnly) {
-            await this.checkNftTxIdStatus(genesisTxId!).catch(() => reject('createNFT error'))
+            result = await this.checkNftTxIdStatus(genesisTxId!).catch(() =>
+              reject('get sensible txId Fail')
+            )
           }
-          const issueRes = await this.issueNFT({
-            genesisId: genesis!,
-            genesisTxid: genesisTxId!,
-            codehash: codeHash!,
-            sensibleId: sensibleId,
-            signersRaw,
-            ..._params,
-          })
-          if (issueRes.code === 200) {
-            if (issueRes.data.amount) {
-              amount += issueRes.data.amount
-            }
-            if (params.checkOnly) {
-              resolve(Math.ceil(amount))
+          if (result) {
+            const issueRes = await this.issueNFT({
+              genesisId: genesis!,
+              genesisTxid: genesisTxId!,
+              codehash: codeHash!,
+              sensibleId: sensibleId,
+              signersRaw,
+              ..._params,
+            })
+            if (issueRes.code === 200) {
+              if (issueRes.data.amount) {
+                amount += issueRes.data.amount
+              }
+              if (params.checkOnly) {
+                resolve(Math.ceil(amount))
+              } else {
+                resolve({
+                  ...issueRes.data,
+                  codehash: codeHash!,
+                  sensibleId: sensibleId!,
+                  genesisId: genesis!,
+                  genesisTxid: genesisTxId!,
+                })
+              }
             } else {
-              resolve({
-                ...issueRes.data,
-                codehash: codeHash!,
-                sensibleId: sensibleId!,
-                genesisId: genesis!,
-                genesisTxid: genesisTxId!,
-              })
+              reject('createNFT error')
             }
           } else {
-            reject('createNFT error')
+            reject('checkNftTxIdStatus error')
           }
         }
         if (!codeHash || !genesis || !genesisTxId || !sensibleId) {
@@ -397,6 +401,7 @@ export default class Sdk {
           await issueOperate()
         }
       } catch (error) {
+        debugger
         reject(error)
       }
     })
@@ -550,7 +555,6 @@ export default class Sdk {
             )
           }
         } else {
-          debugger
           // @ts-ignore
           this.metaidjs?.issueNFT(_params)
         }
@@ -606,7 +610,6 @@ export default class Sdk {
             )
           }
         } else {
-          debugger
           // @ts-ignore
           this.metaidjs?.nftBuy(_params)
         }
@@ -654,7 +657,6 @@ export default class Sdk {
           )
         }
       } else {
-        debugger
         // @ts-ignore
         this.metaidjs?.nftSell(_params)
       }
@@ -702,7 +704,6 @@ export default class Sdk {
           )
         }
       } else {
-        debugger
         // @ts-ignore
         this.metaidjs?.nftCancel(_params)
       }

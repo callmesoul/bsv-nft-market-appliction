@@ -244,8 +244,19 @@ export function confirmToSendMetaData(amount: number) {
 export function getUserSeries() {
   return new Promise(async resolve => {
     const res = await QueryFindMetaDataForPost({
-      find: {},
+      find: {
+        parentNodeName: 'nftGenesis',
+        'data.totalSupply': { $gt: 1 },
+        'data.seriesName': { $exists: true },
+        rootTxId: store.state.userInfo.metaId,
+      },
+      skip: 0,
+      limit: 999,
+      sort: { timestamp: -1 },
     })
+    if (res.code === 200) {
+      res.result.data
+    }
   })
 }
 
