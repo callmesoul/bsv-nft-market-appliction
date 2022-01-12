@@ -70,9 +70,9 @@
           <a :class="{ active: tabIndex === 0 }" @click="changeTabIndex(0)">{{
             $t('priceSale')
           }}</a>
-          <a :class="{ active: tabIndex === 1 }" @click="changeTabIndex(1)">{{
+          <!-- <a :class="{ active: tabIndex === 1 }" @click="changeTabIndex(1)">{{
             $t('auctionSale')
-          }}</a>
+          }}</a> -->
         </div>
 
         <div class="cont-warp">
