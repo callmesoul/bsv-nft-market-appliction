@@ -35,7 +35,6 @@ export default ({ mode }) => {
         symbolId: 'icon-[dir]-[name]',
       }),
       VitePWA({
-        mode: 'development',
         manifest: {
           base: '/',
           includeAssets: ['favicon.ico'],
