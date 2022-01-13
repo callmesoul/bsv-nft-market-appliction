@@ -1,19 +1,24 @@
 <template>
   <InnerPageHeader :title="topic.val?.name" :isShowSearch="false" />
 
-  <div
-    class="series-intro container flex flex-align-center"
-    v-if="route.params.key === 'WebotRightCard' || route.params.key === 'MetaElfLandRightCard'"
-  >
+  <div class="series-intro container flex flex-align-center">
     <div class="series-author flex1">
       <UserMsg :width="48" :name="userInfo.val?.metaIdName" :metaId="userInfo.val?.metaId" />
       <div class="author-intro">
-        {{ $filters.getI18nContent(userInfo.val, 'userProfile', { zh: '' }) }}
+        {{
+          userInfo.val && userInfo.val.userProfile !== ''
+            ? $filters.getI18nContent(userInfo.val, 'userProfile', { zh: '' })
+            : $t('notIntro')
+        }}
       </div>
     </div>
     <div class="series-msg flex2 flex flex-v">
       <div class="series-base flex flex1">
-        <img class="cover" :src="$filters.getI18nContent(genesisInfo.val, 'seriesIcon')" />
+        <img
+          class="cover"
+          v-if="genesisInfo.val && genesisInfo.val.seriesIconCn"
+          :src="$filters.getI18nContent(genesisInfo.val, 'seriesIcon')"
+        />
         <div class="cont flex1 flex flex-v">
           <div class="name">
             {{ $filters.getI18nContent(genesisInfo.val, 'seriesName') }}
@@ -31,11 +36,23 @@
           </div>
         </div>
       </div>
-      <div class="series-data flex flex-align-center">
+      <div
+        class="series-data flex flex-align-center"
+        v-if="genesisVolumeInfo.val && genesisVolumeInfo.val.maxPrice"
+      >
         <div class="series-data-item flex1 flex flex-align-center flex-pack-center">
           <div>
             <div class="value">{{ genesisVolumeInfo.val?.totalSupply }}</div>
             <div class="key">NFT {{ $t('issueNumber') }}</div>
+          </div>
+        </div>
+        <div
+          class="series-data-item flex1 flex flex-align-center flex-pack-center"
+          v-if="genesisVolumeInfo.val?.panicPrice"
+        >
+          <div>
+            <div class="value">{{ $filters.bsvStr(genesisVolumeInfo.val?.panicPrice) }} BSV</div>
+            <div class="key">NFT {{ $t('startPrice') }}</div>
           </div>
         </div>
         <div class="series-data-item flex1 flex flex-align-center flex-pack-center">
@@ -74,23 +91,6 @@
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- banner -->
-  <div class="banner container" v-else>
-    <a>
-      <img
-        v-if="topic.val"
-        :src="
-          topic.val[
-            'coverPicUrl' +
-              i18n.locale.value.slice(0, 1).toLocaleUpperCase() +
-              i18n.locale.value.slice(1, i18n.locale.value.length)
-          ]
-        "
-        alt="Metabot"
-      />
-    </a>
   </div>
 
   <div class="metabot-tags container">
@@ -289,7 +289,7 @@
   <!-- 系列简介详情 -->
   <MoreContentModal
     :visible="isShowMoreSeriesIntro"
-    title="MetaElf Land NFT Profit Rights"
+    :title="$filters.getI18nContent(genesisInfo.val, 'seriesName')"
     @change="val => (isShowMoreSeriesIntro = val)"
   >
     <div class="all-intro">{{ $filters.getI18nContent(genesisInfo.val, 'seriesInfo') }}</div>
@@ -708,7 +708,7 @@ function getSeriesInfo(genesus: string) {
 function getUserInfo() {
   return new Promise<void>(async resolve => {
     if (typeof route.params?.metaId === 'string') {
-      const res = await GetCertUserInfo(route.params?.metaId)
+      const res = await GetCertUserInfo(route.params?.metaId).catch(() => resolve())
       if (res.code === 0) {
         userInfo.val = res.data
       }
@@ -722,8 +722,8 @@ function getGenesisInfo() {
     const res = await GetNosGenesisInfo({
       key: typeof route.params.key === 'string' ? route.params.key : '',
       lang: i18n.locale.value,
-    })
-    if (res.code === 0) {
+    }).catch(() => resolve())
+    if (res && res.code === 0) {
       genesisInfo.val = res.data
     }
     resolve()
@@ -732,24 +732,17 @@ function getGenesisInfo() {
 
 onMounted(async () => {
   if (isShowSkeleton.value) {
-    if (route.params.key) {
-      if (route.params.key === 'WebotRightCard' || route.params.key === 'MetaElfLandRightCard') {
-        getGenesisInfo()
-      }
+    getGenesisInfo()
 
-      const topicItem = store.state.topics.find(item => item.key === route.params.key)
-      if (topicItem) {
-        topic.val = topicItem
-      }
+    const topicItem = store.state.topics.find(item => item.key === route.params.key)
+    if (topicItem) {
+      topic.val = topicItem
     }
     pagination.page = 1
     pagination.loading = false
     pagination.nothing = false
     await getDatas()
-    if (route.params.key === 'WebotRightCard' || route.params.key === 'MetaElfLandRightCard') {
-      await getUserInfo()
-    }
-
+    await getUserInfo()
     isShowSkeleton.value = false
   }
 })
