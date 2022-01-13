@@ -8,6 +8,7 @@ import { svgBuilder } from './svgBuilder'
 import ElementPlus from 'unplugin-element-plus/vite'
 import viteSvgIcons from 'vite-plugin-svg-icons'
 import { VitePWA } from 'vite-plugin-pwa'
+import VitePluginHtmlEnv from 'vite-plugin-html-env'
 
 export default ({ mode }) => {
   console.log('mode')
@@ -17,6 +18,7 @@ export default ({ mode }) => {
   const env = loadEnv(mode, process.cwd())
   return defineConfig({
     plugins: [
+      VitePluginHtmlEnv(),
       vue(),
       // element-plus 按需加载
       ElementPlus(),
@@ -37,9 +39,9 @@ export default ({ mode }) => {
       VitePWA({
         includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
         manifest: {
-          name: 'NFTOnShow',
-          short_name: 'NFTOnShow',
-          description: '元网首个NFT市场',
+          name: env.VITE_AppName,
+          short_name: env.VITE_AppName,
+          description: env.VITE_AppDescription,
           theme_color: '#ffffff',
           icons: [
             {
