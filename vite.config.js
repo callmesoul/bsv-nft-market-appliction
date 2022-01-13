@@ -18,7 +18,6 @@ export default ({ mode }) => {
   const env = loadEnv(mode, process.cwd())
   return defineConfig({
     plugins: [
-      VitePluginHtmlEnv(),
       vue(),
       // element-plus 按需加载
       ElementPlus(),
@@ -72,6 +71,7 @@ export default ({ mode }) => {
           /* other options */
         },
       }),
+      VitePluginHtmlEnv(),
     ],
     resolve: {
       alias: {

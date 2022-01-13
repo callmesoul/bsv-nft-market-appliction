@@ -12,7 +12,6 @@ dist-ssr
 .nyc_output
 
 # local env files
-.env
 .env.local
 .env.*.local
 
