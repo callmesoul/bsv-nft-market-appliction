@@ -3,7 +3,7 @@
     :nfts="nfts"
     :pagination="pagination"
     :isShowSkeleton="isShowNftListSkeleton"
-    :isSelf="true"
+    :isSelf="store.state.userInfo && store.state.userInfo.metaId === route.params.metaId"
     @get-more="getMore"
   />
 </template>
@@ -49,6 +49,7 @@ function getMyNfts(isCover: boolean = false) {
             tokenIndex: item.nftTokenIndex,
           })
           const classify = setDataStrclassify(data)
+          // @ts-ignore
           nfts.push({
             name: item.nftName ? item.nftName : '--',
             amount: item.nftPrice,

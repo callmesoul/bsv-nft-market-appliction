@@ -7,17 +7,11 @@
         :src="metafileUrl(item.coverUrl)"
         fit="contain"
       ></ElImage>
-      <!-- <img
-        class="cover-image"
-        :src="metafileUrl(item?.coverUrl)"
-        :alt="item?.name"
-        :onerror="coverDefaultImg"
-      /> -->
       <span v-if="item.classify && item.classify.length > 0">{{ $t(item.classify[0]) }}</span>
     </div>
     <div class="cont">
-      <div class="name" :title="route.name === 'self' ? item.productName : item?.name">
-        {{ route.name === 'self' ? item.productName : item?.name }}
+      <div class="name" :title="item.name">
+        {{ item?.name }}
       </div>
       <div class="content flex">
         <div class="msg flex1">
@@ -110,8 +104,6 @@ import NftOffSale from '@/utils/offSale'
 import dayjs from 'dayjs'
 import { getMyNftEligibility, metafileUrl } from '@/utils/util'
 import NFTDetail from '@/utils/nftDetail'
-
-const coverDefaultImg = 'this.src="/state/cover-default.jpg"' //默认图地址
 
 const store = useStore()
 const router = useRouter()

@@ -20,7 +20,7 @@
   "article": "Article",
   "contactus": "If you have any specific ideas or requirements, please contact us. ",
   "email": "email",
-  "signinandout": "Sign up/Sign in",
+  "signinandout": "Connect Wallet",
   "creater": "Creator",
   "isca": "ShowPay certified",
   "drsc": "Introduction",
@@ -384,5 +384,7 @@
   "piece": "Piece",
   "mustLargeCurrentNum": "Must be greater than the current quantity",
   "sameNameTips": "The $index placeholder represents the current serial number; the $total placeholder represents the total number of the current series",
-  "sameNameTips2": "Mythology Series $index sheet/total $total sheet"
+  "sameNameTips2": "Mythology Series $index sheet/total $total sheet",
+  "notIntro": "No profile yet",
+  "startPrice": "Initial Price"
 }

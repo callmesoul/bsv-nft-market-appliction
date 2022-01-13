@@ -15,8 +15,7 @@ import UserAvatar from '@/components/NftUserAvatar/NftUserAvatar.vue'
 import svgIcon from '@/components/SvgIcon/SvgIcon.vue' // 全局svg图标组件
 import { registerSW } from 'virtual:pwa-register'
 
-// ElementLocale.i18n(i18n.global.t)
-
+// pwa auto update
 const updateSW = registerSW({
   onOfflineReady() {},
 })

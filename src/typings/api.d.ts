@@ -690,7 +690,9 @@ declare interface GenesisVolumeInfo {
   minPriceOnSellStr: string
   minPriceOnSellTxId: string
   minPriceStr: string
-  totalSupply: 400
+  totalSupply: number
+  panicPrice: number
+  panicPriceStr: string
   dateCountList?: {
     date: string
     percentageIncrease: string
