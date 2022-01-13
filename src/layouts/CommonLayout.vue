@@ -5,13 +5,13 @@
         <KeepAlive>
           <component
             :is="Component"
-            :key="route.meta.usePathKey ? route.path : undefined"
+            :key="route.fullPath"
             v-if="route.meta && route.meta.keepAlive"
           />
         </KeepAlive>
         <component
           :is="Component"
-          :key="route.meta.usePathKey ? route.path : undefined"
+          :key="route.fullPath"
           v-if="!route.meta || (route.meta && !route.meta.keepAlive)"
         />
       </div>
@@ -20,7 +20,4 @@
 </template>
 <script lang="ts" setup>
 import { KeepAlive, Transition } from 'vue'
-import { useRoute } from 'vue-router'
-
-const route = useRoute()
 </script>

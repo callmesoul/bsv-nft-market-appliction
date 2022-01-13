@@ -296,7 +296,7 @@
   </MoreContentModal>
 </template>
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, onActivated } from 'vue'
 import { useStore } from '@/store'
 import IsNull from '@/components/IsNull/IsNull.vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -745,6 +745,10 @@ onMounted(async () => {
     await getUserInfo()
     isShowSkeleton.value = false
   }
+})
+
+onActivated(params => {
+  debugger
 })
 </script>
 
