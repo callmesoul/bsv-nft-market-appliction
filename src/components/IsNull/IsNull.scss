@@ -1,4 +1,14 @@
-.is-null{
+.is-null {
+    padding: 60px 0;
     text-align: center;
-    color: #909399;
+
+    img {
+        width: 150px;
+        height: auto;
+    }
+
+    .tips {
+        color: #909399;
+        margin-top: 15px;
+    }
 }
