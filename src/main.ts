@@ -13,8 +13,13 @@ import * as filters from '@/utils/filters'
 import i18n from '@/utils/i18n'
 import UserAvatar from '@/components/NftUserAvatar/NftUserAvatar.vue'
 import svgIcon from '@/components/SvgIcon/SvgIcon.vue' // 全局svg图标组件
+import { registerSW } from 'virtual:pwa-register'
 
 // ElementLocale.i18n(i18n.global.t)
+
+const updateSW = registerSW({
+  onOfflineReady() {},
+})
 
 const app = createApp(App)
 
