@@ -39,7 +39,7 @@ export default ({ mode }) => {
         manifest: {
           name: 'NFTOnShow',
           short_name: 'NFTOnShow',
-          description: 'NFTOnShow',
+          description: '元网首个NFT市场',
           theme_color: '#ffffff',
           icons: [
             {
