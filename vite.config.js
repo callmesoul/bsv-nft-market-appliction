@@ -7,6 +7,7 @@ import vueI18n from '@intlify/vite-plugin-vue-i18n'
 import { svgBuilder } from './svgBuilder'
 import ElementPlus from 'unplugin-element-plus/vite'
 import viteSvgIcons from 'vite-plugin-svg-icons'
+import { VitePWA } from 'vite-plugin-pwa'
 
 export default ({ mode }) => {
   console.log('mode')
@@ -32,6 +33,42 @@ export default ({ mode }) => {
         // 配置路劲在你的src里的svg存放文件
         iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
         symbolId: 'icon-[dir]-[name]',
+      }),
+      VitePWA({
+        includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
+        manifest: {
+          name: 'NFTOnShow',
+          short_name: 'NFTOnShow',
+          description: 'NFTOnShow',
+          theme_color: '#ffffff',
+          icons: [
+            {
+              src: 'pwa-192x192.png',
+              sizes: '192x192',
+              type: 'image/png',
+            },
+            {
+              src: 'pwa-512x512.png',
+              sizes: '512x512',
+              type: 'image/png',
+            },
+            {
+              src: 'pwa-512x512.png',
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'any maskable',
+            },
+          ],
+        },
+        registerType: 'autoUpdate',
+        workbox: {
+          cleanupOutdatedCaches: false,
+          sourcemap: true,
+        },
+        devOptions: {
+          enabled: true,
+          /* other options */
+        },
       }),
     ],
     resolve: {
