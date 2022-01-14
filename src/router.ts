@@ -153,10 +153,10 @@ export const router = createRouter({
     { path: '/advantage', name: 'advantage', component: Advantage },
     // 404
     { path: '/404', name: '404', component: NotFoundPage },
-    {
-      path: '/:pathMatch(.*)',
-      redirect: '/404',
-    },
+    // {
+    //   path: '/:pathMatch(.*)',
+    //   redirect: '/404',
+    // },
   ],
   async scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
