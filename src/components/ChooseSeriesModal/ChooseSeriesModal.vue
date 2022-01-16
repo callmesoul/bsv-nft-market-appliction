@@ -41,6 +41,7 @@
 </template>
 
 <script setup lang="ts">
+import { GetSeries, NftApiCode } from '@/api'
 import PickerModel from '@/components/PickerModal/PickerModel.vue'
 import { useStore } from '@/store'
 import { ElLoading, ElMessage, ElMessageBox } from 'element-plus'
@@ -63,6 +64,7 @@ const serie = reactive({
 const isShowCreateSeriesModal = ref(false)
 const disabledFunction = (item: SeriesItem) => item.maxNumber <= item.currentNumber
 let key = ''
+let isHasGetOldSeriesKey = ''
 
 function getSeries() {
   return new Promise<void>(async resolve => {
@@ -72,6 +74,31 @@ function getSeries() {
       const list = JSON.parse(string)
       series.push(...list.filter((item: any) => item.metaId === store.state.userInfo?.metaId))
     }
+    debugger
+    const isHasGetOldSeries = localStorage.getItem(isHasGetOldSeriesKey)
+    if (!isHasGetOldSeries) {
+      const res = await GetSeries({ page: 1, pageSize: 99 })
+      if (res.code === NftApiCode.success) {
+        if (res.data.length > 0) {
+          res.data.map((item: any) => {
+            series.push({
+              name: item.series,
+              currentNumber: item.currentNumber,
+              maxNumber: item.maxNumber,
+              codeHash: item.codeHash,
+              genesis: item.genesis,
+              genesisTxId: item.genesisTxId,
+              sensibleId: item.sensibleId,
+              metaId: store.state.userInfo.metaId,
+            })
+          })
+        }
+      }
+      localStorage.setItem(key, JSON.stringify(series))
+      localStorage.setItem(isHasGetOldSeriesKey, 'true')
+    }
+
+    resolve()
     // const res = await GetSeries({ page: 1, pageSize: 99 })
     // if (res.code === NftApiCode.success) {
     //   series.length = 0
@@ -182,6 +209,7 @@ async function removeSeries(seriesItem: SeriesItem) {
 
 if (store.state.nftToken) {
   key = `nftGenesis${store.state.userInfo.metaId}`
+  isHasGetOldSeriesKey = `isHasGetOldSeriesKey${store.state.userInfo.metaId}`
   getSeries()
 } else {
   const watchNFTToken = store.watch(
@@ -190,6 +218,7 @@ if (store.state.nftToken) {
       if (nftToken) {
         watchNFTToken()
         key = `nftGenesis${store.state.userInfo.metaId}`
+        isHasGetOldSeriesKey = `isHasGetOldSeriesKey${store.state.userInfo.metaId}`
         getSeries()
       }
     }
