@@ -103,7 +103,7 @@ function toAppDetail(tag: string) {
     },
   })
 }
-
+debugger
 if (route.query.lang && typeof route.query.lang === 'string') {
   i18n.locale.value = route.query.lang
 }
