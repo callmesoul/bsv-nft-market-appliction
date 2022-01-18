@@ -19,4 +19,5 @@ interface ImportMetaEnv {
   VITE_ShowBotApi: string
   VITE_ToolApi: string
   VITE_AggregationBaseUrl: string
+  VITE_BlockSiteMetaIdList: string
 }

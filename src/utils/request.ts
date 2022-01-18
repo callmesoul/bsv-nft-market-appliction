@@ -3,7 +3,7 @@ import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 import { ElMessage } from 'element-plus'
 export default class HttpRequest {
   request
-  constructor(baseUrl: string) {
+  constructor(baseUrl: string, header?: any) {
     this.request = axios.create({
       baseURL: baseUrl,
     })
@@ -21,6 +21,12 @@ export default class HttpRequest {
             const token = store.state.token ? store.state.token.access_token : null
             if (token) {
               config.headers['Authorization'] = `Bearer ${token}`
+            }
+          }
+
+          if (header) {
+            for (let i in header) {
+              config.headers[i] = header[i]
             }
           }
         }
