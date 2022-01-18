@@ -68,7 +68,7 @@ import InnerPageHeader from '@/components/InnerPageHeader/InnerPageHeader.vue'
 import { ref } from 'vue-demi'
 import NftList from '@/components/NftList/NftList.vue'
 import { reactive } from 'vue'
-import { pagination as initPagination, countryFairClassifyList } from '@/config'
+import { pagination as initPagination } from '@/config'
 import {
   CertificationType,
   GetAllOnSellNftList,
