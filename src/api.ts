@@ -3,7 +3,7 @@ import HttpRequest from '@/utils/request'
 import qs from 'qs'
 import { OrderType, SortType } from './enum'
 import { Platform } from './utils/sdk'
-
+import { store } from './store'
 const env = import.meta.env
 
 export enum NftApiCode {
@@ -11,7 +11,11 @@ export enum NftApiCode {
 }
 const apiHttp = new HttpRequest(env.VITE_WalletApi).request
 const rightHttp = new HttpRequest(env.VITE_ToolApi).request
-const nftHttp = new HttpRequest(env.VITE_NftApi).request
+const nftHttp = new HttpRequest(env.VITE_NftApi, {
+  token: () => store.state.nftToken,
+  type: () => (store.state.isApp ? '0' : '2'),
+  metaId: () => store.state.userInfo?.metaId,
+}).request
 // const nftHttp = new HttpRequest('').request
 const auctionHttp = new HttpRequest(env.VITE_ShowBotApi).request
 // const auctionHttp = new HttpRequest('http://192.168.168.118').request
@@ -566,4 +570,8 @@ export const GetNFTGenesisInfo = (params: {
 
 export const GetAuctionAddress = (): Promise<GetAuctionAddressRes> => {
   return apiHttp.get(`/issue/api/bsv/address`)
+}
+
+export const GetUserCanCreateClassify = (key: string): Promise<GetUserCanCreateClassifyRes> => {
+  return apiHttp.get(`/broad/v1/nos/certification/getNosCertificationMetaIdListByKey/${key}`)
 }

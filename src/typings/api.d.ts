@@ -845,3 +845,7 @@ declare interface GetAuctionListResItem {
   ownerName: string
   sensibleId: string
 }
+
+declare interface GetUserCanCreateClassifyRes extends apiResponse {
+  data: string[]
+}

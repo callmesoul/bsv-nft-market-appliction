@@ -42,7 +42,6 @@
 </template>
 <script lang="ts" setup>
 import { ref, computed } from '@vue/runtime-core'
-import { certedMetaIds } from '@/config'
 import { ElMessage, ElPopover } from 'element-plus'
 import { useI18n } from 'vue-i18n'
 import { useStore } from '@/store'

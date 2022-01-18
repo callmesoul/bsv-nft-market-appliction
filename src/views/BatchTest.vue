@@ -56,7 +56,7 @@
               disabled="disabled"
               :visible="isShowClassifyModal"
               @confirm="onSetAllClassify"
-              :list="classList"
+              :list="store.state.classifyList"
               :selecteds="classify"
             />
           </div>
@@ -148,7 +148,7 @@
             disabled="disabled"
             :visible="item.isShowClassifyModal"
             @confirm="item.isShowClassifyModal = false"
-            :list="classList"
+            :list="store.state.classifyList"
             :selecteds="item.classify"
           />
         </div>
@@ -264,11 +264,6 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import ChooseSeriesModal from '@/components/ChooseSeriesModal/ChooseSeriesModal.vue'
 import { checkSdkStatus, tranfromImgFile } from '@/utils/util'
-import {
-  classifyList,
-  canCreateCardClassifyListMetaids,
-  canCreateRightsClassifyListMetaids,
-} from '@/config'
 import PickerModel from '@/components/PickerModal/PickerModel.vue'
 import InnerPageHeader from '@/components/InnerPageHeader/InnerPageHeader.vue'
 
@@ -296,7 +291,6 @@ const list: {
     isShowClassifyModal: false,
   },
 ])
-const classList = reactive(classifyList)
 const classify: string[] = reactive([])
 const isSameClassify = ref(false)
 const isShowClassifyModal = ref(false)
@@ -324,26 +318,6 @@ const successNum = computed(() => {
   }
   return num
 })
-
-// 设置用户可选的分类
-function setUserCreatCard() {
-  if (store.state.userInfo) {
-    const index = canCreateCardClassifyListMetaids.findIndex(
-      item => item === store.state.userInfo?.metaId
-    )
-    if (index !== -1) {
-      const cardIndex = classList.findIndex(item => item.classify === 'card')
-      classList[cardIndex].disabled = false
-    }
-    const _index = canCreateRightsClassifyListMetaids.findIndex(
-      item => item === store.state.userInfo?.metaId
-    )
-    if (_index !== -1) {
-      const rightsIndex = classList.findIndex(item => item.classify === 'rights')
-      classList[rightsIndex].disabled = false
-    }
-  }
-}
 
 // 添加项
 function addItem() {
@@ -593,14 +567,14 @@ async function startBacth() {
           list[i].codehash = res.codehash
           list[i].genesis = res.genesisId
           list[i].tokenIndex = res.tokenIndex
-            ElMessage.success(
-              `${selectedSeries.length > 0 ? list[i].index : list[i].name}: ${i18n.t(
-                'castingsuccess'
-              )}`
-            )
-            await store.state.sdk
-              ?.checkNftTxIdStatus(res.sendMoneyTx)
-              .catch(() => ElMessage.error(i18n.t('networkTimeout')))
+          ElMessage.success(
+            `${selectedSeries.length > 0 ? list[i].index : list[i].name}: ${i18n.t(
+              'castingsuccess'
+            )}`
+          )
+          await store.state.sdk
+            ?.checkNftTxIdStatus(res.sendMoneyTx)
+            .catch(() => ElMessage.error(i18n.t('networkTimeout')))
         } else {
           isBreak.value = true
           isShowResult.value = false

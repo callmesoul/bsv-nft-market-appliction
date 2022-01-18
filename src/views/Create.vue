@@ -131,7 +131,7 @@
             disabled="disabled"
             :visible="isShowClassifyModal"
             @confirm="isShowClassifyModal = false"
-            :list="classList"
+            :list="store.state.classifyList"
             :selecteds="nft.classify"
           />
         </div>
@@ -193,48 +193,12 @@ import { useStore } from '@/store'
 import { router } from '@/router'
 import PickerModel from '@/components/PickerModal/PickerModel.vue'
 import ChooseSeriesModal from '@/components/ChooseSeriesModal/ChooseSeriesModal.vue'
-import {
-  nftTypes,
-  classifyList,
-  canCreateCardClassifyListMetaids,
-  canCreateRightsClassifyListMetaids,
-} from '@/config'
+import { nftTypes } from '@/config'
 
-const classList = reactive(classifyList)
 const _nftTypes = reactive(nftTypes)
 const i18n = useI18n()
 const store = useStore()
 const seriesModal = ref()
-
-function setUserCreatCard() {
-  if (store.state.userInfo) {
-    const index = canCreateCardClassifyListMetaids.findIndex(
-      item => item === store.state.userInfo?.metaId
-    )
-    if (index !== -1) {
-      const cardIndex = classList.findIndex(item => item.classify === 'card')
-      classList[cardIndex].disabled = false
-    }
-    const _index = canCreateRightsClassifyListMetaids.findIndex(
-      item => item === store.state.userInfo?.metaId
-    )
-    if (_index !== -1) {
-      const rightsIndex = classList.findIndex(item => item.classify === 'rights')
-      classList[rightsIndex].disabled = false
-    }
-  }
-}
-
-if (store.state.userInfo) {
-  setUserCreatCard()
-} else {
-  store.watch(
-    state => state.userInfo,
-    () => {
-      setUserCreatCard()
-    }
-  )
-}
 
 const nft = reactive({
   nftName: '',

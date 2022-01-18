@@ -7,6 +7,7 @@ import {
   GetCertMetaIdList,
   GetToken,
   getTopics,
+  GetUserCanCreateClassify,
   GetUserDiscount,
   QueryFindMetaDataForPost,
 } from '@/api'
@@ -23,6 +24,7 @@ export enum Action {
   setUserDiscount = 'setUserDiscount',
   setSystemConfig = 'setSystemConfig',
   setUserSeries = 'setUserSeries',
+  setUserCanCreateClassify = 'setUserCanCreateClassify',
 }
 
 type AugmentedActionContext = {
@@ -39,9 +41,9 @@ export interface Actions {
   [Action.refreshToken]({ state, commit, dispatch }: AugmentedActionContext): void
   [Action.checkToken]({ state, commit, dispatch }: AugmentedActionContext): void
   [Action.setUserDiscount]({ state, commit, dispatch }: AugmentedActionContext): void
-  [Action.setUserDiscount]({ state, commit, dispatch }: AugmentedActionContext): void
   [Action.setSystemConfig]({ state, commit, dispatch }: AugmentedActionContext): void
   [Action.setUserSeries]({ state, commit, dispatch }: AugmentedActionContext): void
+  [Action.setUserCanCreateClassify]({ state, commit, dispatch }: AugmentedActionContext): void
 }
 
 export const actions: ActionTree<State, State> & Actions = {
@@ -86,6 +88,7 @@ export const actions: ActionTree<State, State> & Actions = {
       // 中心化登陆
       commit(Mutation.NFTLOGIN)
       dispatch(Action.setUserDiscount)
+      dispatch(Action.setUserCanCreateClassify)
       // dispatch(Action.setUserSeries)
     } else {
       state.sdkInitIng = false
@@ -193,6 +196,41 @@ export const actions: ActionTree<State, State> & Actions = {
       if (res.code === 200) {
         res.result.data
       }
+    })
+  },
+  [Action.setUserCanCreateClassify]({ state, commit, dispatch }) {
+    return new Promise<void>(async resolve => {
+      const res = await Promise.all([
+        GetUserCanCreateClassify('avatar'),
+        GetUserCanCreateClassify('card'),
+        GetUserCanCreateClassify('rights'),
+      ])
+      if (res) {
+        if (res[0] && res[0].code === 0) {
+          const index = res[0].data.findIndex(item => item === state.userInfo.metaId)
+          if (index !== -1) {
+            const avatarIndex = state.classifyList.findIndex(item => item.classify === 'avatar')
+            state.classifyList[avatarIndex].disabled = false
+          }
+        }
+
+        if (res[1] && res[1].code === 0) {
+          const index = res[1].data.findIndex(item => item === state.userInfo.metaId)
+          if (index !== -1) {
+            const cardIndex = state.classifyList.findIndex(item => item.classify === 'card')
+            state.classifyList[cardIndex].disabled = false
+          }
+        }
+
+        if (res[2] && res[2].code === 0) {
+          const index = res[2].data.findIndex(item => item === state.userInfo.metaId)
+          if (index !== -1) {
+            const rightsIndex = state.classifyList.findIndex(item => item.classify === 'rights')
+            state.classifyList[rightsIndex].disabled = false
+          }
+        }
+      }
+      resolve()
     })
   },
 }

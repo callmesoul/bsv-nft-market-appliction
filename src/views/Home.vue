@@ -74,7 +74,7 @@
         :keyword="keyword"
         :isShowSkeleton="isShowNftListSkeleton"
         :classify="classify"
-        :classifyList="classifyList"
+        :classifyList="store.state.classifyList"
         :sorts="sorts"
         :sortValue="sortValue"
         @changeSort="changeSort"
@@ -101,7 +101,6 @@ import { useStore } from '@/store'
 import { reactive, ref } from 'vue'
 import SetHomeDatas from '@/utils/homeSetData'
 import NftList from '@/components/NftList/NftList.vue'
-import { classifyList } from '@/config'
 import { router } from '@/router'
 import { ElPopover } from 'element-plus'
 import { useI18n } from 'vue-i18n'

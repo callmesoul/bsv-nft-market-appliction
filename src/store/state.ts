@@ -24,6 +24,8 @@ export interface State {
   topics: Topic[]
   isAndroid: boolean
   isIOS: boolean
+  classifyList: Classify[]
+  marketClassifyList: Classify[]
 }
 
 // @ts-ignore
@@ -67,4 +69,29 @@ export const state: State = {
   topics: [],
   isAndroid,
   isIOS,
+  classifyList: [
+    { classify: 'rights', disabled: true },
+    { classify: 'art' },
+    { classify: 'music', disabled: true },
+    { classify: 'game' },
+    { classify: 'avatar', disabled: true },
+    {
+      classify: 'card',
+      disabled: true,
+    },
+    {
+      classify: 'article',
+      disabled: true,
+    },
+  ],
+  marketClassifyList: [
+    { classify: 'rights', disabled: true },
+    { classify: 'art' },
+    { classify: 'music' },
+    { classify: 'game' },
+    {
+      classify: 'article',
+      disabled: true,
+    },
+  ],
 }
