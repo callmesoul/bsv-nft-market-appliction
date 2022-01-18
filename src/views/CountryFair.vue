@@ -19,7 +19,7 @@
       :keyword="keyword"
       :isShowSkeleton="isShowNftListSkeleton"
       :classify="classify"
-      :classifyList="countryFairClassifyList"
+      :classifyList="store.state.marketClassifyList"
       @search="search"
       @changeClassify="changeClassify"
       @get-more="getMore"
@@ -80,6 +80,7 @@ import SetHomeDatas from '@/utils/homeSetData'
 import { ElDialog } from 'element-plus'
 import { OrderType, SortType } from '@/enum'
 import { useI18n } from 'vue-i18n'
+import { useStore } from '@/store'
 
 const classify = ref('all')
 const keyword = ref('')
@@ -92,6 +93,7 @@ const pagination = reactive({
 })
 let apiType = 'GetAllOnSellNftList'
 const i18n = useI18n()
+const store = useStore()
 
 const sorts: NFTListSortItem[] = reactive([
   {
