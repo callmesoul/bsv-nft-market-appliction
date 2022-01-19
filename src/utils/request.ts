@@ -28,7 +28,11 @@ export default class HttpRequest {
 
         if (header) {
           for (let i in header) {
-            config.headers[i] = header[i]
+            if (typeof header[i] === 'function') {
+              config.headers[i] = header[i]()
+            } else {
+              config.headers[i] = header[i]
+            }
           }
         }
         return config

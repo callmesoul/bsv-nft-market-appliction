@@ -20,7 +20,11 @@ const nftHttp = new HttpRequest(env.VITE_NftApi, {
 const auctionHttp = new HttpRequest(env.VITE_ShowBotApi).request
 // const auctionHttp = new HttpRequest('http://192.168.168.118').request
 const aggregation = new HttpRequest(env.VITE_AggregationBaseUrl, {
-  BlockSiteMetaIdList: JSON.stringify(import.meta.env.VITE_BlockSiteMetaIdList.split(',')),
+  BlockSiteMetaIdList: JSON.stringify(
+    import.meta.env.VITE_BlockSiteMetaIdList
+      ? import.meta.env.VITE_BlockSiteMetaIdList.split(',')
+      : []
+  ),
 }).request
 const Sensible = new HttpRequest('https://api.sensiblequery.com').request
 export const GetToken = (params: object) => {
