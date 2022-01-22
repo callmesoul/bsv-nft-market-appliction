@@ -1,0 +1,51 @@
+@import '@/assets/styles/var.scss';
+
+.reward-list {
+    font-size: 0;
+
+    .reward-item {
+        display: inline-block;
+        width: calc((100% - 66px) / 3);
+        margin-right: 30px;
+        margin-bottom: 30px;
+        border: 1px solid $mainColor;
+        color: $mainColor;
+        border-radius: 10px;
+        text-align: center;
+        padding: 15px 0;
+        cursor: pointer;
+
+        .name {
+            font-size: 20px;
+        }
+
+        .unit {
+            font-size: 14px;
+        }
+
+        &:nth-child(3n) {
+            margin-right: 0px;
+        }
+
+        &:hover {
+            background: $mainColor;
+            color: #fff;
+        }
+    }
+}
+
+.input-amount-warp {
+    :deep(.el-input-number) {
+
+        .el-input-number__decrease,
+        .el-input-number__increase {
+            display: none;
+        }
+    }
+}
+
+.toogle {
+    text-align: center;
+    margin-top: 15px;
+    cursor: pointer;
+}

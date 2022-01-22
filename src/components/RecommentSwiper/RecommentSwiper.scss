@@ -1,0 +1,68 @@
+@import '@/assets/styles/var.scss';
+
+.recommend-section {
+    background: #22084f;
+    position: relative;
+    padding-bottom: 30px;
+    padding-top: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    .title {
+        text-align: center;
+        font-size: 24px;
+        color: $mainColor;
+    }
+
+    .drsc {
+        text-align: center;
+        font-size: 16px;
+        color: #9d65ff;
+        margin-top: 12px;
+    }
+
+    .swiper {
+        margin-top: 40px;
+    }
+
+    .nft-item {
+        width: 250px;
+    }
+
+
+    .recommend-skeleton-list {
+        position: absolute;
+        width: 100%;
+        left: 0;
+        top: 0;
+    }
+
+    .section-cont {
+        margin-top: 0;
+    }
+
+    :deep(.swiper) {
+        .swiper-slide {
+            width: auto;
+            display: inline-block;
+        }
+
+        .swiper-scrollbar {
+            background: #ffa800;
+            padding: 2px 0;
+
+            .swiper-scrollbar-drag {
+                background: #22084f;
+            }
+        }
+    }
+}
+
+
+@media only screen and (max-width: 750px) {
+    .recommend-section {
+        .nft-item {
+            width: 160px;
+        }
+    }
+}

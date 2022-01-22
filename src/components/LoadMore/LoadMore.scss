@@ -1,0 +1,36 @@
+// pagination
+.pagination {
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 60px;
+
+    .nothing {
+        text-align: center;
+        color: #909399;
+        font-size: 14px;
+        margin-top: 30px;
+    }
+
+    .more-warp {
+        cursor: pointer;
+        text-align: center;
+
+        .tips {
+            font-size: 16px;
+            border: 1px solid #ffa800;
+            color: #ffa800;
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 20px;
+        }
+
+        .icon {
+            margin-top: 10px;
+
+            img {
+                width: 12px;
+                height: 12px;
+            }
+        }
+    }
+}

@@ -1,0 +1,125 @@
+@import '@/assets/styles/var.scss';
+
+.banner {
+  margin-top: -60px;
+}
+
+.home {
+
+  .section {
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-screen {}
+
+
+
+    &.all {
+      padding: 90px 0;
+      background: #120725;
+    }
+  }
+}
+
+
+.rank {
+  background: #22084f;
+  padding: 100px 0;
+
+  .title {
+    font-size: 24px;
+    color: $mainColor;
+    text-align: center;
+  }
+
+  .drsc {
+    font-size: 16px;
+    color: #9d65ff;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .rank-section {
+    margin-top: 60px;
+
+    .rank-section-item {
+      margin-right: 15px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      .name {
+        padding: 20px 5px;
+        font-size: 16px;
+        color: #9d65ff;
+        border-bottom: 1px solid #9d65ff;
+      }
+
+      .rank-list {
+
+        .rank-item {
+          padding: 15px 10px;
+          border-bottom: 1px solid #9d65ff;
+        }
+
+        .index {
+          color: $mainColor;
+          font-size: 16px;
+          margin-right: 5px;
+        }
+
+        .avatar {
+          width: 80px;
+          height: 80px;
+          margin-right: 10px;
+        }
+
+        .cont {
+          color: #fff;
+          font-size: 16px;
+
+          .username {}
+
+          .id {
+            margin-top: 10px;
+          }
+        }
+
+        .num {
+          color: $mainColor;
+          font-size: 18px;
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+}
+
+
+
+
+@media only screen and (max-width: 500px) {
+  .home {
+    .section {
+
+      .section-screen {
+        flex-direction: column-reverse;
+
+        .search-warp {
+          width: 100%;
+        }
+
+        .tags {
+          margin-top: 15px;
+
+          a {
+            margin-bottom: 15px;
+          }
+        }
+      }
+    }
+  }
+}

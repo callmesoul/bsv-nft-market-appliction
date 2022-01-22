@@ -1,0 +1,286 @@
+@import '@/assets/styles/var.scss';
+
+header {
+  padding: 0 30px;
+  height: 100px;
+  min-height: 46px;
+  width: 100%;
+  box-sizing: border-box;
+  position: sticky;
+  left: 0;
+  top: 0;
+  background: #120725;
+  z-index: 4;
+  overflow: hidden;
+
+  .header-left {
+    .menu {
+      display: none;
+      cursor: pointer;
+
+      svg {
+        color: #ffa800;
+        width: 58px;
+        height: 58px;
+      }
+
+      img {
+        width: 100%;
+        display: block;
+      }
+    }
+
+    .line {
+      display: none;
+    }
+  }
+
+  nav {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    text-align: center;
+
+    :deep(.el-dropdown) {
+      color: #303133;
+    }
+
+    a {
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 100px;
+      color: #fff;
+      text-decoration: none;
+      font-family: inherit;
+      padding: 0 30px;
+      position: relative;
+
+      &::before {
+        content: '';
+        width: 2px;
+        height: 20px;
+        background: #9f9da3;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        margin-top: -10px;
+      }
+
+      &.router-link-active {
+        color: $mainColor;
+
+
+        &::after {
+          content: '';
+          width: 100%;
+          height: 4px;
+          background: $mainColor;
+          position: absolute;
+          left: 0;
+          bottom: 0;
+        }
+      }
+
+      &:last-child {
+        margin-right: 0;
+
+
+      }
+
+      &.tools {
+        svg {
+          transform: rotate(180deg);
+          margin-left: 4px;
+          width: 10px;
+          height: 6px;
+          fill: #fff;
+
+          &.active {
+            transform: rotate(0);
+            transition: all 0.5s;
+          }
+        }
+
+        &::before {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .line {
+    height: 16px;
+    width: 1px;
+    background: transparent;
+    display: inline-block;
+    margin: 0 18px;
+  }
+
+  .operate {
+    .btn {
+      padding: 8px 8px;
+      position: relative;
+      box-sizing: border-box;
+      z-index: 2;
+      box-sizing: border-box;
+      color: #000;
+    }
+
+    :deep(.el-loading-parent--relative) {
+      .el-loading-mask {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 3;
+
+        .el-loading-spinner {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+
+          .circular {
+            width: 20px;
+            height: 20px;
+          }
+        }
+      }
+    }
+
+    .user-info {
+      cursor: pointer;
+      font-size: 14px;
+
+      .avatar {
+        position: relative;
+        width: 22px;
+        height: 22px;
+        margin-right: 6px;
+        border-radius: 50%;
+        // background: #eee;
+        outline: none;
+      }
+
+      .username {
+        max-width: 120px;
+        color: #d88b18;
+        @extend %text-ellipsis;
+      }
+    }
+
+    .lang {
+      img {
+        width: 26px;
+        height: 26px;
+        margin-right: 10px;
+      }
+
+      font-size: 14px;
+      cursor: pointer;
+      position: relative;
+      z-index: 2;
+      color: $mainColor;
+    }
+  }
+}
+
+.mobile-nav-modal {
+  width: 100%;
+  padding: 0 30px 30px 30px;
+  display: block;
+  box-sizing: border-box;
+
+  a {
+    display: block;
+    line-height: 60px;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+
+    &.router-link-active {
+      background: $mainColor;
+    }
+
+    img {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+}
+
+.menu-drawer {
+  min-height: 200px;
+  width: 100%;
+}
+
+@media only screen and (max-width: 750px) {
+  header {
+    position: relative;
+    flex-direction: row-reverse;
+
+    .line {
+      display: none;
+    }
+
+    .logo {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      text-align: center;
+      left: 50%;
+      margin-left: -98.5px;
+      z-index: -1;
+    }
+
+    .username {
+      display: none;
+    }
+
+    nav {
+      display: none;
+    }
+
+    .header-left {
+      flex-direction: row-reverse;
+
+      .menu {
+        display: inline-block;
+      }
+
+    }
+
+    .operate {
+      :deep(.lang-drop-down) {
+        display: none;
+
+      }
+
+      .user-info {
+        :deep(.avatar) {
+          margin-right: 0;
+          width: 50px;
+          height: 50px;
+
+          .username {
+            color: #d88b18;
+          }
+
+          img {
+            width: 50px;
+            height: 50px;
+          }
+        }
+      }
+    }
+  }
+}

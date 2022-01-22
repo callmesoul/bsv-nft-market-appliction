@@ -1,0 +1,40 @@
+$bgColor: #f5f7f9;
+$mainColor: #d88b18;
+$mainFontColor: #fff;
+
+%text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin author($avatorWidth, $mrginRight, $nameFontSize, $metaIdFontSize, $marginTop) {
+  .avatar {
+    position: relative;
+    width: $avatorWidth;
+    height: $avatorWidth;
+    margin-right: $mrginRight;
+    // background: #eee;
+  }
+
+  .author-msg {
+    .creater {
+      font-weight: 400;
+      font-size: $nameFontSize;
+    }
+
+    .metaid {
+      font-size: $metaIdFontSize;
+      font-weight: 400;
+      color: #909399;
+      margin-top: $marginTop;
+    }
+  }
+}
+
+@mixin text-many-ellipsis($lineNum) {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: $lineNum;
+  -webkit-box-orient: vertical;
+}
