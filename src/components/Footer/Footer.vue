@@ -64,7 +64,7 @@
     </div>
     <div class="footer-bottom">
       <div class="container">
-        ShowNFT © 2021
+        <a href="https://beian.miit.gov.cn" target="_blank">粤ICP备19109852号</a>ShowNFT © 2021
       </div>
     </div>
   </footer>
